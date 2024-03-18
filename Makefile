@@ -1,8 +1,7 @@
-.PHONY: build force-build \
+.PHONY: build force-build dist \
 	clean delete-jar distclean \
 	format checkstyle \
-	update \
-	java \
+	update java \
 	test test-perms test-formatting test-style
 
 java-files := $(shell find src -name '*.java')
@@ -12,6 +11,7 @@ gradle := ./gw
 plugin-name := $(shell ./src/build/gradle-var plugin_name)
 plugin-dirname := $(shell basename `pwd`)
 plugin-build-jar = build/libs/$(plugin-name).jar
+plugin-dist-jar := dist/$(plugin-name)-$(shell ./src/build/sem-ver).jar
 
 google-java-format-ver := $(shell ./src/build/gradle-var google_java_format_version)
 google-java-format-jar = libs/google-java-format-$(google-java-format-ver).jar
@@ -29,7 +29,7 @@ checkstyle-run = ./jdk/bin/java \
 	-jar $(checkstyle-jar) \
 	-c .checkstyle/checkstyle.xml
 
-_ := $(shell mkdir -p build libs)
+_ := $(shell mkdir -p build dist libs)
 
 build: $(plugin-build-jar)
 
@@ -41,6 +41,10 @@ $(plugin-build-jar): java $(java-files) $(config-files)
 	@rm -f $(module-build-jar)
 	@$(gradle) build
 	@touch $@
+
+dist: $(plugin-dist-jar)
+$(plugin-dist-jar): build
+	@cp $(plugin-build-jar) $(plugin-dist-jar)
 
 java:
 	@./src/build/download-java
