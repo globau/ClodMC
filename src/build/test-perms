@@ -1,0 +1,13 @@
+#!/usr/bin/env python3
+import os
+from pathlib import Path
+import sys
+
+x_files = []
+for filename in Path("src/main/java").rglob("*.java"):
+    if os.access(filename, os.X_OK):
+        x_files.append(filename)
+if x_files:
+    print("bad file permissions (+x):")
+    print("\n".join(str(f) for f in sorted(x_files)))
+    sys.exit(1)

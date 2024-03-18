@@ -1,0 +1,9 @@
+/.idea
+/.gradle
+/build
+/libs
+/gradlew.bat
+/jdk
+/jdk.temp
+__pycache__
+.ruff_cache
