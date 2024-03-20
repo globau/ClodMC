@@ -23,7 +23,7 @@ public class PlayerConfig {
 
   public PlayerConfig(@NotNull File path, @NotNull Player player) {
     this.player = player;
-    this.configFile = new File(path, player.getUniqueId() + ".yml");
+    this.configFile = new File(path, player.getUniqueId().toString());
 
     ConfigFile config = new ConfigFile(this.configFile, this.player.getName());
     for (Map.Entry<String, String> entrySet : config.entrySet()) {
