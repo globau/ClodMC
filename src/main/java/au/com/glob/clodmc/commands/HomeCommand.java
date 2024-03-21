@@ -3,6 +3,7 @@ package au.com.glob.clodmc.commands;
 import au.com.glob.clodmc.BaseCommand;
 import au.com.glob.clodmc.CommandError;
 import au.com.glob.clodmc.config.PlayerConfig;
+import java.util.List;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -28,5 +29,11 @@ public class HomeCommand extends BaseCommand {
             + "</grey>");
     playerConfig.setHome(PlayerConfig.BACK_NAME, player.getLocation());
     player.teleportAsync(location);
+  }
+
+  @Override
+  protected List<String> tabComplete(
+      @NotNull Player player, @NotNull PlayerConfig playerConfig, @NotNull String[] args) {
+    return this.tabCompleteHomes(playerConfig, args);
   }
 }

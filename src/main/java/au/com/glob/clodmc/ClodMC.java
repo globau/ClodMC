@@ -27,32 +27,26 @@ public final class ClodMC extends JavaPlugin implements Listener {
     PluginCommand backCommand = this.getCommand("back");
     assert backCommand != null;
     backCommand.setExecutor(new BackCommand());
-    backCommand.setTabCompleter(new NullTabCompleter());
 
     PluginCommand homeCommand = this.getCommand("home");
     assert homeCommand != null;
     homeCommand.setExecutor(new HomeCommand());
-    homeCommand.setTabCompleter(new HomeTabCompleter());
 
     PluginCommand delHomeCommand = this.getCommand("delhome");
     assert delHomeCommand != null;
     delHomeCommand.setExecutor(new DelHomeCommand());
-    delHomeCommand.setTabCompleter(new HomeTabCompleter());
 
     PluginCommand homesCommand = this.getCommand("homes");
     assert homesCommand != null;
     homesCommand.setExecutor(new HomesCommand());
-    homesCommand.setTabCompleter(new NullTabCompleter());
 
     PluginCommand setHomeCommand = this.getCommand("sethome");
     assert setHomeCommand != null;
     setHomeCommand.setExecutor(new SetHomeCommand());
-    setHomeCommand.setTabCompleter(new NullTabCompleter());
 
     PluginCommand spawnCommand = this.getCommand("spawn");
     assert spawnCommand != null;
     spawnCommand.setExecutor(new SpawnCommand());
-    spawnCommand.setTabCompleter(new NullTabCompleter());
 
     PluginConfig.getInstance().reload();
   }

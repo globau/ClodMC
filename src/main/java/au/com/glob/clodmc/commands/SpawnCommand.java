@@ -3,6 +3,7 @@ package au.com.glob.clodmc.commands;
 import au.com.glob.clodmc.BaseCommand;
 import au.com.glob.clodmc.config.PlayerConfig;
 import au.com.glob.clodmc.config.PluginConfig;
+import java.util.List;
 import java.util.Random;
 import org.bukkit.Bukkit;
 import org.bukkit.GameRule;
@@ -39,5 +40,11 @@ public class SpawnCommand extends BaseCommand {
 
     // teleport to the center of the block, just above the surface as per vanilla
     player.teleportAsync(loc.add(0.5, 0.1, 0.5));
+  }
+
+  @Override
+  protected List<String> tabComplete(
+      @NotNull Player player, @NotNull PlayerConfig playerConfig, @NotNull String[] args) {
+    return List.of();
   }
 }

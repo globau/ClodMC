@@ -4,6 +4,7 @@ import au.com.glob.clodmc.BaseCommand;
 import au.com.glob.clodmc.CommandError;
 import au.com.glob.clodmc.config.PlayerConfig;
 import au.com.glob.clodmc.config.PluginConfig;
+import java.util.List;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
@@ -29,5 +30,11 @@ public class SetHomeCommand extends BaseCommand {
     } else {
       player.sendMessage("Home '" + name + "' " + (existing ? "updated" : "created"));
     }
+  }
+
+  @Override
+  protected List<String> tabComplete(
+      @NotNull Player player, @NotNull PlayerConfig playerConfig, @NotNull String[] args) {
+    return List.of();
   }
 }

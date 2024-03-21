@@ -22,4 +22,10 @@ public class HomesCommand extends BaseCommand {
       player.sendMessage("Homes: " + joiner);
     }
   }
+
+  @Override
+  protected List<String> tabComplete(
+      @NotNull Player player, @NotNull PlayerConfig playerConfig, @NotNull String[] args) {
+    return List.of();
+  }
 }

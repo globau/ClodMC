@@ -3,6 +3,7 @@ package au.com.glob.clodmc.commands;
 import au.com.glob.clodmc.BaseCommand;
 import au.com.glob.clodmc.CommandError;
 import au.com.glob.clodmc.config.PlayerConfig;
+import java.util.List;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -19,5 +20,11 @@ public class DelHomeCommand extends BaseCommand {
     }
     playerConfig.setHome(name, null);
     player.sendRichMessage("<grey>Home '" + name + "' deleted</grey>");
+  }
+
+  @Override
+  protected List<String> tabComplete(
+      @NotNull Player player, @NotNull PlayerConfig playerConfig, @NotNull String[] args) {
+    return this.tabCompleteHomes(playerConfig, args);
   }
 }
