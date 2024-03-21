@@ -37,7 +37,7 @@ public class PluginConfig {
     ConfigFile configFile =
         new ConfigFile(new File(dataFolder, "config.properties"), "au.com.glob.homes config");
 
-    this.maxHomes = configFile.get("max-homes", 3);
+    this.maxHomes = configFile.get("max-homes", 2);
     this.overworldName = configFile.get("overworld-name", "world");
 
     if (!configFile.exists()) {
