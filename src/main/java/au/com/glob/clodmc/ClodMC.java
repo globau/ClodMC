@@ -1,12 +1,12 @@
-package au.com.glob.homes;
+package au.com.glob.clodmc;
 
-import au.com.glob.homes.commands.BackCommand;
-import au.com.glob.homes.commands.DelHomeCommand;
-import au.com.glob.homes.commands.HomeCommand;
-import au.com.glob.homes.commands.HomesCommand;
-import au.com.glob.homes.commands.SetHomeCommand;
-import au.com.glob.homes.commands.SpawnCommand;
-import au.com.glob.homes.config.PluginConfig;
+import au.com.glob.clodmc.commands.BackCommand;
+import au.com.glob.clodmc.commands.DelHomeCommand;
+import au.com.glob.clodmc.commands.HomeCommand;
+import au.com.glob.clodmc.commands.HomesCommand;
+import au.com.glob.clodmc.commands.SetHomeCommand;
+import au.com.glob.clodmc.commands.SpawnCommand;
+import au.com.glob.clodmc.config.PluginConfig;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -15,8 +15,8 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 
-public final class Homes extends JavaPlugin implements Listener {
-  private static Homes INSTANCE;
+public final class ClodMC extends JavaPlugin implements Listener {
+  private static ClodMC INSTANCE;
 
   @Override
   public void onEnable() {
@@ -57,7 +57,7 @@ public final class Homes extends JavaPlugin implements Listener {
     PluginConfig.getInstance().reload();
   }
 
-  public static @NotNull Homes getInstance() {
+  public static @NotNull ClodMC getInstance() {
     return INSTANCE;
   }
 

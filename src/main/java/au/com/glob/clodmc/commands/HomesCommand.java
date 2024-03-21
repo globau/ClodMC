@@ -1,7 +1,7 @@
-package au.com.glob.homes.commands;
+package au.com.glob.clodmc.commands;
 
-import au.com.glob.homes.BaseCommand;
-import au.com.glob.homes.config.PlayerConfig;
+import au.com.glob.clodmc.BaseCommand;
+import au.com.glob.clodmc.config.PlayerConfig;
 import java.util.List;
 import java.util.StringJoiner;
 import org.bukkit.entity.Player;

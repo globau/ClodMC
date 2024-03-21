@@ -6,7 +6,7 @@
 //file:noinspection unused
 
 class Globals {
-    static def plugin_name = "glob-mc-homes"
+    static def plugin_name = "ClodMC"
     static def plugin_version = "./src/build/sem-ver".execute().text.trim()
     // run `make update` to update tooling versions
     static def target_java_version = 17

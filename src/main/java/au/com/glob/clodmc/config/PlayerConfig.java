@@ -1,4 +1,4 @@
-package au.com.glob.homes.config;
+package au.com.glob.clodmc.config;
 
 import java.io.File;
 import java.util.ArrayList;

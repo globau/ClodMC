@@ -1,6 +1,6 @@
-package au.com.glob.homes.config;
+package au.com.glob.clodmc.config;
 
-import au.com.glob.homes.Homes;
+import au.com.glob.clodmc.ClodMC;
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
@@ -48,7 +48,7 @@ public class PluginConfig {
 
     this.playerConfigPath = new File(dataFolder, "players");
     if (!this.playerConfigPath.exists() && !this.playerConfigPath.mkdirs()) {
-      Homes.getInstance().logWarning(this.playerConfigPath + ": mkdir failed");
+      ClodMC.getInstance().logWarning(this.playerConfigPath + ": mkdir failed");
     }
   }
 

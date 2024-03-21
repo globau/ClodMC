@@ -1,4 +1,4 @@
-package au.com.glob.homes;
+package au.com.glob.clodmc;
 
 import java.util.List;
 import org.bukkit.command.Command;

@@ -1,8 +1,8 @@
-package au.com.glob.homes.commands;
+package au.com.glob.clodmc.commands;
 
-import au.com.glob.homes.BaseCommand;
-import au.com.glob.homes.config.PlayerConfig;
-import au.com.glob.homes.config.PluginConfig;
+import au.com.glob.clodmc.BaseCommand;
+import au.com.glob.clodmc.config.PlayerConfig;
+import au.com.glob.clodmc.config.PluginConfig;
 import java.util.Random;
 import org.bukkit.Bukkit;
 import org.bukkit.GameRule;

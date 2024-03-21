@@ -1,6 +1,6 @@
-name: glob-mc-homes
+name: ClodMC
 version: '${version}'
-main: au.com.glob.homes.Homes
+main: au.com.glob.clodmc.ClodMC
 api-version: '1.20'
 commands:
   back:

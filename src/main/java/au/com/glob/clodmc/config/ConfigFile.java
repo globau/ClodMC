@@ -1,6 +1,6 @@
-package au.com.glob.homes.config;
+package au.com.glob.clodmc.config;
 
-import au.com.glob.homes.Homes;
+import au.com.glob.clodmc.ClodMC;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
@@ -51,7 +51,7 @@ public class ConfigFile {
         }
       }
     } catch (IOException e) {
-      Homes.getInstance().logWarning(e.getMessage());
+      ClodMC.getInstance().logWarning(e.getMessage());
     }
   }
 
