@@ -14,11 +14,11 @@ public class DelHomeCommand extends BaseCommand {
       @NotNull Player player, @NotNull PlayerConfig playerConfig, @NotNull String[] args)
       throws CommandError {
     String name = args.length == 0 ? PlayerConfig.DEFAULT_NAME : args[0];
-    Location location = playerConfig.getHome(name);
+    Location location = playerConfig.getHomeLocation(name);
     if (location == null) {
       throw new CommandError("No such home '" + name + "'");
     }
-    playerConfig.setHome(name, null);
+    playerConfig.deleteHome(name);
     player.sendRichMessage("<grey>Home '" + name + "' deleted</grey>");
   }
 

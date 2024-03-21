@@ -30,7 +30,7 @@ public abstract class BaseCommand implements CommandExecutor, TabCompleter {
       return true;
     } catch (CommandError e) {
       sender.sendRichMessage("<red>" + e.getMessage() + "</red>");
-      return false;
+      return true;
     }
   }
 
@@ -39,19 +39,14 @@ public abstract class BaseCommand implements CommandExecutor, TabCompleter {
       @NotNull Command command,
       @NotNull String label,
       @NotNull String[] args) {
-    try {
-      if (!(sender instanceof org.bukkit.entity.Player player)) {
-        return null;
-      }
-      PlayerConfig playerConfig = PluginConfig.getInstance().getPlayerConfig(player);
-      if (playerConfig == null) {
-        return List.of();
-      }
-      return this.tabComplete(player, playerConfig, args);
-    } catch (CommandError e) {
-      sender.sendRichMessage("<red>" + e.getMessage() + "</red>");
+    if (!(sender instanceof org.bukkit.entity.Player player)) {
       return null;
     }
+    PlayerConfig playerConfig = PluginConfig.getInstance().getPlayerConfig(player);
+    if (playerConfig == null) {
+      return List.of();
+    }
+    return this.tabComplete(player, playerConfig, args);
   }
 
   protected List<String> tabCompleteHomes(
@@ -59,7 +54,7 @@ public abstract class BaseCommand implements CommandExecutor, TabCompleter {
     if (args.length == 0) {
       return null;
     }
-    return args[0].isBlank() ? playerConfig.getHomes() : List.of();
+    return args[0].isBlank() ? playerConfig.getHomeNames() : List.of();
   }
 
   protected abstract void execute(
@@ -67,6 +62,5 @@ public abstract class BaseCommand implements CommandExecutor, TabCompleter {
       throws CommandError;
 
   protected abstract List<String> tabComplete(
-      @NotNull Player player, @NotNull PlayerConfig playerConfig, @NotNull String[] args)
-      throws CommandError;
+      @NotNull Player player, @NotNull PlayerConfig playerConfig, @NotNull String[] args);
 }

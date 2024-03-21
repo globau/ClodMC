@@ -1,6 +1,7 @@
 package au.com.glob.clodmc.config;
 
 import au.com.glob.clodmc.ClodMC;
+import au.com.glob.clodmc.IniFile;
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
@@ -12,10 +13,9 @@ import org.jetbrains.annotations.Nullable;
 public class PluginConfig {
   private static PluginConfig INSTANCE;
 
-  @Nullable private File playerConfigPath;
-  private int maxHomes;
-  private String overworldName;
+  private IniFile iniFile;
 
+  @Nullable private File playerConfigPath;
   private final Map<String, PlayerConfig> playerConfigs = new HashMap<>();
 
   public @NotNull static PluginConfig getInstance() {
@@ -34,16 +34,11 @@ public class PluginConfig {
   }
 
   public void loadConfig(@NotNull File dataFolder) {
-    ConfigFile configFile =
-        new ConfigFile(new File(dataFolder, "config.properties"), "au.com.glob.homes config");
+    this.iniFile = new IniFile(new File(dataFolder, "config.ini"), null);
 
-    this.maxHomes = configFile.get("max-homes", 2);
-    this.overworldName = configFile.get("overworld-name", "world");
-
-    if (!configFile.exists()) {
-      configFile.set("max-homes", this.maxHomes);
-      configFile.set("overworld-name", "world");
-      configFile.save();
+    if (!this.iniFile.exists()) {
+      this.iniFile.setInteger("homes", "max-allowed", this.getMaxAllowedHomes());
+      this.iniFile.setString("homes", "overworld-name", this.getOverworldName());
     }
 
     this.playerConfigPath = new File(dataFolder, "players");
@@ -52,12 +47,12 @@ public class PluginConfig {
     }
   }
 
-  public int getMaxHomes() {
-    return this.maxHomes;
+  public int getMaxAllowedHomes() {
+    return this.iniFile.getInteger("homes", "max-allowed", 2);
   }
 
   public @NotNull String getOverworldName() {
-    return this.overworldName;
+    return this.iniFile.getString("homes", "overworld-name", "world");
   }
 
   public @Nullable PlayerConfig getPlayerConfig(@NotNull Player player) {

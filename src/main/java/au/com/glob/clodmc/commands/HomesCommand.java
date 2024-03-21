@@ -11,7 +11,7 @@ public class HomesCommand extends BaseCommand {
   @Override
   protected void execute(
       @NotNull Player player, @NotNull PlayerConfig playerConfig, @NotNull String[] args) {
-    List<String> homes = playerConfig.getHomes();
+    List<String> homes = playerConfig.getHomeNames();
     if (homes.isEmpty()) {
       player.sendRichMessage("Homes: <italic>None</italic>");
     } else {

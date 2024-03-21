@@ -16,7 +16,7 @@ public class SpawnCommand extends BaseCommand {
   @Override
   protected void execute(
       @NotNull Player player, @NotNull PlayerConfig playerConfig, @NotNull String[] args) {
-    playerConfig.setHome(PlayerConfig.BACK_NAME, player.getLocation());
+    playerConfig.setBackLocation(player.getLocation());
     World world = Bukkit.getWorld(PluginConfig.getInstance().getOverworldName());
     if (world == null) {
       return;

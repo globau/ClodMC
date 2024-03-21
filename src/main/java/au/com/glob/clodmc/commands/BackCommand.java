@@ -13,13 +13,13 @@ public class BackCommand extends BaseCommand {
   protected void execute(
       @NotNull Player player, @NotNull PlayerConfig playerConfig, @NotNull String[] args)
       throws CommandError {
-    Location location = playerConfig.getHome(PlayerConfig.BACK_NAME);
+    Location location = playerConfig.getBackLocation();
     if (location == null) {
       throw new CommandError("No previous location");
     }
 
     player.sendRichMessage("<grey>Teleporting you back</grey>");
-    playerConfig.setHome(PlayerConfig.BACK_NAME, player.getLocation());
+    playerConfig.setBackLocation(player.getLocation());
     player.teleportAsync(location);
   }
 

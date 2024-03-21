@@ -15,7 +15,7 @@ public class HomeCommand extends BaseCommand {
       throws CommandError {
     String homeName = args.length == 0 ? PlayerConfig.DEFAULT_NAME : args[0];
 
-    Location location = playerConfig.getHome(homeName);
+    Location location = playerConfig.getHomeLocation(homeName);
     if (location == null) {
       throw new CommandError(
           homeName.equals(PlayerConfig.DEFAULT_NAME)
@@ -27,7 +27,7 @@ public class HomeCommand extends BaseCommand {
         "<grey>Teleporting you "
             + (homeName.equals(PlayerConfig.DEFAULT_NAME) ? "home" : "to '" + homeName + "'")
             + "</grey>");
-    playerConfig.setHome(PlayerConfig.BACK_NAME, player.getLocation());
+    playerConfig.setBackLocation(player.getLocation());
     player.teleportAsync(location);
   }
 
