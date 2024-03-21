@@ -7,6 +7,7 @@ import au.com.glob.clodmc.commands.HomesCommand;
 import au.com.glob.clodmc.commands.SetHomeCommand;
 import au.com.glob.clodmc.commands.SpawnCommand;
 import au.com.glob.clodmc.config.PluginConfig;
+import java.io.File;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -22,7 +23,13 @@ public final class ClodMC extends JavaPlugin implements Listener {
   public void onEnable() {
     INSTANCE = this;
     getServer().getPluginManager().registerEvents(this, this);
-    PluginConfig.getInstance().loadConfig(this.getDataFolder());
+    File dataFolder = this.getDataFolder();
+    if (!dataFolder.exists()) {
+      if (!dataFolder.mkdirs()) {
+        this.logWarning("failed to create " + dataFolder);
+      }
+    }
+    PluginConfig.getInstance().loadConfig(dataFolder);
 
     PluginCommand backCommand = this.getCommand("back");
     assert backCommand != null;
