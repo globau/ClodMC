@@ -25,6 +25,6 @@ public class DelHomeCommand extends BaseCommand {
   @Override
   protected List<String> tabComplete(
       @NotNull Player player, @NotNull PlayerConfig playerConfig, @NotNull String[] args) {
-    return this.tabCompleteHomes(playerConfig, args);
+    return this.completeFrom(playerConfig.getHomeNames(), args);
   }
 }

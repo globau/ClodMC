@@ -49,12 +49,13 @@ public abstract class BaseCommand implements CommandExecutor, TabCompleter {
     return this.tabComplete(player, playerConfig, args);
   }
 
-  protected List<String> tabCompleteHomes(
-      @NotNull PlayerConfig playerConfig, @NotNull String[] args) {
+  protected @Nullable List<String> completeFrom(
+      @NotNull List<String> values, @NotNull String[] args) {
     if (args.length == 0) {
       return null;
     }
-    return args[0].isBlank() ? playerConfig.getHomeNames() : List.of();
+    String prefix = args[0];
+    return values.stream().filter(v -> v.startsWith(prefix)).toList();
   }
 
   protected abstract void execute(
