@@ -1,17 +1,14 @@
-package au.com.glob.clodmc;
+package au.com.glob.clodmc.command;
 
 import au.com.glob.clodmc.config.PlayerConfig;
 import au.com.glob.clodmc.config.PluginConfig;
 import java.util.List;
 import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
-public abstract class BaseCommand implements CommandExecutor, TabCompleter {
+public abstract class PlayerCommand extends BaseCommand {
   @Override
   public boolean onCommand(
       @NotNull CommandSender sender,
@@ -19,7 +16,7 @@ public abstract class BaseCommand implements CommandExecutor, TabCompleter {
       @NotNull String label,
       @NotNull String[] args) {
     try {
-      if (!(sender instanceof org.bukkit.entity.Player player)) {
+      if (!(sender instanceof Player player)) {
         throw new CommandError("This command can only be run by a player");
       }
       PlayerConfig playerConfig = PluginConfig.getInstance().getPlayerConfig(player);
@@ -32,30 +29,6 @@ public abstract class BaseCommand implements CommandExecutor, TabCompleter {
       sender.sendRichMessage("<red>" + e.getMessage() + "</red>");
       return true;
     }
-  }
-
-  public @Nullable List<String> onTabComplete(
-      @NotNull CommandSender sender,
-      @NotNull Command command,
-      @NotNull String label,
-      @NotNull String[] args) {
-    if (!(sender instanceof org.bukkit.entity.Player player)) {
-      return null;
-    }
-    PlayerConfig playerConfig = PluginConfig.getInstance().getPlayerConfig(player);
-    if (playerConfig == null) {
-      return List.of();
-    }
-    return this.tabComplete(player, playerConfig, args);
-  }
-
-  protected @Nullable List<String> completeFrom(
-      @NotNull List<String> values, @NotNull String[] args) {
-    if (args.length == 0) {
-      return null;
-    }
-    String prefix = args[0];
-    return values.stream().filter(v -> v.startsWith(prefix)).toList();
   }
 
   protected abstract void execute(

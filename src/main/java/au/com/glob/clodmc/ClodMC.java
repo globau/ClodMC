@@ -1,78 +1,61 @@
 package au.com.glob.clodmc;
 
-import au.com.glob.clodmc.commands.BackCommand;
-import au.com.glob.clodmc.commands.DelHomeCommand;
-import au.com.glob.clodmc.commands.HomeCommand;
-import au.com.glob.clodmc.commands.HomesCommand;
-import au.com.glob.clodmc.commands.SetHomeCommand;
-import au.com.glob.clodmc.commands.SpawnCommand;
 import au.com.glob.clodmc.config.PluginConfig;
+import au.com.glob.clodmc.modules.homes.BackCommand;
+import au.com.glob.clodmc.modules.homes.DelHomeCommand;
+import au.com.glob.clodmc.modules.homes.HomeCommand;
+import au.com.glob.clodmc.modules.homes.HomesCommand;
+import au.com.glob.clodmc.modules.homes.SetHomeCommand;
+import au.com.glob.clodmc.modules.homes.SpawnCommand;
+import au.com.glob.clodmc.modules.invite.InviteCommand;
+import au.com.glob.clodmc.modules.spawn.PreventMobSpawn;
 import java.io.File;
+import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.PluginCommand;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 
-public final class ClodMC extends JavaPlugin implements Listener {
-  private static ClodMC INSTANCE;
+public final class ClodMC extends JavaPlugin {
+  private static ClodMC instance;
 
   @Override
   public void onEnable() {
-    INSTANCE = this;
-    getServer().getPluginManager().registerEvents(this, this);
+    instance = this;
     File dataFolder = this.getDataFolder();
     if (!dataFolder.exists()) {
       if (!dataFolder.mkdirs()) {
-        this.logWarning("failed to create " + dataFolder);
+        logWarning("failed to create " + dataFolder);
       }
     }
     PluginConfig.getInstance().loadConfig(dataFolder);
 
-    PluginCommand backCommand = this.getCommand("back");
-    assert backCommand != null;
-    backCommand.setExecutor(new BackCommand());
+    this.addCommand("back", new BackCommand());
+    this.addCommand("home", new HomeCommand());
+    this.addCommand("delhome", new DelHomeCommand());
+    this.addCommand("homes", new HomesCommand());
+    this.addCommand("sethome", new SetHomeCommand());
+    this.addCommand("spawn", new SpawnCommand());
 
-    PluginCommand homeCommand = this.getCommand("home");
-    assert homeCommand != null;
-    homeCommand.setExecutor(new HomeCommand());
+    this.addCommand("invite", new InviteCommand());
 
-    PluginCommand delHomeCommand = this.getCommand("delhome");
-    assert delHomeCommand != null;
-    delHomeCommand.setExecutor(new DelHomeCommand());
-
-    PluginCommand homesCommand = this.getCommand("homes");
-    assert homesCommand != null;
-    homesCommand.setExecutor(new HomesCommand());
-
-    PluginCommand setHomeCommand = this.getCommand("sethome");
-    assert setHomeCommand != null;
-    setHomeCommand.setExecutor(new SetHomeCommand());
-
-    PluginCommand spawnCommand = this.getCommand("spawn");
-    assert spawnCommand != null;
-    spawnCommand.setExecutor(new SpawnCommand());
+    new PreventMobSpawn();
 
     PluginConfig.getInstance().reload();
   }
 
+  private void addCommand(@NotNull String name, @NotNull CommandExecutor executor) {
+    PluginCommand command = this.getCommand(name);
+    if (command == null) {
+      throw new RuntimeException("'" + name + "' not defined in plugin.yml");
+    }
+    command.setExecutor(executor);
+  }
+
   public static @NotNull ClodMC getInstance() {
-    return INSTANCE;
+    return instance;
   }
 
-  @EventHandler
-  public void onPlayerJoin(@NotNull PlayerJoinEvent event) {
-    PluginConfig.getInstance().onPlayerJoin(event.getPlayer());
-  }
-
-  @EventHandler
-  public void onPlayerQuit(@NotNull PlayerQuitEvent event) {
-    PluginConfig.getInstance().onPlayerPart(event.getPlayer());
-  }
-
-  public void logWarning(@NotNull String message) {
-    this.getLogger().warning(message);
+  public static void logWarning(@NotNull String message) {
+    instance.getLogger().warning(message);
   }
 }

@@ -2,6 +2,7 @@ name: ClodMC
 version: '${version}'
 main: au.com.glob.clodmc.ClodMC
 api-version: '1.20'
+softdepend: [ GriefProtection ]
 commands:
   back:
     description: Teleport to previous location
@@ -21,3 +22,6 @@ commands:
   spawn:
     description: Teleport to spawn
     usage: /spawn
+  invite:
+    description: Invite a player to the server
+    usage: /invite java|bedrock {name}

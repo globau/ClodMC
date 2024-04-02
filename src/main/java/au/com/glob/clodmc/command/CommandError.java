@@ -1,4 +1,4 @@
-package au.com.glob.clodmc;
+package au.com.glob.clodmc.command;
 
 import org.jetbrains.annotations.NotNull;
 

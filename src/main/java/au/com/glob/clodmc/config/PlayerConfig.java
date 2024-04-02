@@ -1,6 +1,6 @@
 package au.com.glob.clodmc.config;
 
-import au.com.glob.clodmc.IniFile;
+import au.com.glob.clodmc.util.IniFile;
 import java.io.File;
 import java.util.List;
 import org.bukkit.Location;

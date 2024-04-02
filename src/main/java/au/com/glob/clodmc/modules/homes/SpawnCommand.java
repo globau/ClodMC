@@ -1,6 +1,6 @@
-package au.com.glob.clodmc.commands;
+package au.com.glob.clodmc.modules.homes;
 
-import au.com.glob.clodmc.BaseCommand;
+import au.com.glob.clodmc.command.PlayerCommand;
 import au.com.glob.clodmc.config.PlayerConfig;
 import au.com.glob.clodmc.config.PluginConfig;
 import java.util.List;
@@ -12,12 +12,16 @@ import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-public class SpawnCommand extends BaseCommand {
+public class SpawnCommand extends PlayerCommand {
+  public SpawnCommand() {
+    PluginConfig.getInstance().setDefaultValue("homes", "overworld-name", "world");
+  }
+
   @Override
   protected void execute(
       @NotNull Player player, @NotNull PlayerConfig playerConfig, @NotNull String[] args) {
     playerConfig.setBackLocation(player.getLocation());
-    World world = Bukkit.getWorld(PluginConfig.getInstance().getOverworldName());
+    World world = Bukkit.getWorld(PluginConfig.getInstance().getString("homes", "overworld-name"));
     if (world == null) {
       return;
     }

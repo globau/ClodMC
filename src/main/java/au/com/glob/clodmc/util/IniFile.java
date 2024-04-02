@@ -1,5 +1,6 @@
-package au.com.glob.clodmc;
+package au.com.glob.clodmc.util;
 
+import au.com.glob.clodmc.ClodMC;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -52,7 +53,7 @@ public class IniFile {
     try {
       this.saveIni(this.iniFile);
     } catch (IOException e) {
-      ClodMC.getInstance().logWarning("Failed to save config: " + e.getMessage());
+      ClodMC.logWarning("Failed to save config: " + e.getMessage());
     }
   }
 

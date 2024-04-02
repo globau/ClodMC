@@ -15,7 +15,10 @@ class Globals {
     static def checkstyle_version = "10.13.0"
 }
 
+import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
+
 plugins {
+    id 'com.github.johnrengelman.shadow' version '8.1.1'
     id 'java'
 }
 
@@ -31,15 +34,36 @@ repositories {
         name = "sonatype"
         url = "https://oss.sonatype.org/content/groups/public/"
     }
+    maven { url 'https://jitpack.io' }
 }
 
 dependencies {
+    shadow localGroovy()
+    shadow gradleApi()
+
     compileOnly "io.papermc.paper:paper-api:1.20.4-R0.1-SNAPSHOT"
+    compileOnly "com.github.GriefPrevention:GriefPrevention:16.18.2"
 }
 
 tasks.withType(JavaCompile).configureEach {
     options.encoding = 'UTF-8'
     options.release.set(Globals.target_java_version)
+}
+
+tasks.named('shadowJar', ShadowJar) {
+    enableRelocation true
+}
+shadowJar {
+    archiveFileName = "ClodMC.jar"
+}
+
+
+tasks.register('deploy', Copy) {
+    from jar
+    into '/opt/clod-mc/minecraft/plugins'
+}
+tasks.named('deploy') {
+    dependsOn('shadowJar')
 }
 
 processResources {

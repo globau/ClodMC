@@ -1,14 +1,14 @@
-package au.com.glob.clodmc.commands;
+package au.com.glob.clodmc.modules.homes;
 
-import au.com.glob.clodmc.BaseCommand;
-import au.com.glob.clodmc.CommandError;
+import au.com.glob.clodmc.command.CommandError;
+import au.com.glob.clodmc.command.PlayerCommand;
 import au.com.glob.clodmc.config.PlayerConfig;
 import java.util.List;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-public class HomeCommand extends BaseCommand {
+public class HomeCommand extends PlayerCommand {
   @Override
   protected void execute(
       @NotNull Player player, @NotNull PlayerConfig playerConfig, @NotNull String[] args)

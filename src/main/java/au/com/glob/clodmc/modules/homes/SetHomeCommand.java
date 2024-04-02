@@ -1,21 +1,26 @@
-package au.com.glob.clodmc.commands;
+package au.com.glob.clodmc.modules.homes;
 
-import au.com.glob.clodmc.BaseCommand;
-import au.com.glob.clodmc.CommandError;
+import au.com.glob.clodmc.command.CommandError;
+import au.com.glob.clodmc.command.PlayerCommand;
 import au.com.glob.clodmc.config.PlayerConfig;
 import au.com.glob.clodmc.config.PluginConfig;
 import java.util.List;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-public class SetHomeCommand extends BaseCommand {
+public class SetHomeCommand extends PlayerCommand {
+  public SetHomeCommand() {
+    super();
+    PluginConfig.getInstance().setDefaultValue("homes", "max-allowed", 2);
+  }
+
   @Override
   protected void execute(
       @NotNull Player player, @NotNull PlayerConfig playerConfig, @NotNull String[] args)
       throws CommandError {
 
     String name = args.length == 0 ? PlayerConfig.DEFAULT_NAME : args[0];
-    int maxHomes = PluginConfig.getInstance().getMaxAllowedHomes();
+    int maxHomes = PluginConfig.getInstance().getInteger("homes", "max-allowed");
 
     boolean existing = playerConfig.getHomeLocation(name) != null;
     if (!existing && playerConfig.getHomeNames().size() >= maxHomes) {
