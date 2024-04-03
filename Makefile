@@ -39,7 +39,7 @@ delete-jar:
 
 $(plugin-build-jar): java $(java-files) $(config-files)
 	@rm -f $(module-build-jar)
-	@$(gradle) build
+	@$(gradle) build shadowJar
 	@touch $@
 
 dist: $(plugin-dist-jar)
