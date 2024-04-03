@@ -15,6 +15,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class PluginConfig implements Listener {
+
   private static PluginConfig INSTANCE;
 
   private IniFile iniFile;
@@ -26,11 +27,10 @@ public class PluginConfig implements Listener {
     if (INSTANCE == null) {
       INSTANCE = new PluginConfig();
     }
-
     return INSTANCE;
   }
 
-  public PluginConfig() {
+  private PluginConfig() {
     Bukkit.getServer().getPluginManager().registerEvents(this, ClodMC.getInstance());
   }
 

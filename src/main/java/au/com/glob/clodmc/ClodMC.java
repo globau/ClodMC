@@ -4,51 +4,62 @@ import au.com.glob.clodmc.config.PluginConfig;
 import au.com.glob.clodmc.modules.homes.BackCommand;
 import au.com.glob.clodmc.modules.homes.DelHomeCommand;
 import au.com.glob.clodmc.modules.homes.HomeCommand;
+import au.com.glob.clodmc.modules.homes.Homes;
 import au.com.glob.clodmc.modules.homes.HomesCommand;
 import au.com.glob.clodmc.modules.homes.SetHomeCommand;
 import au.com.glob.clodmc.modules.homes.SpawnCommand;
 import au.com.glob.clodmc.modules.invite.InviteCommand;
 import au.com.glob.clodmc.modules.spawn.PreventMobSpawn;
+import dev.jorel.commandapi.CommandAPI;
+import dev.jorel.commandapi.CommandAPIBukkitConfig;
 import java.io.File;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.PluginCommand;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 
 public final class ClodMC extends JavaPlugin {
   private static ClodMC instance;
+  private File dataFolder;
+
+  public ClodMC() {
+    super();
+    instance = this;
+  }
+
+  @Override
+  public void onLoad() {
+    this.dataFolder = this.getDataFolder();
+    if (!this.dataFolder.exists()) {
+      if (!this.dataFolder.mkdirs()) {
+        logWarning("failed to create " + this.dataFolder);
+      }
+    }
+
+    CommandAPI.onLoad(new CommandAPIBukkitConfig(this).verboseOutput(true));
+  }
 
   @Override
   public void onEnable() {
-    instance = this;
-    File dataFolder = this.getDataFolder();
-    if (!dataFolder.exists()) {
-      if (!dataFolder.mkdirs()) {
-        logWarning("failed to create " + dataFolder);
-      }
-    }
-    PluginConfig.getInstance().loadConfig(dataFolder);
-
-    this.addCommand("back", new BackCommand());
-    this.addCommand("home", new HomeCommand());
-    this.addCommand("delhome", new DelHomeCommand());
-    this.addCommand("homes", new HomesCommand());
-    this.addCommand("sethome", new SetHomeCommand());
-    this.addCommand("spawn", new SpawnCommand());
-
-    this.addCommand("invite", new InviteCommand());
-
-    new PreventMobSpawn();
-
+    PluginConfig.getInstance().loadConfig(this.dataFolder);
     PluginConfig.getInstance().reload();
+
+    CommandAPI.onEnable();
+
+    Homes.register();
+    BackCommand.register();
+    DelHomeCommand.register();
+    HomeCommand.register();
+    SpawnCommand.register();
+    HomesCommand.register();
+    SetHomeCommand.register();
+
+    InviteCommand.register();
+
+    PreventMobSpawn.register();
   }
 
-  private void addCommand(@NotNull String name, @NotNull CommandExecutor executor) {
-    PluginCommand command = this.getCommand(name);
-    if (command == null) {
-      throw new RuntimeException("'" + name + "' not defined in plugin.yml");
-    }
-    command.setExecutor(executor);
+  @Override
+  public void onDisable() {
+    CommandAPI.onDisable();
   }
 
   public static @NotNull ClodMC getInstance() {

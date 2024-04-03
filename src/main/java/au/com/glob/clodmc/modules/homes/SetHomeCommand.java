@@ -1,43 +1,47 @@
 package au.com.glob.clodmc.modules.homes;
 
 import au.com.glob.clodmc.command.CommandError;
-import au.com.glob.clodmc.command.PlayerCommand;
+import au.com.glob.clodmc.command.CommandUtil;
 import au.com.glob.clodmc.config.PlayerConfig;
 import au.com.glob.clodmc.config.PluginConfig;
-import java.util.List;
+import dev.jorel.commandapi.CommandAPICommand;
+import dev.jorel.commandapi.executors.CommandArguments;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
 
-public class SetHomeCommand extends PlayerCommand {
-  public SetHomeCommand() {
-    super();
-    PluginConfig.getInstance().setDefaultValue("homes", "max-allowed", 2);
-  }
+public class SetHomeCommand {
+  public static void register() {
+    new CommandAPICommand("sethome")
+        .withShortDescription("Sets a home to your current location")
+        .withRequirement((sender) -> sender instanceof Player)
+        .withOptionalArguments(Homes.homesArgument("name"))
+        .executes(
+            (CommandSender sender, CommandArguments args) -> {
+              try {
+                Player player = CommandUtil.senderToPlayer(sender);
+                PlayerConfig playerConfig = CommandUtil.getPlayerConfig(player);
 
-  @Override
-  protected void execute(
-      @NotNull Player player, @NotNull PlayerConfig playerConfig, @NotNull String[] args)
-      throws CommandError {
+                String name = (String) args.getOrDefault("name", PlayerConfig.DEFAULT_NAME);
+                int maxHomes = PluginConfig.getInstance().getInteger("homes", "max-allowed");
 
-    String name = args.length == 0 ? PlayerConfig.DEFAULT_NAME : args[0];
-    int maxHomes = PluginConfig.getInstance().getInteger("homes", "max-allowed");
+                boolean existing = playerConfig.getHomeLocation(name) != null;
+                if (!existing && playerConfig.getHomeNames().size() >= maxHomes) {
+                  throw new CommandError(
+                      "You have reached the maximum number of homes (" + maxHomes + ")");
+                }
 
-    boolean existing = playerConfig.getHomeLocation(name) != null;
-    if (!existing && playerConfig.getHomeNames().size() >= maxHomes) {
-      throw new CommandError("You have reached the maximum number of homes (" + maxHomes + ")");
-    }
+                playerConfig.setHomeLocation(name, player.getLocation());
+                if (name.equals(PlayerConfig.DEFAULT_NAME)) {
+                  player.sendMessage(
+                      "Home " + (existing ? "updated" : "set") + " to you current location");
+                } else {
+                  player.sendMessage("Home '" + name + "' " + (existing ? "updated" : "created"));
+                }
 
-    playerConfig.setHomeLocation(name, player.getLocation());
-    if (name.equals(PlayerConfig.DEFAULT_NAME)) {
-      player.sendMessage("Home " + (existing ? "updated" : "set") + " to you current location");
-    } else {
-      player.sendMessage("Home '" + name + "' " + (existing ? "updated" : "created"));
-    }
-  }
-
-  @Override
-  protected List<String> tabComplete(
-      @NotNull Player player, @NotNull PlayerConfig playerConfig, @NotNull String[] args) {
-    return List.of();
+              } catch (CommandError e) {
+                sender.sendRichMessage("<red>" + e.getMessage() + "</red>");
+              }
+            })
+        .register();
   }
 }

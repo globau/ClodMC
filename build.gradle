@@ -18,23 +18,18 @@ class Globals {
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 
 plugins {
-    id 'com.github.johnrengelman.shadow' version '8.1.1'
-    id 'java'
+    id "java"
+    id "com.github.johnrengelman.shadow" version "8.1.1"
 }
 
-group = 'au.com.glob'
+group = "au.com.glob"
 
 repositories {
     mavenCentral()
-    maven {
-        name = "papermc-repo"
-        url = "https://repo.papermc.io/repository/maven-public/"
-    }
-    maven {
-        name = "sonatype"
-        url = "https://oss.sonatype.org/content/groups/public/"
-    }
-    maven { url 'https://jitpack.io' }
+    maven { url = "https://repo.papermc.io/repository/maven-public/" }
+    maven { url = "https://oss.sonatype.org/content/groups/public/" }
+    maven { url = "https://repo.codemc.org/repository/maven-public/" }
+    maven { url = "https://jitpack.io" }
 }
 
 dependencies {
@@ -43,34 +38,41 @@ dependencies {
 
     compileOnly "io.papermc.paper:paper-api:1.20.4-R0.1-SNAPSHOT"
     compileOnly "com.github.GriefPrevention:GriefPrevention:16.18.2"
+
+    implementation "dev.jorel:commandapi-bukkit-shade:9.3.0"
 }
 
 tasks.withType(JavaCompile).configureEach {
-    options.encoding = 'UTF-8'
+    options.encoding = "UTF-8"
     options.release.set(Globals.target_java_version)
 }
 
-tasks.named('shadowJar', ShadowJar) {
+tasks.named("shadowJar", ShadowJar) {
     enableRelocation true
 }
 shadowJar {
+    dependencies {
+        include dependency("dev.jorel:commandapi-bukkit-shade:9.3.0")
+    }
+    relocate("dev.jorel.commandapi", "au.com.glob.shadow.commandapi")
+
     archiveFileName = "ClodMC.jar"
 }
 
 
-tasks.register('deploy', Copy) {
+tasks.register("deploy", Copy) {
     from jar
-    into '/opt/clod-mc/minecraft/plugins'
+    into "/opt/clod-mc/minecraft/plugins"
 }
-tasks.named('deploy') {
-    dependsOn('shadowJar')
+tasks.named("deploy") {
+    dependsOn("shadowJar")
 }
 
 processResources {
     def props = [version: Globals.plugin_version]
     inputs.properties props
-    filteringCharset 'UTF-8'
-    filesMatching('plugin.yml') {
+    filteringCharset "UTF-8"
+    filesMatching("plugin.yml") {
         expand props
     }
 }

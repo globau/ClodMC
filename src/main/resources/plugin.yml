@@ -3,25 +3,3 @@ version: '${version}'
 main: au.com.glob.clodmc.ClodMC
 api-version: '1.20'
 softdepend: [ GriefProtection ]
-commands:
-  back:
-    description: Teleport to previous location
-    usage: /back
-  delhome:
-    description: Delete home
-    usage: /home [name]
-  home:
-    description: Teleport home
-    usage: /home [name]
-  homes:
-    description: List homes
-    usage: /homes
-  sethome:
-    description: Sets a home to your current location
-    usage: /sethome [name]
-  spawn:
-    description: Teleport to spawn
-    usage: /spawn
-  invite:
-    description: Invite a player to the server
-    usage: /invite java|bedrock {name}

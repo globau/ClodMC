@@ -12,8 +12,10 @@ import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.jetbrains.annotations.NotNull;
 
 public class PreventMobSpawn implements Listener {
-  public PreventMobSpawn() {
-    Bukkit.getServer().getPluginManager().registerEvents(this, ClodMC.getInstance());
+  public static void register() {
+    Bukkit.getServer()
+        .getPluginManager()
+        .registerEvents(new PreventMobSpawn(), ClodMC.getInstance());
   }
 
   @EventHandler(priority = EventPriority.LOWEST)

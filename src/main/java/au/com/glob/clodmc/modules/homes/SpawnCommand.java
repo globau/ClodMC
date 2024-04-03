@@ -1,54 +1,63 @@
 package au.com.glob.clodmc.modules.homes;
 
-import au.com.glob.clodmc.command.PlayerCommand;
+import au.com.glob.clodmc.command.CommandError;
+import au.com.glob.clodmc.command.CommandUtil;
 import au.com.glob.clodmc.config.PlayerConfig;
 import au.com.glob.clodmc.config.PluginConfig;
-import java.util.List;
+import dev.jorel.commandapi.CommandAPICommand;
+import dev.jorel.commandapi.executors.CommandArguments;
 import java.util.Random;
 import org.bukkit.Bukkit;
 import org.bukkit.GameRule;
 import org.bukkit.Location;
 import org.bukkit.World;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
 
-public class SpawnCommand extends PlayerCommand {
-  public SpawnCommand() {
-    PluginConfig.getInstance().setDefaultValue("homes", "overworld-name", "world");
-  }
+public class SpawnCommand {
+  public static void register() {
+    new CommandAPICommand("spawn")
+        .withShortDescription("Teleport to spawn")
+        .withRequirement((sender) -> sender instanceof Player)
+        .executes(
+            (CommandSender sender, CommandArguments args) -> {
+              try {
+                Player player = CommandUtil.senderToPlayer(sender);
+                PlayerConfig playerConfig = CommandUtil.getPlayerConfig(player);
 
-  @Override
-  protected void execute(
-      @NotNull Player player, @NotNull PlayerConfig playerConfig, @NotNull String[] args) {
-    playerConfig.setBackLocation(player.getLocation());
-    World world = Bukkit.getWorld(PluginConfig.getInstance().getString("homes", "overworld-name"));
-    if (world == null) {
-      return;
-    }
+                playerConfig.setBackLocation(player.getLocation());
 
-    player.sendRichMessage("<grey>Teleporting you to spawn</grey>");
+                String worldName = PluginConfig.getInstance().getString("homes", "overworld-name");
+                World world = Bukkit.getWorld(worldName);
+                if (world == null) {
+                  return;
+                }
 
-    // find random location around spawn point
-    // governed by the SpawnRadius gamerule
-    Integer spawnRadius = world.getGameRuleValue(GameRule.SPAWN_RADIUS);
-    Random rand = new Random();
-    double angle = rand.nextDouble() * 2 * Math.PI;
-    double distance = rand.nextDouble() * (spawnRadius == null ? 10 : spawnRadius);
-    Location loc = world.getSpawnLocation();
-    loc.add(Math.round(distance + Math.cos(angle)), 0, Math.round(distance + Math.sin(angle)));
+                player.sendRichMessage("<grey>Teleporting you to spawn</grey>");
 
-    // ensure the block isn't solid
-    while (loc.getBlock().isCollidable()) {
-      loc.add(0, 1, 0);
-    }
+                // find random location around spawn point
+                // governed by the SpawnRadius gamerule
+                Integer spawnRadius = world.getGameRuleValue(GameRule.SPAWN_RADIUS);
+                Random rand = new Random();
+                double angle = rand.nextDouble() * 2 * Math.PI;
+                double distance = rand.nextDouble() * (spawnRadius == null ? 10 : spawnRadius);
+                Location loc = world.getSpawnLocation();
+                loc.add(
+                    Math.round(distance + Math.cos(angle)),
+                    0,
+                    Math.round(distance + Math.sin(angle)));
 
-    // teleport to the center of the block, just above the surface as per vanilla
-    player.teleportAsync(loc.add(0.5, 0.1, 0.5));
-  }
+                // ensure the block isn't solid
+                while (loc.getBlock().isCollidable()) {
+                  loc.add(0, 1, 0);
+                }
 
-  @Override
-  protected List<String> tabComplete(
-      @NotNull Player player, @NotNull PlayerConfig playerConfig, @NotNull String[] args) {
-    return List.of();
+                // teleport to the center of the block, just above the surface as per vanilla
+                player.teleportAsync(loc.add(0.5, 0.1, 0.5));
+              } catch (CommandError e) {
+                sender.sendRichMessage("<red>" + e.getMessage() + "</red>");
+              }
+            })
+        .register();
   }
 }

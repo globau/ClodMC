@@ -1,30 +1,34 @@
 package au.com.glob.clodmc.modules.homes;
 
 import au.com.glob.clodmc.command.CommandError;
-import au.com.glob.clodmc.command.PlayerCommand;
+import au.com.glob.clodmc.command.CommandUtil;
 import au.com.glob.clodmc.config.PlayerConfig;
-import java.util.List;
-import org.bukkit.Location;
+import dev.jorel.commandapi.CommandAPICommand;
+import dev.jorel.commandapi.executors.CommandArguments;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
 
-public class DelHomeCommand extends PlayerCommand {
-  @Override
-  protected void execute(
-      @NotNull Player player, @NotNull PlayerConfig playerConfig, @NotNull String[] args)
-      throws CommandError {
-    String name = args.length == 0 ? PlayerConfig.DEFAULT_NAME : args[0];
-    Location location = playerConfig.getHomeLocation(name);
-    if (location == null) {
-      throw new CommandError("No such home '" + name + "'");
-    }
-    playerConfig.deleteHome(name);
-    player.sendRichMessage("<grey>Home '" + name + "' deleted</grey>");
-  }
+public class DelHomeCommand {
+  public static void register() {
+    new CommandAPICommand("delhome")
+        .withShortDescription("Delete home")
+        .withRequirement((sender) -> sender instanceof Player)
+        .withOptionalArguments(Homes.homesArgument("name"))
+        .executes(
+            (CommandSender sender, CommandArguments args) -> {
+              try {
+                Player player = CommandUtil.senderToPlayer(sender);
+                PlayerConfig playerConfig = CommandUtil.getPlayerConfig(player);
 
-  @Override
-  protected List<String> tabComplete(
-      @NotNull Player player, @NotNull PlayerConfig playerConfig, @NotNull String[] args) {
-    return this.completeFrom(playerConfig.getHomeNames(), args);
+                String name = (String) args.getOrDefault("name", PlayerConfig.DEFAULT_NAME);
+
+                playerConfig.deleteHome(name);
+                player.sendRichMessage("<grey>Home '" + name + "' deleted</grey>");
+
+              } catch (CommandError e) {
+                sender.sendRichMessage("<red>" + e.getMessage() + "</red>");
+              }
+            })
+        .register();
   }
 }
