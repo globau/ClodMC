@@ -2,11 +2,11 @@ package au.com.glob.clodmc.modules.homes;
 
 import au.com.glob.clodmc.command.CommandError;
 import au.com.glob.clodmc.command.CommandUtil;
-import au.com.glob.clodmc.config.PlayerConfig;
 import dev.jorel.commandapi.CommandAPICommand;
 import dev.jorel.commandapi.executors.CommandArguments;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 
 public class BackCommand {
@@ -18,15 +18,17 @@ public class BackCommand {
             (CommandSender sender, CommandArguments args) -> {
               try {
                 Player player = CommandUtil.senderToPlayer(sender);
-                PlayerConfig playerConfig = CommandUtil.getPlayerConfig(player);
+                FileConfiguration config = Homes.instance.getConfig(player);
 
-                Location location = playerConfig.getBackLocation();
+                Location location = config.getLocation("internal.back");
                 if (location == null) {
                   throw new CommandError("No previous location");
                 }
 
+                config.set("internal.back", player.getLocation());
+                Homes.instance.saveConfig(player, config);
+
                 player.sendRichMessage("<grey>Teleporting you back</grey>");
-                playerConfig.setBackLocation(player.getLocation());
                 player.teleportAsync(location);
 
               } catch (CommandError e) {

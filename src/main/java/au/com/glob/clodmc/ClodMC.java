@@ -1,6 +1,5 @@
 package au.com.glob.clodmc;
 
-import au.com.glob.clodmc.config.PluginConfig;
 import au.com.glob.clodmc.modules.homes.BackCommand;
 import au.com.glob.clodmc.modules.homes.DelHomeCommand;
 import au.com.glob.clodmc.modules.homes.HomeCommand;
@@ -10,6 +9,7 @@ import au.com.glob.clodmc.modules.homes.SetHomeCommand;
 import au.com.glob.clodmc.modules.homes.SpawnCommand;
 import au.com.glob.clodmc.modules.invite.InviteCommand;
 import au.com.glob.clodmc.modules.spawn.PreventMobSpawn;
+import au.com.glob.clodmc.util.Mailer;
 import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.CommandAPIBukkitConfig;
 import java.io.File;
@@ -17,8 +17,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 
 public final class ClodMC extends JavaPlugin {
-  private static ClodMC instance;
-  private File dataFolder;
+  public static ClodMC instance;
 
   public ClodMC() {
     super();
@@ -27,11 +26,9 @@ public final class ClodMC extends JavaPlugin {
 
   @Override
   public void onLoad() {
-    this.dataFolder = this.getDataFolder();
-    if (!this.dataFolder.exists()) {
-      if (!this.dataFolder.mkdirs()) {
-        logWarning("failed to create " + this.dataFolder);
-      }
+    File dataFolder = this.getDataFolder();
+    if (!dataFolder.exists() && !dataFolder.mkdirs()) {
+      logWarning("failed to create " + dataFolder);
     }
 
     CommandAPI.onLoad(new CommandAPIBukkitConfig(this).verboseOutput(true));
@@ -39,10 +36,9 @@ public final class ClodMC extends JavaPlugin {
 
   @Override
   public void onEnable() {
-    PluginConfig.getInstance().loadConfig(this.dataFolder);
-    PluginConfig.getInstance().reload();
-
     CommandAPI.onEnable();
+
+    Mailer.register();
 
     Homes.register();
     BackCommand.register();
@@ -60,10 +56,6 @@ public final class ClodMC extends JavaPlugin {
   @Override
   public void onDisable() {
     CommandAPI.onDisable();
-  }
-
-  public static @NotNull ClodMC getInstance() {
-    return instance;
   }
 
   public static void logWarning(@NotNull String message) {

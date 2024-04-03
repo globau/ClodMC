@@ -2,11 +2,11 @@ package au.com.glob.clodmc.modules.homes;
 
 import au.com.glob.clodmc.command.CommandError;
 import au.com.glob.clodmc.command.CommandUtil;
-import au.com.glob.clodmc.config.PlayerConfig;
 import dev.jorel.commandapi.CommandAPICommand;
 import dev.jorel.commandapi.executors.CommandArguments;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 
 public class HomeCommand {
@@ -19,23 +19,21 @@ public class HomeCommand {
             (CommandSender sender, CommandArguments args) -> {
               try {
                 Player player = CommandUtil.senderToPlayer(sender);
-                PlayerConfig playerConfig = CommandUtil.getPlayerConfig(player);
+                String name = (String) args.getOrDefault("name", "home");
 
-                String name = (String) args.getOrDefault("name", PlayerConfig.DEFAULT_NAME);
-
-                Location location = playerConfig.getHomeLocation(name);
+                FileConfiguration config = Homes.instance.getConfig(player);
+                Location location = config.getLocation("homes." + name);
                 if (location == null) {
                   throw new CommandError(
-                      name.equals(PlayerConfig.DEFAULT_NAME)
-                          ? "No home set"
-                          : "No such home '" + name + "'");
+                      name.equals("home") ? "No home set" : "No such home '" + name + "'");
                 }
+                config.set("internal.back", player.getLocation());
+                Homes.instance.saveConfig(player, config);
 
                 player.sendRichMessage(
                     "<grey>Teleporting you "
-                        + (name.equals(PlayerConfig.DEFAULT_NAME) ? "home" : "to '" + name + "'")
+                        + (name.equals("home") ? "home" : "to '" + name + "'")
                         + "</grey>");
-                playerConfig.setBackLocation(player.getLocation());
                 player.teleportAsync(location);
 
               } catch (CommandError e) {

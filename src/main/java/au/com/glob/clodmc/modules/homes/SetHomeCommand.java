@@ -1,12 +1,13 @@
 package au.com.glob.clodmc.modules.homes;
 
+import au.com.glob.clodmc.ClodMC;
 import au.com.glob.clodmc.command.CommandError;
 import au.com.glob.clodmc.command.CommandUtil;
-import au.com.glob.clodmc.config.PlayerConfig;
-import au.com.glob.clodmc.config.PluginConfig;
 import dev.jorel.commandapi.CommandAPICommand;
 import dev.jorel.commandapi.executors.CommandArguments;
 import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 
 public class SetHomeCommand {
@@ -18,20 +19,22 @@ public class SetHomeCommand {
         .executes(
             (CommandSender sender, CommandArguments args) -> {
               try {
+                int maxHomes = ClodMC.instance.getConfig().getInt("homes.max-allowed");
                 Player player = CommandUtil.senderToPlayer(sender);
-                PlayerConfig playerConfig = CommandUtil.getPlayerConfig(player);
+                String name = (String) args.getOrDefault("name", "home");
 
-                String name = (String) args.getOrDefault("name", PlayerConfig.DEFAULT_NAME);
-                int maxHomes = PluginConfig.getInstance().getInteger("homes", "max-allowed");
+                FileConfiguration config = Homes.instance.getConfig(player);
+                ConfigurationSection section = config.getConfigurationSection("homes");
+                boolean existing = section != null && section.contains(name);
 
-                boolean existing = playerConfig.getHomeLocation(name) != null;
-                if (!existing && playerConfig.getHomeNames().size() >= maxHomes) {
+                if (section != null && !existing && section.getKeys(false).size() >= maxHomes) {
                   throw new CommandError(
                       "You have reached the maximum number of homes (" + maxHomes + ")");
                 }
 
-                playerConfig.setHomeLocation(name, player.getLocation());
-                if (name.equals(PlayerConfig.DEFAULT_NAME)) {
+                config.set("homes." + name, player.getLocation());
+                Homes.instance.saveConfig(player, config);
+                if (name.equals("home")) {
                   player.sendMessage(
                       "Home " + (existing ? "updated" : "set") + " to you current location");
                 } else {

@@ -2,7 +2,6 @@ package au.com.glob.clodmc.modules.invite;
 
 import au.com.glob.clodmc.ClodMC;
 import au.com.glob.clodmc.command.CommandError;
-import au.com.glob.clodmc.config.PluginConfig;
 import au.com.glob.clodmc.util.HttpClient;
 import au.com.glob.clodmc.util.Mailer;
 import com.google.gson.JsonObject;
@@ -19,12 +18,19 @@ import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.Statistic;
 import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
 public class InviteCommand {
+  private static final int DEFAULT_PLAYTIME = 60 * 4;
+
   public static void register() {
-    PluginConfig.getInstance().setDefaultValue("invite", "playtime-minutes", 60 * 4);
+    FileConfiguration config = ClodMC.instance.getConfig();
+    if (!config.contains("invite.playtime-minutes")) {
+      config.set("invite.playtime", config.get("invite.playtime", DEFAULT_PLAYTIME));
+      ClodMC.instance.saveConfig();
+    }
 
     new CommandAPICommand("invite")
         .withShortDescription("Allow a player to join the server")
@@ -42,8 +48,7 @@ public class InviteCommand {
                 if (sender instanceof Player player && !player.isOp()) {
                   int ticks = player.getStatistic(Statistic.PLAY_ONE_MINUTE);
                   long minutesPlayed = Math.round(ticks / 20.0 / 60.0);
-                  PluginConfig config = PluginConfig.getInstance();
-                  int minPlaytime = config.getInteger("invite", "playtime-minutes");
+                  int minPlaytime = (int) config.get("invite.playtime-minutes", DEFAULT_PLAYTIME);
                   if (minutesPlayed < minPlaytime) {
                     throw new CommandError(
                         "You have not played long enough on this server to invite others");
@@ -68,7 +73,7 @@ public class InviteCommand {
                 if (isJava) {
                   Bukkit.getScheduler()
                       .runTaskAsynchronously(
-                          ClodMC.getInstance(),
+                          ClodMC.instance,
                           () -> {
                             String url =
                                 "https://api.mojang.com/users/profiles/Xminecraft/"
@@ -90,7 +95,7 @@ public class InviteCommand {
                 } else {
                   Bukkit.getScheduler()
                       .runTaskAsynchronously(
-                          ClodMC.getInstance(),
+                          ClodMC.instance,
                           () -> {
                             String url =
                                 "https://api.geysermc.org/v2/xbox/xuid/"
@@ -139,7 +144,7 @@ public class InviteCommand {
                                   "<yellow>" + normalisedName + " added to the whitelist</yellow>");
                               Bukkit.getScheduler()
                                   .runTaskAsynchronously(
-                                      ClodMC.getInstance(),
+                                      ClodMC.instance,
                                       () -> {
                                         try {
                                           Mailer.emailAdmin(
@@ -156,7 +161,7 @@ public class InviteCommand {
                                       });
                             }
                           }
-                        }.runTask(ClodMC.getInstance()));
+                        }.runTask(ClodMC.instance));
 
               } catch (CommandError e) {
                 sender.sendRichMessage("<red>" + e.getMessage() + "</red>");

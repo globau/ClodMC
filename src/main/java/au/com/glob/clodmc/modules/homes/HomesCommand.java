@@ -2,12 +2,14 @@ package au.com.glob.clodmc.modules.homes;
 
 import au.com.glob.clodmc.command.CommandError;
 import au.com.glob.clodmc.command.CommandUtil;
-import au.com.glob.clodmc.config.PlayerConfig;
 import dev.jorel.commandapi.CommandAPICommand;
 import dev.jorel.commandapi.executors.CommandArguments;
+import java.util.Collection;
 import java.util.List;
 import java.util.StringJoiner;
 import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 
 public class HomesCommand {
@@ -19,14 +21,15 @@ public class HomesCommand {
             (CommandSender sender, CommandArguments args) -> {
               try {
                 Player player = CommandUtil.senderToPlayer(sender);
-                PlayerConfig playerConfig = CommandUtil.getPlayerConfig(player);
-                List<String> names = playerConfig.getHomeNames();
+                FileConfiguration config = Homes.instance.getConfig(player);
+                ConfigurationSection section = config.getConfigurationSection("homes");
+                Collection<String> names = section == null ? List.of() : section.getKeys(false);
 
                 if (names.isEmpty()) {
                   player.sendRichMessage("Homes: <italic>None</italic>");
                 } else {
                   StringJoiner joiner = new StringJoiner(", ");
-                  for (String name : names) {
+                  for (String name : names.stream().sorted().toList()) {
                     joiner.add(name);
                   }
                   player.sendMessage("Homes: " + joiner);

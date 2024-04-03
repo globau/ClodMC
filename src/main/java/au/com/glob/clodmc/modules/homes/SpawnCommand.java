@@ -1,9 +1,8 @@
 package au.com.glob.clodmc.modules.homes;
 
+import au.com.glob.clodmc.ClodMC;
 import au.com.glob.clodmc.command.CommandError;
 import au.com.glob.clodmc.command.CommandUtil;
-import au.com.glob.clodmc.config.PlayerConfig;
-import au.com.glob.clodmc.config.PluginConfig;
 import dev.jorel.commandapi.CommandAPICommand;
 import dev.jorel.commandapi.executors.CommandArguments;
 import java.util.Random;
@@ -12,6 +11,7 @@ import org.bukkit.GameRule;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 
 public class SpawnCommand {
@@ -23,15 +23,17 @@ public class SpawnCommand {
             (CommandSender sender, CommandArguments args) -> {
               try {
                 Player player = CommandUtil.senderToPlayer(sender);
-                PlayerConfig playerConfig = CommandUtil.getPlayerConfig(player);
 
-                playerConfig.setBackLocation(player.getLocation());
-
-                String worldName = PluginConfig.getInstance().getString("homes", "overworld-name");
+                String worldName =
+                    (String) ClodMC.instance.getConfig().get("homes.overworld-name", "world");
                 World world = Bukkit.getWorld(worldName);
                 if (world == null) {
                   return;
                 }
+
+                FileConfiguration config = Homes.instance.getConfig(player);
+                config.set("internal.back", player.getLocation());
+                Homes.instance.saveConfig(player, config);
 
                 player.sendRichMessage("<grey>Teleporting you to spawn</grey>");
 

@@ -1,6 +1,6 @@
 package au.com.glob.clodmc.util;
 
-import au.com.glob.clodmc.config.PluginConfig;
+import au.com.glob.clodmc.ClodMC;
 import java.io.BufferedReader;
 import java.io.Closeable;
 import java.io.DataOutputStream;
@@ -10,10 +10,23 @@ import java.net.Socket;
 import java.text.DateFormat;
 import java.util.Date;
 import java.util.Locale;
+import java.util.Objects;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.jetbrains.annotations.NotNull;
 
 public class Mailer {
   private Mailer() {}
+
+  public static void register() {
+    FileConfiguration config = ClodMC.instance.getConfig();
+    if (!config.contains("mailer.hostname")) {
+      config.set("mailer.hostname", config.get("mailer.hostname", "in1-smtp.messagingengine.com"));
+      config.set("mailer.sender-name", config.get("mailer.sender-name", "Clod Minecraft Server"));
+      config.set("mailer.sender-addr", config.get("mailer.sender-addr", "clod-mc@glob.com.au"));
+      config.set("mailer.admin-addr", config.get("mailer.admin-addr", "byron@glob.com.au"));
+      ClodMC.instance.saveConfig();
+    }
+  }
 
   public static class MailerError extends Exception {
     public MailerError(String message) {
@@ -26,18 +39,21 @@ public class Mailer {
   }
 
   public static void emailAdmin(@NotNull String subject, @NotNull String body) throws MailerError {
-    send(PluginConfig.getInstance().getString("mailer", "admin-addr"), subject, body);
+    String addr = (String) ClodMC.instance.getConfig().get("mailer.admin-addr");
+    if (addr != null) {
+      send(addr, subject, body);
+    }
   }
 
   public static void send(@NotNull String recipient, @NotNull String subject, @NotNull String body)
       throws MailerError {
-    PluginConfig config = PluginConfig.getInstance();
-    String hostname = config.getString("mailer", "hostname");
-    String senderAddr = config.getString("mailer", "sender-addr");
-    String senderName = config.getString("mailer", "sender-name");
+    FileConfiguration config = ClodMC.instance.getConfig();
+    String hostname = (String) config.get("mailer.hostname");
+    String senderAddr = (String) config.get("mailer.sender-addr");
+    String senderName = (String) config.get("mailer.sender-name");
 
     try {
-      try (SMTP smtp = new SMTP(hostname)) {
+      try (SMTP smtp = new SMTP(Objects.requireNonNull(hostname))) {
         smtp.waitFor("220 ");
         smtp.sendAndWait("HELO glob.au", "250 ");
         smtp.sendAndWait("MAIL FROM: " + senderAddr, "250 ");

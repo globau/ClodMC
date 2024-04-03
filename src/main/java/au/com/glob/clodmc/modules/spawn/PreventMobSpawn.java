@@ -13,9 +13,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class PreventMobSpawn implements Listener {
   public static void register() {
-    Bukkit.getServer()
-        .getPluginManager()
-        .registerEvents(new PreventMobSpawn(), ClodMC.getInstance());
+    Bukkit.getServer().getPluginManager().registerEvents(new PreventMobSpawn(), ClodMC.instance);
   }
 
   @EventHandler(priority = EventPriority.LOWEST)
