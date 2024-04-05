@@ -1,4 +1,4 @@
-package au.com.glob.clodmc.modules.spawn;
+package au.com.glob.clodmc.modules.mobs;
 
 import au.com.glob.clodmc.ClodMC;
 import me.ryanhamshire.GriefPrevention.Claim;
