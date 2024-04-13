@@ -16,13 +16,11 @@ public class HttpClient {
 
   private static final Gson gson = new Gson();
 
-  @NotNull
-  public static JsonHttpResponse getJSON(@NotNull String urlString) {
+  @NotNull public static JsonHttpResponse getJSON(@NotNull String urlString) {
     return readJsonResponse(request(urlString));
   }
 
-  @NotNull
-  private static HttpURLConnection request(@NotNull String urlString) {
+  @NotNull private static HttpURLConnection request(@NotNull String urlString) {
     HttpURLConnection connection;
 
     try {
