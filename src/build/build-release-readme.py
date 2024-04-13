@@ -11,7 +11,7 @@ def main() -> None:
         check=True,
         encoding="utf8",
     ).stdout.strip()
-    with Path(f"{root_path}/SUMMARY.md").open() as f:
+    with Path(f"{root_path}/README.md").open() as f:
         print(f.read())
 
     print("## Recent Changes")
