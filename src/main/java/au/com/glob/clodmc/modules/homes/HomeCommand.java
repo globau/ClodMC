@@ -1,7 +1,7 @@
 package au.com.glob.clodmc.modules.homes;
 
-import au.com.glob.clodmc.command.CommandError;
 import au.com.glob.clodmc.command.CommandUtil;
+import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.CommandAPICommand;
 import dev.jorel.commandapi.executors.CommandArguments;
 import org.bukkit.Location;
@@ -17,28 +17,23 @@ public class HomeCommand {
         .withOptionalArguments(Homes.homesArgument("name"))
         .executes(
             (CommandSender sender, CommandArguments args) -> {
-              try {
-                Player player = CommandUtil.senderToPlayer(sender);
-                String name = (String) args.getOrDefault("name", "home");
+              Player player = CommandUtil.senderToPlayer(sender);
+              String name = (String) args.getOrDefault("name", "home");
 
-                FileConfiguration config = Homes.instance.getConfig(player);
-                Location location = config.getLocation("homes." + name);
-                if (location == null) {
-                  throw new CommandError(
-                      name.equals("home") ? "No home set" : "No such home '" + name + "'");
-                }
-                config.set("internal.back", player.getLocation());
-                Homes.instance.saveConfig(player, config);
-
-                player.sendRichMessage(
-                    "<grey>Teleporting you "
-                        + (name.equals("home") ? "home" : "to '" + name + "'")
-                        + "</grey>");
-                player.teleportAsync(location);
-
-              } catch (CommandError e) {
-                sender.sendRichMessage("<red>" + e.getMessage() + "</red>");
+              FileConfiguration config = Homes.instance.getConfig(player);
+              Location location = config.getLocation("homes." + name);
+              if (location == null) {
+                throw CommandAPI.failWithString(
+                    name.equals("home") ? "No home set" : "No such home '" + name + "'");
               }
+              config.set("internal.back", player.getLocation());
+              Homes.instance.saveConfig(player, config);
+
+              player.sendRichMessage(
+                  "<grey>Teleporting you "
+                      + (name.equals("home") ? "home" : "to '" + name + "'")
+                      + "</grey>");
+              player.teleportAsync(location);
             })
         .register();
   }
