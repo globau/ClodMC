@@ -2,9 +2,6 @@
 /.gradle/
 /.idea/
 /build/
-/dist/
 /gradlew.bat
-/jdk.temp/
-/jdk/
-/libs/
+/local.gradle
 __pycache__

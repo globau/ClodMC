@@ -1,0 +1,52 @@
+name: release
+on: [push]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: jdk
+        uses: actions/setup-java@v4
+        with:
+          distribution: microsoft
+          java-version: 17
+
+      - name: verify gradle wrapper
+        uses: gradle/wrapper-validation-action@v2
+
+      - name: setup gradlew
+        run: ./gradlew --version
+
+      - name: build
+        run: |
+          rm -f build/libs/*.jar
+          ./gradlew build
+
+      - name: tag
+        id: tag
+        run: |
+          VER=$(./src/build/version.py)
+          echo "ver=$VER" >> $GITHUB_OUTPUT
+          TAG=v$VER
+          echo "tag=$TAG" >> $GITHUB_OUTPUT
+          git config user.name "${GITHUB_ACTOR}"
+          git config user.email "${GITHUB_ACTOR}@users.noreply.github.com"
+          git tag -a $TAG -m $TAG ${GITHUB_SHA}
+          git push origin $TAG
+
+      - name: release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git fetch --tags
+          ./src/build/build-release-readme.py > release.md
+          gh release create ${{ steps.tag.outputs.tag }} \
+            --repo="$GITHUB_REPOSITORY" \
+            --generate-notes \
+            --notes-file release.md \
+            --title="ClodMC-${{ steps.tag.outputs.ver }}" \
+            README.md build/libs/*.jar

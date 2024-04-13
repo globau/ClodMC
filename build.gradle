@@ -1,78 +1,63 @@
-//file:noinspection GrUnresolvedAccess
-//file:noinspection GradlePackageUpdate
-//file:noinspection GroovyAccessibility
-//file:noinspection GroovyAssignabilityCheck
-//file:noinspection GroovyUnusedAssignment
-//file:noinspection unused
-
-class Globals {
-    static def plugin_name = "ClodMC"
-    static def plugin_version = "./src/build/sem-ver".execute().text.trim()
-    // run `make update` to update tooling versions
-    static def target_java_version = 17
-    static def jdk_version = "17.0.10+7"
-    static def google_java_format_version = "1.19.2"
-    static def checkstyle_version = "10.13.0"
-}
-
-import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
-
 plugins {
-    id "java"
-    id "com.github.johnrengelman.shadow" version "8.1.1"
+    id 'java-library'
+    id 'com.diffplug.spotless' version '6.25.0'
+    id 'com.github.johnrengelman.shadow' version '8.1.1'
+    id 'checkstyle'
 }
-
-group = "au.com.glob"
 
 repositories {
     mavenCentral()
     maven { url = "https://repo.papermc.io/repository/maven-public/" }
-    maven { url = "https://oss.sonatype.org/content/groups/public/" }
-    maven { url = "https://repo.codemc.org/repository/maven-public/" }
     maven { url = "https://jitpack.io" }
 }
 
 dependencies {
-    shadow localGroovy()
-    shadow gradleApi()
-
+    implementation 'dev.jorel:commandapi-bukkit-shade:9.3.0'
     compileOnly "io.papermc.paper:paper-api:1.20.4-R0.1-SNAPSHOT"
     compileOnly "com.github.GriefPrevention:GriefPrevention:16.18.2"
+    compileOnly 'org.jetbrains:annotations:15.0'
+}
 
-    implementation "dev.jorel:commandapi-bukkit-shade:9.3.0"
+group = 'au.com.glob'
+version = './src/build/version.py'.execute().text.trim()
+description = 'ClodMC'
+java.sourceCompatibility = JavaVersion.VERSION_17
+
+shadowJar {
+    archiveClassifier.set('')
+    enableRelocation true
+    minimize()
+}
+tasks.named('build') {
+    dependsOn('shadowJar')
 }
 
 tasks.withType(JavaCompile).configureEach {
-    options.encoding = "UTF-8"
-    options.release.set(Globals.target_java_version)
+    options.encoding = 'UTF-8'
 }
 
-tasks.named("shadowJar", ShadowJar) {
-    enableRelocation true
-}
-shadowJar {
-    dependencies {
-        include dependency("dev.jorel:commandapi-bukkit-shade:9.3.0")
+spotless {
+    format 'misc', {
+        target '*.gradle', '.gitattributes', '.gitignore'
+        trimTrailingWhitespace()
+        indentWithSpaces(4)
+        endWithNewline()
     }
-    relocate("dev.jorel.commandapi", "au.com.glob.shadow.commandapi")
-
-    archiveFileName = "ClodMC.jar"
-}
-
-
-tasks.register("deploy", Copy) {
-    from jar
-    into "/opt/clod-mc/minecraft/plugins"
-}
-tasks.named("deploy") {
-    dependsOn("shadowJar")
+    java {
+        googleJavaFormat('1.19.2').reflowLongStrings().skipJavadocFormatting()
+        formatAnnotations()
+    }
 }
 
 processResources {
-    def props = [version: Globals.plugin_version]
+    def props = [version: version]
     inputs.properties props
     filteringCharset "UTF-8"
     filesMatching("plugin.yml") {
         expand props
     }
+}
+
+if (file('local.gradle').exists()) {
+    apply from: 'local.gradle'
 }

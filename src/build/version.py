@@ -1,8 +1,7 @@
 #!/usr/bin/env python3
 import datetime
 import subprocess
-
-from util import main_wrapper
+import sys
 
 
 def main() -> None:
@@ -20,5 +19,10 @@ def main() -> None:
     print(dt.strftime("%y.%m%d.%H%M"))
 
 
-with main_wrapper():
+try:
     main()
+except KeyboardInterrupt:
+    sys.exit(3)
+except Exception as e:
+    print(e, file=sys.stderr)
+    sys.exit(1)
