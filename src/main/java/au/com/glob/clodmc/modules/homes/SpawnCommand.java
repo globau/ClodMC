@@ -53,6 +53,7 @@ public class SpawnCommand {
               }
 
               // teleport to the center of the block, just above the surface as per vanilla
+              player.setFlying(false);
               player.teleportAsync(loc.add(0.5, 0.1, 0.5));
             })
         .register();
