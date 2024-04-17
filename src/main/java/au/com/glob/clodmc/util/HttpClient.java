@@ -5,6 +5,7 @@ import com.google.gson.JsonObject;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
+import java.net.URI;
 import java.net.URL;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -24,7 +25,7 @@ public class HttpClient {
     HttpURLConnection connection;
 
     try {
-      URL url = new URL(urlString);
+      URL url = URI.create(urlString).toURL();
       connection = (HttpURLConnection) url.openConnection();
     } catch (Exception exception) {
       throw new RuntimeException("Failed to create connection", exception);
