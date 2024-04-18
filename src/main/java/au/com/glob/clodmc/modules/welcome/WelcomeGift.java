@@ -1,6 +1,7 @@
 package au.com.glob.clodmc.modules.welcome;
 
 import au.com.glob.clodmc.ClodMC;
+import au.com.glob.clodmc.util.Config;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -14,6 +15,7 @@ public class WelcomeGift implements Listener {
 
   public static void register() {
     Bukkit.getServer().getPluginManager().registerEvents(new WelcomeGift(), ClodMC.instance);
+    Config.init("welcome-book.yml");
   }
 
   @EventHandler

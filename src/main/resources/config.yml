@@ -1,0 +1,21 @@
+# Clod-MC config
+
+homes:
+  # maximum amount of homes across all worlds
+  max-allowed: 2
+  # name of the world that /spawn takes you to
+  overworld-name: world
+
+mailer:
+  # send admin emails here (eg. notifications of invites)
+  admin-addr: clod@glob.au
+  # smtp server hostname
+  hostname: in1-smtp.messagingengine.com
+  # email sender's name
+  sender-name: Clod Minecraft Server
+  # email sender's address
+  sender-addr: clod@glob.au
+
+invite:
+  # minimum playtime in minutes before a player can /invite
+  playtime: 240

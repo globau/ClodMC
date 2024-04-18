@@ -18,20 +18,11 @@ import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.Statistic;
 import org.bukkit.command.CommandSender;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
 public class InviteCommand {
-  private static final int DEFAULT_PLAYTIME = 60 * 4;
-
   public static void register() {
-    FileConfiguration config = ClodMC.instance.getConfig();
-    if (!config.contains("invite.playtime-minutes")) {
-      config.set("invite.playtime", config.get("invite.playtime", DEFAULT_PLAYTIME));
-      ClodMC.instance.saveConfig();
-    }
-
     new CommandAPICommand("invite")
         .withShortDescription("Allow a player to join the server")
         .withArguments(new MultiLiteralArgument("type", "java", "bedrock"))
@@ -46,7 +37,7 @@ public class InviteCommand {
               if (sender instanceof Player player && !player.isOp()) {
                 int ticks = player.getStatistic(Statistic.PLAY_ONE_MINUTE);
                 long minutesPlayed = Math.round(ticks / 20.0 / 60.0);
-                int minPlaytime = (int) config.get("invite.playtime-minutes", DEFAULT_PLAYTIME);
+                int minPlaytime = ClodMC.instance.getConfig().getInt("invite.playtime-minutes");
                 if (minutesPlayed < minPlaytime) {
                   throw CommandAPI.failWithString(
                       "You have not played long enough on this server to invite others");

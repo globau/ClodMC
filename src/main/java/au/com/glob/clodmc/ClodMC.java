@@ -12,7 +12,7 @@ import au.com.glob.clodmc.modules.mobs.PreventMobGriefing;
 import au.com.glob.clodmc.modules.mobs.PreventMobSpawn;
 import au.com.glob.clodmc.modules.welcome.WelcomeCommand;
 import au.com.glob.clodmc.modules.welcome.WelcomeGift;
-import au.com.glob.clodmc.util.Mailer;
+import au.com.glob.clodmc.util.Config;
 import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.CommandAPIBukkitConfig;
 import java.io.File;
@@ -39,9 +39,9 @@ public final class ClodMC extends JavaPlugin {
 
   @Override
   public void onEnable() {
-    CommandAPI.onEnable();
+    Config.init("config.yml");
 
-    Mailer.register();
+    CommandAPI.onEnable();
 
     Homes.register();
     BackCommand.register();
@@ -65,7 +65,20 @@ public final class ClodMC extends JavaPlugin {
     CommandAPI.onDisable();
   }
 
+  @Override
+  public @NotNull Config getConfig() {
+    return Config.getInstance("config.yml");
+  }
+
+  public static void logInfo(@NotNull String message) {
+    instance.getLogger().info(message);
+  }
+
   public static void logWarning(@NotNull String message) {
     instance.getLogger().warning(message);
+  }
+
+  public static void logError(@NotNull String message) {
+    instance.getLogger().severe(message);
   }
 }

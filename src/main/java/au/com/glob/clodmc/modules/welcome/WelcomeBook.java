@@ -1,12 +1,11 @@
 package au.com.glob.clodmc.modules.welcome;
 
 import au.com.glob.clodmc.ClodMC;
-import java.io.File;
+import au.com.glob.clodmc.util.Config;
 import java.util.List;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Material;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BookMeta;
 import org.jetbrains.annotations.Nullable;
@@ -15,18 +14,12 @@ public class WelcomeBook {
   private static ItemStack welcomeBookItemStack;
   private static long configLastModified = -1;
 
-  @Nullable public static ItemStack build() {
+  public static @Nullable ItemStack build() {
     // build an ItemStack book from welcome-book.yml
-    // changes to the config will automatically be detected
 
-    File configFile = new File(ClodMC.instance.getDataFolder(), "welcome-book.yml");
-    if (!configFile.exists()) {
-      welcomeBookItemStack = null;
-      configLastModified = -1;
-      return null;
-    }
+    Config config = Config.getInstance("welcome-book.yml");
 
-    long mtime = configFile.lastModified();
+    long mtime = config.lastModified();
     if (mtime == configLastModified) {
       return welcomeBookItemStack;
     }
@@ -38,19 +31,17 @@ public class WelcomeBook {
     BookMeta bookMeta = (BookMeta) bookItem.getItemMeta();
     BookMeta.BookMetaBuilder builder = bookMeta.toBuilder();
 
-    YamlConfiguration config = YamlConfiguration.loadConfiguration(configFile);
-
     List<String> pages = config.getStringList("pages");
     if (pages.isEmpty()) {
-      ClodMC.logWarning(configFile + ": no pages");
+      ClodMC.logWarning(config + ": no pages");
       return null;
     }
     for (String page : pages) {
       builder.addPage(miniMessage.deserialize(page));
     }
     builder
-        .title(Component.text(config.getString("title", "Welcome")))
-        .author(Component.text(config.getString("author", "glob")));
+        .title(Component.text(config.getString("title", "")))
+        .author(Component.text(config.getString("author", "")));
 
     bookItem.setItemMeta(builder.build());
     welcomeBookItemStack = bookItem;

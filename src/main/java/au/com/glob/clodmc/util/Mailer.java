@@ -11,22 +11,10 @@ import java.text.DateFormat;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Objects;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.jetbrains.annotations.NotNull;
 
 public class Mailer {
   private Mailer() {}
-
-  public static void register() {
-    FileConfiguration config = ClodMC.instance.getConfig();
-    if (!config.contains("mailer.hostname")) {
-      config.set("mailer.hostname", config.get("mailer.hostname", "in1-smtp.messagingengine.com"));
-      config.set("mailer.sender-name", config.get("mailer.sender-name", "Clod Minecraft Server"));
-      config.set("mailer.sender-addr", config.get("mailer.sender-addr", "clod-mc@glob.com.au"));
-      config.set("mailer.admin-addr", config.get("mailer.admin-addr", "byron@glob.com.au"));
-      ClodMC.instance.saveConfig();
-    }
-  }
 
   public static class MailerError extends Exception {
     public MailerError(String message) {
@@ -47,10 +35,10 @@ public class Mailer {
 
   public static void send(@NotNull String recipient, @NotNull String subject, @NotNull String body)
       throws MailerError {
-    FileConfiguration config = ClodMC.instance.getConfig();
-    String hostname = (String) config.get("mailer.hostname");
-    String senderAddr = (String) config.get("mailer.sender-addr");
-    String senderName = (String) config.get("mailer.sender-name");
+    Config config = ClodMC.instance.getConfig();
+    String hostname = config.getString("mailer.hostname");
+    String senderAddr = config.getString("mailer.sender-addr");
+    String senderName = config.getString("mailer.sender-name");
 
     try {
       try (SMTP smtp = new SMTP(Objects.requireNonNull(hostname))) {

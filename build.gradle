@@ -48,6 +48,11 @@ spotless {
         googleJavaFormat('1.19.2').reflowLongStrings().skipJavadocFormatting()
         formatAnnotations()
     }
+    yaml {
+        target 'src/main/resources/*.yml'
+        trimTrailingWhitespace()
+        endWithNewline()
+    }
 }
 
 processResources {

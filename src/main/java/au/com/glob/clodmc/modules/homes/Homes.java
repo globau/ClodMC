@@ -27,18 +27,11 @@ public class Homes implements Listener {
   private final Map<String, FileConfiguration> playerConfigs = new HashMap<>();
 
   public static void register() {
-    FileConfiguration config = ClodMC.instance.getConfig();
-    if (!config.contains("homes.max-allowed")) {
-      config.set("homes.max-allowed", config.get("homes.max-allowed", 2));
-      config.set("homes.overworld-name", config.get("homes.overworld-name", "world"));
-      ClodMC.instance.saveConfig();
-    }
-
-    Bukkit.getServer().getPluginManager().registerEvents(new Homes(), ClodMC.instance);
-
     for (Player player : Bukkit.getServer().getOnlinePlayers()) {
       Homes.instance.onPlayerJoin(player);
     }
+
+    Bukkit.getServer().getPluginManager().registerEvents(new Homes(), ClodMC.instance);
   }
 
   private Homes() {
