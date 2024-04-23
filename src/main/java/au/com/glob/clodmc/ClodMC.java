@@ -1,5 +1,6 @@
 package au.com.glob.clodmc;
 
+import au.com.glob.clodmc.modules.admin.OutlineClaimCommand;
 import au.com.glob.clodmc.modules.homes.BackCommand;
 import au.com.glob.clodmc.modules.homes.DelHomeCommand;
 import au.com.glob.clodmc.modules.homes.HomeCommand;
@@ -58,6 +59,8 @@ public final class ClodMC extends JavaPlugin {
 
     WelcomeGift.register();
     WelcomeCommand.register();
+
+    OutlineClaimCommand.register();
   }
 
   @Override
