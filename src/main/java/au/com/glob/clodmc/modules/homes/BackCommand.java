@@ -4,10 +4,10 @@ import au.com.glob.clodmc.command.CommandUtil;
 import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.CommandAPICommand;
 import dev.jorel.commandapi.executors.CommandArguments;
-import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 public class BackCommand {
   public static void register() {
@@ -19,17 +19,26 @@ public class BackCommand {
               Player player = CommandUtil.senderToPlayer(sender);
               FileConfiguration config = Homes.instance.getConfig(player);
 
-              Location location = config.getLocation("internal.back");
+              PlayerLocation location = (PlayerLocation) config.get("internal.back");
               if (location == null) {
                 throw CommandAPI.failWithString("No previous location");
               }
 
-              config.set("internal.back", player.getLocation());
-              Homes.instance.saveConfig(player, config);
+              BackCommand.store(player, config);
 
               player.sendRichMessage("<grey>Teleporting you back</grey>");
-              player.teleportAsync(location);
+              location.teleportPlayer(player);
             })
         .register();
+  }
+
+  public static void store(@NotNull Player player) {
+    store(player, Homes.instance.getConfig(player));
+  }
+
+  public static void store(@NotNull Player player, @NotNull FileConfiguration config) {
+    PlayerLocation playerLocation = PlayerLocation.of(player);
+    config.set("internal.back", playerLocation);
+    Homes.instance.saveConfig(player, config);
   }
 }

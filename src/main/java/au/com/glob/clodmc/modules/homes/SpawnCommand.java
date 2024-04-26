@@ -10,7 +10,6 @@ import org.bukkit.GameRule;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 
 public class SpawnCommand {
@@ -29,9 +28,7 @@ public class SpawnCommand {
                 return;
               }
 
-              FileConfiguration config = Homes.instance.getConfig(player);
-              config.set("internal.back", player.getLocation());
-              Homes.instance.saveConfig(player, config);
+              BackCommand.store(player);
 
               player.sendRichMessage("<grey>Teleporting you to spawn</grey>");
 

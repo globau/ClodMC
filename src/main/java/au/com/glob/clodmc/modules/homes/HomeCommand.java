@@ -26,8 +26,7 @@ public class HomeCommand {
                 throw CommandAPI.failWithString(
                     name.equals("home") ? "No home set" : "No such home '" + name + "'");
               }
-              config.set("internal.back", player.getLocation());
-              Homes.instance.saveConfig(player, config);
+              BackCommand.store(player, config);
 
               player.sendRichMessage(
                   "<grey>Teleporting you "
