@@ -1,19 +1,20 @@
 .PHONY: format test
 
 java-files := $(shell find src -name '*.java')
-config-files := $(shell find src -name '*.yml') build.gradle settings.gradle
+config-files := $(shell find src -name '*.yml') build.gradle settings.gradle Makefile
 version := $(shell src/build/version.py)
+gradle := ./gradlew $(shell ./src/build/gradle-args)
 
-build: build/libs/PortalNetwork-$(version).jar
-build/libs/PortalNetwork-$(version).jar: $(java-files) $(config-files)
-	./gradlew build
-	@echo built build/libs/PortalNetwork-$(version).jar
+build: build/libs/ClodMC-$(version).jar
+build/libs/ClodMC-$(version).jar: $(java-files) $(config-files)
+	$(gradle) build
+	@echo built build/libs/ClodMC-$(version).jar
 
 format: build/format
 build/format: $(java-files) $(config-files)
 	@mkdir -p build
-	./gradlew :spotlessApply
+	$(gradle) :spotlessApply
 	@touch $@
 
 test:
-	./gradlew check
+	$(gradle) check

@@ -35,7 +35,7 @@ public final class ClodMC extends JavaPlugin {
       logWarning("failed to create " + dataFolder);
     }
 
-    CommandAPI.onLoad(new CommandAPIBukkitConfig(this).verboseOutput(true));
+    CommandAPI.onLoad(new CommandAPIBukkitConfig(this));
   }
 
   @Override

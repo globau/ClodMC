@@ -7,14 +7,14 @@ plugins {
 
 repositories {
     mavenCentral()
-    maven { url = "https://repo.papermc.io/repository/maven-public/" }
-    maven { url = "https://jitpack.io" }
+    maven { url = 'https://repo.papermc.io/repository/maven-public/' }
+    maven { url = 'https://jitpack.io' }
 }
 
 dependencies {
     implementation 'dev.jorel:commandapi-bukkit-shade:9.3.0'
-    compileOnly "io.papermc.paper:paper-api:1.20.4-R0.1-SNAPSHOT"
-    compileOnly "com.github.GriefPrevention:GriefPrevention:16.18.2"
+    compileOnly 'io.papermc.paper:paper-api:1.20.4-R0.1-SNAPSHOT'
+    compileOnly 'com.github.GriefPrevention:GriefPrevention:16.18.2'
     compileOnly 'org.jetbrains:annotations:15.0'
 }
 
@@ -58,8 +58,8 @@ spotless {
 processResources {
     def props = [version: version]
     inputs.properties props
-    filteringCharset "UTF-8"
-    filesMatching("plugin.yml") {
+    filteringCharset 'UTF-8'
+    filesMatching('plugin.yml') {
         expand props
     }
 }
