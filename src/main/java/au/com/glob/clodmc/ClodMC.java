@@ -6,6 +6,7 @@ import au.com.glob.clodmc.modules.homes.DelHomeCommand;
 import au.com.glob.clodmc.modules.homes.HomeCommand;
 import au.com.glob.clodmc.modules.homes.Homes;
 import au.com.glob.clodmc.modules.homes.HomesCommand;
+import au.com.glob.clodmc.modules.homes.PlayerLocation;
 import au.com.glob.clodmc.modules.homes.SetHomeCommand;
 import au.com.glob.clodmc.modules.homes.SpawnCommand;
 import au.com.glob.clodmc.modules.invite.InviteCommand;
@@ -17,10 +18,15 @@ import au.com.glob.clodmc.util.Config;
 import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.CommandAPIBukkitConfig;
 import java.io.File;
+import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 
 public final class ClodMC extends JavaPlugin {
+  static {
+    ConfigurationSerialization.registerClass(PlayerLocation.class, "Location");
+  }
+
   public static ClodMC instance;
 
   public ClodMC() {

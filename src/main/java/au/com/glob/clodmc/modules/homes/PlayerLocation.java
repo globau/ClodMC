@@ -3,17 +3,12 @@ package au.com.glob.clodmc.modules.homes;
 import java.util.Map;
 import org.bukkit.Location;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
-import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.configuration.serialization.SerializableAs;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 @SerializableAs("Location")
 public class PlayerLocation implements ConfigurationSerializable {
-  static {
-    ConfigurationSerialization.registerClass(PlayerLocation.class, "Location");
-  }
-
   private final Location location;
   private final boolean isFlying;
 
