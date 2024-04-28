@@ -118,6 +118,12 @@ public class InviteCommand {
                                     + " is not a valid "
                                     + (isJava ? "Java" : "Bedrock")
                                     + " player name</red>");
+                            if (!isJava) {
+                              sender.sendRichMessage(
+                                  "<yellow>Ask "
+                                      + name
+                                      + " to try to connect, then try again</yellow>");
+                            }
                             return;
                           }
 
