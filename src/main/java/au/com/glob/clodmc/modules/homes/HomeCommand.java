@@ -1,6 +1,7 @@
 package au.com.glob.clodmc.modules.homes;
 
 import au.com.glob.clodmc.command.CommandUtil;
+import au.com.glob.clodmc.util.PlayerLocation;
 import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.CommandAPICommand;
 import dev.jorel.commandapi.executors.CommandArguments;
@@ -32,7 +33,12 @@ public class HomeCommand {
                   "<grey>Teleporting you "
                       + (name.equals("home") ? "home" : "to '" + name + "'")
                       + "</grey>");
-              player.teleportAsync(location);
+              try {
+                PlayerLocation playerLoc = PlayerLocation.of(location);
+                playerLoc.teleportPlayer(player);
+              } catch (PlayerLocation.LocationError e) {
+                throw CommandAPI.failWithString(e.getMessage());
+              }
             })
         .register();
   }

@@ -1,6 +1,7 @@
 package au.com.glob.clodmc.modules.homes;
 
 import au.com.glob.clodmc.command.CommandUtil;
+import au.com.glob.clodmc.util.PlayerLocation;
 import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.CommandAPICommand;
 import dev.jorel.commandapi.executors.CommandArguments;
@@ -27,7 +28,11 @@ public class BackCommand {
               BackCommand.store(player, config);
 
               player.sendRichMessage("<grey>Teleporting you back</grey>");
-              location.teleportPlayer(player);
+              try {
+                location.teleportPlayer(player);
+              } catch (PlayerLocation.LocationError e) {
+                throw CommandAPI.failWithString(e.getMessage());
+              }
             })
         .register();
   }
