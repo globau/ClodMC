@@ -11,6 +11,7 @@ import au.com.glob.clodmc.modules.homes.SpawnCommand;
 import au.com.glob.clodmc.modules.invite.InviteCommand;
 import au.com.glob.clodmc.modules.mobs.PreventMobGriefing;
 import au.com.glob.clodmc.modules.mobs.PreventMobSpawn;
+import au.com.glob.clodmc.modules.plugins.RequiredPlugins;
 import au.com.glob.clodmc.modules.welcome.WelcomeCommand;
 import au.com.glob.clodmc.modules.welcome.WelcomeGift;
 import au.com.glob.clodmc.util.Config;
@@ -49,6 +50,8 @@ public final class ClodMC extends JavaPlugin {
     Config.init("config.yml");
 
     CommandAPI.onEnable();
+
+    RequiredPlugins.register();
 
     Homes.register();
     BackCommand.register();

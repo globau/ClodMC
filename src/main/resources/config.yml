@@ -19,3 +19,10 @@ mailer:
 invite:
   # minimum playtime in minutes before a player can /invite
   playtime: 240
+
+required-plugins:
+  # list of plugins that must be loaded.  if any of these
+  # are not running, players will not be able to join
+  - ChunkyBorder
+  - GriefPrevention
+  - LuckPerms
