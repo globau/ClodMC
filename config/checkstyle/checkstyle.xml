@@ -122,7 +122,9 @@
     <module name="OneStatementPerLine"/>
     <module name="MultipleVariableDeclarations"/>
     <module name="ArrayTypeStyle"/>
+    <!-- glob: this is fine
     <module name="MissingSwitchDefault"/>
+    -->
     <module name="FallThrough"/>
     <module name="UpperEll"/>
     <module name="ModifierOrder"/>

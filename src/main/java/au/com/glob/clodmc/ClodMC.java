@@ -9,6 +9,7 @@ import au.com.glob.clodmc.modules.homes.HomesCommand;
 import au.com.glob.clodmc.modules.homes.SetHomeCommand;
 import au.com.glob.clodmc.modules.homes.SpawnCommand;
 import au.com.glob.clodmc.modules.invite.InviteCommand;
+import au.com.glob.clodmc.modules.mobs.BetterDrops;
 import au.com.glob.clodmc.modules.mobs.PreventMobGriefing;
 import au.com.glob.clodmc.modules.mobs.PreventMobSpawn;
 import au.com.glob.clodmc.modules.plugins.RequiredPlugins;
@@ -63,6 +64,7 @@ public final class ClodMC extends JavaPlugin {
 
     InviteCommand.register();
 
+    BetterDrops.register();
     PreventMobGriefing.register();
     PreventMobSpawn.register();
 

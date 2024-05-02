@@ -24,3 +24,5 @@ added to the server's whitelist.
 - mobs will not spawn in admin claims (eg. spawn)
 - creeper explosions no longer destroy blocks
 - endermen no longer pick up blocks
+- shulkers always drop two shells when killed by a player
+- wither skeletons have a slightly increased chance of dropping heads
