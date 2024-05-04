@@ -1,4 +1,4 @@
-package au.com.glob.clodmc.modules.plugins;
+package au.com.glob.clodmc.modules.server;
 
 import au.com.glob.clodmc.ClodMC;
 import java.util.Set;
