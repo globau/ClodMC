@@ -1,6 +1,7 @@
 package au.com.glob.clodmc.modules.homes;
 
 import au.com.glob.clodmc.command.CommandUtil;
+import au.com.glob.clodmc.util.BlockPos;
 import au.com.glob.clodmc.util.PlayerLocation;
 import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.CommandAPICommand;
@@ -36,7 +37,7 @@ public class HomeCommand {
               try {
                 PlayerLocation playerLoc = PlayerLocation.of(location);
                 playerLoc.teleportPlayer(player);
-              } catch (PlayerLocation.LocationError e) {
+              } catch (BlockPos.LocationError e) {
                 throw CommandAPI.failWithString(e.getMessage());
               }
             })
