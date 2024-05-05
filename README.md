@@ -26,3 +26,9 @@ added to the server's whitelist.
 - endermen no longer pick up blocks
 - shulkers always drop two shells when killed by a player
 - wither skeletons have a slightly increased chance of dropping heads
+
+### Other
+
+- new players receive a book welcoming them to the server
+- shift+right-click to sort a container
+- the server announces the name of the player who skipped the night

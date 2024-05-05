@@ -1,10 +1,11 @@
 title: Welcome to Clod-MC
 author: glob
 pages:
-- "Welcome to <b>Clod-MC</b>\n\nMap\n\n  <click:open_url:https://clod.glob.au><blue>clod.glob.au</blue></click>\n\nAdmin\n\n  clod@glob.au"
-- "<b>Rules</b>\n\nBe respectful\n\nNo Griefing\nNo Stealing\n\nQuality of life\nclient mods only"
-- "<b>AFK</b>\n\nPlayers idle for 5 mins will be marked as AFK\n\n<dark_green>/afk</dark_green>\n go afk now"
-- "<b>Homes</b>\n\n<dark_green>/sethome [name]</dark_green>\n set home loc\n<dark_green>/home [name]</dark_green>\n tp home\n<dark_green>/delhome [name]</dark_green>\n delete home\n<dark_green>/homes</dark_green>\nlist homes\n<dark_green>/back</dark_green>\n tp to last loc\n<dark_green>/spawn</dark_green>\n tp to spawn"
-- "<b>Land Claims</b>\n\nClaim land with a golden shovel.\n\n<click:open_url:https://bit.ly/mcgpuser><blue>bit.ly/mcgpuser</blue></click>"
-- "<b>Invite Players</b>\n\nIf you've played on the server long enough you can invite other players.\n\n<dark_green>/invite java {name}</dark_green>\n invite java player\n<dark_green>/invite bedrock {name}</dark_green>\n invite bedrock player"
-- "<b>Portals</b>\n\nEnd-game player-built portals\n\n<click:open_url:https://s.glob.au/0Pa><blue>https://s.glob.au/0Pa</blue></click>"
+  - "Welcome to <b>Clod-MC</b>\n\nMap\n\n  <click:open_url:https://clod.glob.au><blue>clod.glob.au</blue></click>\n\nAdmin\n\n  clod@glob.au"
+  - "<b>Rules</b>\n\nBe respectful\n\nNo Griefing\nNo Stealing\n\nQuality of life\nclient mods only"
+  - "<b>AFK</b>\n\nPlayers idle for 5 mins will be marked as AFK\n\n<dark_green>/afk</dark_green>\n go afk now"
+  - "<b>Homes</b>\n\n<dark_green>/sethome [name]</dark_green>\n set home loc\n<dark_green>/home [name]</dark_green>\n tp home\n<dark_green>/delhome [name]</dark_green>\n delete home\n<dark_green>/homes</dark_green>\nlist homes\n<dark_green>/back</dark_green>\n tp to last loc\n<dark_green>/spawn</dark_green>\n tp to spawn"
+  - "<b>Land Claims</b>\n\nClaim land with a golden shovel.\n\n<click:open_url:https://bit.ly/mcgpuser><blue>bit.ly/mcgpuser</blue></click>"
+  - "<b>Invite Players</b>\n\nIf you've played on the server long enough you can invite other players.\n\n<dark_green>/invite java {name}</dark_green>\n invite java player\n<dark_green>/invite bedrock {name}</dark_green>\n invite bedrock player"
+  - "<b>Portals</b>\n\nEnd-game player-built portals\n\n<click:open_url:https://s.glob.au/0Pa><blue>https://s.glob.au/0Pa</blue></click>"
+  - "<b>Other</b>\n\nShift+Right-clicking an container's inventory will sort it"

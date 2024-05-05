@@ -8,6 +8,7 @@ import au.com.glob.clodmc.modules.homes.Homes;
 import au.com.glob.clodmc.modules.homes.HomesCommand;
 import au.com.glob.clodmc.modules.homes.SetHomeCommand;
 import au.com.glob.clodmc.modules.homes.SpawnCommand;
+import au.com.glob.clodmc.modules.inventory.InventorySort;
 import au.com.glob.clodmc.modules.invite.InviteCommand;
 import au.com.glob.clodmc.modules.mobs.BetterDrops;
 import au.com.glob.clodmc.modules.mobs.PreventMobGriefing;
@@ -58,6 +59,8 @@ public final class ClodMC extends JavaPlugin {
     ConfigureServer.register();
 
     Sleep.register();
+
+    InventorySort.register();
 
     Homes.register();
     BackCommand.register();
