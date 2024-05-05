@@ -187,7 +187,7 @@ public class BlockPos {
     }
   }
 
-  private boolean isUnsafe() {
+  public boolean isUnsafe() {
     return this.isDamaging() || this.isAboveAir();
   }
 

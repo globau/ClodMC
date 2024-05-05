@@ -2,6 +2,7 @@ package au.com.glob.clodmc.modules.homes;
 
 import au.com.glob.clodmc.ClodMC;
 import au.com.glob.clodmc.command.CommandUtil;
+import au.com.glob.clodmc.util.BlockPos;
 import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.CommandAPICommand;
 import dev.jorel.commandapi.executors.CommandArguments;
@@ -29,6 +30,10 @@ public class SetHomeCommand {
               if (section != null && !existing && section.getKeys(false).size() >= maxHomes) {
                 throw CommandAPI.failWithString(
                     "You have reached the maximum number of homes (" + maxHomes + ")");
+              }
+
+              if (BlockPos.of(player.getLocation()).isUnsafe()) {
+                throw CommandAPI.failWithString("Your current location is not safe");
               }
 
               config.set("homes." + name, player.getLocation());
