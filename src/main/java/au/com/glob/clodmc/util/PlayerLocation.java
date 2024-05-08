@@ -47,7 +47,6 @@ public class PlayerLocation implements ConfigurationSerializable {
       loc = BlockPos.of(this.location).getSafePos().asLocation();
       loc.setYaw(this.location.getYaw());
       loc.setPitch(this.location.getPitch());
-      loc = loc.add(0.5, 0, 0.5);
     }
     player.teleportAsync(loc);
   }

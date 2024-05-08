@@ -9,6 +9,8 @@ import java.util.Set;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
+import org.bukkit.block.Block;
+import org.bukkit.block.data.type.Slab;
 import org.jetbrains.annotations.NotNull;
 
 public class BlockPos {
@@ -16,75 +18,39 @@ public class BlockPos {
   private int x;
   private int y;
   private int z;
+  private double adjustY;
 
-  private static final Set<Material> DAMAGING_TYPES =
+  private static final Material PORTAL = getMaterial("NETHER_PORTAL", "PORTAL");
+  private static final Set<Material> UNSAFE_BELOW =
       getMatchingMaterials(
           "CACTUS",
           "CAMPFIRE",
           "FIRE",
+          "FLOWING_LAVA",
+          "LAVA",
           "MAGMA_BLOCK",
           "SOUL_CAMPFIRE",
           "SOUL_FIRE",
+          "STATIONARY_LAVA",
           "SWEET_BERRY_BUSH",
           "WITHER_ROSE");
-  private static final Set<Material> LAVA_TYPES =
-      getMatchingMaterials("FLOWING_LAVA", "LAVA", "STATIONARY_LAVA");
-  private static final Material PORTAL = getMaterial("NETHER_PORTAL", "PORTAL");
-  private static final Material LIGHT = getMaterial("LIGHT");
-  private static final Material PATH = getMaterial("GRASS_PATH");
-  private static final Material FARMLAND = getMaterial("FARMLAND");
-  private static final Set<Material> BEDS;
-  private static final Set<Material> HOLLOW_MATERIALS = EnumSet.noneOf(Material.class);
 
-  private static final int RADIUS = 3;
-  private static final Vector3D[] VOLUME;
+  private static final int CHECK_RADIUS = 3;
+  private static final Vector3D[] SHIFT_VECTORS;
 
   private record Vector3D(int x, int y, int z) {}
 
   static {
-    for (final Material mat : Material.values()) {
-      if (!mat.isOccluding()) {
-        HOLLOW_MATERIALS.add(mat);
-      }
-    }
-    HOLLOW_MATERIALS.remove(Material.BARRIER);
-    HOLLOW_MATERIALS.remove(PATH);
-    HOLLOW_MATERIALS.remove(FARMLAND);
-    if (LIGHT != null) {
-      HOLLOW_MATERIALS.add(LIGHT);
-    }
-
-    BEDS =
-        getMatchingMaterials(
-            "BED",
-            "BED_BLOCK",
-            "WHITE_BED",
-            "ORANGE_BED",
-            "MAGENTA_BED",
-            "LIGHT_BLUE_BED",
-            "YELLOW_BED",
-            "LIME_BED",
-            "PINK_BED",
-            "GRAY_BED",
-            "LIGHT_GRAY_BED",
-            "CYAN_BED",
-            "PURPLE_BED",
-            "BLUE_BED",
-            "BROWN_BED",
-            "GREEN_BED",
-            "RED_BED",
-            "BLACK_BED");
-
     final List<Vector3D> pos = new ArrayList<>();
-    for (int x = -RADIUS; x <= RADIUS; x++) {
-      for (int y = -RADIUS; y <= RADIUS; y++) {
-        for (int z = -RADIUS; z <= RADIUS; z++) {
+    for (int x = -CHECK_RADIUS; x <= CHECK_RADIUS; x++) {
+      for (int y = -CHECK_RADIUS; y <= CHECK_RADIUS; y++) {
+        for (int z = -CHECK_RADIUS; z <= CHECK_RADIUS; z++) {
           pos.add(new Vector3D(x, y, z));
         }
       }
     }
     pos.sort(Comparator.comparingInt(a -> a.x * a.x + a.y * a.y + a.z * a.z));
-    VOLUME = pos.toArray(new Vector3D[0]);
+    SHIFT_VECTORS = pos.toArray(new Vector3D[0]);
   }
 
   private BlockPos(@NotNull World world, int x, int y, int z) {
@@ -92,6 +58,7 @@ public class BlockPos {
     this.x = x;
     this.y = y;
     this.z = z;
+    this.adjustY = 0.0;
   }
 
   public static BlockPos of(@NotNull Location loc) {
@@ -99,7 +66,19 @@ public class BlockPos {
   }
 
   public @NotNull Location asLocation() {
-    return new Location(this.world, this.x, this.y, this.z);
+    return new Location(this.world, this.x + 0.5, this.y + this.adjustY, this.z + 0.5);
+  }
+
+  private @NotNull Block getBlock() {
+    return this.world.getBlockAt(this.x, this.y, this.z);
+  }
+
+  private @NotNull Block getBlockBelow() {
+    return this.world.getBlockAt(this.x, this.y - 1, this.z);
+  }
+
+  private @NotNull Block getBlockAbove() {
+    return this.world.getBlockAt(this.x, this.y + 1, this.z);
   }
 
   public @NotNull BlockPos getSafePos() throws LocationError {
@@ -109,104 +88,52 @@ public class BlockPos {
 
     BlockPos pos = new BlockPos(this.world, this.x, this.y, this.z);
 
-    pos.moveInsideWorldBorder();
+    // push up outside of non-air blocks
+    while (!pos.getBlock().isEmpty() && pos.getBlockAbove().isEmpty()) {
+      pos.y++;
+      if (pos.y == worldMaxY) {
+        pos.y = this.y;
+      }
+    }
 
-    // put on ground
-    while (pos.isAboveAir()) {
+    // mid-air isn't safe
+    while (pos.getBlockBelow().isEmpty()) {
       pos.y--;
-      if (pos.y < 0) {
+      if (pos.y == worldMinY) {
         pos.y = this.y;
         break;
       }
     }
 
-    // try nearby
-    if (pos.isUnsafe()) {
-      pos.x = pos.x == this.x ? pos.x - 1 : pos.x + 1;
-      pos.z = pos.z == this.z ? pos.z - 1 : pos.z + 1;
-    }
-
-    // try within 3x3x3 area
+    // find a safe spot try within 3x3x3 area
     int i = 0;
     while (pos.isUnsafe()) {
       i++;
-      if (i >= VOLUME.length) {
+      if (i >= SHIFT_VECTORS.length) {
         pos.x = this.x;
-        pos.y = clamp(this.y + RADIUS, worldMinY, worldMaxY);
+        pos.y = clamp(this.y + CHECK_RADIUS, worldMinY, worldMaxY);
         pos.z = this.z;
         break;
       }
-      pos.x = this.x + VOLUME[i].x;
-      pos.y = clamp(this.y + VOLUME[i].y, worldMinY, worldMaxY);
-      pos.z = this.z + VOLUME[i].z;
+      pos.x = this.x + SHIFT_VECTORS[i].x;
+      pos.y = clamp(this.y + SHIFT_VECTORS[i].y, worldMinY, worldMaxY);
+      pos.z = this.z + SHIFT_VECTORS[i].z;
     }
 
-    // move up
-    while (pos.isUnsafe()) {
-      pos.y++;
-      if (pos.y >= worldMaxY) {
-        pos.x++;
-        break;
-      }
-    }
-
-    // move down
-    while (pos.isUnsafe()) {
-      pos.y--;
-      if (pos.y <= worldMinY + 1) {
-        pos.x++;
-        // Allow spawning at the top of the world, but not above the nether roof
-        pos.y = Math.min(this.world.getHighestBlockYAt(pos.x, pos.z) + 1, worldMaxY);
-        if (pos.x - 48 > this.x) {
-          throw new LocationError("Hole in floor!");
-        }
-      }
+    // stand on top of bottom-slabs
+    if (pos.getBlockBelow().getState().getBlockData() instanceof Slab slab
+        && slab.getType() == Slab.Type.BOTTOM) {
+      pos.adjustY -= 0.5;
     }
 
     return pos;
   }
 
-  private void moveInsideWorldBorder() {
-    Location center = this.world.getWorldBorder().getCenter();
-    int radius = (int) this.world.getWorldBorder().getSize() / 2;
-
-    int x1 = center.getBlockX() - radius;
-    int x2 = center.getBlockX() + radius;
-    if (this.x < x1) {
-      this.x = x1;
-    } else if (this.x > x2) {
-      this.x = x2;
-    }
-
-    int z1 = center.getBlockZ() - radius;
-    int z2 = center.getBlockZ() + radius;
-    if (this.z < z1) {
-      this.z = z1;
-    } else if (this.z > z2) {
-      this.z = z2;
-    }
-  }
-
   public boolean isUnsafe() {
-    return this.isDamaging() || this.isAboveAir();
-  }
-
-  private boolean isDamaging() {
-    final Material block = this.world.getBlockAt(this.x, this.y, this.z).getType();
-    final Material below = this.world.getBlockAt(this.x, this.y - 1, this.z).getType();
-    final Material above = this.world.getBlockAt(this.x, this.y + 1, this.z).getType();
-    if (DAMAGING_TYPES.contains(below) || LAVA_TYPES.contains(below) || isBed(below)) {
-      return true;
-    }
-    if (block == PORTAL) {
-      return true;
-    }
-    return !HOLLOW_MATERIALS.contains(block) || !HOLLOW_MATERIALS.contains(above);
-  }
-
-  private boolean isAboveAir() {
-    return this.y > this.world.getMaxHeight()
-        || HOLLOW_MATERIALS.contains(this.world.getBlockAt(this.x, this.y - 1, this.z).getType());
+    Block block = this.getBlock();
+    return !block.isEmpty()
+        || block.getType() == PORTAL
+        || UNSAFE_BELOW.contains(this.getBlockBelow().getType());
   }
 
   public static class LocationError extends Exception {
@@ -249,10 +176,6 @@ public class BlockPos {
 
   private static Material getMaterial(final String... names) {
     return valueOfMaterial(names);
-  }
-
-  private static boolean isBed(final Material material) {
-    return BEDS.contains(material);
   }
 
   private static int clamp(int value, int min, int max) {
