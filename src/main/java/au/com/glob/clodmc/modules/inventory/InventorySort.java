@@ -119,7 +119,7 @@ public class InventorySort implements Listener {
     int maxSlot = inventory.getSize() - 1;
     if (inventory.getType() == InventoryType.PLAYER) {
       minSlot = 9;
-      maxSlot = 36;
+      maxSlot = 35;
     } else if (inventory.getHolder() instanceof Donkey) {
       minSlot = 1;
     }
