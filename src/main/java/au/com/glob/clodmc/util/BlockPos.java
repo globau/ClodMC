@@ -81,7 +81,7 @@ public class BlockPos {
     return this.world.getBlockAt(this.x, this.y + 1, this.z);
   }
 
-  public @NotNull BlockPos getSafePos() throws LocationError {
+  public @NotNull BlockPos getSafePos() {
     final int worldMinY = this.world.getMinHeight();
     final int worldLogicalY = this.world.getLogicalHeight();
     final int worldMaxY = this.y < worldLogicalY ? worldLogicalY : this.world.getMaxHeight();
@@ -89,7 +89,7 @@ public class BlockPos {
     BlockPos pos = new BlockPos(this.world, this.x, this.y, this.z);
 
     // push up outside of non-air blocks
-    while (!pos.getBlock().isEmpty() && pos.getBlockAbove().isEmpty()) {
+    while (pos.getBlock().isSolid() && !pos.getBlockAbove().isSolid()) {
       pos.y++;
       if (pos.y == worldMaxY) {
         pos.y = this.y;
@@ -97,7 +97,7 @@ public class BlockPos {
     }
 
     // mid-air isn't safe
-    while (pos.getBlockBelow().isEmpty()) {
+    while (!pos.getBlockBelow().isSolid()) {
       pos.y--;
       if (pos.y == worldMinY) {
         pos.y = this.y;
@@ -131,9 +131,10 @@ public class BlockPos {
 
   public boolean isUnsafe() {
     Block block = this.getBlock();
-    return !block.isEmpty()
+    return block.isSolid()
         || block.getType() == PORTAL
-        || UNSAFE_BELOW.contains(this.getBlockBelow().getType());
+        || UNSAFE_BELOW.contains(this.getBlockBelow().getType())
+        || this.getBlockAbove().isSolid();
   }
 
   public static class LocationError extends Exception {
