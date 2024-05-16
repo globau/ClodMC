@@ -1,6 +1,5 @@
 package au.com.glob.clodmc;
 
-import au.com.glob.clodmc.modules.admin.OutlineClaimCommand;
 import au.com.glob.clodmc.modules.homes.BackCommand;
 import au.com.glob.clodmc.modules.homes.DelHomeCommand;
 import au.com.glob.clodmc.modules.homes.HomeCommand;
@@ -20,9 +19,8 @@ import au.com.glob.clodmc.modules.welcome.WelcomeCommand;
 import au.com.glob.clodmc.modules.welcome.WelcomeGift;
 import au.com.glob.clodmc.util.Config;
 import au.com.glob.clodmc.util.PlayerLocation;
-import dev.jorel.commandapi.CommandAPI;
-import dev.jorel.commandapi.CommandAPIBukkitConfig;
 import java.io.File;
+import java.util.logging.Level;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
@@ -45,15 +43,11 @@ public final class ClodMC extends JavaPlugin {
     if (!dataFolder.exists() && !dataFolder.mkdirs()) {
       logWarning("failed to create " + dataFolder);
     }
-
-    CommandAPI.onLoad(new CommandAPIBukkitConfig(this));
   }
 
   @Override
   public void onEnable() {
     Config.init("config.yml");
-
-    CommandAPI.onEnable();
 
     RequiredPlugins.register();
     ConfigureServer.register();
@@ -78,13 +72,6 @@ public final class ClodMC extends JavaPlugin {
 
     WelcomeGift.register();
     WelcomeCommand.register();
-
-    OutlineClaimCommand.register();
-  }
-
-  @Override
-  public void onDisable() {
-    CommandAPI.onDisable();
   }
 
   @Override
@@ -102,5 +89,16 @@ public final class ClodMC extends JavaPlugin {
 
   public static void logError(@NotNull String message) {
     instance.getLogger().severe(message);
+  }
+
+  public static void logException(@NotNull Throwable exception) {
+    instance
+        .getLogger()
+        .log(
+            Level.SEVERE,
+            exception.getMessage() == null
+                ? exception.getClass().getSimpleName()
+                : exception.getMessage(),
+            exception);
   }
 }

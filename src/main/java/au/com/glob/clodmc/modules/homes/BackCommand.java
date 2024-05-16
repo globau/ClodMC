@@ -1,50 +1,39 @@
 package au.com.glob.clodmc.modules.homes;
 
-import au.com.glob.clodmc.command.CommandUtil;
+import au.com.glob.clodmc.command.CommandError;
+import au.com.glob.clodmc.command.SimpleCommand;
 import au.com.glob.clodmc.util.BlockPos;
 import au.com.glob.clodmc.util.PlayerLocation;
-import dev.jorel.commandapi.CommandAPI;
-import dev.jorel.commandapi.CommandAPICommand;
-import dev.jorel.commandapi.executors.CommandArguments;
+import java.util.List;
 import org.bukkit.command.CommandSender;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-public class BackCommand {
+public class BackCommand extends SimpleCommand {
   public static void register() {
-    new CommandAPICommand("back")
-        .withShortDescription("Teleport to previous location")
-        .withRequirement((sender) -> sender instanceof Player)
-        .executes(
-            (CommandSender sender, CommandArguments args) -> {
-              Player player = CommandUtil.senderToPlayer(sender);
-              FileConfiguration config = Homes.instance.getConfig(player);
-
-              PlayerLocation location = (PlayerLocation) config.get("internal.back");
-              if (location == null) {
-                throw CommandAPI.failWithString("No previous location");
-              }
-
-              BackCommand.store(player, config);
-
-              player.sendRichMessage("<grey>Teleporting you back</grey>");
-              try {
-                location.teleportPlayer(player);
-              } catch (BlockPos.LocationError e) {
-                throw CommandAPI.failWithString(e.getMessage());
-              }
-            })
-        .register();
+    SimpleCommand.register(new BackCommand());
   }
 
-  public static void store(@NotNull Player player) {
-    store(player, Homes.instance.getConfig(player));
+  protected BackCommand() {
+    super("back", "Teleport to previous location");
   }
 
-  public static void store(@NotNull Player player, @NotNull FileConfiguration config) {
-    PlayerLocation playerLocation = PlayerLocation.of(player);
-    config.set("internal.back", playerLocation);
-    Homes.instance.saveConfig(player, config);
+  @Override
+  protected void execute(@NotNull CommandSender sender, @NotNull List<String> args) {
+    Player player = this.toPlayer(sender);
+
+    PlayerLocation location = Homes.instance.getBackLocation(player);
+    if (location == null) {
+      throw new CommandError("No previous location");
+    }
+
+    Homes.instance.setBackLocation(player);
+
+    player.sendRichMessage("<grey>Teleporting you back</grey>");
+    try {
+      location.teleportPlayer(player);
+    } catch (BlockPos.LocationError e) {
+      throw new CommandError(e.getMessage());
+    }
   }
 }

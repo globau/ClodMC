@@ -1,14 +1,14 @@
 package au.com.glob.clodmc.modules.homes;
 
 import au.com.glob.clodmc.ClodMC;
-import dev.jorel.commandapi.arguments.Argument;
-import dev.jorel.commandapi.arguments.ArgumentSuggestions;
-import dev.jorel.commandapi.arguments.StringArgument;
+import au.com.glob.clodmc.util.PlayerLocation;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -21,7 +21,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class Homes implements Listener {
-  public static Homes instance;
+  protected static Homes instance;
 
   @Nullable private final File playerConfigPath;
   private final Map<String, FileConfiguration> playerConfigs = new HashMap<>();
@@ -47,11 +47,56 @@ public class Homes implements Listener {
     return new File(this.playerConfigPath, player.getUniqueId() + ".yml");
   }
 
-  public @NotNull FileConfiguration getConfig(@NotNull Player player) {
+  private @NotNull FileConfiguration getConfig(@NotNull Player player) {
     return this.playerConfigs.get(player.getName());
   }
 
-  public void saveConfig(@NotNull Player player, @NotNull FileConfiguration config) {
+  protected @NotNull Map<String, Location> getHomes(@NotNull Player player) {
+    FileConfiguration config = this.getConfig(player);
+    ConfigurationSection section = config.getConfigurationSection("homes");
+    if (section == null) {
+      return new HashMap<>(0);
+    }
+    return section.getKeys(false).stream()
+        .collect(
+            Collectors.toMap(
+                (String name) -> name,
+                (String name) -> {
+                  Location location = config.getLocation("homes." + name, null);
+                  assert location != null;
+                  return location;
+                }));
+  }
+
+  protected void setHomes(@NotNull Player player, @NotNull Map<String, Location> homes) {
+    FileConfiguration config = this.getConfig(player);
+    ConfigurationSection section = config.getConfigurationSection("homes");
+    if (section != null) {
+      for (String name : section.getKeys(false)) {
+        if (!homes.containsKey(name)) {
+          section.set(name, null);
+        }
+      }
+    }
+    for (String name : homes.keySet()) {
+      config.set("homes." + name, homes.get(name));
+    }
+    this.saveConfig(player, config);
+  }
+
+  protected void setBackLocation(@NotNull Player player) {
+    PlayerLocation playerLocation = PlayerLocation.of(player);
+    FileConfiguration config = this.getConfig(player);
+    config.set("internal.back", playerLocation);
+    this.saveConfig(player, config);
+  }
+
+  protected @Nullable PlayerLocation getBackLocation(@NotNull Player player) {
+    FileConfiguration config = this.getConfig(player);
+    return (PlayerLocation) config.get("internal.back");
+  }
+
+  private void saveConfig(@NotNull Player player, @NotNull FileConfiguration config) {
     try {
       config.save(this.getPlayerConfigFile(player));
     } catch (IOException e) {
@@ -76,6 +121,7 @@ public class Homes implements Listener {
     this.playerConfigs.remove(event.getPlayer().getName());
   }
 
+  /*
   public static @NotNull Argument<String> homesArgument(@NotNull String name) {
     return new StringArgument(name)
         .replaceSuggestions(
@@ -92,4 +138,6 @@ public class Homes implements Listener {
                   }
                 }));
   }
+
+   */
 }

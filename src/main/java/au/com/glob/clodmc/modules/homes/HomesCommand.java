@@ -1,38 +1,36 @@
 package au.com.glob.clodmc.modules.homes;
 
-import au.com.glob.clodmc.command.CommandUtil;
-import dev.jorel.commandapi.CommandAPICommand;
-import dev.jorel.commandapi.executors.CommandArguments;
-import java.util.Collection;
+import au.com.glob.clodmc.command.SimpleCommand;
 import java.util.List;
+import java.util.Map;
 import java.util.StringJoiner;
+import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
-import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
-public class HomesCommand {
+public class HomesCommand extends SimpleCommand {
   public static void register() {
-    new CommandAPICommand("homes")
-        .withShortDescription("List homes")
-        .withRequirement((sender) -> sender instanceof Player)
-        .executes(
-            (CommandSender sender, CommandArguments args) -> {
-              Player player = CommandUtil.senderToPlayer(sender);
-              FileConfiguration config = Homes.instance.getConfig(player);
-              ConfigurationSection section = config.getConfigurationSection("homes");
-              Collection<String> names = section == null ? List.of() : section.getKeys(false);
+    SimpleCommand.register(new HomesCommand());
+  }
 
-              if (names.isEmpty()) {
-                player.sendRichMessage("Homes: <italic>None</italic>");
-              } else {
-                StringJoiner joiner = new StringJoiner(", ");
-                for (String name : names.stream().sorted().toList()) {
-                  joiner.add(name);
-                }
-                player.sendMessage("Homes: " + joiner);
-              }
-            })
-        .register();
+  protected HomesCommand() {
+    super("homes", "List homes");
+  }
+
+  @Override
+  public void execute(@NotNull CommandSender sender, @NotNull List<String> args) {
+    Player player = this.toPlayer(sender);
+    Map<String, Location> homes = Homes.instance.getHomes(player);
+
+    if (homes.isEmpty()) {
+      player.sendRichMessage("Homes: <italic>None</italic>");
+    } else {
+      StringJoiner joiner = new StringJoiner(", ");
+      for (String name : homes.keySet().stream().sorted().toList()) {
+        joiner.add(name);
+      }
+      player.sendMessage("Homes: " + joiner);
+    }
   }
 }

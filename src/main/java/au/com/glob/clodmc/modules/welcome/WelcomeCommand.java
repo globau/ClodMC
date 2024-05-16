@@ -1,29 +1,46 @@
 package au.com.glob.clodmc.modules.welcome;
 
-import dev.jorel.commandapi.CommandAPICommand;
-import dev.jorel.commandapi.CommandPermission;
-import dev.jorel.commandapi.arguments.PlayerArgument;
-import dev.jorel.commandapi.executors.CommandArguments;
+import au.com.glob.clodmc.command.CommandError;
+import au.com.glob.clodmc.command.SimpleCommand;
+import java.util.List;
+import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
-public class WelcomeCommand {
+public class WelcomeCommand extends SimpleCommand {
   public static void register() {
-    // /welcome {player} --> gives them the welcome book
-    new CommandAPICommand("welcome")
-        .withShortDescription("Give specified play the welcome book")
-        .withPermission(CommandPermission.OP)
-        .withArguments(new PlayerArgument("player"))
-        .executes(
-            (CommandSender sender, CommandArguments args) -> {
-              Player player = (Player) args.get("player");
-              ItemStack book = WelcomeBook.build();
-              if (player != null && book != null) {
-                player.getInventory().addItem(book);
-                sender.sendRichMessage("Gave welcome book to " + player.getName());
-              }
-            })
-        .register();
+    SimpleCommand.register(new WelcomeCommand());
+  }
+
+  protected WelcomeCommand() {
+    super("welcome", "/welcome <player>", "Give specified player the welcome book");
+  }
+
+  @Override
+  protected void execute(@NotNull CommandSender sender, @NotNull List<String> args) {
+    if (sender instanceof Player player && !player.isOp()) {
+      throw new CommandError("You are not allowed to give players welcome books");
+    }
+
+    Player player = this.popPlayerArg(args);
+    ItemStack book = WelcomeBook.build();
+    if (book != null) {
+      player.getInventory().addItem(book);
+      sender.sendRichMessage("Gave welcome book to " + player.getName());
+    }
+  }
+
+  @Override
+  public @NotNull List<String> tabComplete(
+      @NotNull CommandSender sender, @NotNull String alias, @NotNull String[] args)
+      throws IllegalArgumentException {
+    String arg = args.length == 0 ? "" : args[0].toLowerCase();
+    return Bukkit.getOnlinePlayers().stream()
+        .map(Player::getName)
+        .map(String::toLowerCase)
+        .filter(name -> name.startsWith(arg))
+        .toList();
   }
 }

@@ -27,7 +27,7 @@ public class Mailer {
   }
 
   public static void emailAdmin(@NotNull String subject, @NotNull String body) throws MailerError {
-    String addr = (String) ClodMC.instance.getConfig().get("mailer.admin-addr");
+    String addr = ClodMC.instance.getConfig().getString("mailer.admin-addr");
     if (addr != null) {
       send(addr, subject, body);
     }

@@ -1,50 +1,50 @@
 package au.com.glob.clodmc.modules.homes;
 
 import au.com.glob.clodmc.ClodMC;
-import au.com.glob.clodmc.command.CommandUtil;
+import au.com.glob.clodmc.command.CommandError;
+import au.com.glob.clodmc.command.SimpleCommand;
 import au.com.glob.clodmc.util.BlockPos;
-import dev.jorel.commandapi.CommandAPI;
-import dev.jorel.commandapi.CommandAPICommand;
-import dev.jorel.commandapi.executors.CommandArguments;
+import java.util.List;
+import java.util.Map;
+import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
-import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
-public class SetHomeCommand {
+public class SetHomeCommand extends SimpleCommand {
   public static void register() {
-    new CommandAPICommand("sethome")
-        .withShortDescription("Sets a home to your current location")
-        .withRequirement((sender) -> sender instanceof Player)
-        .withOptionalArguments(Homes.homesArgument("name"))
-        .executes(
-            (CommandSender sender, CommandArguments args) -> {
-              int maxHomes = ClodMC.instance.getConfig().getInt("homes.max-allowed");
-              Player player = CommandUtil.senderToPlayer(sender);
-              String name = (String) args.getOrDefault("name", "home");
+    SimpleCommand.register(new SetHomeCommand());
+  }
 
-              FileConfiguration config = Homes.instance.getConfig(player);
-              ConfigurationSection section = config.getConfigurationSection("homes");
-              boolean existing = section != null && section.contains(name);
+  protected SetHomeCommand() {
+    super("sethome", "/sethome [name]", "Sets a home to your current location");
+  }
 
-              if (section != null && !existing && section.getKeys(false).size() >= maxHomes) {
-                throw CommandAPI.failWithString(
-                    "You have reached the maximum number of homes (" + maxHomes + ")");
-              }
+  @Override
+  protected void execute(@NotNull CommandSender sender, @NotNull List<String> args) {
+    Player player = this.toPlayer(sender);
+    String name = this.popArg(args, "home");
 
-              if (BlockPos.of(player.getLocation()).isUnsafe()) {
-                throw CommandAPI.failWithString("Your current location is not safe");
-              }
+    int maxHomes = ClodMC.instance.getConfig().getInt("homes.max-allowed");
 
-              config.set("homes." + name, player.getLocation());
-              Homes.instance.saveConfig(player, config);
-              if (name.equals("home")) {
-                player.sendMessage(
-                    "Home " + (existing ? "updated" : "set") + " to you current location");
-              } else {
-                player.sendMessage("Home '" + name + "' " + (existing ? "updated" : "created"));
-              }
-            })
-        .register();
+    Map<String, Location> homes = Homes.instance.getHomes(player);
+    boolean existing = homes.containsKey(name);
+
+    if (homes.size() >= maxHomes) {
+      throw new CommandError("You have reached the maximum number of homes (" + maxHomes + ")");
+    }
+
+    if (BlockPos.of(player.getLocation()).isUnsafe()) {
+      throw new CommandError("Your current location is not safe");
+    }
+
+    homes.put(name, player.getLocation());
+    Homes.instance.setHomes(player, homes);
+
+    if (name.equals("home")) {
+      player.sendMessage("Home " + (existing ? "updated" : "set") + " to you current location");
+    } else {
+      player.sendMessage("Home '" + name + "' " + (existing ? "updated" : "created"));
+    }
   }
 }

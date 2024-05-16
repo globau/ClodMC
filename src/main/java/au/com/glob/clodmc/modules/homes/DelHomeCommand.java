@@ -1,29 +1,42 @@
 package au.com.glob.clodmc.modules.homes;
 
-import au.com.glob.clodmc.command.CommandUtil;
-import dev.jorel.commandapi.CommandAPICommand;
-import dev.jorel.commandapi.executors.CommandArguments;
+import au.com.glob.clodmc.command.SimpleCommand;
+import java.util.List;
+import java.util.Map;
+import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
-public class DelHomeCommand {
+public class DelHomeCommand extends SimpleCommand {
   public static void register() {
-    new CommandAPICommand("delhome")
-        .withShortDescription("Delete home")
-        .withRequirement((sender) -> sender instanceof Player)
-        .withOptionalArguments(Homes.homesArgument("name"))
-        .executes(
-            (CommandSender sender, CommandArguments args) -> {
-              Player player = CommandUtil.senderToPlayer(sender);
-              String name = (String) args.getOrDefault("name", "home");
+    SimpleCommand.register(new DelHomeCommand());
+  }
 
-              FileConfiguration config = Homes.instance.getConfig(player);
-              config.set("homes." + name, null);
-              Homes.instance.saveConfig(player, config);
+  protected DelHomeCommand() {
+    super("delhome", "/delhome [name]", "Delete home");
+  }
 
-              player.sendRichMessage("<grey>Home '" + name + "' deleted</grey>");
-            })
-        .register();
+  @Override
+  protected void execute(@NotNull CommandSender sender, @NotNull List<String> args) {
+    Player player = this.toPlayer(sender);
+    String name = this.popArg(args, "home");
+
+    Map<String, Location> homes = Homes.instance.getHomes(player);
+    homes.remove(name);
+    Homes.instance.setHomes(player, homes);
+  }
+
+  @Override
+  public @NotNull List<String> tabComplete(
+      @NotNull CommandSender sender, @NotNull String alias, @NotNull String[] args)
+      throws IllegalArgumentException {
+    Player player = this.toPlayer(sender);
+    if (args.length == 0) {
+      return List.of();
+    }
+
+    Map<String, Location> homes = Homes.instance.getHomes(player);
+    return homes.keySet().stream().sorted(String::compareToIgnoreCase).toList();
   }
 }

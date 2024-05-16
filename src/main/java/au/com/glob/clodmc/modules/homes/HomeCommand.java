@@ -1,46 +1,62 @@
 package au.com.glob.clodmc.modules.homes;
 
-import au.com.glob.clodmc.command.CommandUtil;
+import au.com.glob.clodmc.command.CommandError;
+import au.com.glob.clodmc.command.SimpleCommand;
 import au.com.glob.clodmc.util.BlockPos;
 import au.com.glob.clodmc.util.PlayerLocation;
-import dev.jorel.commandapi.CommandAPI;
-import dev.jorel.commandapi.CommandAPICommand;
-import dev.jorel.commandapi.executors.CommandArguments;
+import java.util.List;
+import java.util.Map;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
-public class HomeCommand {
+public class HomeCommand extends SimpleCommand {
   public static void register() {
-    new CommandAPICommand("home")
-        .withShortDescription("Teleport home")
-        .withRequirement((sender) -> sender instanceof Player)
-        .withOptionalArguments(Homes.homesArgument("name"))
-        .executes(
-            (CommandSender sender, CommandArguments args) -> {
-              Player player = CommandUtil.senderToPlayer(sender);
-              String name = (String) args.getOrDefault("name", "home");
+    SimpleCommand.register(new HomeCommand());
+  }
 
-              FileConfiguration config = Homes.instance.getConfig(player);
-              Location location = config.getLocation("homes." + name);
-              if (location == null) {
-                throw CommandAPI.failWithString(
-                    name.equals("home") ? "No home set" : "No such home '" + name + "'");
-              }
-              BackCommand.store(player, config);
+  protected HomeCommand() {
+    super("home", "/home [name]", "Teleport home");
+  }
 
-              player.sendRichMessage(
-                  "<grey>Teleporting you "
-                      + (name.equals("home") ? "home" : "to '" + name + "'")
-                      + "</grey>");
-              try {
-                PlayerLocation playerLoc = PlayerLocation.of(location);
-                playerLoc.teleportPlayer(player);
-              } catch (BlockPos.LocationError e) {
-                throw CommandAPI.failWithString(e.getMessage());
-              }
-            })
-        .register();
+  @Override
+  protected void execute(@NotNull CommandSender sender, @NotNull List<String> args) {
+    Player player = this.toPlayer(sender);
+    String name = this.popArg(args, "home");
+
+    Map<String, Location> homes = Homes.instance.getHomes(player);
+    if (homes.isEmpty()) {
+      throw new CommandError(name.equals("home") ? "No home set" : "No such home '" + name + "'");
+    }
+
+    Homes.instance.setBackLocation(player);
+
+    player.sendRichMessage(
+        "<grey>Teleporting you "
+            + (name.equals("home") ? "home" : "to '" + name + "'")
+            + "</grey>");
+    try {
+      PlayerLocation playerLoc = PlayerLocation.of(homes.get(name));
+      playerLoc.teleportPlayer(player);
+    } catch (BlockPos.LocationError e) {
+      throw new CommandError(e);
+    }
+  }
+
+  @Override
+  public @NotNull List<String> tabComplete(
+      @NotNull CommandSender sender, @NotNull String alias, @NotNull String[] args)
+      throws IllegalArgumentException {
+    Player player = this.toPlayer(sender);
+    if (args.length == 0) {
+      return List.of();
+    }
+
+    Map<String, Location> homes = Homes.instance.getHomes(player);
+    return homes.keySet().stream()
+        .filter((String name) -> name.startsWith(args[0]))
+        .sorted(String::compareToIgnoreCase)
+        .toList();
   }
 }

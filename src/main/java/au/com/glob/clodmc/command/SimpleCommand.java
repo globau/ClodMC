@@ -1,0 +1,88 @@
+package au.com.glob.clodmc.command;
+
+import au.com.glob.clodmc.ClodMC;
+import java.util.ArrayList;
+import java.util.List;
+import org.bukkit.Bukkit;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
+
+public abstract class SimpleCommand extends Command {
+  public static void register(@NotNull SimpleCommand command) {
+    ClodMC.instance.getServer().getCommandMap().register("clod-mc", command);
+  }
+
+  protected SimpleCommand(@NotNull String name, @NotNull String description) {
+    super(name);
+    this.setDescription(description);
+  }
+
+  protected SimpleCommand(
+      @NotNull String name, @NotNull String usage, @NotNull String description) {
+    super(name, description, usage, List.of());
+  }
+
+  // execution
+
+  protected abstract void execute(@NotNull CommandSender sender, @NotNull List<String> args);
+
+  @Override
+  public boolean execute(
+      @NotNull CommandSender sender, @NotNull String commandLabel, @NotNull String[] args) {
+    try {
+      this.execute(sender, new ArrayList<>(List.of(args)));
+    } catch (CommandError e) {
+      sender.sendRichMessage("<red>" + e.getMessage() + "</red>");
+    } catch (Throwable e) {
+      String message = e.getMessage() == null ? e.getClass().getSimpleName() : e.getMessage();
+      sender.sendRichMessage("<red>internal command error: " + message + "</red>");
+      ClodMC.logException(e);
+    }
+    return true;
+  }
+
+  // args
+
+  protected @NotNull String popArg(@NotNull List<String> args) {
+    if (args.isEmpty()) {
+      throw new CommandError(this.usageMessage);
+    }
+    return args.remove(0);
+  }
+
+  protected @NotNull String popArg(@NotNull List<String> args, @NotNull String fallback) {
+    if (args.isEmpty()) {
+      return fallback;
+    }
+    return args.remove(0);
+  }
+
+  protected @NotNull Player popPlayerArg(@NotNull List<String> args) {
+    String name = this.popArg(args);
+    Player player = Bukkit.getPlayerExact(name);
+    if (player == null) {
+      throw new CommandError("Invalid player: " + name);
+    }
+    return player;
+  }
+
+  // tab completion
+
+  @Override
+  public @NotNull List<String> tabComplete(
+      @NotNull CommandSender sender, @NotNull String alias, @NotNull String[] args)
+      throws IllegalArgumentException {
+    return List.of();
+  }
+
+  // helpers
+
+  protected @NotNull Player toPlayer(@NotNull CommandSender sender) throws CommandError {
+    if (!(sender instanceof Player player)) {
+      throw new CommandError("This command can only be run by a player");
+    }
+    return player;
+  }
+}
