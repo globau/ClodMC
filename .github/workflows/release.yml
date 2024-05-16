@@ -13,7 +13,7 @@ jobs:
         uses: actions/setup-java@v4
         with:
           distribution: microsoft
-          java-version: 17
+          java-version: 21
 
       - name: verify gradle wrapper
         uses: gradle/wrapper-validation-action@v2
