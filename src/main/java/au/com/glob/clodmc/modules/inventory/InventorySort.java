@@ -1,6 +1,7 @@
 package au.com.glob.clodmc.modules.inventory;
 
 import au.com.glob.clodmc.ClodMC;
+import au.com.glob.clodmc.modules.Module;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -30,14 +31,12 @@ import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
 
-public class InventorySort implements Listener {
-  public static void register() {
-    Bukkit.getServer().getPluginManager().registerEvents(new InventorySort(), ClodMC.instance);
-  }
-
+public class InventorySort implements Listener, Module {
   private static final Map<String, Integer> materialOrder = new HashMap<>();
 
   public InventorySort() {
+    super();
+
     List<String> allMaterials = Arrays.stream(Material.values()).map(Enum::name).toList();
 
     // read inventory_order.txt. format is:

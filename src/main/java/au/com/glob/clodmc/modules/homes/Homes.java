@@ -1,6 +1,7 @@
 package au.com.glob.clodmc.modules.homes;
 
 import au.com.glob.clodmc.ClodMC;
+import au.com.glob.clodmc.modules.Module;
 import au.com.glob.clodmc.util.PlayerLocation;
 import java.io.File;
 import java.io.IOException;
@@ -20,26 +21,24 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class Homes implements Listener {
+public class Homes implements Listener, Module {
   protected static Homes instance;
 
   @Nullable private final File playerConfigPath;
   private final Map<String, FileConfiguration> playerConfigs = new HashMap<>();
 
-  public static void register() {
-    for (Player player : Bukkit.getServer().getOnlinePlayers()) {
-      Homes.instance.onPlayerJoin(player);
-    }
+  public Homes() {
+    super();
 
-    Bukkit.getServer().getPluginManager().registerEvents(new Homes(), ClodMC.instance);
-  }
-
-  private Homes() {
     instance = this;
 
     this.playerConfigPath = new File(ClodMC.instance.getDataFolder(), "players");
     if (!this.playerConfigPath.exists() && !this.playerConfigPath.mkdirs()) {
       ClodMC.logWarning(this.playerConfigPath + ": mkdir failed");
+    }
+
+    for (Player player : Bukkit.getServer().getOnlinePlayers()) {
+      Homes.instance.onPlayerJoin(player);
     }
   }
 
@@ -120,24 +119,4 @@ public class Homes implements Listener {
   public void onPlayerQuit(@NotNull PlayerQuitEvent event) {
     this.playerConfigs.remove(event.getPlayer().getName());
   }
-
-  /*
-  public static @NotNull Argument<String> homesArgument(@NotNull String name) {
-    return new StringArgument(name)
-        .replaceSuggestions(
-            ArgumentSuggestions.strings(
-                (info) -> {
-                  if (info.sender() instanceof Player player) {
-                    FileConfiguration config = instance.getConfig(player);
-                    ConfigurationSection section = config.getConfigurationSection("homes");
-                    return section == null
-                        ? new String[0]
-                        : section.getKeys(false).toArray(new String[0]);
-                  } else {
-                    return new String[0];
-                  }
-                }));
-  }
-
-   */
 }

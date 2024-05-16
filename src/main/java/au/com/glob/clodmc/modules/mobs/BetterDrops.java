@@ -1,18 +1,13 @@
 package au.com.glob.clodmc.modules.mobs;
 
-import au.com.glob.clodmc.ClodMC;
-import org.bukkit.Bukkit;
+import au.com.glob.clodmc.modules.Module;
 import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.inventory.ItemStack;
 
-public class BetterDrops implements Listener {
-  public static void register() {
-    Bukkit.getServer().getPluginManager().registerEvents(new BetterDrops(), ClodMC.instance);
-  }
-
+public class BetterDrops implements Listener, Module {
   @EventHandler
   public void onEntityDeath(EntityDeathEvent event) {
     // adjust drops for mobs killed by players

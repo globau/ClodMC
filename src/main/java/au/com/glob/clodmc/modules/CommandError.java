@@ -1,4 +1,4 @@
-package au.com.glob.clodmc.command;
+package au.com.glob.clodmc.modules;
 
 import org.bukkit.command.CommandException;
 

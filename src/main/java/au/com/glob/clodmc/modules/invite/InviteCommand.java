@@ -1,8 +1,9 @@
 package au.com.glob.clodmc.modules.invite;
 
 import au.com.glob.clodmc.ClodMC;
-import au.com.glob.clodmc.command.CommandError;
-import au.com.glob.clodmc.command.SimpleCommand;
+import au.com.glob.clodmc.modules.CommandError;
+import au.com.glob.clodmc.modules.Module;
+import au.com.glob.clodmc.modules.SimpleCommand;
 import au.com.glob.clodmc.util.HttpClient;
 import au.com.glob.clodmc.util.Mailer;
 import com.google.gson.JsonObject;
@@ -18,12 +19,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 
-public class InviteCommand extends SimpleCommand {
-  public static void register() {
-    SimpleCommand.register(new InviteCommand());
-  }
-
-  protected InviteCommand() {
+public class InviteCommand extends SimpleCommand implements Module {
+  public InviteCommand() {
     super("invite", "/invite <java | bedrock> <player>", "Teleport to previous location");
   }
 

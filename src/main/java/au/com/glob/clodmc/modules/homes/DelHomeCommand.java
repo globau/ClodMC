@@ -1,6 +1,7 @@
 package au.com.glob.clodmc.modules.homes;
 
-import au.com.glob.clodmc.command.SimpleCommand;
+import au.com.glob.clodmc.modules.Module;
+import au.com.glob.clodmc.modules.SimpleCommand;
 import java.util.List;
 import java.util.Map;
 import org.bukkit.Location;
@@ -8,12 +9,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-public class DelHomeCommand extends SimpleCommand {
-  public static void register() {
-    SimpleCommand.register(new DelHomeCommand());
-  }
-
-  protected DelHomeCommand() {
+public class DelHomeCommand extends SimpleCommand implements Module {
+  public DelHomeCommand() {
     super("delhome", "/delhome [name]", "Delete home");
   }
 
@@ -25,6 +22,12 @@ public class DelHomeCommand extends SimpleCommand {
     Map<String, Location> homes = Homes.instance.getHomes(player);
     homes.remove(name);
     Homes.instance.setHomes(player, homes);
+
+    if (name.equals("home")) {
+      player.sendMessage("Deleted home");
+    } else {
+      player.sendMessage("Deleted home '" + name + "'");
+    }
   }
 
   @Override

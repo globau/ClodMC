@@ -1,8 +1,9 @@
 package au.com.glob.clodmc.modules.homes;
 
 import au.com.glob.clodmc.ClodMC;
-import au.com.glob.clodmc.command.CommandError;
-import au.com.glob.clodmc.command.SimpleCommand;
+import au.com.glob.clodmc.modules.CommandError;
+import au.com.glob.clodmc.modules.Module;
+import au.com.glob.clodmc.modules.SimpleCommand;
 import au.com.glob.clodmc.util.BlockPos;
 import java.util.List;
 import java.util.Map;
@@ -11,12 +12,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-public class SetHomeCommand extends SimpleCommand {
-  public static void register() {
-    SimpleCommand.register(new SetHomeCommand());
-  }
-
-  protected SetHomeCommand() {
+public class SetHomeCommand extends SimpleCommand implements Module {
+  public SetHomeCommand() {
     super("sethome", "/sethome [name]", "Sets a home to your current location");
   }
 

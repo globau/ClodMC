@@ -1,6 +1,7 @@
 package au.com.glob.clodmc.modules.homes;
 
-import au.com.glob.clodmc.command.SimpleCommand;
+import au.com.glob.clodmc.modules.Module;
+import au.com.glob.clodmc.modules.SimpleCommand;
 import java.util.List;
 import java.util.Map;
 import java.util.StringJoiner;
@@ -9,12 +10,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-public class HomesCommand extends SimpleCommand {
-  public static void register() {
-    SimpleCommand.register(new HomesCommand());
-  }
-
-  protected HomesCommand() {
+public class HomesCommand extends SimpleCommand implements Module {
+  public HomesCommand() {
     super("homes", "List homes");
   }
 

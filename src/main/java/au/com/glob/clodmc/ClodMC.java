@@ -1,5 +1,7 @@
 package au.com.glob.clodmc;
 
+import au.com.glob.clodmc.modules.Module;
+import au.com.glob.clodmc.modules.SimpleCommand;
 import au.com.glob.clodmc.modules.homes.BackCommand;
 import au.com.glob.clodmc.modules.homes.DelHomeCommand;
 import au.com.glob.clodmc.modules.homes.HomeCommand;
@@ -21,7 +23,9 @@ import au.com.glob.clodmc.util.Config;
 import au.com.glob.clodmc.util.PlayerLocation;
 import java.io.File;
 import java.util.logging.Level;
+import org.bukkit.Bukkit;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
+import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 
@@ -49,29 +53,44 @@ public final class ClodMC extends JavaPlugin {
   public void onEnable() {
     Config.init("config.yml");
 
-    RequiredPlugins.register();
-    ConfigureServer.register();
+    this.register(new RequiredPlugins());
+    this.register(new ConfigureServer());
 
-    Sleep.register();
+    this.register(new Sleep());
 
-    InventorySort.register();
+    this.register(new InventorySort());
 
-    Homes.register();
-    BackCommand.register();
-    DelHomeCommand.register();
-    HomeCommand.register();
-    SpawnCommand.register();
-    HomesCommand.register();
-    SetHomeCommand.register();
+    this.register(new Homes());
+    this.register(new BackCommand());
+    this.register(new DelHomeCommand());
+    this.register(new HomeCommand());
+    this.register(new SpawnCommand());
+    this.register(new HomesCommand());
+    this.register(new SetHomeCommand());
 
-    InviteCommand.register();
+    this.register(new InviteCommand());
 
-    BetterDrops.register();
-    PreventMobGriefing.register();
-    PreventMobSpawn.register();
+    this.register(new BetterDrops());
+    this.register(new PreventMobGriefing());
+    this.register(new PreventMobSpawn());
 
-    WelcomeGift.register();
-    WelcomeCommand.register();
+    this.register(new WelcomeGift());
+    this.register(new WelcomeCommand());
+  }
+
+  private void register(@NotNull Module module) {
+    if (module instanceof Listener listener) {
+      Bukkit.getServer().getPluginManager().registerEvents(listener, ClodMC.instance);
+    }
+
+    if (module instanceof SimpleCommand command) {
+      ClodMC.instance.getServer().getCommandMap().register("clod-mc", command);
+    }
+  }
+
+  @Override
+  public void onDisable() {
+    SimpleCommand.unregisterAll();
   }
 
   @Override

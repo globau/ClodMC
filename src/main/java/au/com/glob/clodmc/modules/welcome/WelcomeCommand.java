@@ -1,7 +1,8 @@
 package au.com.glob.clodmc.modules.welcome;
 
-import au.com.glob.clodmc.command.CommandError;
-import au.com.glob.clodmc.command.SimpleCommand;
+import au.com.glob.clodmc.modules.CommandError;
+import au.com.glob.clodmc.modules.Module;
+import au.com.glob.clodmc.modules.SimpleCommand;
 import java.util.List;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
@@ -9,12 +10,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
-public class WelcomeCommand extends SimpleCommand {
-  public static void register() {
-    SimpleCommand.register(new WelcomeCommand());
-  }
-
-  protected WelcomeCommand() {
+public class WelcomeCommand extends SimpleCommand implements Module {
+  public WelcomeCommand() {
     super("welcome", "/welcome <player>", "Give specified player the welcome book");
   }
 

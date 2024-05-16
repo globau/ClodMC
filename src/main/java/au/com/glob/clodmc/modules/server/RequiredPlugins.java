@@ -1,11 +1,11 @@
 package au.com.glob.clodmc.modules.server;
 
 import au.com.glob.clodmc.ClodMC;
+import au.com.glob.clodmc.modules.Module;
 import java.util.Set;
 import java.util.stream.Collectors;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -15,16 +15,14 @@ import org.bukkit.event.server.PluginEnableEvent;
 import org.bukkit.event.server.ServerLoadEvent;
 import org.bukkit.plugin.Plugin;
 
-public class RequiredPlugins implements Listener {
+public class RequiredPlugins implements Listener, Module {
   private final Set<String> required;
   private Set<String> missing;
   private final Component kickMessage;
 
-  public static void register() {
-    Bukkit.getServer().getPluginManager().registerEvents(new RequiredPlugins(), ClodMC.instance);
-  }
+  public RequiredPlugins() {
+    super();
 
-  private RequiredPlugins() {
     this.required =
         ClodMC.instance.getConfig().getStringList("required-plugins").stream()
             .map(String::toLowerCase)

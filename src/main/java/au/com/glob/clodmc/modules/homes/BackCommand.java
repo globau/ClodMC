@@ -1,7 +1,8 @@
 package au.com.glob.clodmc.modules.homes;
 
-import au.com.glob.clodmc.command.CommandError;
-import au.com.glob.clodmc.command.SimpleCommand;
+import au.com.glob.clodmc.modules.CommandError;
+import au.com.glob.clodmc.modules.Module;
+import au.com.glob.clodmc.modules.SimpleCommand;
 import au.com.glob.clodmc.util.BlockPos;
 import au.com.glob.clodmc.util.PlayerLocation;
 import java.util.List;
@@ -9,12 +10,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-public class BackCommand extends SimpleCommand {
-  public static void register() {
-    SimpleCommand.register(new BackCommand());
-  }
-
-  protected BackCommand() {
+public class BackCommand extends SimpleCommand implements Module {
+  public BackCommand() {
     super("back", "Teleport to previous location");
   }
 
