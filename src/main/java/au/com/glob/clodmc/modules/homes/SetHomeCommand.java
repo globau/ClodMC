@@ -27,7 +27,7 @@ public class SetHomeCommand extends SimpleCommand implements Module {
     Map<String, Location> homes = Homes.instance.getHomes(player);
     boolean existing = homes.containsKey(name);
 
-    if (homes.size() >= maxHomes) {
+    if (!existing && homes.size() >= maxHomes) {
       throw new CommandError("You have reached the maximum number of homes (" + maxHomes + ")");
     }
 
