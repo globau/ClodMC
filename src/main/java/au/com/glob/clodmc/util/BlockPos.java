@@ -1,13 +1,9 @@
 package au.com.glob.clodmc.util;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.EnumSet;
 import java.util.List;
-import java.util.Set;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.type.Slab;
@@ -19,21 +15,6 @@ public class BlockPos {
   private int y;
   private int z;
   private double adjustY;
-
-  private static final Material PORTAL = getMaterial("NETHER_PORTAL", "PORTAL");
-  private static final Set<Material> UNSAFE_BELOW =
-      getMatchingMaterials(
-          "CACTUS",
-          "CAMPFIRE",
-          "FIRE",
-          "FLOWING_LAVA",
-          "LAVA",
-          "MAGMA_BLOCK",
-          "SOUL_CAMPFIRE",
-          "SOUL_FIRE",
-          "STATIONARY_LAVA",
-          "SWEET_BERRY_BUSH",
-          "WITHER_ROSE");
 
   private static final int CHECK_RADIUS = 3;
   private static final Vector3D[] SHIFT_VECTORS;
@@ -131,52 +112,11 @@ public class BlockPos {
 
   public boolean isUnsafe() {
     Block block = this.getBlock();
-    return block.isSolid()
-        || block.getType() == PORTAL
-        || UNSAFE_BELOW.contains(this.getBlockBelow().getType())
-        || this.getBlockAbove().isSolid();
-  }
-
-  public static class LocationError extends Exception {
-    public LocationError(String message) {
-      super(message);
-    }
-  }
-
-  private static <T extends Enum<T>> Set<T> getMatchingMaterials(final String... names) {
-    //noinspection unchecked
-    final Set<T> set = EnumSet.noneOf((Class<T>) Material.class);
-    for (final String name : names) {
-      try {
-        final Field enumField = Material.class.getDeclaredField(name);
-        if (enumField.isEnumConstant()) {
-          //noinspection unchecked
-          set.add((T) enumField.get(null));
-        }
-      } catch (final NoSuchFieldException | IllegalAccessException e) {
-        // ignored
-      }
-    }
-    return set;
-  }
-
-  private static <T extends Enum<T>> T valueOfMaterial(final String... names) {
-    for (final String name : names) {
-      try {
-        final Field enumField = Material.class.getDeclaredField(name);
-        if (enumField.isEnumConstant()) {
-          //noinspection unchecked
-          return (T) enumField.get(null);
-        }
-      } catch (final NoSuchFieldException | IllegalAccessException e) {
-        // ignored
-      }
-    }
-    return null;
-  }
-
-  private static Material getMaterial(final String... names) {
-    return valueOfMaterial(names);
+    return !MaterialUtil.ALWAYS_SAFE.contains(block.getType())
+        && (MaterialUtil.ALWAYS_UNSAFE.contains(block.getType())
+            || block.isSolid()
+            || MaterialUtil.ALWAYS_UNSAFE.contains(this.getBlockBelow().getType())
+            || this.getBlockAbove().isSolid());
   }
 
   private static int clamp(int value, int min, int max) {

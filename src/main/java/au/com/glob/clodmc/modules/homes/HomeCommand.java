@@ -3,7 +3,6 @@ package au.com.glob.clodmc.modules.homes;
 import au.com.glob.clodmc.modules.CommandError;
 import au.com.glob.clodmc.modules.Module;
 import au.com.glob.clodmc.modules.SimpleCommand;
-import au.com.glob.clodmc.util.BlockPos;
 import au.com.glob.clodmc.util.PlayerLocation;
 import java.util.List;
 import java.util.Map;
@@ -33,12 +32,8 @@ public class HomeCommand extends SimpleCommand implements Module {
         "<grey>Teleporting you "
             + (name.equals("home") ? "home" : "to '" + name + "'")
             + "</grey>");
-    try {
-      PlayerLocation playerLoc = PlayerLocation.of(homes.get(name));
-      playerLoc.teleportPlayer(player);
-    } catch (BlockPos.LocationError e) {
-      throw new CommandError(e);
-    }
+    PlayerLocation playerLoc = PlayerLocation.of(homes.get(name));
+    playerLoc.teleportPlayer(player);
   }
 
   @Override

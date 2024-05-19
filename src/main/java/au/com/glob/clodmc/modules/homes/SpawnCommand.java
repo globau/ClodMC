@@ -1,10 +1,8 @@
 package au.com.glob.clodmc.modules.homes;
 
 import au.com.glob.clodmc.ClodMC;
-import au.com.glob.clodmc.modules.CommandError;
 import au.com.glob.clodmc.modules.Module;
 import au.com.glob.clodmc.modules.SimpleCommand;
-import au.com.glob.clodmc.util.BlockPos;
 import au.com.glob.clodmc.util.PlayerLocation;
 import java.util.List;
 import java.util.Random;
@@ -50,11 +48,7 @@ public class SpawnCommand extends SimpleCommand implements Module {
     }
 
     // teleport to the center of the block, just above the surface as per vanilla
-    try {
-      PlayerLocation playerLoc = PlayerLocation.of(loc.add(0.5, 0.1, 0.5));
-      playerLoc.teleportPlayer(player);
-    } catch (BlockPos.LocationError e) {
-      throw new CommandError(e);
-    }
+    PlayerLocation playerLoc = PlayerLocation.of(loc.add(0.5, 0.1, 0.5));
+    playerLoc.teleportPlayer(player);
   }
 }

@@ -3,7 +3,6 @@ package au.com.glob.clodmc.modules.homes;
 import au.com.glob.clodmc.modules.CommandError;
 import au.com.glob.clodmc.modules.Module;
 import au.com.glob.clodmc.modules.SimpleCommand;
-import au.com.glob.clodmc.util.BlockPos;
 import au.com.glob.clodmc.util.PlayerLocation;
 import java.util.List;
 import org.bukkit.command.CommandSender;
@@ -27,10 +26,6 @@ public class BackCommand extends SimpleCommand implements Module {
     Homes.instance.setBackLocation(player);
 
     player.sendRichMessage("<grey>Teleporting you back</grey>");
-    try {
-      location.teleportPlayer(player);
-    } catch (BlockPos.LocationError e) {
-      throw new CommandError(e.getMessage());
-    }
+    location.teleportPlayer(player);
   }
 }

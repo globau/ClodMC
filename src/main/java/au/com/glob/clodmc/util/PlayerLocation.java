@@ -28,7 +28,7 @@ public class PlayerLocation implements ConfigurationSerializable {
     return new PlayerLocation(location, false);
   }
 
-  public void teleportPlayer(@NotNull Player player) throws BlockPos.LocationError {
+  public void teleportPlayer(@NotNull Player player) {
     if (player.isInsideVehicle()) {
       if (player.getVehicle() instanceof Horse) {
         player.sendRichMessage("<grey>Dismounting your horse</grey>");

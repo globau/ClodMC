@@ -20,6 +20,7 @@ import au.com.glob.clodmc.modules.server.RequiredPlugins;
 import au.com.glob.clodmc.modules.welcome.WelcomeCommand;
 import au.com.glob.clodmc.modules.welcome.WelcomeGift;
 import au.com.glob.clodmc.util.Config;
+import au.com.glob.clodmc.util.MaterialUtil;
 import au.com.glob.clodmc.util.PlayerLocation;
 import java.io.File;
 import java.util.logging.Level;
@@ -52,6 +53,7 @@ public final class ClodMC extends JavaPlugin {
   @Override
   public void onEnable() {
     Config.init("config.yml");
+    MaterialUtil.init();
 
     this.register(new RequiredPlugins());
     this.register(new ConfigureServer());
