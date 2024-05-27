@@ -1,5 +1,6 @@
 package au.com.glob.clodmc.modules.homes;
 
+import au.com.glob.clodmc.modules.CommandError;
 import au.com.glob.clodmc.modules.Module;
 import au.com.glob.clodmc.modules.SimpleCommand;
 import java.util.List;
@@ -20,6 +21,10 @@ public class DelHomeCommand extends SimpleCommand implements Module {
     String name = this.popArg(args, "home");
 
     Map<String, Location> homes = Homes.instance.getHomes(player);
+    if (homes.isEmpty() || !homes.containsKey(name)) {
+      throw new CommandError(name.equals("home") ? "No home set" : "No such home '" + name + "'");
+    }
+
     homes.remove(name);
     Homes.instance.setHomes(player, homes);
 

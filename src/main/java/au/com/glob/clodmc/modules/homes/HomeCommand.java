@@ -22,7 +22,7 @@ public class HomeCommand extends SimpleCommand implements Module {
     String name = this.popArg(args, "home");
 
     Map<String, Location> homes = Homes.instance.getHomes(player);
-    if (homes.isEmpty()) {
+    if (homes.isEmpty() || !homes.containsKey(name)) {
       throw new CommandError(name.equals("home") ? "No home set" : "No such home '" + name + "'");
     }
 
