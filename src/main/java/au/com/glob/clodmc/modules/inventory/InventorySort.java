@@ -16,6 +16,7 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Donkey;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
@@ -28,6 +29,7 @@ import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
+import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
 
@@ -183,6 +185,7 @@ public class InventorySort implements Listener, Module {
     private final ItemStack itemStack;
     private final int materialIndex;
     private final String name;
+    private final String extra;
     private final int amount;
     private final int damage;
 
@@ -199,14 +202,38 @@ public class InventorySort implements Listener, Module {
         this.materialIndex = index;
       }
 
-      // visible in-game name (eg. include potion type)
+      // visible in-game name
       this.name =
           PlainTextComponentSerializer.plainText().serialize(Component.translatable(itemStack));
 
-      // others
-      this.amount = itemStack.getAmount();
       ItemMeta meta = itemStack.getItemMeta();
-      this.damage = (meta == null) ? 0 : ((Damageable) meta).getDamage();
+      if (meta != null) {
+        StringJoiner extraJoiner = new StringJoiner(".");
+
+        // enchantment storage (eg. book)
+        if (meta instanceof EnchantmentStorageMeta enchantmentStorageMeta) {
+          for (Map.Entry<Enchantment, Integer> entry :
+              enchantmentStorageMeta.getStoredEnchants().entrySet()) {
+            extraJoiner.add(entry.getKey().getKey().getKey());
+            extraJoiner.add(String.valueOf(entry.getValue()));
+          }
+        }
+
+        this.extra = extraJoiner.toString();
+
+        // damage
+        if (meta instanceof Damageable damageableMeta) {
+          this.damage = damageableMeta.getDamage();
+        } else {
+          this.damage = 0;
+        }
+      } else {
+        this.extra = "";
+        this.damage = 0;
+      }
+
+      // amount
+      this.amount = itemStack.getAmount();
     }
 
     @Override
@@ -214,6 +241,7 @@ public class InventorySort implements Listener, Module {
       StringJoiner joiner = new StringJoiner(":", "[", "]");
       joiner.add(String.valueOf(this.materialIndex));
       joiner.add(this.name);
+      joiner.add(this.extra);
       joiner.add(String.valueOf(this.amount));
       joiner.add(String.valueOf(this.damage));
       return joiner.toString();
@@ -233,6 +261,11 @@ public class InventorySort implements Listener, Module {
       }
       // item description
       comp = this.name.compareTo(o.name);
+      if (comp != 0) {
+        return comp;
+      }
+      // item extra
+      comp = this.extra.compareTo(o.extra);
       if (comp != 0) {
         return comp;
       }
