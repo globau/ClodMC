@@ -9,6 +9,7 @@ import au.com.glob.clodmc.modules.homes.Homes;
 import au.com.glob.clodmc.modules.homes.HomesCommand;
 import au.com.glob.clodmc.modules.homes.SetHomeCommand;
 import au.com.glob.clodmc.modules.homes.SpawnCommand;
+import au.com.glob.clodmc.modules.inventory.AdminModeCommand;
 import au.com.glob.clodmc.modules.inventory.InventorySort;
 import au.com.glob.clodmc.modules.invite.InviteCommand;
 import au.com.glob.clodmc.modules.mobs.BetterDrops;
@@ -60,6 +61,7 @@ public final class ClodMC extends JavaPlugin {
 
     this.register(new Sleep());
 
+    this.register(new AdminModeCommand());
     this.register(new InventorySort());
 
     this.register(new Homes());

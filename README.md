@@ -32,3 +32,4 @@ added to the server's whitelist.
 - new players receive a book welcoming them to the server
 - shift+right-click to sort a container
 - the server announces the name of the player who skipped the night
+- `/adminmode` to toggle between player and admin inventories
