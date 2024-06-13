@@ -59,7 +59,7 @@ public class RequiredPlugins implements Listener, Module {
     this.missing.add(pluginName.toLowerCase());
 
     for (Player player : ClodMC.instance.getServer().getOnlinePlayers()) {
-      if (player.hasPermission("requiredplugins.bypasskick")) {
+      if (player.isOp()) {
         player.sendRichMessage("<red>Plugin " + pluginName + " is not loaded</red>");
       } else {
         player.kick(this.kickMessage);
@@ -73,16 +73,17 @@ public class RequiredPlugins implements Listener, Module {
       return;
     }
 
-    if (event.getPlayer().hasPermission("requiredplugins.bypassblock")) {
+    if (event.getPlayer().isOp()) {
       ClodMC.instance
           .getServer()
           .getScheduler()
-          .runTask(
+          .scheduleSyncDelayedTask(
               ClodMC.instance,
               () ->
                   event
                       .getPlayer()
-                      .sendRichMessage("<red>" + this.missingErrorMessage() + "</red>"));
+                      .sendRichMessage("<red>" + this.missingErrorMessage() + "</red>"),
+              20);
     } else {
       event.setResult(PlayerLoginEvent.Result.KICK_OTHER);
       event.kickMessage(this.kickMessage);
@@ -98,7 +99,7 @@ public class RequiredPlugins implements Listener, Module {
   }
 
   private String missingErrorMessage() {
-    return "Not all required plugins are loaded.  Missing: "
+    return "Missing required plugins: "
         + this.missing.stream()
             .sorted(String::compareToIgnoreCase)
             .collect(Collectors.joining(" "));
