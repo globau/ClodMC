@@ -3,6 +3,7 @@ package au.com.glob.clodmc.util;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.Block;
@@ -40,6 +41,27 @@ public class BlockPos {
     this.y = y;
     this.z = z;
     this.adjustY = 0.0;
+  }
+
+  @Override
+  public boolean equals(Object other) {
+    if (this == other) {
+      return true;
+    }
+    if (other == null || this.getClass() != other.getClass()) {
+      return false;
+    }
+    BlockPos otherPos = (BlockPos) other;
+    return this.x == otherPos.x
+        && this.y == otherPos.y
+        && this.z == otherPos.z
+        && this.adjustY == otherPos.adjustY
+        && this.world.equals(otherPos.world);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(this.world, this.x, this.y, this.z, this.adjustY);
   }
 
   public static BlockPos of(@NotNull Location loc) {

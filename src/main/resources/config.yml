@@ -6,6 +6,10 @@ homes:
   # name of the world that /spawn takes you to
   overworld-name: world
 
+afk:
+  # time in seconds before an idle player is marked as afk
+  idle-time: 300
+
 mailer:
   # send admin emails here (eg. notifications of invites)
   admin-addr: clod@glob.au
