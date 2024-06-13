@@ -33,4 +33,5 @@ added to the server's whitelist.
 - shift+right-click to sort a container
 - the server announces the name of the player who skipped the night
 - indicates when players are afk, use `/afk` to toggle
+- leaves decay quickly
 - `/adminmode` to toggle between player and admin inventories

@@ -21,6 +21,7 @@ import au.com.glob.clodmc.modules.server.ConfigureServer;
 import au.com.glob.clodmc.modules.server.RequiredPlugins;
 import au.com.glob.clodmc.modules.welcome.WelcomeCommand;
 import au.com.glob.clodmc.modules.welcome.WelcomeGift;
+import au.com.glob.clodmc.modules.world.FastLeafDecay;
 import au.com.glob.clodmc.util.Config;
 import au.com.glob.clodmc.util.MaterialUtil;
 import au.com.glob.clodmc.util.PlayerLocation;
@@ -57,16 +58,7 @@ public final class ClodMC extends JavaPlugin {
     Config.init("config.yml");
     MaterialUtil.init();
 
-    this.register(new RequiredPlugins());
-    this.register(new ConfigureServer());
-
-    this.register(new AFK());
-    this.register(new InviteCommand());
-    this.register(new Sleep());
-
-    this.register(new AdminModeCommand());
-    this.register(new InventorySort());
-
+    // homes
     this.register(new Homes());
     this.register(new BackCommand());
     this.register(new DelHomeCommand());
@@ -75,12 +67,30 @@ public final class ClodMC extends JavaPlugin {
     this.register(new HomesCommand());
     this.register(new SetHomeCommand());
 
+    // inventory
+    this.register(new AdminModeCommand());
+    this.register(new InventorySort());
+
+    // mobs
     this.register(new BetterDrops());
     this.register(new PreventMobGriefing());
     this.register(new PreventMobSpawn());
 
+    // player
+    this.register(new AFK());
+    this.register(new InviteCommand());
+    this.register(new Sleep());
+
+    // server
+    this.register(new RequiredPlugins());
+    this.register(new ConfigureServer());
+
+    // welcome
     this.register(new WelcomeGift());
     this.register(new WelcomeCommand());
+
+    // world
+    this.register(new FastLeafDecay());
   }
 
   private void register(@NotNull Module module) {
