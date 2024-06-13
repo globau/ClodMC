@@ -1,4 +1,4 @@
-package au.com.glob.clodmc.modules.invite;
+package au.com.glob.clodmc.modules.player;
 
 import au.com.glob.clodmc.ClodMC;
 import au.com.glob.clodmc.modules.CommandError;

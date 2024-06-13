@@ -11,11 +11,11 @@ import au.com.glob.clodmc.modules.homes.SetHomeCommand;
 import au.com.glob.clodmc.modules.homes.SpawnCommand;
 import au.com.glob.clodmc.modules.inventory.AdminModeCommand;
 import au.com.glob.clodmc.modules.inventory.InventorySort;
-import au.com.glob.clodmc.modules.invite.InviteCommand;
 import au.com.glob.clodmc.modules.mobs.BetterDrops;
 import au.com.glob.clodmc.modules.mobs.PreventMobGriefing;
 import au.com.glob.clodmc.modules.mobs.PreventMobSpawn;
 import au.com.glob.clodmc.modules.player.AFK;
+import au.com.glob.clodmc.modules.player.InviteCommand;
 import au.com.glob.clodmc.modules.player.Sleep;
 import au.com.glob.clodmc.modules.server.ConfigureServer;
 import au.com.glob.clodmc.modules.server.RequiredPlugins;
@@ -61,6 +61,7 @@ public final class ClodMC extends JavaPlugin {
     this.register(new ConfigureServer());
 
     this.register(new AFK());
+    this.register(new InviteCommand());
     this.register(new Sleep());
 
     this.register(new AdminModeCommand());
@@ -73,8 +74,6 @@ public final class ClodMC extends JavaPlugin {
     this.register(new SpawnCommand());
     this.register(new HomesCommand());
     this.register(new SetHomeCommand());
-
-    this.register(new InviteCommand());
 
     this.register(new BetterDrops());
     this.register(new PreventMobGriefing());
