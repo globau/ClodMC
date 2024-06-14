@@ -24,6 +24,7 @@ import au.com.glob.clodmc.modules.welcome.WelcomeGift;
 import au.com.glob.clodmc.modules.world.FastLeafDecay;
 import au.com.glob.clodmc.util.Config;
 import au.com.glob.clodmc.util.MaterialUtil;
+import au.com.glob.clodmc.util.PlayerData;
 import au.com.glob.clodmc.util.PlayerLocation;
 import java.io.File;
 import java.util.logging.Level;
@@ -56,6 +57,7 @@ public final class ClodMC extends JavaPlugin {
   @Override
   public void onEnable() {
     Config.init("config.yml");
+    PlayerData.init();
     MaterialUtil.init();
 
     // homes
@@ -95,11 +97,11 @@ public final class ClodMC extends JavaPlugin {
 
   private void register(@NotNull Module module) {
     if (module instanceof Listener listener) {
-      Bukkit.getServer().getPluginManager().registerEvents(listener, ClodMC.instance);
+      Bukkit.getServer().getPluginManager().registerEvents(listener, this);
     }
 
     if (module instanceof SimpleCommand command) {
-      ClodMC.instance.getServer().getCommandMap().register("clod-mc", command);
+      this.getServer().getCommandMap().register("clod-mc", command);
     }
   }
 
