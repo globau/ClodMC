@@ -41,7 +41,8 @@ public class InventorySort implements Listener, Module {
 
     List<String> allMaterials = Arrays.stream(Material.values()).map(Enum::name).toList();
 
-    // read inventory_order.txt. format is:
+    // read inventory_order.txt. format follows.  english name is ignored
+    // # comment
     // english name  :MATERIAL
     List<String> orderedMaterials = new ArrayList<>();
     InputStream resourceStream = ClodMC.instance.getResource("inventory_order.txt");
@@ -53,6 +54,9 @@ public class InventorySort implements Listener, Module {
       int lineNo = 0;
       while ((line = reader.readLine()) != null) {
         lineNo++;
+        if (line.isBlank() || line.startsWith("#")) {
+          continue;
+        }
         String[] parts = line.split(":");
         if (parts.length != 2) {
           throw new RuntimeException("invalid inventory_order.txt: line " + lineNo);

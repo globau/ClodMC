@@ -1,3 +1,7 @@
+#
+# wood
+#
+
 Acacia Door                              :ACACIA_DOOR
 Acacia Fence                             :ACACIA_FENCE
 Acacia Fence Gate                        :ACACIA_FENCE_GATE
@@ -15,33 +19,14 @@ Acacia Stairs                            :ACACIA_STAIRS
 Acacia Trapdoor                          :ACACIA_TRAPDOOR
 Acacia Wood                              :ACACIA_WOOD
 Stripped Acacia Wood                     :STRIPPED_ACACIA_WOOD
-Block Of Amethyst                        :AMETHYST_BLOCK
-Amethyst Shard                           :AMETHYST_SHARD
-Amethyst Cluster                         :AMETHYST_CLUSTER
-Budding Amethyst                         :BUDDING_AMETHYST
-Small Amethyst Bud                       :SMALL_AMETHYST_BUD
-Medium Amethyst Bud                      :MEDIUM_AMETHYST_BUD
-Large Amethyst Bud                       :LARGE_AMETHYST_BUD
-Andesite                                 :ANDESITE
-Polished Andesite                        :POLISHED_ANDESITE
-Andesite Slab                            :ANDESITE_SLAB
-Polished Andesite Slab                   :POLISHED_ANDESITE_SLAB
-Andesite Stairs                          :ANDESITE_STAIRS
-Polished Andesite Stairs                 :POLISHED_ANDESITE_STAIRS
-Andesite Wall                            :ANDESITE_WALL
-Anvil                                    :ANVIL
-Damaged Anvil                            :DAMAGED_ANVIL
-Apple                                    :APPLE
-Golden Apple                             :GOLDEN_APPLE
-Enchanted Golden Apple                   :ENCHANTED_GOLDEN_APPLE
-Armor Stand                              :ARMOR_STAND
-Arrow                                    :ARROW
-Spectral Arrow                           :SPECTRAL_ARROW
-Tipped Arrow                             :TIPPED_ARROW
+Acacia Boat                              :ACACIA_BOAT
+Acacia Boat With Chest                   :ACACIA_CHEST_BOAT
+
 Azalea                                   :AZALEA
 Flowering Azalea                         :FLOWERING_AZALEA
 Azalea Leaves                            :AZALEA_LEAVES
 Flowering Azalea Leaves                  :FLOWERING_AZALEA_LEAVES
+
 Bamboo                                   :BAMBOO
 Bamboo Sapling                           :BAMBOO_SAPLING
 Bamboo Button                            :BAMBOO_BUTTON
@@ -55,8 +40,6 @@ Bamboo Mosaic Slab                       :BAMBOO_MOSAIC_SLAB
 Bamboo Mosaic Stairs                     :BAMBOO_MOSAIC_STAIRS
 Bamboo Planks                            :BAMBOO_PLANKS
 Bamboo Pressure Plate                    :BAMBOO_PRESSURE_PLATE
-Bamboo Raft                              :BAMBOO_RAFT
-Bamboo Raft With Chest                   :BAMBOO_CHEST_RAFT
 Bamboo Sign                              :BAMBOO_SIGN
 Bamboo Sign                              :BAMBOO_WALL_SIGN
 Bamboo Slab                              :BAMBOO_SLAB
@@ -64,76 +47,9 @@ Bamboo Stairs                            :BAMBOO_STAIRS
 Bamboo Trapdoor                          :BAMBOO_TRAPDOOR
 Block Of Bamboo                          :BAMBOO_BLOCK
 Block Of Stripped Bamboo                 :STRIPPED_BAMBOO_BLOCK
-White Banner                             :WHITE_BANNER
-White Banner                             :WHITE_WALL_BANNER
-Light Gray Banner                        :LIGHT_GRAY_BANNER
-Light Gray Banner                        :LIGHT_GRAY_WALL_BANNER
-Gray Banner                              :GRAY_BANNER
-Gray Banner                              :GRAY_WALL_BANNER
-Black Banner                             :BLACK_BANNER
-Black Banner                             :BLACK_WALL_BANNER
-Brown Banner                             :BROWN_BANNER
-Brown Banner                             :BROWN_WALL_BANNER
-Red Banner                               :RED_BANNER
-Red Banner                               :RED_WALL_BANNER
-Orange Banner                            :ORANGE_BANNER
-Orange Banner                            :ORANGE_WALL_BANNER
-Yellow Banner                            :YELLOW_BANNER
-Yellow Banner                            :YELLOW_WALL_BANNER
-Lime Banner                              :LIME_BANNER
-Lime Banner                              :LIME_WALL_BANNER
-Green Banner                             :GREEN_BANNER
-Green Banner                             :GREEN_WALL_BANNER
-Cyan Banner                              :CYAN_BANNER
-Cyan Banner                              :CYAN_WALL_BANNER
-Light Blue Banner                        :LIGHT_BLUE_BANNER
-Light Blue Banner                        :LIGHT_BLUE_WALL_BANNER
-Blue Banner                              :BLUE_BANNER
-Blue Banner                              :BLUE_WALL_BANNER
-Purple Banner                            :PURPLE_BANNER
-Purple Banner                            :PURPLE_WALL_BANNER
-Magenta Banner                           :MAGENTA_BANNER
-Magenta Banner                           :MAGENTA_WALL_BANNER
-Pink Banner                              :PINK_BANNER
-Pink Banner                              :PINK_WALL_BANNER
-Creeper Banner Pattern                   :CREEPER_BANNER_PATTERN
-Flower Banner Pattern                    :FLOWER_BANNER_PATTERN
-Flow Banner Pattern                      :FLOW_BANNER_PATTERN
-Globe Banner Pattern                     :GLOBE_BANNER_PATTERN
-Guster Banner Pattern                    :GUSTER_BANNER_PATTERN
-Mojang Banner Pattern                    :MOJANG_BANNER_PATTERN
-Piglin Banner Pattern                    :PIGLIN_BANNER_PATTERN
-Skull Banner Pattern                     :SKULL_BANNER_PATTERN
-Barrel                                   :BARREL
-Barrier                                  :BARRIER
-Basalt                                   :BASALT
-Polished Basalt                          :POLISHED_BASALT
-Smooth Basalt                            :SMOOTH_BASALT
-Beacon                                   :BEACON
-White Bed                                :WHITE_BED
-Light Gray Bed                           :LIGHT_GRAY_BED
-Gray Bed                                 :GRAY_BED
-Black Bed                                :BLACK_BED
-Brown Bed                                :BROWN_BED
-Red Bed                                  :RED_BED
-Orange Bed                               :ORANGE_BED
-Yellow Bed                               :YELLOW_BED
-Lime Bed                                 :LIME_BED
-Green Bed                                :GREEN_BED
-Cyan Bed                                 :CYAN_BED
-Light Blue Bed                           :LIGHT_BLUE_BED
-Blue Bed                                 :BLUE_BED
-Purple Bed                               :PURPLE_BED
-Magenta Bed                              :MAGENTA_BED
-Pink Bed                                 :PINK_BED
-Bedrock                                  :BEDROCK
-Bee Nest                                 :BEE_NEST
-Beehive                                  :BEEHIVE
-Beetroot                                 :BEETROOT
-Beetroots                                :BEETROOTS
-Beetroot Seeds                           :BEETROOT_SEEDS
-Beetroot Soup                            :BEETROOT_SOUP
-Bell                                     :BELL
+Bamboo Raft                              :BAMBOO_RAFT
+Bamboo Raft With Chest                   :BAMBOO_CHEST_RAFT
+
 Birch Door                               :BIRCH_DOOR
 Birch Fence                              :BIRCH_FENCE
 Birch Fence Gate                         :BIRCH_FENCE_GATE
@@ -151,152 +67,9 @@ Birch Stairs                             :BIRCH_STAIRS
 Birch Trapdoor                           :BIRCH_TRAPDOOR
 Birch Wood                               :BIRCH_WOOD
 Stripped Birch Wood                      :STRIPPED_BIRCH_WOOD
-Blackstone                               :BLACKSTONE
-Polished Blackstone Brick Slab           :POLISHED_BLACKSTONE_BRICK_SLAB
-Polished Blackstone Brick Stairs         :POLISHED_BLACKSTONE_BRICK_STAIRS
-Polished Blackstone Brick Wall           :POLISHED_BLACKSTONE_BRICK_WALL
-Cracked Polished Blackstone Bricks       :CRACKED_POLISHED_BLACKSTONE_BRICKS
-Polished Blackstone Bricks               :POLISHED_BLACKSTONE_BRICKS
-Chiseled Polished Blackstone             :CHISELED_POLISHED_BLACKSTONE
-Polished Blackstone                      :POLISHED_BLACKSTONE
-Blackstone Slab                          :BLACKSTONE_SLAB
-Polished Blackstone Slab                 :POLISHED_BLACKSTONE_SLAB
-Blackstone Stairs                        :BLACKSTONE_STAIRS
-Polished Blackstone Stairs               :POLISHED_BLACKSTONE_STAIRS
-Blackstone Wall                          :BLACKSTONE_WALL
-Polished Blackstone Wall                 :POLISHED_BLACKSTONE_WALL
-Gilded Blackstone                        :GILDED_BLACKSTONE
-Blast Furnace                            :BLAST_FURNACE
-Blaze Rod                                :BLAZE_ROD
-Blaze Powder                             :BLAZE_POWDER
-Breeze Rod                               :BREEZE_ROD
-Acacia Boat                              :ACACIA_BOAT
-Acacia Boat With Chest                   :ACACIA_CHEST_BOAT
-Birch Boat With Chest                    :BIRCH_CHEST_BOAT
 Birch Boat                               :BIRCH_BOAT
-Dark Oak Boat                            :DARK_OAK_BOAT
-Dark Oak Boat With Chest                 :DARK_OAK_CHEST_BOAT
-Jungle Boat                              :JUNGLE_BOAT
-Jungle Boat With Chest                   :JUNGLE_CHEST_BOAT
-Mangrove Boat                            :MANGROVE_BOAT
-Mangrove Boat With Chest                 :MANGROVE_CHEST_BOAT
-Oak Boat                                 :OAK_BOAT
-Oak Boat With Chest                      :OAK_CHEST_BOAT
-Spruce Boat                              :SPRUCE_BOAT
-Spruce Boat With Chest                   :SPRUCE_CHEST_BOAT
-Bone                                     :BONE
-Bone Block                               :BONE_BLOCK
-Bone Meal                                :BONE_MEAL
-Book                                     :BOOK
-Book And Quill                           :WRITABLE_BOOK
-Written Book                             :WRITTEN_BOOK
-Enchanted Book                           :ENCHANTED_BOOK
-Bookshelf                                :BOOKSHELF
-Chiseled Bookshelf                       :CHISELED_BOOKSHELF
-Bottle O' Enchanting                     :EXPERIENCE_BOTTLE
-Bow                                      :BOW
-Bowl                                     :BOWL
-Bread                                    :BREAD
-Brewing Stand                            :BREWING_STAND
-Brick                                    :BRICK
-Brick Slab                               :BRICK_SLAB
-Deepslate Brick Slab                     :DEEPSLATE_BRICK_SLAB
-Brick Stairs                             :BRICK_STAIRS
-Deepslate Brick Stairs                   :DEEPSLATE_BRICK_STAIRS
-Brick Wall                               :BRICK_WALL
-Deepslate Brick Wall                     :DEEPSLATE_BRICK_WALL
-Bricks                                   :BRICKS
-Cracked Deepslate Bricks                 :CRACKED_DEEPSLATE_BRICKS
-Deepslate Bricks                         :DEEPSLATE_BRICKS
-Bucket                                   :BUCKET
-Water Bucket                             :WATER_BUCKET
-Lava Bucket                              :LAVA_BUCKET
-Milk Bucket                              :MILK_BUCKET
-Powder Snow Bucket                       :POWDER_SNOW_BUCKET
-Bundle                                   :BUNDLE
-Acacia Button                            :ACACIA_BUTTON
-Birch Button                             :BIRCH_BUTTON
-Polished Blackstone Button               :POLISHED_BLACKSTONE_BUTTON
-Crimson Button                           :CRIMSON_BUTTON
-Dark Oak Button                          :DARK_OAK_BUTTON
-Mangrove Button                          :MANGROVE_BUTTON
-Jungle Button                            :JUNGLE_BUTTON
-Oak Button                               :OAK_BUTTON
-Spruce Button                            :SPRUCE_BUTTON
-Stone Button                             :STONE_BUTTON
-Warped Button                            :WARPED_BUTTON
-Cactus                                   :CACTUS
-Cake                                     :CAKE
-Candle Cake                              :CANDLE_CAKE
-White Candle Cake                        :WHITE_CANDLE_CAKE
-Light Gray Candle Cake                   :LIGHT_GRAY_CANDLE_CAKE
-Gray Candle Cake                         :GRAY_CANDLE_CAKE
-Black Candle Cake                        :BLACK_CANDLE_CAKE
-Brown Candle Cake                        :BROWN_CANDLE_CAKE
-Red Candle Cake                          :RED_CANDLE_CAKE
-Orange Candle Cake                       :ORANGE_CANDLE_CAKE
-Yellow Candle Cake                       :YELLOW_CANDLE_CAKE
-Lime Candle Cake                         :LIME_CANDLE_CAKE
-Green Candle Cake                        :GREEN_CANDLE_CAKE
-Cyan Candle Cake                         :CYAN_CANDLE_CAKE
-Light Blue Candle Cake                   :LIGHT_BLUE_CANDLE_CAKE
-Blue Candle Cake                         :BLUE_CANDLE_CAKE
-Purple Candle Cake                       :PURPLE_CANDLE_CAKE
-Magenta Candle Cake                      :MAGENTA_CANDLE_CAKE
-Pink Candle Cake                         :PINK_CANDLE_CAKE
-Calcite                                  :CALCITE
-Campfire                                 :CAMPFIRE
-Candle                                   :CANDLE
-White Candle                             :WHITE_CANDLE
-Light Gray Candle                        :LIGHT_GRAY_CANDLE
-Gray Candle                              :GRAY_CANDLE
-Black Candle                             :BLACK_CANDLE
-Brown Candle                             :BROWN_CANDLE
-Red Candle                               :RED_CANDLE
-Orange Candle                            :ORANGE_CANDLE
-Yellow Candle                            :YELLOW_CANDLE
-Lime Candle                              :LIME_CANDLE
-Green Candle                             :GREEN_CANDLE
-Cyan Candle                              :CYAN_CANDLE
-Light Blue Candle                        :LIGHT_BLUE_CANDLE
-Blue Candle                              :BLUE_CANDLE
-Purple Candle                            :PURPLE_CANDLE
-Magenta Candle                           :MAGENTA_CANDLE
-Pink Candle                              :PINK_CANDLE
-White Carpet                             :WHITE_CARPET
-Light Gray Carpet                        :LIGHT_GRAY_CARPET
-Gray Carpet                              :GRAY_CARPET
-Black Carpet                             :BLACK_CARPET
-Brown Carpet                             :BROWN_CARPET
-Red Carpet                               :RED_CARPET
-Orange Carpet                            :ORANGE_CARPET
-Yellow Carpet                            :YELLOW_CARPET
-Lime Carpet                              :LIME_CARPET
-Green Carpet                             :GREEN_CARPET
-Cyan Carpet                              :CYAN_CARPET
-Light Blue Carpet                        :LIGHT_BLUE_CARPET
-Blue Carpet                              :BLUE_CARPET
-Purple Carpet                            :PURPLE_CARPET
-Magenta Carpet                           :MAGENTA_CARPET
-Pink Carpet                              :PINK_CARPET
-Carrot                                   :CARROT
-Carrots                                  :CARROTS
-Carrot On A Stick                        :CARROT_ON_A_STICK
-Cartography Table                        :CARTOGRAPHY_TABLE
-Cauldron                                 :CAULDRON
-Water Cauldron                           :WATER_CAULDRON
-Lava Cauldron                            :LAVA_CAULDRON
-Powder Snow Cauldron                     :POWDER_SNOW_CAULDRON
-Chain                                    :CHAIN
-Chainmail Boots                          :CHAINMAIL_BOOTS
-Chainmail Chestplate                     :CHAINMAIL_CHESTPLATE
-Chainmail Helmet                         :CHAINMAIL_HELMET
-Chainmail Leggings                       :CHAINMAIL_LEGGINGS
-Charcoal                                 :CHARCOAL
-Chest                                    :CHEST
-Trapped Chest                            :TRAPPED_CHEST
-Cherry Boat                              :CHERRY_BOAT
-Cherry Boat With Chest                   :CHERRY_CHEST_BOAT
+Birch Boat With Chest                    :BIRCH_CHEST_BOAT
+
 Cherry Button                            :CHERRY_BUTTON
 Cherry Door                              :CHERRY_DOOR
 Cherry Fence                             :CHERRY_FENCE
@@ -316,39 +89,201 @@ Cherry Stairs                            :CHERRY_STAIRS
 Cherry Trapdoor                          :CHERRY_TRAPDOOR
 Cherry Wood                              :CHERRY_WOOD
 Stripped Cherry Wood                     :STRIPPED_CHERRY_WOOD
-Raw Chicken                              :CHICKEN
-Cooked Chicken                           :COOKED_CHICKEN
-Chipped Anvil                            :CHIPPED_ANVIL
-Chiseled Deepslate                       :CHISELED_DEEPSLATE
-Chorus Plant                             :CHORUS_PLANT
-Chorus Flower                            :CHORUS_FLOWER
-Chorus Fruit                             :CHORUS_FRUIT
-Popped Chorus Fruit                      :POPPED_CHORUS_FRUIT
-Clay                                     :CLAY
-Clay Ball                                :CLAY_BALL
-Clock                                    :CLOCK
-Coal                                     :COAL
-Block Of Coal                            :COAL_BLOCK
-Coal Ore                                 :COAL_ORE
-Deepslate Coal Ore                       :DEEPSLATE_COAL_ORE
-Cobbled Deepslate                        :COBBLED_DEEPSLATE
-Cobbled Deepslate Slab                   :COBBLED_DEEPSLATE_SLAB
-Cobbled Deepslate Stairs                 :COBBLED_DEEPSLATE_STAIRS
-Cobbled Deepslate Wall                   :COBBLED_DEEPSLATE_WALL
+Cherry Boat                              :CHERRY_BOAT
+Cherry Boat With Chest                   :CHERRY_CHEST_BOAT
+
+Crimson Door                             :CRIMSON_DOOR
+Crimson Fence                            :CRIMSON_FENCE
+Crimson Fence Gate                       :CRIMSON_FENCE_GATE
+Crimson Fungus                           :CRIMSON_FUNGUS
+Crimson Hyphae                           :CRIMSON_HYPHAE
+Stripped Crimson Hyphae                  :STRIPPED_CRIMSON_HYPHAE
+Crimson Nylium                           :CRIMSON_NYLIUM
+Crimson Planks                           :CRIMSON_PLANKS
+Crimson Roots                            :CRIMSON_ROOTS
+Crimson Sign                             :CRIMSON_SIGN
+Crimson Sign                             :CRIMSON_WALL_SIGN
+Crimson Hanging Sign                     :CRIMSON_HANGING_SIGN
+Crimson Hanging Sign                     :CRIMSON_WALL_HANGING_SIGN
+Crimson Slab                             :CRIMSON_SLAB
+Crimson Stairs                           :CRIMSON_STAIRS
+Crimson Stem                             :CRIMSON_STEM
+Stripped Crimson Stem                    :STRIPPED_CRIMSON_STEM
+Crimson Trapdoor                         :CRIMSON_TRAPDOOR
+
+Dark Oak Door                            :DARK_OAK_DOOR
+Dark Oak Fence                           :DARK_OAK_FENCE
+Dark Oak Fence Gate                      :DARK_OAK_FENCE_GATE
+Dark Oak Leaves                          :DARK_OAK_LEAVES
+Dark Oak Log                             :DARK_OAK_LOG
+Stripped Dark Oak Log                    :STRIPPED_DARK_OAK_LOG
+Dark Oak Planks                          :DARK_OAK_PLANKS
+Dark Oak Sapling                         :DARK_OAK_SAPLING
+Dark Oak Sign                            :DARK_OAK_SIGN
+Dark Oak Sign                            :DARK_OAK_WALL_SIGN
+Dark Oak Hanging Sign                    :DARK_OAK_HANGING_SIGN
+Dark Oak Hanging Sign                    :DARK_OAK_WALL_HANGING_SIGN
+Dark Oak Slab                            :DARK_OAK_SLAB
+Petrified Oak Slab                       :PETRIFIED_OAK_SLAB
+Dark Oak Stairs                          :DARK_OAK_STAIRS
+Dark Oak Trapdoor                        :DARK_OAK_TRAPDOOR
+Dark Oak Wood                            :DARK_OAK_WOOD
+Stripped Dark Oak Wood                   :STRIPPED_DARK_OAK_WOOD
+Dark Oak Boat                            :DARK_OAK_BOAT
+Dark Oak Boat With Chest                 :DARK_OAK_CHEST_BOAT
+
+Jungle Door                              :JUNGLE_DOOR
+Jungle Fence                             :JUNGLE_FENCE
+Jungle Fence Gate                        :JUNGLE_FENCE_GATE
+Jungle Leaves                            :JUNGLE_LEAVES
+Jungle Log                               :JUNGLE_LOG
+Stripped Jungle Log                      :STRIPPED_JUNGLE_LOG
+Jungle Planks                            :JUNGLE_PLANKS
+Jungle Sapling                           :JUNGLE_SAPLING
+Jungle Sign                              :JUNGLE_SIGN
+Jungle Sign                              :JUNGLE_WALL_SIGN
+Jungle Hanging Sign                      :JUNGLE_HANGING_SIGN
+Jungle Hanging Sign                      :JUNGLE_WALL_HANGING_SIGN
+Jungle Slab                              :JUNGLE_SLAB
+Jungle Stairs                            :JUNGLE_STAIRS
+Jungle Trapdoor                          :JUNGLE_TRAPDOOR
+Jungle Wood                              :JUNGLE_WOOD
+Stripped Jungle Wood                     :STRIPPED_JUNGLE_WOOD
+Jungle Boat                              :JUNGLE_BOAT
+Jungle Boat With Chest                   :JUNGLE_CHEST_BOAT
+
+Mangrove Door                            :MANGROVE_DOOR
+Mangrove Fence                           :MANGROVE_FENCE
+Mangrove Fence Gate                      :MANGROVE_FENCE_GATE
+Mangrove Leaves                          :MANGROVE_LEAVES
+Mangrove Log                             :MANGROVE_LOG
+Stripped Mangrove Log                    :STRIPPED_MANGROVE_LOG
+Mangrove Planks                          :MANGROVE_PLANKS
+Mangrove Propagule                       :MANGROVE_PROPAGULE
+Mangrove Roots                           :MANGROVE_ROOTS
+Muddy Mangrove Roots                     :MUDDY_MANGROVE_ROOTS
+Mangrove Sign                            :MANGROVE_SIGN
+Mangrove Sign                            :MANGROVE_WALL_SIGN
+Mangrove Hanging Sign                    :MANGROVE_HANGING_SIGN
+Mangrove Hanging Sign                    :MANGROVE_WALL_HANGING_SIGN
+Mangrove Slab                            :MANGROVE_SLAB
+Mangrove Stairs                          :MANGROVE_STAIRS
+Mangrove Trapdoor                        :MANGROVE_TRAPDOOR
+Mangrove Wood                            :MANGROVE_WOOD
+Stripped Mangrove Wood                   :STRIPPED_MANGROVE_WOOD
+Mangrove Boat                            :MANGROVE_BOAT
+Mangrove Boat With Chest                 :MANGROVE_CHEST_BOAT
+
+Oak Door                                 :OAK_DOOR
+Oak Fence                                :OAK_FENCE
+Oak Fence Gate                           :OAK_FENCE_GATE
+Oak Leaves                               :OAK_LEAVES
+Oak Log                                  :OAK_LOG
+Stripped Oak Log                         :STRIPPED_OAK_LOG
+Oak Planks                               :OAK_PLANKS
+Oak Sapling                              :OAK_SAPLING
+Oak Sign                                 :OAK_SIGN
+Oak Sign                                 :OAK_WALL_SIGN
+Oak Hanging Sign                         :OAK_HANGING_SIGN
+Oak Hanging Sign                         :OAK_WALL_HANGING_SIGN
+Oak Slab                                 :OAK_SLAB
+Oak Stairs                               :OAK_STAIRS
+Oak Trapdoor                             :OAK_TRAPDOOR
+Oak Wood                                 :OAK_WOOD
+Stripped Oak Wood                        :STRIPPED_OAK_WOOD
+Oak Boat                                 :OAK_BOAT
+Oak Boat With Chest                      :OAK_CHEST_BOAT
+
+Spruce Door                              :SPRUCE_DOOR
+Spruce Fence                             :SPRUCE_FENCE
+Spruce Fence Gate                        :SPRUCE_FENCE_GATE
+Spruce Leaves                            :SPRUCE_LEAVES
+Spruce Log                               :SPRUCE_LOG
+Stripped Spruce Log                      :STRIPPED_SPRUCE_LOG
+Spruce Planks                            :SPRUCE_PLANKS
+Spruce Sapling                           :SPRUCE_SAPLING
+Spruce Sign                              :SPRUCE_SIGN
+Spruce Sign                              :SPRUCE_WALL_SIGN
+Spruce Hanging Sign                      :SPRUCE_HANGING_SIGN
+Spruce Hanging Sign                      :SPRUCE_WALL_HANGING_SIGN
+Spruce Slab                              :SPRUCE_SLAB
+Spruce Stairs                            :SPRUCE_STAIRS
+Spruce Trapdoor                          :SPRUCE_TRAPDOOR
+Spruce Wood                              :SPRUCE_WOOD
+Stripped Spruce Wood                     :STRIPPED_SPRUCE_WOOD
+Spruce Boat                              :SPRUCE_BOAT
+Spruce Boat With Chest                   :SPRUCE_CHEST_BOAT
+
+Warped Door                              :WARPED_DOOR
+Warped Fence                             :WARPED_FENCE
+Warped Fence Gate                        :WARPED_FENCE_GATE
+Warped Fungus                            :WARPED_FUNGUS
+Warped Hyphae                            :WARPED_HYPHAE
+Stripped Warped Hyphae                   :STRIPPED_WARPED_HYPHAE
+Warped Nylium                            :WARPED_NYLIUM
+Warped Planks                            :WARPED_PLANKS
+Warped Roots                             :WARPED_ROOTS
+Warped Sign                              :WARPED_SIGN
+Warped Sign                              :WARPED_WALL_SIGN
+Warped Hanging Sign                      :WARPED_HANGING_SIGN
+Warped Hanging Sign                      :WARPED_WALL_HANGING_SIGN
+Warped Slab                              :WARPED_SLAB
+Warped Stairs                            :WARPED_STAIRS
+Warped Stem                              :WARPED_STEM
+Stripped Warped Stem                     :STRIPPED_WARPED_STEM
+Warped Trapdoor                          :WARPED_TRAPDOOR
+Warped Wart Block                        :WARPED_WART_BLOCK
+
+#
+# stone
+#
+
+Andesite                                 :ANDESITE
+Polished Andesite                        :POLISHED_ANDESITE
+Andesite Slab                            :ANDESITE_SLAB
+Polished Andesite Slab                   :POLISHED_ANDESITE_SLAB
+Andesite Stairs                          :ANDESITE_STAIRS
+Polished Andesite Stairs                 :POLISHED_ANDESITE_STAIRS
+Andesite Wall                            :ANDESITE_WALL
+
+Basalt                                   :BASALT
+Polished Basalt                          :POLISHED_BASALT
+Smooth Basalt                            :SMOOTH_BASALT
+
+Blackstone                               :BLACKSTONE
+Polished Blackstone Brick Slab           :POLISHED_BLACKSTONE_BRICK_SLAB
+Polished Blackstone Brick Stairs         :POLISHED_BLACKSTONE_BRICK_STAIRS
+Polished Blackstone Brick Wall           :POLISHED_BLACKSTONE_BRICK_WALL
+Cracked Polished Blackstone Bricks       :CRACKED_POLISHED_BLACKSTONE_BRICKS
+Polished Blackstone Bricks               :POLISHED_BLACKSTONE_BRICKS
+Chiseled Polished Blackstone             :CHISELED_POLISHED_BLACKSTONE
+Polished Blackstone                      :POLISHED_BLACKSTONE
+Blackstone Slab                          :BLACKSTONE_SLAB
+Polished Blackstone Slab                 :POLISHED_BLACKSTONE_SLAB
+Blackstone Stairs                        :BLACKSTONE_STAIRS
+Polished Blackstone Stairs               :POLISHED_BLACKSTONE_STAIRS
+Blackstone Wall                          :BLACKSTONE_WALL
+Polished Blackstone Wall                 :POLISHED_BLACKSTONE_WALL
+Gilded Blackstone                        :GILDED_BLACKSTONE
+
+Brick                                    :BRICK
+Brick Slab                               :BRICK_SLAB
+Brick Stairs                             :BRICK_STAIRS
+Brick Wall                               :BRICK_WALL
+Bricks                                   :BRICKS
+
+Calcite                                  :CALCITE
+
 Cobblestone                              :COBBLESTONE
 Infested Cobblestone                     :INFESTED_COBBLESTONE
 Cobblestone Slab                         :COBBLESTONE_SLAB
 Cobblestone Stairs                       :COBBLESTONE_STAIRS
 Cobblestone Wall                         :COBBLESTONE_WALL
-Cobweb                                   :COBWEB
-Cocoa Beans                              :COCOA
-Cocoa Beans                              :COCOA_BEANS
-Command Block                            :COMMAND_BLOCK
-Repeating Command Block                  :REPEATING_COMMAND_BLOCK
-Chain Command Block                      :CHAIN_COMMAND_BLOCK
-Compass                                  :COMPASS
-Recovery Compass                         :RECOVERY_COMPASS
-Composter                                :COMPOSTER
+Mossy Cobblestone                        :MOSSY_COBBLESTONE
+Mossy Cobblestone Slab                   :MOSSY_COBBLESTONE_SLAB
+Mossy Cobblestone Stairs                 :MOSSY_COBBLESTONE_STAIRS
+Mossy Cobblestone Wall                   :MOSSY_COBBLESTONE_WALL
+
 White Concrete                           :WHITE_CONCRETE
 Light Gray Concrete                      :LIGHT_GRAY_CONCRETE
 Gray Concrete                            :GRAY_CONCRETE
@@ -365,6 +300,7 @@ Blue Concrete                            :BLUE_CONCRETE
 Purple Concrete                          :PURPLE_CONCRETE
 Magenta Concrete                         :MAGENTA_CONCRETE
 Pink Concrete                            :PINK_CONCRETE
+
 White Concrete Powder                    :WHITE_CONCRETE_POWDER
 Light Gray Concrete Powder               :LIGHT_GRAY_CONCRETE_POWDER
 Gray Concrete Powder                     :GRAY_CONCRETE_POWDER
@@ -381,8 +317,438 @@ Blue Concrete Powder                     :BLUE_CONCRETE_POWDER
 Purple Concrete Powder                   :PURPLE_CONCRETE_POWDER
 Magenta Concrete Powder                  :MAGENTA_CONCRETE_POWDER
 Pink Concrete Powder                     :PINK_CONCRETE_POWDER
-Conduit                                  :CONDUIT
-Cookie                                   :COOKIE
+
+Dark Prismarine                          :DARK_PRISMARINE
+Dark Prismarine Slab                     :DARK_PRISMARINE_SLAB
+Dark Prismarine Stairs                   :DARK_PRISMARINE_STAIRS
+
+Deepslate                                :DEEPSLATE
+Reinforced Deepslate                     :REINFORCED_DEEPSLATE
+Infested Deepslate                       :INFESTED_DEEPSLATE
+Polished Deepslate                       :POLISHED_DEEPSLATE
+Polished Deepslate Slab                  :POLISHED_DEEPSLATE_SLAB
+Polished Deepslate Stairs                :POLISHED_DEEPSLATE_STAIRS
+Polished Deepslate Wall                  :POLISHED_DEEPSLATE_WALL
+Chiseled Deepslate                       :CHISELED_DEEPSLATE
+Cobbled Deepslate                        :COBBLED_DEEPSLATE
+Cobbled Deepslate Slab                   :COBBLED_DEEPSLATE_SLAB
+Cobbled Deepslate Stairs                 :COBBLED_DEEPSLATE_STAIRS
+Cobbled Deepslate Wall                   :COBBLED_DEEPSLATE_WALL
+Deepslate Bricks                         :DEEPSLATE_BRICKS
+Cracked Deepslate Bricks                 :CRACKED_DEEPSLATE_BRICKS
+Deepslate Brick Slab                     :DEEPSLATE_BRICK_SLAB
+Deepslate Brick Stairs                   :DEEPSLATE_BRICK_STAIRS
+Deepslate Brick Wall                     :DEEPSLATE_BRICK_WALL
+Deepslate Tiles                          :DEEPSLATE_TILES
+Deepslate Tile Slab                      :DEEPSLATE_TILE_SLAB
+Deepslate Tile Stairs                    :DEEPSLATE_TILE_STAIRS
+Deepslate Tile Wall                      :DEEPSLATE_TILE_WALL
+Cracked Deepslate Tiles                  :CRACKED_DEEPSLATE_TILES
+
+Diorite                                  :DIORITE
+Polished Diorite                         :POLISHED_DIORITE
+Diorite Slab                             :DIORITE_SLAB
+Polished Diorite Slab                    :POLISHED_DIORITE_SLAB
+Diorite Stairs                           :DIORITE_STAIRS
+Polished Diorite Stairs                  :POLISHED_DIORITE_STAIRS
+Diorite Wall                             :DIORITE_WALL
+
+Dripstone Block                          :DRIPSTONE_BLOCK
+Pointed Dripstone                        :POINTED_DRIPSTONE
+
+End Stone                                :END_STONE
+End Stone Brick Slab                     :END_STONE_BRICK_SLAB
+End Stone Brick Stairs                   :END_STONE_BRICK_STAIRS
+End Stone Brick Wall                     :END_STONE_BRICK_WALL
+End Stone Bricks                         :END_STONE_BRICKS
+
+Granite                                  :GRANITE
+Polished Granite                         :POLISHED_GRANITE
+Granite Slab                             :GRANITE_SLAB
+Polished Granite Slab                    :POLISHED_GRANITE_SLAB
+Granite Stairs                           :GRANITE_STAIRS
+Polished Granite Stairs                  :POLISHED_GRANITE_STAIRS
+Granite Wall                             :GRANITE_WALL
+
+Gravel                                   :GRAVEL
+Suspicious Gravel                        :SUSPICIOUS_GRAVEL
+
+Prismarine                               :PRISMARINE
+Prismarine Brick Slab                    :PRISMARINE_BRICK_SLAB
+Prismarine Brick Stairs                  :PRISMARINE_BRICK_STAIRS
+Prismarine Bricks                        :PRISMARINE_BRICKS
+Prismarine Crystals                      :PRISMARINE_CRYSTALS
+Prismarine Shard                         :PRISMARINE_SHARD
+Prismarine Slab                          :PRISMARINE_SLAB
+Prismarine Stairs                        :PRISMARINE_STAIRS
+Prismarine Wall                          :PRISMARINE_WALL
+
+Stone                                    :STONE
+Stone Slab                               :STONE_SLAB
+Stone Stairs                             :STONE_STAIRS
+Stone Bricks                             :STONE_BRICKS
+Stone Brick Slab                         :STONE_BRICK_SLAB
+Stone Brick Stairs                       :STONE_BRICK_STAIRS
+Stone Brick Wall                         :STONE_BRICK_WALL
+Chiseled Stone Bricks                    :CHISELED_STONE_BRICKS
+Cracked Stone Bricks                     :CRACKED_STONE_BRICKS
+Smooth Stone                             :SMOOTH_STONE
+Smooth Stone Slab                        :SMOOTH_STONE_SLAB
+Infested Stone                           :INFESTED_STONE
+Infested Stone Bricks                    :INFESTED_STONE_BRICKS
+Infested Chiseled Stone Bricks           :INFESTED_CHISELED_STONE_BRICKS
+Infested Cracked Stone Bricks            :INFESTED_CRACKED_STONE_BRICKS
+Mossy Stone Bricks                       :MOSSY_STONE_BRICKS
+Mossy Stone Brick Slab                   :MOSSY_STONE_BRICK_SLAB
+Mossy Stone Brick Stairs                 :MOSSY_STONE_BRICK_STAIRS
+Mossy Stone Brick Wall                   :MOSSY_STONE_BRICK_WALL
+Infested Mossy Stone Bricks              :INFESTED_MOSSY_STONE_BRICKS
+
+Tuff                                     :TUFF
+Tuff Slab                                :TUFF_SLAB
+Tuff Stairs                              :TUFF_STAIRS
+Tuff Wall                                :TUFF_WALL
+Chiseled Tuff                            :CHISELED_TUFF
+Polished Tuff                            :POLISHED_TUFF
+Polished Tuff Slab                       :POLISHED_TUFF_SLAB
+Polished Tuff Stairs                     :POLISHED_TUFF_STAIRS
+Polished Tuff Wall                       :POLISHED_TUFF_WALL
+Tuff Bricks                              :TUFF_BRICKS
+Tuff Brick Slab                          :TUFF_BRICK_SLAB
+Tuff Brick Stairs                        :TUFF_BRICK_STAIRS
+Tuff Brick Wall                          :TUFF_BRICK_WALL
+Chiseled Tuff Bricks                     :CHISELED_TUFF_BRICKS
+
+#
+# dirt, sand, clay, snow, ice, nether, moss, mud, purpur, sculk
+#
+
+Clay                                     :CLAY
+Clay Ball                                :CLAY_BALL
+
+Dirt                                     :DIRT
+Coarse Dirt                              :COARSE_DIRT
+Rooted Dirt                              :ROOTED_DIRT
+Dirt Path                                :DIRT_PATH
+Farmland                                 :FARMLAND
+
+Flower Pot                               :FLOWER_POT
+
+Terracotta                               :TERRACOTTA
+White Terracotta                         :WHITE_TERRACOTTA
+White Glazed Terracotta                  :WHITE_GLAZED_TERRACOTTA
+Light Gray Terracotta                    :LIGHT_GRAY_TERRACOTTA
+Light Gray Glazed Terracotta             :LIGHT_GRAY_GLAZED_TERRACOTTA
+Gray Terracotta                          :GRAY_TERRACOTTA
+Gray Glazed Terracotta                   :GRAY_GLAZED_TERRACOTTA
+Black Terracotta                         :BLACK_TERRACOTTA
+Black Glazed Terracotta                  :BLACK_GLAZED_TERRACOTTA
+Brown Terracotta                         :BROWN_TERRACOTTA
+Brown Glazed Terracotta                  :BROWN_GLAZED_TERRACOTTA
+Red Terracotta                           :RED_TERRACOTTA
+Red Glazed Terracotta                    :RED_GLAZED_TERRACOTTA
+Orange Terracotta                        :ORANGE_TERRACOTTA
+Orange Glazed Terracotta                 :ORANGE_GLAZED_TERRACOTTA
+Yellow Terracotta                        :YELLOW_TERRACOTTA
+Yellow Glazed Terracotta                 :YELLOW_GLAZED_TERRACOTTA
+Lime Terracotta                          :LIME_TERRACOTTA
+Lime Glazed Terracotta                   :LIME_GLAZED_TERRACOTTA
+Green Terracotta                         :GREEN_TERRACOTTA
+Green Glazed Terracotta                  :GREEN_GLAZED_TERRACOTTA
+Cyan Terracotta                          :CYAN_TERRACOTTA
+Cyan Glazed Terracotta                   :CYAN_GLAZED_TERRACOTTA
+Light Blue Terracotta                    :LIGHT_BLUE_TERRACOTTA
+Light Blue Glazed Terracotta             :LIGHT_BLUE_GLAZED_TERRACOTTA
+Blue Terracotta                          :BLUE_TERRACOTTA
+Blue Glazed Terracotta                   :BLUE_GLAZED_TERRACOTTA
+Purple Terracotta                        :PURPLE_TERRACOTTA
+Purple Glazed Terracotta                 :PURPLE_GLAZED_TERRACOTTA
+Magenta Terracotta                       :MAGENTA_TERRACOTTA
+Magenta Glazed Terracotta                :MAGENTA_GLAZED_TERRACOTTA
+Pink Terracotta                          :PINK_TERRACOTTA
+Pink Glazed Terracotta                   :PINK_GLAZED_TERRACOTTA
+
+Ice                                      :ICE
+Blue Ice                                 :BLUE_ICE
+Packed Ice                               :PACKED_ICE
+Frosted Ice                              :FROSTED_ICE
+
+Magma Block                              :MAGMA_BLOCK
+
+Moss Block                               :MOSS_BLOCK
+Moss Carpet                              :MOSS_CARPET
+
+Mud                                      :MUD
+Mud Brick Slab                           :MUD_BRICK_SLAB
+Mud Brick Stairs                         :MUD_BRICK_STAIRS
+Mud Brick Wall                           :MUD_BRICK_WALL
+Mud Bricks                               :MUD_BRICKS
+Packed Mud                               :PACKED_MUD
+
+Mycelium                                 :MYCELIUM
+
+Nether Brick                             :NETHER_BRICK
+Nether Brick Fence                       :NETHER_BRICK_FENCE
+Nether Brick Slab                        :NETHER_BRICK_SLAB
+Red Nether Brick Slab                    :RED_NETHER_BRICK_SLAB
+Nether Brick Stairs                      :NETHER_BRICK_STAIRS
+Red Nether Brick Stairs                  :RED_NETHER_BRICK_STAIRS
+Nether Brick Wall                        :NETHER_BRICK_WALL
+Red Nether Brick Wall                    :RED_NETHER_BRICK_WALL
+Nether Bricks                            :NETHER_BRICKS
+Red Nether Bricks                        :RED_NETHER_BRICKS
+Chiseled Nether Bricks                   :CHISELED_NETHER_BRICKS
+Cracked Nether Bricks                    :CRACKED_NETHER_BRICKS
+
+Netherrack                               :NETHERRACK
+Obsidian                                 :OBSIDIAN
+Crying Obsidian                          :CRYING_OBSIDIAN
+
+Podzol                                   :PODZOL
+
+Purpur Block                             :PURPUR_BLOCK
+Purpur Pillar                            :PURPUR_PILLAR
+Purpur Slab                              :PURPUR_SLAB
+Purpur Stairs                            :PURPUR_STAIRS
+
+Sand                                     :SAND
+Sandstone                                :SANDSTONE
+Sandstone Slab                           :SANDSTONE_SLAB
+Sandstone Stairs                         :SANDSTONE_STAIRS
+Sandstone Wall                           :SANDSTONE_WALL
+Chiseled Sandstone                       :CHISELED_SANDSTONE
+Smooth Sandstone                         :SMOOTH_SANDSTONE
+Smooth Sandstone Slab                    :SMOOTH_SANDSTONE_SLAB
+Smooth Sandstone Stairs                  :SMOOTH_SANDSTONE_STAIRS
+Cut Sandstone                            :CUT_SANDSTONE
+Cut Sandstone Slab                       :CUT_SANDSTONE_SLAB
+
+Red Sand                                 :RED_SAND
+Red Sandstone                            :RED_SANDSTONE
+Red Sandstone Slab                       :RED_SANDSTONE_SLAB
+Red Sandstone Stairs                     :RED_SANDSTONE_STAIRS
+Red Sandstone Wall                       :RED_SANDSTONE_WALL
+Chiseled Red Sandstone                   :CHISELED_RED_SANDSTONE
+Smooth Red Sandstone                     :SMOOTH_RED_SANDSTONE
+Smooth Red Sandstone Slab                :SMOOTH_RED_SANDSTONE_SLAB
+Smooth Red Sandstone Stairs              :SMOOTH_RED_SANDSTONE_STAIRS
+Cut Red Sandstone                        :CUT_RED_SANDSTONE
+Cut Red Sandstone Slab                   :CUT_RED_SANDSTONE_SLAB
+
+Suspicious Sand                          :SUSPICIOUS_SAND
+
+Sculk                                    :SCULK
+Sculk Catalyst                           :SCULK_CATALYST
+Sculk Shrieker                           :SCULK_SHRIEKER
+Sculk Vein                               :SCULK_VEIN
+
+Snow                                     :SNOW
+Powder Snow                              :POWDER_SNOW
+Snow Block                               :SNOW_BLOCK
+Snowball                                 :SNOWBALL
+
+Soul Sand                                :SOUL_SAND
+Soul Soil                                :SOUL_SOIL
+
+#
+# nature inc mobs
+#
+
+Bee Nest                                 :BEE_NEST
+Beehive                                  :BEEHIVE
+Honey Block                              :HONEY_BLOCK
+Honey Bottle                             :HONEY_BOTTLE
+Honeycomb                                :HONEYCOMB
+Honeycomb Block                          :HONEYCOMB_BLOCK
+
+Beetroot                                 :BEETROOT
+Beetroots                                :BEETROOTS
+Beetroot Seeds                           :BEETROOT_SEEDS
+Beetroot Soup                            :BEETROOT_SOUP
+Blaze Rod                                :BLAZE_ROD
+Blaze Powder                             :BLAZE_POWDER
+Breeze Rod                               :BREEZE_ROD
+Bone                                     :BONE
+Bone Block                               :BONE_BLOCK
+Bone Meal                                :BONE_MEAL
+Cactus                                   :CACTUS
+Chorus Plant                             :CHORUS_PLANT
+Chorus Flower                            :CHORUS_FLOWER
+Chorus Fruit                             :CHORUS_FRUIT
+Popped Chorus Fruit                      :POPPED_CHORUS_FRUIT
+Cobweb                                   :COBWEB
+
+Brain Coral                              :BRAIN_CORAL
+Brain Coral Block                        :BRAIN_CORAL_BLOCK
+Brain Coral Fan                          :BRAIN_CORAL_FAN
+Brain Coral Fan                          :BRAIN_CORAL_WALL_FAN
+Dead Brain Coral                         :DEAD_BRAIN_CORAL
+Dead Brain Coral Block                   :DEAD_BRAIN_CORAL_BLOCK
+Dead Brain Coral Fan                     :DEAD_BRAIN_CORAL_FAN
+Dead Brain Coral Fan                     :DEAD_BRAIN_CORAL_WALL_FAN
+Bubble Coral                             :BUBBLE_CORAL
+Bubble Coral Block                       :BUBBLE_CORAL_BLOCK
+Bubble Coral Fan                         :BUBBLE_CORAL_FAN
+Bubble Coral Fan                         :BUBBLE_CORAL_WALL_FAN
+Dead Bubble Coral                        :DEAD_BUBBLE_CORAL
+Dead Bubble Coral Block                  :DEAD_BUBBLE_CORAL_BLOCK
+Dead Bubble Coral Fan                    :DEAD_BUBBLE_CORAL_FAN
+Dead Bubble Coral Fan                    :DEAD_BUBBLE_CORAL_WALL_FAN
+Fire Coral                               :FIRE_CORAL
+Fire Coral Block                         :FIRE_CORAL_BLOCK
+Fire Coral Fan                           :FIRE_CORAL_FAN
+Fire Coral Fan                           :FIRE_CORAL_WALL_FAN
+Dead Fire Coral                          :DEAD_FIRE_CORAL
+Dead Fire Coral Block                    :DEAD_FIRE_CORAL_BLOCK
+Dead Fire Coral Fan                      :DEAD_FIRE_CORAL_FAN
+Dead Fire Coral Fan                      :DEAD_FIRE_CORAL_WALL_FAN
+Horn Coral                               :HORN_CORAL
+Horn Coral Block                         :HORN_CORAL_BLOCK
+Horn Coral Fan                           :HORN_CORAL_FAN
+Horn Coral Fan                           :HORN_CORAL_WALL_FAN
+Dead Horn Coral                          :DEAD_HORN_CORAL
+Dead Horn Coral Block                    :DEAD_HORN_CORAL_BLOCK
+Dead Horn Coral Fan                      :DEAD_HORN_CORAL_FAN
+Dead Horn Coral Fan                      :DEAD_HORN_CORAL_WALL_FAN
+Tube Coral                               :TUBE_CORAL
+Tube Coral Block                         :TUBE_CORAL_BLOCK
+Tube Coral Fan                           :TUBE_CORAL_FAN
+Tube Coral Fan                           :TUBE_CORAL_WALL_FAN
+Dead Tube Coral                          :DEAD_TUBE_CORAL
+Dead Tube Coral Block                    :DEAD_TUBE_CORAL_BLOCK
+Dead Tube Coral Fan                      :DEAD_TUBE_CORAL_FAN
+Dead Tube Coral Fan                      :DEAD_TUBE_CORAL_WALL_FAN
+
+Dead Bush                                :DEAD_BUSH
+Small Dripleaf                           :SMALL_DRIPLEAF
+Big Dripleaf                             :BIG_DRIPLEAF
+Big Dripleaf                             :BIG_DRIPLEAF_STEM
+Ender Pearl                              :ENDER_PEARL
+Eye Of Ender                             :ENDER_EYE
+Feather                                  :FEATHER
+Fermented Spider Eye                     :FERMENTED_SPIDER_EYE
+Fern                                     :FERN
+Large Fern                               :LARGE_FERN
+Fire Charge                              :FIRE_CHARGE
+Cooked Cod                               :COOKED_COD
+Raw Cod                                  :COD
+Pufferfish                               :PUFFERFISH
+Cooked Salmon                            :COOKED_SALMON
+Raw Salmon                               :SALMON
+Tropical Fish                            :TROPICAL_FISH
+Bucket Of Axolotl                        :AXOLOTL_BUCKET
+Bucket Of Cod                            :COD_BUCKET
+Bucket Of Pufferfish                     :PUFFERFISH_BUCKET
+Bucket Of Salmon                         :SALMON_BUCKET
+Bucket Of Tadpole                        :TADPOLE_BUCKET
+Bucket Of Tropical Fish                  :TROPICAL_FISH_BUCKET
+
+Allium                                   :ALLIUM
+Azure Bluet                              :AZURE_BLUET
+Blue Orchid                              :BLUE_ORCHID
+Cornflower                               :CORNFLOWER
+Dandelion                                :DANDELION
+Lilac                                    :LILAC
+Lily Of The Valley                       :LILY_OF_THE_VALLEY
+Orange Tulip                             :ORANGE_TULIP
+Oxeye Daisy                              :OXEYE_DAISY
+Peony                                    :PEONY
+Pink Petals                              :PINK_PETALS
+Pink Tulip                               :PINK_TULIP
+Pitcher Plant                            :PITCHER_PLANT
+Pitcher Pod                              :PITCHER_POD
+Pitcher Crop                             :PITCHER_CROP
+Poppy                                    :POPPY
+Red Tulip                                :RED_TULIP
+Rose Bush                                :ROSE_BUSH
+Sunflower                                :SUNFLOWER
+Torchflower                              :TORCHFLOWER
+Torchflower Seeds                        :TORCHFLOWER_SEEDS
+Torchflower Crop                         :TORCHFLOWER_CROP
+White Tulip                              :WHITE_TULIP
+Wither Rose                              :WITHER_ROSE
+
+Frogspawn                                :FROGSPAWN
+Ghast Tear                               :GHAST_TEAR
+Glow Berries                             :GLOW_BERRIES
+Glow Ink Sac                             :GLOW_INK_SAC
+Glow Lichen                              :GLOW_LICHEN
+Goat Horn                                :GOAT_HORN
+Short Grass                              :SHORT_GRASS
+Tall Grass                               :TALL_GRASS
+Grass Block                              :GRASS_BLOCK
+Gunpowder                                :GUNPOWDER
+Hanging Roots                            :HANGING_ROOTS
+Ink Sac                                  :INK_SAC
+
+Kelp                                     :KELP
+Kelp Plant                               :KELP_PLANT
+Dried Kelp Block                         :DRIED_KELP_BLOCK
+Dried Kelp                               :DRIED_KELP
+
+Leather                                  :LEATHER
+Lily Pad                                 :LILY_PAD
+Magma Cream                              :MAGMA_CREAM
+Nautilus Shell                           :NAUTILUS_SHELL
+Nether Star                              :NETHER_STAR
+Nether Sprouts                           :NETHER_SPROUTS
+Nether Wart                              :NETHER_WART
+Nether Wart Block                        :NETHER_WART_BLOCK
+Phantom Membrane                         :PHANTOM_MEMBRANE
+Rabbit Hide                              :RABBIT_HIDE
+Rabbit's Foot                            :RABBIT_FOOT
+Rotten Flesh                             :ROTTEN_FLESH
+Turtle Scute                             :TURTLE_SCUTE
+Armadillo Scute                          :ARMADILLO_SCUTE
+Sea Pickle                               :SEA_PICKLE
+Seagrass                                 :SEAGRASS
+Tall Seagrass                            :TALL_SEAGRASS
+Shulker Shell                            :SHULKER_SHELL
+Skeleton Skull                           :SKELETON_SKULL
+Skeleton Skull                           :SKELETON_WALL_SKULL
+Slimeball                                :SLIME_BALL
+Spider Eye                               :SPIDER_EYE
+Spore Blossom                            :SPORE_BLOSSOM
+Stick                                    :STICK
+String                                   :STRING
+Sugar                                    :SUGAR
+Sugar Cane                               :SUGAR_CANE
+Sweet Berries                            :SWEET_BERRIES
+Sweet Berry Bush                         :SWEET_BERRY_BUSH
+Turtle Egg                               :TURTLE_EGG
+Turtle Shell                             :TURTLE_HELMET
+Twisting Vines                           :TWISTING_VINES
+Twisting Vines Plant                     :TWISTING_VINES_PLANT
+Vines                                    :VINE
+Cave Vines                               :CAVE_VINES
+Cave Vines Plant                         :CAVE_VINES_PLANT
+Weeping Vines                            :WEEPING_VINES
+Weeping Vines Plant                      :WEEPING_VINES_PLANT
+Hay Bale                                 :HAY_BLOCK
+Wheat                                    :WHEAT
+Wheat Seeds                              :WHEAT_SEEDS
+Wind Charge                              :WIND_CHARGE
+Wither Skeleton Skull                    :WITHER_SKELETON_SKULL
+Wither Skeleton Skull                    :WITHER_SKELETON_WALL_SKULL
+
+#
+# gems, ores, metals
+#
+
+Block Of Amethyst                        :AMETHYST_BLOCK
+Amethyst Shard                           :AMETHYST_SHARD
+Amethyst Cluster                         :AMETHYST_CLUSTER
+Budding Amethyst                         :BUDDING_AMETHYST
+Small Amethyst Bud                       :SMALL_AMETHYST_BUD
+Medium Amethyst Bud                      :MEDIUM_AMETHYST_BUD
+Large Amethyst Bud                       :LARGE_AMETHYST_BUD
+
+Charcoal                                 :CHARCOAL
+Coal                                     :COAL
+Block Of Coal                            :COAL_BLOCK
+Coal Ore                                 :COAL_ORE
+Deepslate Coal Ore                       :DEEPSLATE_COAL_ORE
+
 Copper Ingot                             :COPPER_INGOT
 Block Of Raw Copper                      :RAW_COPPER_BLOCK
 Raw Copper                               :RAW_COPPER
@@ -460,105 +826,227 @@ Waxed Chiseled Copper                    :WAXED_CHISELED_COPPER
 Waxed Exposed Chiseled Copper            :WAXED_EXPOSED_CHISELED_COPPER
 Waxed Weathered Chiseled Copper          :WAXED_WEATHERED_CHISELED_COPPER
 Waxed Oxidized Chiseled Copper           :WAXED_OXIDIZED_CHISELED_COPPER
-Brain Coral                              :BRAIN_CORAL
-Brain Coral Block                        :BRAIN_CORAL_BLOCK
-Brain Coral Fan                          :BRAIN_CORAL_FAN
-Brain Coral Fan                          :BRAIN_CORAL_WALL_FAN
-Dead Brain Coral                         :DEAD_BRAIN_CORAL
-Dead Brain Coral Block                   :DEAD_BRAIN_CORAL_BLOCK
-Dead Brain Coral Fan                     :DEAD_BRAIN_CORAL_FAN
-Dead Brain Coral Fan                     :DEAD_BRAIN_CORAL_WALL_FAN
-Bubble Coral                             :BUBBLE_CORAL
-Bubble Coral Block                       :BUBBLE_CORAL_BLOCK
-Bubble Coral Fan                         :BUBBLE_CORAL_FAN
-Bubble Coral Fan                         :BUBBLE_CORAL_WALL_FAN
-Dead Bubble Coral                        :DEAD_BUBBLE_CORAL
-Dead Bubble Coral Block                  :DEAD_BUBBLE_CORAL_BLOCK
-Dead Bubble Coral Fan                    :DEAD_BUBBLE_CORAL_FAN
-Dead Bubble Coral Fan                    :DEAD_BUBBLE_CORAL_WALL_FAN
-Fire Coral                               :FIRE_CORAL
-Fire Coral Block                         :FIRE_CORAL_BLOCK
-Fire Coral Fan                           :FIRE_CORAL_FAN
-Fire Coral Fan                           :FIRE_CORAL_WALL_FAN
-Dead Fire Coral                          :DEAD_FIRE_CORAL
-Dead Fire Coral Block                    :DEAD_FIRE_CORAL_BLOCK
-Dead Fire Coral Fan                      :DEAD_FIRE_CORAL_FAN
-Dead Fire Coral Fan                      :DEAD_FIRE_CORAL_WALL_FAN
-Horn Coral                               :HORN_CORAL
-Horn Coral Block                         :HORN_CORAL_BLOCK
-Horn Coral Fan                           :HORN_CORAL_FAN
-Horn Coral Fan                           :HORN_CORAL_WALL_FAN
-Dead Horn Coral                          :DEAD_HORN_CORAL
-Dead Horn Coral Block                    :DEAD_HORN_CORAL_BLOCK
-Dead Horn Coral Fan                      :DEAD_HORN_CORAL_FAN
-Dead Horn Coral Fan                      :DEAD_HORN_CORAL_WALL_FAN
-Tube Coral                               :TUBE_CORAL
-Tube Coral Block                         :TUBE_CORAL_BLOCK
-Tube Coral Fan                           :TUBE_CORAL_FAN
-Tube Coral Fan                           :TUBE_CORAL_WALL_FAN
-Dead Tube Coral                          :DEAD_TUBE_CORAL
-Dead Tube Coral Block                    :DEAD_TUBE_CORAL_BLOCK
-Dead Tube Coral Fan                      :DEAD_TUBE_CORAL_FAN
-Dead Tube Coral Fan                      :DEAD_TUBE_CORAL_WALL_FAN
-Crafter                                  :CRAFTER
-Crafting Table                           :CRAFTING_TABLE
-Crimson Door                             :CRIMSON_DOOR
-Crimson Fence                            :CRIMSON_FENCE
-Crimson Fence Gate                       :CRIMSON_FENCE_GATE
-Crimson Fungus                           :CRIMSON_FUNGUS
-Crimson Hyphae                           :CRIMSON_HYPHAE
-Stripped Crimson Hyphae                  :STRIPPED_CRIMSON_HYPHAE
-Crimson Nylium                           :CRIMSON_NYLIUM
-Crimson Planks                           :CRIMSON_PLANKS
-Crimson Roots                            :CRIMSON_ROOTS
-Crimson Sign                             :CRIMSON_SIGN
-Crimson Sign                             :CRIMSON_WALL_SIGN
-Crimson Hanging Sign                     :CRIMSON_HANGING_SIGN
-Crimson Hanging Sign                     :CRIMSON_WALL_HANGING_SIGN
-Crimson Slab                             :CRIMSON_SLAB
-Crimson Stairs                           :CRIMSON_STAIRS
-Crimson Stem                             :CRIMSON_STEM
-Stripped Crimson Stem                    :STRIPPED_CRIMSON_STEM
-Crimson Trapdoor                         :CRIMSON_TRAPDOOR
-Crossbow                                 :CROSSBOW
-Cut Red Sandstone                        :CUT_RED_SANDSTONE
-Cut Red Sandstone Slab                   :CUT_RED_SANDSTONE_SLAB
-Cut Sandstone                            :CUT_SANDSTONE
-Cut Sandstone Slab                       :CUT_SANDSTONE_SLAB
-Dark Oak Door                            :DARK_OAK_DOOR
-Dark Oak Fence                           :DARK_OAK_FENCE
-Dark Oak Fence Gate                      :DARK_OAK_FENCE_GATE
-Dark Oak Leaves                          :DARK_OAK_LEAVES
-Dark Oak Log                             :DARK_OAK_LOG
-Stripped Dark Oak Log                    :STRIPPED_DARK_OAK_LOG
-Dark Oak Planks                          :DARK_OAK_PLANKS
-Dark Oak Sapling                         :DARK_OAK_SAPLING
-Dark Oak Sign                            :DARK_OAK_SIGN
-Dark Oak Sign                            :DARK_OAK_WALL_SIGN
-Dark Oak Hanging Sign                    :DARK_OAK_HANGING_SIGN
-Dark Oak Hanging Sign                    :DARK_OAK_WALL_HANGING_SIGN
-Dark Oak Slab                            :DARK_OAK_SLAB
-Dark Oak Stairs                          :DARK_OAK_STAIRS
-Dark Oak Trapdoor                        :DARK_OAK_TRAPDOOR
-Dark Oak Wood                            :DARK_OAK_WOOD
-Stripped Dark Oak Wood                   :STRIPPED_DARK_OAK_WOOD
-Dark Prismarine                          :DARK_PRISMARINE
-Dark Prismarine Slab                     :DARK_PRISMARINE_SLAB
-Dark Prismarine Stairs                   :DARK_PRISMARINE_STAIRS
-Daylight Detector                        :DAYLIGHT_DETECTOR
-Dead Bush                                :DEAD_BUSH
-Debug Stick                              :DEBUG_STICK
-Deepslate                                :DEEPSLATE
-Reinforced Deepslate                     :REINFORCED_DEEPSLATE
-Infested Deepslate                       :INFESTED_DEEPSLATE
-Polished Deepslate                       :POLISHED_DEEPSLATE
-Polished Deepslate Slab                  :POLISHED_DEEPSLATE_SLAB
-Polished Deepslate Stairs                :POLISHED_DEEPSLATE_STAIRS
-Polished Deepslate Wall                  :POLISHED_DEEPSLATE_WALL
-Block Of Diamond                         :DIAMOND_BLOCK
+
 Diamond                                  :DIAMOND
 Diamond Ore                              :DIAMOND_ORE
 Deepslate Diamond Ore                    :DEEPSLATE_DIAMOND_ORE
+Block Of Diamond                         :DIAMOND_BLOCK
+
+Block Of Emerald                         :EMERALD_BLOCK
+Emerald                                  :EMERALD
+Emerald Ore                              :EMERALD_ORE
+Deepslate Emerald Ore                    :DEEPSLATE_EMERALD_ORE
+
+Flint                                    :FLINT
+Glowstone                                :GLOWSTONE
+Glowstone Dust                           :GLOWSTONE_DUST
+
+Block Of Gold                            :GOLD_BLOCK
+Gold Ingot                               :GOLD_INGOT
+Gold Nugget                              :GOLD_NUGGET
+Block Of Raw Gold                        :RAW_GOLD_BLOCK
+Raw Gold                                 :RAW_GOLD
+Gold Ore                                 :GOLD_ORE
+Deepslate Gold Ore                       :DEEPSLATE_GOLD_ORE
+Nether Gold Ore                          :NETHER_GOLD_ORE
+
+Block Of Iron                            :IRON_BLOCK
+Iron Ingot                               :IRON_INGOT
+Iron Nugget                              :IRON_NUGGET
+Block Of Raw Iron                        :RAW_IRON_BLOCK
+Raw Iron                                 :RAW_IRON
+Iron Ore                                 :IRON_ORE
+Deepslate Iron Ore                       :DEEPSLATE_IRON_ORE
+
+Block Of Lapis Lazuli                    :LAPIS_BLOCK
+Lapis Lazuli                             :LAPIS_LAZULI
+Lapis Lazuli Ore                         :LAPIS_ORE
+Deepslate Lapis Lazuli Ore               :DEEPSLATE_LAPIS_ORE
+
+Block Of Netherite                       :NETHERITE_BLOCK
+Netherite Ingot                          :NETHERITE_INGOT
+Netherite Scrap                          :NETHERITE_SCRAP
+Ancient Debris                           :ANCIENT_DEBRIS
+
+Nether Quartz                            :QUARTZ
+Nether Quartz Ore                        :NETHER_QUARTZ_ORE
+Block Of Quartz                          :QUARTZ_BLOCK
+Chiseled Quartz Block                    :CHISELED_QUARTZ_BLOCK
+Smooth Quartz Block                      :SMOOTH_QUARTZ
+Quartz Bricks                            :QUARTZ_BRICKS
+Quartz Pillar                            :QUARTZ_PILLAR
+Quartz Slab                              :QUARTZ_SLAB
+Smooth Quartz Slab                       :SMOOTH_QUARTZ_SLAB
+Quartz Stairs                            :QUARTZ_STAIRS
+Smooth Quartz Stairs                     :SMOOTH_QUARTZ_STAIRS
+
+#
+# redstone, rail
+#
+
+Acacia Button                            :ACACIA_BUTTON
+Birch Button                             :BIRCH_BUTTON
+Polished Blackstone Button               :POLISHED_BLACKSTONE_BUTTON
+Crimson Button                           :CRIMSON_BUTTON
+Dark Oak Button                          :DARK_OAK_BUTTON
+Mangrove Button                          :MANGROVE_BUTTON
+Jungle Button                            :JUNGLE_BUTTON
+Oak Button                               :OAK_BUTTON
+Spruce Button                            :SPRUCE_BUTTON
+Stone Button                             :STONE_BUTTON
+Warped Button                            :WARPED_BUTTON
+
+Daylight Detector                        :DAYLIGHT_DETECTOR
+Trapped Chest                            :TRAPPED_CHEST
+Dispenser                                :DISPENSER
+Dropper                                  :DROPPER
+Hopper                                   :HOPPER
+Iron Door                                :IRON_DOOR
+Iron Trapdoor                            :IRON_TRAPDOOR
+Lever                                    :LEVER
+
+Minecart                                 :MINECART
+Minecart With Chest                      :CHEST_MINECART
+Minecart With Command Block              :COMMAND_BLOCK_MINECART
+Minecart With Furnace                    :FURNACE_MINECART
+Minecart With Hopper                     :HOPPER_MINECART
+Minecart With Tnt                        :TNT_MINECART
+
+Rail                                     :RAIL
+Activator Rail                           :ACTIVATOR_RAIL
+Detector Rail                            :DETECTOR_RAIL
+Powered Rail                             :POWERED_RAIL
+
+Observer                                 :OBSERVER
+Piston                                   :PISTON
+Piston Head                              :PISTON_HEAD
+Moving Piston                            :MOVING_PISTON
+
+Acacia Pressure Plate                    :ACACIA_PRESSURE_PLATE
+Birch Pressure Plate                     :BIRCH_PRESSURE_PLATE
+Polished Blackstone Pressure Plate       :POLISHED_BLACKSTONE_PRESSURE_PLATE
+Crimson Pressure Plate                   :CRIMSON_PRESSURE_PLATE
+Dark Oak Pressure Plate                  :DARK_OAK_PRESSURE_PLATE
+Light Weighted Pressure Plate            :LIGHT_WEIGHTED_PRESSURE_PLATE
+Heavy Weighted Pressure Plate            :HEAVY_WEIGHTED_PRESSURE_PLATE
+Mangrove Pressure Plate                  :MANGROVE_PRESSURE_PLATE
+Jungle Pressure Plate                    :JUNGLE_PRESSURE_PLATE
+Oak Pressure Plate                       :OAK_PRESSURE_PLATE
+Spruce Pressure Plate                    :SPRUCE_PRESSURE_PLATE
+Stone Pressure Plate                     :STONE_PRESSURE_PLATE
+Warped Pressure Plate                    :WARPED_PRESSURE_PLATE
+
+Block Of Redstone                        :REDSTONE_BLOCK
+Redstone Dust                            :REDSTONE
+Redstone Dust                            :REDSTONE_WIRE
+Redstone Ore                             :REDSTONE_ORE
+Deepslate Redstone Ore                   :DEEPSLATE_REDSTONE_ORE
+Redstone Comparator                      :COMPARATOR
+Redstone Lamp                            :REDSTONE_LAMP
+Redstone Repeater                        :REPEATER
+Redstone Torch                           :REDSTONE_TORCH
+Redstone Torch                           :REDSTONE_WALL_TORCH
+Sculk Sensor                             :SCULK_SENSOR
+Calibrated Sculk Sensor                  :CALIBRATED_SCULK_SENSOR
+Slime Block                              :SLIME_BLOCK
+Sticky Piston                            :STICKY_PISTON
+Target                                   :TARGET
+Tripwire                                 :TRIPWIRE
+Tripwire Hook                            :TRIPWIRE_HOOK
+
+#
+# food
+#
+
+Apple                                    :APPLE
+Golden Apple                             :GOLDEN_APPLE
+Enchanted Golden Apple                   :ENCHANTED_GOLDEN_APPLE
+Bowl                                     :BOWL
+Bread                                    :BREAD
+
+Cake                                     :CAKE
+Candle Cake                              :CANDLE_CAKE
+White Candle Cake                        :WHITE_CANDLE_CAKE
+Light Gray Candle Cake                   :LIGHT_GRAY_CANDLE_CAKE
+Gray Candle Cake                         :GRAY_CANDLE_CAKE
+Black Candle Cake                        :BLACK_CANDLE_CAKE
+Brown Candle Cake                        :BROWN_CANDLE_CAKE
+Red Candle Cake                          :RED_CANDLE_CAKE
+Orange Candle Cake                       :ORANGE_CANDLE_CAKE
+Yellow Candle Cake                       :YELLOW_CANDLE_CAKE
+Lime Candle Cake                         :LIME_CANDLE_CAKE
+Green Candle Cake                        :GREEN_CANDLE_CAKE
+Cyan Candle Cake                         :CYAN_CANDLE_CAKE
+Light Blue Candle Cake                   :LIGHT_BLUE_CANDLE_CAKE
+Blue Candle Cake                         :BLUE_CANDLE_CAKE
+Purple Candle Cake                       :PURPLE_CANDLE_CAKE
+Magenta Candle Cake                      :MAGENTA_CANDLE_CAKE
+Pink Candle Cake                         :PINK_CANDLE_CAKE
+
+Carrot                                   :CARROT
+Carrots                                  :CARROTS
+Raw Chicken                              :CHICKEN
+Cooked Chicken                           :COOKED_CHICKEN
+Cocoa Beans                              :COCOA
+Cocoa Beans                              :COCOA_BEANS
+Cookie                                   :COOKIE
+Egg                                      :EGG
+Sniffer Egg                              :SNIFFER_EGG
+Golden Carrot                            :GOLDEN_CARROT
+
+Melon                                    :MELON
+Melon                                    :MELON_STEM
+Melon                                    :ATTACHED_MELON_STEM
+Melon Seeds                              :MELON_SEEDS
+Melon Slice                              :MELON_SLICE
+
+Brown Mushroom                           :BROWN_MUSHROOM
+Red Mushroom                             :RED_MUSHROOM
+Brown Mushroom Block                     :BROWN_MUSHROOM_BLOCK
+Red Mushroom Block                       :RED_MUSHROOM_BLOCK
+Mushroom Stem                            :MUSHROOM_STEM
+Mushroom Stew                            :MUSHROOM_STEW
+
+Cooked Mutton                            :COOKED_MUTTON
+Raw Mutton                               :MUTTON
+Cooked Porkchop                          :COOKED_PORKCHOP
+Raw Porkchop                             :PORKCHOP
+
+Potato                                   :POTATO
+Potatoes                                 :POTATOES
+Baked Potato                             :BAKED_POTATO
+Poisonous Potato                         :POISONOUS_POTATO
+
+Pumpkin                                  :PUMPKIN
+Pumpkin                                  :PUMPKIN_STEM
+Pumpkin                                  :ATTACHED_PUMPKIN_STEM
+Carved Pumpkin                           :CARVED_PUMPKIN
+Pumpkin Pie                              :PUMPKIN_PIE
+Pumpkin Seeds                            :PUMPKIN_SEEDS
+
+Raw Rabbit                               :RABBIT
+Cooked Rabbit                            :COOKED_RABBIT
+Rabbit Stew                              :RABBIT_STEW
+Raw Beef                                 :BEEF
+Steak                                    :COOKED_BEEF
+Suspicious Stew                          :SUSPICIOUS_STEW
+
+#
+# armour, weapons, tools
+#
+
+Arrow                                    :ARROW
+Spectral Arrow                           :SPECTRAL_ARROW
+Tipped Arrow                             :TIPPED_ARROW
+Bow                                      :BOW
+
+Chainmail Boots                          :CHAINMAIL_BOOTS
+Chainmail Chestplate                     :CHAINMAIL_CHESTPLATE
+Chainmail Helmet                         :CHAINMAIL_HELMET
+Chainmail Leggings                       :CHAINMAIL_LEGGINGS
+
+Crossbow                                 :CROSSBOW
+
 Diamond Axe                              :DIAMOND_AXE
 Diamond Boots                            :DIAMOND_BOOTS
 Diamond Chestplate                       :DIAMOND_CHESTPLATE
@@ -568,26 +1056,295 @@ Diamond Leggings                         :DIAMOND_LEGGINGS
 Diamond Pickaxe                          :DIAMOND_PICKAXE
 Diamond Shovel                           :DIAMOND_SHOVEL
 Diamond Sword                            :DIAMOND_SWORD
-Diorite                                  :DIORITE
-Polished Diorite                         :POLISHED_DIORITE
-Diorite Slab                             :DIORITE_SLAB
-Polished Diorite Slab                    :POLISHED_DIORITE_SLAB
-Diorite Stairs                           :DIORITE_STAIRS
-Polished Diorite Stairs                  :POLISHED_DIORITE_STAIRS
-Diorite Wall                             :DIORITE_WALL
-Dirt                                     :DIRT
-Coarse Dirt                              :COARSE_DIRT
-Rooted Dirt                              :ROOTED_DIRT
-Dirt Path                                :DIRT_PATH
-Dispenser                                :DISPENSER
-Dragon Egg                               :DRAGON_EGG
-Dragon'S Breath                          :DRAGON_BREATH
-Small Dripleaf                           :SMALL_DRIPLEAF
-Big Dripleaf                             :BIG_DRIPLEAF
-Big Dripleaf                             :BIG_DRIPLEAF_STEM
-Dripstone Block                          :DRIPSTONE_BLOCK
-Pointed Dripstone                        :POINTED_DRIPSTONE
-Dropper                                  :DROPPER
+
+Elytra                                   :ELYTRA
+
+Golden Axe                               :GOLDEN_AXE
+Golden Boots                             :GOLDEN_BOOTS
+Golden Chestplate                        :GOLDEN_CHESTPLATE
+Golden Helmet                            :GOLDEN_HELMET
+Golden Hoe                               :GOLDEN_HOE
+Golden Leggings                          :GOLDEN_LEGGINGS
+Golden Pickaxe                           :GOLDEN_PICKAXE
+Golden Shovel                            :GOLDEN_SHOVEL
+Golden Sword                             :GOLDEN_SWORD
+
+Heavy Core                               :HEAVY_CORE
+Mace                                     :MACE
+
+Diamond Horse Armor                      :DIAMOND_HORSE_ARMOR
+Golden Horse Armor                       :GOLDEN_HORSE_ARMOR
+Iron Horse Armor                         :IRON_HORSE_ARMOR
+Leather Horse Armor                      :LEATHER_HORSE_ARMOR
+
+Iron Axe                                 :IRON_AXE
+Iron Boots                               :IRON_BOOTS
+Iron Chestplate                          :IRON_CHESTPLATE
+Iron Helmet                              :IRON_HELMET
+Iron Hoe                                 :IRON_HOE
+Iron Leggings                            :IRON_LEGGINGS
+Iron Pickaxe                             :IRON_PICKAXE
+Iron Shovel                              :IRON_SHOVEL
+Iron Sword                               :IRON_SWORD
+
+Leather Boots                            :LEATHER_BOOTS
+Leather Cap                              :LEATHER_HELMET
+Leather Pants                            :LEATHER_LEGGINGS
+Leather Tunic                            :LEATHER_CHESTPLATE
+
+Netherite Axe                            :NETHERITE_AXE
+Netherite Boots                          :NETHERITE_BOOTS
+Netherite Chestplate                     :NETHERITE_CHESTPLATE
+Netherite Helmet                         :NETHERITE_HELMET
+Netherite Hoe                            :NETHERITE_HOE
+Netherite Leggings                       :NETHERITE_LEGGINGS
+Netherite Pickaxe                        :NETHERITE_PICKAXE
+Netherite Shovel                         :NETHERITE_SHOVEL
+Netherite Sword                          :NETHERITE_SWORD
+
+Shield                                   :SHIELD
+
+Stone Axe                                :STONE_AXE
+Stone Hoe                                :STONE_HOE
+Stone Pickaxe                            :STONE_PICKAXE
+Stone Shovel                             :STONE_SHOVEL
+Stone Sword                              :STONE_SWORD
+
+Trident                                  :TRIDENT
+Wolf Armor                               :WOLF_ARMOR
+
+Wooden Axe                               :WOODEN_AXE
+Wooden Hoe                               :WOODEN_HOE
+Wooden Pickaxe                           :WOODEN_PICKAXE
+Wooden Shovel                            :WOODEN_SHOVEL
+Wooden Sword                             :WOODEN_SWORD
+
+Bolt Armor Trim Smithing Template        :BOLT_ARMOR_TRIM_SMITHING_TEMPLATE
+Coast Armor Trim Smithing Template       :COAST_ARMOR_TRIM_SMITHING_TEMPLATE
+Dune Armor Trim Smithing Template        :DUNE_ARMOR_TRIM_SMITHING_TEMPLATE
+Eye Armor Trim Smithing Template         :EYE_ARMOR_TRIM_SMITHING_TEMPLATE
+Flow Armor Trim Smithing Template        :FLOW_ARMOR_TRIM_SMITHING_TEMPLATE
+Host Armor Trim Smithing Template        :HOST_ARMOR_TRIM_SMITHING_TEMPLATE
+Netherite Upgrade Smithing Template      :NETHERITE_UPGRADE_SMITHING_TEMPLATE
+Raiser Armor Trim Smithing Template      :RAISER_ARMOR_TRIM_SMITHING_TEMPLATE
+Rib Armor Trim Smithing Template         :RIB_ARMOR_TRIM_SMITHING_TEMPLATE
+Sentry Armor Trim Smithing Template      :SENTRY_ARMOR_TRIM_SMITHING_TEMPLATE
+Shaper Armor Trim Smithing Template      :SHAPER_ARMOR_TRIM_SMITHING_TEMPLATE
+Silence Armor Trim Smithing Template     :SILENCE_ARMOR_TRIM_SMITHING_TEMPLATE
+Snout Armor Trim Smithing Template       :SNOUT_ARMOR_TRIM_SMITHING_TEMPLATE
+Spire Armor Trim Smithing Template       :SPIRE_ARMOR_TRIM_SMITHING_TEMPLATE
+Tide Armor Trim Smithing Template        :TIDE_ARMOR_TRIM_SMITHING_TEMPLATE
+Vex Armor Trim Smithing Template         :VEX_ARMOR_TRIM_SMITHING_TEMPLATE
+Ward Armor Trim Smithing Template        :WARD_ARMOR_TRIM_SMITHING_TEMPLATE
+Wayfinder Armor Trim Smithing Template   :WAYFINDER_ARMOR_TRIM_SMITHING_TEMPLATE
+Wild Armor Trim Smithing Template        :WILD_ARMOR_TRIM_SMITHING_TEMPLATE
+
+#
+# enchantments, potions, and ingredients
+#
+
+Bottle O' Enchanting                     :EXPERIENCE_BOTTLE
+Dragon's Breath                          :DRAGON_BREATH
+Enchanted Book                           :ENCHANTED_BOOK
+Glistering Melon Slice                   :GLISTERING_MELON_SLICE
+Ominous Trial Key                        :OMINOUS_TRIAL_KEY
+Ominous Bottle                           :OMINOUS_BOTTLE
+Potion                                   :POTION
+Splash Potion                            :SPLASH_POTION
+Lingering Potion                         :LINGERING_POTION
+
+#
+# utility
+#
+
+Anvil                                    :ANVIL
+Damaged Anvil                            :DAMAGED_ANVIL
+Chipped Anvil                            :CHIPPED_ANVIL
+Armor Stand                              :ARMOR_STAND
+Barrel                                   :BARREL
+Beacon                                   :BEACON
+Blast Furnace                            :BLAST_FURNACE
+
+White Bed                                :WHITE_BED
+Light Gray Bed                           :LIGHT_GRAY_BED
+Gray Bed                                 :GRAY_BED
+Black Bed                                :BLACK_BED
+Brown Bed                                :BROWN_BED
+Red Bed                                  :RED_BED
+Orange Bed                               :ORANGE_BED
+Yellow Bed                               :YELLOW_BED
+Lime Bed                                 :LIME_BED
+Green Bed                                :GREEN_BED
+Cyan Bed                                 :CYAN_BED
+Light Blue Bed                           :LIGHT_BLUE_BED
+Blue Bed                                 :BLUE_BED
+Purple Bed                               :PURPLE_BED
+Magenta Bed                              :MAGENTA_BED
+Pink Bed                                 :PINK_BED
+
+Brewing Stand                            :BREWING_STAND
+Brush                                    :BRUSH
+Bucket                                   :BUCKET
+Water Bucket                             :WATER_BUCKET
+Lava Bucket                              :LAVA_BUCKET
+Milk Bucket                              :MILK_BUCKET
+Powder Snow Bucket                       :POWDER_SNOW_BUCKET
+Bundle                                   :BUNDLE
+Campfire                                 :CAMPFIRE
+Carrot On A Stick                        :CARROT_ON_A_STICK
+Cartography Table                        :CARTOGRAPHY_TABLE
+Cauldron                                 :CAULDRON
+Water Cauldron                           :WATER_CAULDRON
+Lava Cauldron                            :LAVA_CAULDRON
+Powder Snow Cauldron                     :POWDER_SNOW_CAULDRON
+Chest                                    :CHEST
+Clock                                    :CLOCK
+Compass                                  :COMPASS
+Recovery Compass                         :RECOVERY_COMPASS
+Composter                                :COMPOSTER
+Conduit                                  :CONDUIT
+Crafter                                  :CRAFTER
+Crafting Table                           :CRAFTING_TABLE
+Enchanting Table                         :ENCHANTING_TABLE
+End Crystal                              :END_CRYSTAL
+Ender Chest                              :ENDER_CHEST
+Firework Rocket                          :FIREWORK_ROCKET
+Firework Star                            :FIREWORK_STAR
+Fishing Rod                              :FISHING_ROD
+Fletching Table                          :FLETCHING_TABLE
+Flint And Steel                          :FLINT_AND_STEEL
+Furnace                                  :FURNACE
+Grindstone                               :GRINDSTONE
+Jukebox                                  :JUKEBOX
+Ladder                                   :LADDER
+Lead                                     :LEAD
+Lodestone                                :LODESTONE
+Loom                                     :LOOM
+Map                                      :MAP
+Empty Map                                :FILLED_MAP
+Name Tag                                 :NAME_TAG
+Note Block                               :NOTE_BLOCK
+Paper                                    :PAPER
+Respawn Anchor                           :RESPAWN_ANCHOR
+Saddle                                   :SADDLE
+Scaffolding                              :SCAFFOLDING
+Shears                                   :SHEARS
+
+Shulker Box                              :SHULKER_BOX
+White Shulker Box                        :WHITE_SHULKER_BOX
+Light Gray Shulker Box                   :LIGHT_GRAY_SHULKER_BOX
+Gray Shulker Box                         :GRAY_SHULKER_BOX
+Black Shulker Box                        :BLACK_SHULKER_BOX
+Brown Shulker Box                        :BROWN_SHULKER_BOX
+Red Shulker Box                          :RED_SHULKER_BOX
+Orange Shulker Box                       :ORANGE_SHULKER_BOX
+Yellow Shulker Box                       :YELLOW_SHULKER_BOX
+Lime Shulker Box                         :LIME_SHULKER_BOX
+Green Shulker Box                        :GREEN_SHULKER_BOX
+Cyan Shulker Box                         :CYAN_SHULKER_BOX
+Light Blue Shulker Box                   :LIGHT_BLUE_SHULKER_BOX
+Blue Shulker Box                         :BLUE_SHULKER_BOX
+Purple Shulker Box                       :PURPLE_SHULKER_BOX
+Magenta Shulker Box                      :MAGENTA_SHULKER_BOX
+Pink Shulker Box                         :PINK_SHULKER_BOX
+
+Smithing Table                           :SMITHING_TABLE
+Smoker                                   :SMOKER
+Sponge                                   :SPONGE
+Wet Sponge                               :WET_SPONGE
+Spyglass                                 :SPYGLASS
+Stonecutter                              :STONECUTTER
+Tnt                                      :TNT
+Totem Of Undying                         :TOTEM_OF_UNDYING
+Trial Key                                :TRIAL_KEY
+Warped Fungus On A Stick                 :WARPED_FUNGUS_ON_A_STICK
+
+#
+# decoration
+#
+
+White Banner                             :WHITE_BANNER
+White Banner                             :WHITE_WALL_BANNER
+Light Gray Banner                        :LIGHT_GRAY_BANNER
+Light Gray Banner                        :LIGHT_GRAY_WALL_BANNER
+Gray Banner                              :GRAY_BANNER
+Gray Banner                              :GRAY_WALL_BANNER
+Black Banner                             :BLACK_BANNER
+Black Banner                             :BLACK_WALL_BANNER
+Brown Banner                             :BROWN_BANNER
+Brown Banner                             :BROWN_WALL_BANNER
+Red Banner                               :RED_BANNER
+Red Banner                               :RED_WALL_BANNER
+Orange Banner                            :ORANGE_BANNER
+Orange Banner                            :ORANGE_WALL_BANNER
+Yellow Banner                            :YELLOW_BANNER
+Yellow Banner                            :YELLOW_WALL_BANNER
+Lime Banner                              :LIME_BANNER
+Lime Banner                              :LIME_WALL_BANNER
+Green Banner                             :GREEN_BANNER
+Green Banner                             :GREEN_WALL_BANNER
+Cyan Banner                              :CYAN_BANNER
+Cyan Banner                              :CYAN_WALL_BANNER
+Light Blue Banner                        :LIGHT_BLUE_BANNER
+Light Blue Banner                        :LIGHT_BLUE_WALL_BANNER
+Blue Banner                              :BLUE_BANNER
+Blue Banner                              :BLUE_WALL_BANNER
+Purple Banner                            :PURPLE_BANNER
+Purple Banner                            :PURPLE_WALL_BANNER
+Magenta Banner                           :MAGENTA_BANNER
+Magenta Banner                           :MAGENTA_WALL_BANNER
+Pink Banner                              :PINK_BANNER
+Pink Banner                              :PINK_WALL_BANNER
+
+Creeper Banner Pattern                   :CREEPER_BANNER_PATTERN
+Flower Banner Pattern                    :FLOWER_BANNER_PATTERN
+Flow Banner Pattern                      :FLOW_BANNER_PATTERN
+Globe Banner Pattern                     :GLOBE_BANNER_PATTERN
+Guster Banner Pattern                    :GUSTER_BANNER_PATTERN
+Mojang Banner Pattern                    :MOJANG_BANNER_PATTERN
+Piglin Banner Pattern                    :PIGLIN_BANNER_PATTERN
+Skull Banner Pattern                     :SKULL_BANNER_PATTERN
+
+Candle                                   :CANDLE
+White Candle                             :WHITE_CANDLE
+Light Gray Candle                        :LIGHT_GRAY_CANDLE
+Gray Candle                              :GRAY_CANDLE
+Black Candle                             :BLACK_CANDLE
+Brown Candle                             :BROWN_CANDLE
+Red Candle                               :RED_CANDLE
+Orange Candle                            :ORANGE_CANDLE
+Yellow Candle                            :YELLOW_CANDLE
+Lime Candle                              :LIME_CANDLE
+Green Candle                             :GREEN_CANDLE
+Cyan Candle                              :CYAN_CANDLE
+Light Blue Candle                        :LIGHT_BLUE_CANDLE
+Blue Candle                              :BLUE_CANDLE
+Purple Candle                            :PURPLE_CANDLE
+Magenta Candle                           :MAGENTA_CANDLE
+Pink Candle                              :PINK_CANDLE
+
+White Carpet                             :WHITE_CARPET
+Light Gray Carpet                        :LIGHT_GRAY_CARPET
+Gray Carpet                              :GRAY_CARPET
+Black Carpet                             :BLACK_CARPET
+Brown Carpet                             :BROWN_CARPET
+Red Carpet                               :RED_CARPET
+Orange Carpet                            :ORANGE_CARPET
+Yellow Carpet                            :YELLOW_CARPET
+Lime Carpet                              :LIME_CARPET
+Green Carpet                             :GREEN_CARPET
+Cyan Carpet                              :CYAN_CARPET
+Light Blue Carpet                        :LIGHT_BLUE_CARPET
+Blue Carpet                              :BLUE_CARPET
+Purple Carpet                            :PURPLE_CARPET
+Magenta Carpet                           :MAGENTA_CARPET
+Pink Carpet                              :PINK_CARPET
+
+Bell                                     :BELL
+Chain                                    :CHAIN
+Bookshelf                                :BOOKSHELF
+Chiseled Bookshelf                       :CHISELED_BOOKSHELF
+
 White Dye                                :WHITE_DYE
 Light Gray Dye                           :LIGHT_GRAY_DYE
 Gray Dye                                 :GRAY_DYE
@@ -604,376 +1361,61 @@ Blue Dye                                 :BLUE_DYE
 Purple Dye                               :PURPLE_DYE
 Magenta Dye                              :MAGENTA_DYE
 Pink Dye                                 :PINK_DYE
-Echo Shard                               :ECHO_SHARD
-Egg                                      :EGG
-Sniffer Egg                              :SNIFFER_EGG
-Elytra                                   :ELYTRA
-Block Of Emerald                         :EMERALD_BLOCK
-Emerald                                  :EMERALD
-Emerald Ore                              :EMERALD_ORE
-Deepslate Emerald Ore                    :DEEPSLATE_EMERALD_ORE
-Enchanting Table                         :ENCHANTING_TABLE
-End Crystal                              :END_CRYSTAL
-End Gateway                              :END_GATEWAY
-End Portal                               :END_PORTAL
-End Portal Frame                         :END_PORTAL_FRAME
+
 End Rod                                  :END_ROD
-End Stone                                :END_STONE
-End Stone Brick Slab                     :END_STONE_BRICK_SLAB
-End Stone Brick Stairs                   :END_STONE_BRICK_STAIRS
-End Stone Brick Wall                     :END_STONE_BRICK_WALL
-End Stone Bricks                         :END_STONE_BRICKS
-Ender Chest                              :ENDER_CHEST
-Ender Pearl                              :ENDER_PEARL
-Eye Of Ender                             :ENDER_EYE
-Farmland                                 :FARMLAND
-Feather                                  :FEATHER
-Fermented Spider Eye                     :FERMENTED_SPIDER_EYE
-Fern                                     :FERN
-Large Fern                               :LARGE_FERN
-Fire Charge                              :FIRE_CHARGE
-Firework Rocket                          :FIREWORK_ROCKET
-Firework Star                            :FIREWORK_STAR
-Cooked Cod                               :COOKED_COD
-Raw Cod                                  :COD
-Pufferfish                               :PUFFERFISH
-Cooked Salmon                            :COOKED_SALMON
-Raw Salmon                               :SALMON
-Tropical Fish                            :TROPICAL_FISH
-Bucket Of Axolotl                        :AXOLOTL_BUCKET
-Bucket Of Cod                            :COD_BUCKET
-Bucket Of Pufferfish                     :PUFFERFISH_BUCKET
-Bucket Of Salmon                         :SALMON_BUCKET
-Bucket Of Tadpole                        :TADPOLE_BUCKET
-Bucket Of Tropical Fish                  :TROPICAL_FISH_BUCKET
-Fishing Rod                              :FISHING_ROD
-Fletching Table                          :FLETCHING_TABLE
-Flint                                    :FLINT
-Flint And Steel                          :FLINT_AND_STEEL
-Allium                                   :ALLIUM
-Azure Bluet                              :AZURE_BLUET
-Blue Orchid                              :BLUE_ORCHID
-Cornflower                               :CORNFLOWER
-Dandelion                                :DANDELION
-Lilac                                    :LILAC
-Lily Of The Valley                       :LILY_OF_THE_VALLEY
-Orange Tulip                             :ORANGE_TULIP
-Oxeye Daisy                              :OXEYE_DAISY
-Peony                                    :PEONY
-Pink Petals                              :PINK_PETALS
-Pink Tulip                               :PINK_TULIP
-Pitcher Plant                            :PITCHER_PLANT
-Pitcher Pod                              :PITCHER_POD
-Pitcher Crop                             :PITCHER_CROP
-Poppy                                    :POPPY
-Red Tulip                                :RED_TULIP
-Rose Bush                                :ROSE_BUSH
-Sunflower                                :SUNFLOWER
-Torchflower                              :TORCHFLOWER
-Torchflower Seeds                        :TORCHFLOWER_SEEDS
-Torchflower Crop                         :TORCHFLOWER_CROP
-White Tulip                              :WHITE_TULIP
-Wither Rose                              :WITHER_ROSE
-Flower Pot                               :FLOWER_POT
-Frogspawn                                :FROGSPAWN
 Ochre Froglight                          :OCHRE_FROGLIGHT
 Pearlescent Froglight                    :PEARLESCENT_FROGLIGHT
 Verdant Froglight                        :VERDANT_FROGLIGHT
-Furnace                                  :FURNACE
-Ghast Tear                               :GHAST_TEAR
+
 Glass                                    :GLASS
 Glass Bottle                             :GLASS_BOTTLE
 Glass Pane                               :GLASS_PANE
-White Glazed Terracotta                  :WHITE_GLAZED_TERRACOTTA
-Light Gray Glazed Terracotta             :LIGHT_GRAY_GLAZED_TERRACOTTA
-Gray Glazed Terracotta                   :GRAY_GLAZED_TERRACOTTA
-Black Glazed Terracotta                  :BLACK_GLAZED_TERRACOTTA
-Brown Glazed Terracotta                  :BROWN_GLAZED_TERRACOTTA
-Red Glazed Terracotta                    :RED_GLAZED_TERRACOTTA
-Orange Glazed Terracotta                 :ORANGE_GLAZED_TERRACOTTA
-Yellow Glazed Terracotta                 :YELLOW_GLAZED_TERRACOTTA
-Lime Glazed Terracotta                   :LIME_GLAZED_TERRACOTTA
-Green Glazed Terracotta                  :GREEN_GLAZED_TERRACOTTA
-Cyan Glazed Terracotta                   :CYAN_GLAZED_TERRACOTTA
-Light Blue Glazed Terracotta             :LIGHT_BLUE_GLAZED_TERRACOTTA
-Blue Glazed Terracotta                   :BLUE_GLAZED_TERRACOTTA
-Purple Glazed Terracotta                 :PURPLE_GLAZED_TERRACOTTA
-Magenta Glazed Terracotta                :MAGENTA_GLAZED_TERRACOTTA
-Pink Glazed Terracotta                   :PINK_GLAZED_TERRACOTTA
-Glistering Melon Slice                   :GLISTERING_MELON_SLICE
-Glow Berries                             :GLOW_BERRIES
-Glow Ink Sac                             :GLOW_INK_SAC
+
+White Stained Glass                      :WHITE_STAINED_GLASS
+Light Gray Stained Glass                 :LIGHT_GRAY_STAINED_GLASS
+Gray Stained Glass                       :GRAY_STAINED_GLASS
+Black Stained Glass                      :BLACK_STAINED_GLASS
+Brown Stained Glass                      :BROWN_STAINED_GLASS
+Red Stained Glass                        :RED_STAINED_GLASS
+Orange Stained Glass                     :ORANGE_STAINED_GLASS
+Yellow Stained Glass                     :YELLOW_STAINED_GLASS
+Lime Stained Glass                       :LIME_STAINED_GLASS
+Green Stained Glass                      :GREEN_STAINED_GLASS
+Cyan Stained Glass                       :CYAN_STAINED_GLASS
+Light Blue Stained Glass                 :LIGHT_BLUE_STAINED_GLASS
+Blue Stained Glass                       :BLUE_STAINED_GLASS
+Purple Stained Glass                     :PURPLE_STAINED_GLASS
+Magenta Stained Glass                    :MAGENTA_STAINED_GLASS
+Pink Stained Glass                       :PINK_STAINED_GLASS
+
+White Stained Glass Pane                 :WHITE_STAINED_GLASS_PANE
+Light Gray Stained Glass Pane            :LIGHT_GRAY_STAINED_GLASS_PANE
+Gray Stained Glass Pane                  :GRAY_STAINED_GLASS_PANE
+Black Stained Glass Pane                 :BLACK_STAINED_GLASS_PANE
+Brown Stained Glass Pane                 :BROWN_STAINED_GLASS_PANE
+Red Stained Glass Pane                   :RED_STAINED_GLASS_PANE
+Orange Stained Glass Pane                :ORANGE_STAINED_GLASS_PANE
+Yellow Stained Glass Pane                :YELLOW_STAINED_GLASS_PANE
+Lime Stained Glass Pane                  :LIME_STAINED_GLASS_PANE
+Green Stained Glass Pane                 :GREEN_STAINED_GLASS_PANE
+Cyan Stained Glass Pane                  :CYAN_STAINED_GLASS_PANE
+Light Blue Stained Glass Pane            :LIGHT_BLUE_STAINED_GLASS_PANE
+Blue Stained Glass Pane                  :BLUE_STAINED_GLASS_PANE
+Purple Stained Glass Pane                :PURPLE_STAINED_GLASS_PANE
+Magenta Stained Glass Pane               :MAGENTA_STAINED_GLASS_PANE
+Pink Stained Glass Pane                  :PINK_STAINED_GLASS_PANE
+
 Glow Item Frame                          :GLOW_ITEM_FRAME
-Glow Lichen                              :GLOW_LICHEN
-Glowstone                                :GLOWSTONE
-Glowstone Dust                           :GLOWSTONE_DUST
-Goat Horn                                :GOAT_HORN
-Block Of Gold                            :GOLD_BLOCK
-Gold Ingot                               :GOLD_INGOT
-Gold Nugget                              :GOLD_NUGGET
-Block Of Raw Gold                        :RAW_GOLD_BLOCK
-Raw Gold                                 :RAW_GOLD
-Gold Ore                                 :GOLD_ORE
-Deepslate Gold Ore                       :DEEPSLATE_GOLD_ORE
-Golden Axe                               :GOLDEN_AXE
-Golden Boots                             :GOLDEN_BOOTS
-Golden Carrot                            :GOLDEN_CARROT
-Golden Chestplate                        :GOLDEN_CHESTPLATE
-Golden Helmet                            :GOLDEN_HELMET
-Golden Hoe                               :GOLDEN_HOE
-Golden Leggings                          :GOLDEN_LEGGINGS
-Golden Pickaxe                           :GOLDEN_PICKAXE
-Golden Shovel                            :GOLDEN_SHOVEL
-Golden Sword                             :GOLDEN_SWORD
-Granite                                  :GRANITE
-Polished Granite                         :POLISHED_GRANITE
-Granite Slab                             :GRANITE_SLAB
-Polished Granite Slab                    :POLISHED_GRANITE_SLAB
-Granite Stairs                           :GRANITE_STAIRS
-Polished Granite Stairs                  :POLISHED_GRANITE_STAIRS
-Granite Wall                             :GRANITE_WALL
-Short Grass                              :SHORT_GRASS
-Tall Grass                               :TALL_GRASS
-Grass Block                              :GRASS_BLOCK
-Gravel                                   :GRAVEL
-Suspicious Gravel                        :SUSPICIOUS_GRAVEL
-Grindstone                               :GRINDSTONE
-Gunpowder                                :GUNPOWDER
-Hanging Roots                            :HANGING_ROOTS
 Heart Of The Sea                         :HEART_OF_THE_SEA
-Heavy Core                               :HEAVY_CORE
-Honey Block                              :HONEY_BLOCK
-Honey Bottle                             :HONEY_BOTTLE
-Honeycomb                                :HONEYCOMB
-Honeycomb Block                          :HONEYCOMB_BLOCK
-Hopper                                   :HOPPER
-Diamond Horse Armor                      :DIAMOND_HORSE_ARMOR
-Golden Horse Armor                       :GOLDEN_HORSE_ARMOR
-Iron Horse Armor                         :IRON_HORSE_ARMOR
-Leather Horse Armor                      :LEATHER_HORSE_ARMOR
-Ice                                      :ICE
-Blue Ice                                 :BLUE_ICE
-Packed Ice                               :PACKED_ICE
-Frosted Ice                              :FROSTED_ICE
-Ink Sac                                  :INK_SAC
-Block Of Iron                            :IRON_BLOCK
-Iron Ingot                               :IRON_INGOT
-Iron Nugget                              :IRON_NUGGET
-Block Of Raw Iron                        :RAW_IRON_BLOCK
-Raw Iron                                 :RAW_IRON
-Iron Ore                                 :IRON_ORE
-Deepslate Iron Ore                       :DEEPSLATE_IRON_ORE
-Iron Axe                                 :IRON_AXE
 Iron Bars                                :IRON_BARS
-Iron Boots                               :IRON_BOOTS
-Iron Chestplate                          :IRON_CHESTPLATE
-Iron Door                                :IRON_DOOR
-Iron Helmet                              :IRON_HELMET
-Iron Hoe                                 :IRON_HOE
-Iron Leggings                            :IRON_LEGGINGS
-Iron Pickaxe                             :IRON_PICKAXE
-Iron Shovel                              :IRON_SHOVEL
-Iron Sword                               :IRON_SWORD
-Iron Trapdoor                            :IRON_TRAPDOOR
 Item Frame                               :ITEM_FRAME
 Jack O'Lantern                           :JACK_O_LANTERN
-Jigsaw Block                             :JIGSAW
-Jukebox                                  :JUKEBOX
-Jungle Door                              :JUNGLE_DOOR
-Jungle Fence                             :JUNGLE_FENCE
-Jungle Fence Gate                        :JUNGLE_FENCE_GATE
-Jungle Leaves                            :JUNGLE_LEAVES
-Jungle Log                               :JUNGLE_LOG
-Stripped Jungle Log                      :STRIPPED_JUNGLE_LOG
-Jungle Planks                            :JUNGLE_PLANKS
-Jungle Sapling                           :JUNGLE_SAPLING
-Jungle Sign                              :JUNGLE_SIGN
-Jungle Sign                              :JUNGLE_WALL_SIGN
-Jungle Hanging Sign                      :JUNGLE_HANGING_SIGN
-Jungle Hanging Sign                      :JUNGLE_WALL_HANGING_SIGN
-Jungle Slab                              :JUNGLE_SLAB
-Jungle Stairs                            :JUNGLE_STAIRS
-Jungle Trapdoor                          :JUNGLE_TRAPDOOR
-Jungle Wood                              :JUNGLE_WOOD
-Stripped Jungle Wood                     :STRIPPED_JUNGLE_WOOD
-Kelp                                     :KELP
-Kelp Plant                               :KELP_PLANT
-Dried Kelp Block                         :DRIED_KELP_BLOCK
-Dried Kelp                               :DRIED_KELP
-Knowledge Book                           :KNOWLEDGE_BOOK
-Ladder                                   :LADDER
 Lantern                                  :LANTERN
-Block Of Lapis Lazuli                    :LAPIS_BLOCK
-Lapis Lazuli                             :LAPIS_LAZULI
-Lapis Lazuli Ore                         :LAPIS_ORE
-Deepslate Lapis Lazuli Ore               :DEEPSLATE_LAPIS_ORE
-Lava                                     :LAVA
-Lead                                     :LEAD
-Leather                                  :LEATHER
-Leather Boots                            :LEATHER_BOOTS
-Leather Cap                              :LEATHER_HELMET
-Leather Pants                            :LEATHER_LEGGINGS
-Leather Tunic                            :LEATHER_CHESTPLATE
 Lectern                                  :LECTERN
-Lever                                    :LEVER
 Light                                    :LIGHT
 Lightning Rod                            :LIGHTNING_ROD
-Lily Pad                                 :LILY_PAD
-Lodestone                                :LODESTONE
-Loom                                     :LOOM
-Mace                                     :MACE
-Magma Block                              :MAGMA_BLOCK
-Magma Cream                              :MAGMA_CREAM
-Mangrove Door                            :MANGROVE_DOOR
-Mangrove Fence                           :MANGROVE_FENCE
-Mangrove Fence Gate                      :MANGROVE_FENCE_GATE
-Mangrove Leaves                          :MANGROVE_LEAVES
-Mangrove Log                             :MANGROVE_LOG
-Stripped Mangrove Log                    :STRIPPED_MANGROVE_LOG
-Mangrove Planks                          :MANGROVE_PLANKS
-Mangrove Propagule                       :MANGROVE_PROPAGULE
-Mangrove Roots                           :MANGROVE_ROOTS
-Muddy Mangrove Roots                     :MUDDY_MANGROVE_ROOTS
-Mangrove Sign                            :MANGROVE_SIGN
-Mangrove Sign                            :MANGROVE_WALL_SIGN
-Mangrove Hanging Sign                    :MANGROVE_HANGING_SIGN
-Mangrove Hanging Sign                    :MANGROVE_WALL_HANGING_SIGN
-Mangrove Slab                            :MANGROVE_SLAB
-Mangrove Stairs                          :MANGROVE_STAIRS
-Mangrove Trapdoor                        :MANGROVE_TRAPDOOR
-Mangrove Wood                            :MANGROVE_WOOD
-Stripped Mangrove Wood                   :STRIPPED_MANGROVE_WOOD
-Map                                      :MAP
-Empty Map                                :FILLED_MAP
-Melon                                    :MELON
-Melon                                    :MELON_STEM
-Melon                                    :ATTACHED_MELON_STEM
-Melon Seeds                              :MELON_SEEDS
-Melon Slice                              :MELON_SLICE
-Minecart                                 :MINECART
-Minecart With Chest                      :CHEST_MINECART
-Minecart With Command Block              :COMMAND_BLOCK_MINECART
-Minecart With Furnace                    :FURNACE_MINECART
-Minecart With Hopper                     :HOPPER_MINECART
-Minecart With Tnt                        :TNT_MINECART
-Monster Spawner                          :SPAWNER
-Moss Block                               :MOSS_BLOCK
-Moss Carpet                              :MOSS_CARPET
-Mossy Cobblestone                        :MOSSY_COBBLESTONE
-Mossy Cobblestone Slab                   :MOSSY_COBBLESTONE_SLAB
-Mossy Cobblestone Stairs                 :MOSSY_COBBLESTONE_STAIRS
-Mossy Cobblestone Wall                   :MOSSY_COBBLESTONE_WALL
-Mossy Stone Brick Slab                   :MOSSY_STONE_BRICK_SLAB
-Mossy Stone Brick Stairs                 :MOSSY_STONE_BRICK_STAIRS
-Mossy Stone Brick Wall                   :MOSSY_STONE_BRICK_WALL
-Mossy Stone Bricks                       :MOSSY_STONE_BRICKS
-Infested Mossy Stone Bricks              :INFESTED_MOSSY_STONE_BRICKS
-Mud                                      :MUD
-Mud Brick Slab                           :MUD_BRICK_SLAB
-Mud Brick Stairs                         :MUD_BRICK_STAIRS
-Mud Brick Wall                           :MUD_BRICK_WALL
-Mud Bricks                               :MUD_BRICKS
-Packed Mud                               :PACKED_MUD
-Brown Mushroom                           :BROWN_MUSHROOM
-Red Mushroom                             :RED_MUSHROOM
-Brown Mushroom Block                     :BROWN_MUSHROOM_BLOCK
-Red Mushroom Block                       :RED_MUSHROOM_BLOCK
-Mushroom Stem                            :MUSHROOM_STEM
-Mushroom Stew                            :MUSHROOM_STEW
-Music Disc 11                            :MUSIC_DISC_11
-Music Disc 13                            :MUSIC_DISC_13
-Music Disc 5                             :MUSIC_DISC_5
-Music Disc Blocks                        :MUSIC_DISC_BLOCKS
-Music Disc Cat                           :MUSIC_DISC_CAT
-Music Disc Chirp                         :MUSIC_DISC_CHIRP
-Music Disc Far                           :MUSIC_DISC_FAR
-Music Disc Mall                          :MUSIC_DISC_MALL
-Music Disc Mellohi                       :MUSIC_DISC_MELLOHI
-Music Disc Otherside                     :MUSIC_DISC_OTHERSIDE
-Music Disc Pigstep                       :MUSIC_DISC_PIGSTEP
-Music Disc Relic                         :MUSIC_DISC_RELIC
-Music Disc Stal                          :MUSIC_DISC_STAL
-Music Disc Strad                         :MUSIC_DISC_STRAD
-Music Disc Wait                          :MUSIC_DISC_WAIT
-Music Disc Ward                          :MUSIC_DISC_WARD
-Disc Fragment 5                          :DISC_FRAGMENT_5
-Cooked Mutton                            :COOKED_MUTTON
-Raw Mutton                               :MUTTON
-Mycelium                                 :MYCELIUM
-Name Tag                                 :NAME_TAG
-Nautilus Shell                           :NAUTILUS_SHELL
-Nether Brick                             :NETHER_BRICK
-Nether Brick Fence                       :NETHER_BRICK_FENCE
-Nether Brick Slab                        :NETHER_BRICK_SLAB
-Red Nether Brick Slab                    :RED_NETHER_BRICK_SLAB
-Nether Brick Stairs                      :NETHER_BRICK_STAIRS
-Red Nether Brick Stairs                  :RED_NETHER_BRICK_STAIRS
-Nether Brick Wall                        :NETHER_BRICK_WALL
-Red Nether Brick Wall                    :RED_NETHER_BRICK_WALL
-Nether Bricks                            :NETHER_BRICKS
-Red Nether Bricks                        :RED_NETHER_BRICKS
-Chiseled Nether Bricks                   :CHISELED_NETHER_BRICKS
-Cracked Nether Bricks                    :CRACKED_NETHER_BRICKS
-Nether Gold Ore                          :NETHER_GOLD_ORE
-Nether Portal                            :NETHER_PORTAL
-Nether Sprouts                           :NETHER_SPROUTS
-Nether Star                              :NETHER_STAR
-Nether Wart                              :NETHER_WART
-Nether Wart Block                        :NETHER_WART_BLOCK
-Block Of Netherite                       :NETHERITE_BLOCK
-Netherite Ingot                          :NETHERITE_INGOT
-Netherite Scrap                          :NETHERITE_SCRAP
-Ancient Debris                           :ANCIENT_DEBRIS
-Netherite Axe                            :NETHERITE_AXE
-Netherite Boots                          :NETHERITE_BOOTS
-Netherite Chestplate                     :NETHERITE_CHESTPLATE
-Netherite Helmet                         :NETHERITE_HELMET
-Netherite Hoe                            :NETHERITE_HOE
-Netherite Leggings                       :NETHERITE_LEGGINGS
-Netherite Pickaxe                        :NETHERITE_PICKAXE
-Netherite Shovel                         :NETHERITE_SHOVEL
-Netherite Sword                          :NETHERITE_SWORD
-Netherrack                               :NETHERRACK
-Note Block                               :NOTE_BLOCK
-Oak Door                                 :OAK_DOOR
-Oak Fence                                :OAK_FENCE
-Oak Fence Gate                           :OAK_FENCE_GATE
-Oak Leaves                               :OAK_LEAVES
-Oak Log                                  :OAK_LOG
-Stripped Oak Log                         :STRIPPED_OAK_LOG
-Oak Planks                               :OAK_PLANKS
-Oak Sapling                              :OAK_SAPLING
-Oak Sign                                 :OAK_SIGN
-Oak Sign                                 :OAK_WALL_SIGN
-Oak Hanging Sign                         :OAK_HANGING_SIGN
-Oak Hanging Sign                         :OAK_WALL_HANGING_SIGN
-Oak Slab                                 :OAK_SLAB
-Oak Stairs                               :OAK_STAIRS
-Oak Trapdoor                             :OAK_TRAPDOOR
-Oak Wood                                 :OAK_WOOD
-Stripped Oak Wood                        :STRIPPED_OAK_WOOD
-Observer                                 :OBSERVER
-Obsidian                                 :OBSIDIAN
-Crying Obsidian                          :CRYING_OBSIDIAN
-Ominous Trial Key                        :OMINOUS_TRIAL_KEY
-Ominous Bottle                           :OMINOUS_BOTTLE
 Painting                                 :PAINTING
-Paper                                    :PAPER
-Petrified Oak Slab                       :PETRIFIED_OAK_SLAB
-Phantom Membrane                         :PHANTOM_MEMBRANE
-Piston                                   :PISTON
-Piston Head                              :PISTON_HEAD
-Moving Piston                            :MOVING_PISTON
-Podzol                                   :PODZOL
-Cooked Porkchop                          :COOKED_PORKCHOP
-Raw Porkchop                             :PORKCHOP
-Potato                                   :POTATO
-Potatoes                                 :POTATOES
-Baked Potato                             :BAKED_POTATO
-Poisonous Potato                         :POISONOUS_POTATO
-Potion                                   :POTION
-Splash Potion                            :SPLASH_POTION
-Lingering Potion                         :LINGERING_POTION
+
 Potted Acacia Sapling                    :POTTED_ACACIA_SAPLING
 Potted Allium                            :POTTED_ALLIUM
 Potted Azalea Bush                       :POTTED_AZALEA_BUSH
@@ -1008,140 +1450,113 @@ Potted Warped Fungus                     :POTTED_WARPED_FUNGUS
 Potted Warped Roots                      :POTTED_WARPED_ROOTS
 Potted White Tulip                       :POTTED_WHITE_TULIP
 Potted Wither Rose                       :POTTED_WITHER_ROSE
-Acacia Pressure Plate                    :ACACIA_PRESSURE_PLATE
-Birch Pressure Plate                     :BIRCH_PRESSURE_PLATE
-Polished Blackstone Pressure Plate       :POLISHED_BLACKSTONE_PRESSURE_PLATE
-Crimson Pressure Plate                   :CRIMSON_PRESSURE_PLATE
-Dark Oak Pressure Plate                  :DARK_OAK_PRESSURE_PLATE
-Light Weighted Pressure Plate            :LIGHT_WEIGHTED_PRESSURE_PLATE
-Heavy Weighted Pressure Plate            :HEAVY_WEIGHTED_PRESSURE_PLATE
-Mangrove Pressure Plate                  :MANGROVE_PRESSURE_PLATE
-Jungle Pressure Plate                    :JUNGLE_PRESSURE_PLATE
-Oak Pressure Plate                       :OAK_PRESSURE_PLATE
-Spruce Pressure Plate                    :SPRUCE_PRESSURE_PLATE
-Stone Pressure Plate                     :STONE_PRESSURE_PLATE
-Warped Pressure Plate                    :WARPED_PRESSURE_PLATE
-Prismarine                               :PRISMARINE
-Prismarine Brick Slab                    :PRISMARINE_BRICK_SLAB
-Prismarine Brick Stairs                  :PRISMARINE_BRICK_STAIRS
-Prismarine Bricks                        :PRISMARINE_BRICKS
-Prismarine Crystals                      :PRISMARINE_CRYSTALS
-Prismarine Shard                         :PRISMARINE_SHARD
-Prismarine Slab                          :PRISMARINE_SLAB
-Prismarine Stairs                        :PRISMARINE_STAIRS
-Prismarine Wall                          :PRISMARINE_WALL
-Pumpkin                                  :PUMPKIN
-Pumpkin                                  :PUMPKIN_STEM
-Pumpkin                                  :ATTACHED_PUMPKIN_STEM
-Carved Pumpkin                           :CARVED_PUMPKIN
-Pumpkin Pie                              :PUMPKIN_PIE
-Pumpkin Seeds                            :PUMPKIN_SEEDS
-Purpur Block                             :PURPUR_BLOCK
-Purpur Pillar                            :PURPUR_PILLAR
-Purpur Slab                              :PURPUR_SLAB
-Purpur Stairs                            :PURPUR_STAIRS
-Nether Quartz                            :QUARTZ
-Nether Quartz Ore                        :NETHER_QUARTZ_ORE
-Block Of Quartz                          :QUARTZ_BLOCK
-Chiseled Quartz Block                    :CHISELED_QUARTZ_BLOCK
-Smooth Quartz Block                      :SMOOTH_QUARTZ
-Quartz Bricks                            :QUARTZ_BRICKS
-Quartz Pillar                            :QUARTZ_PILLAR
-Quartz Slab                              :QUARTZ_SLAB
-Smooth Quartz Slab                       :SMOOTH_QUARTZ_SLAB
-Quartz Stairs                            :QUARTZ_STAIRS
-Smooth Quartz Stairs                     :SMOOTH_QUARTZ_STAIRS
-Raw Rabbit                               :RABBIT
-Cooked Rabbit                            :COOKED_RABBIT
-Rabbit Hide                              :RABBIT_HIDE
-Rabbit Stew                              :RABBIT_STEW
-Rabbit'S Foot                            :RABBIT_FOOT
-Rail                                     :RAIL
-Activator Rail                           :ACTIVATOR_RAIL
-Detector Rail                            :DETECTOR_RAIL
-Powered Rail                             :POWERED_RAIL
-Chiseled Red Sandstone                   :CHISELED_RED_SANDSTONE
-Smooth Red Sandstone Slab                :SMOOTH_RED_SANDSTONE_SLAB
-Smooth Red Sandstone                     :SMOOTH_RED_SANDSTONE
-Smooth Red Sandstone Stairs              :SMOOTH_RED_SANDSTONE_STAIRS
-Block Of Redstone                        :REDSTONE_BLOCK
-Redstone Dust                            :REDSTONE
-Redstone Dust                            :REDSTONE_WIRE
-Redstone Ore                             :REDSTONE_ORE
-Deepslate Redstone Ore                   :DEEPSLATE_REDSTONE_ORE
-Redstone Comparator                      :COMPARATOR
-Redstone Lamp                            :REDSTONE_LAMP
-Redstone Repeater                        :REPEATER
-Redstone Torch                           :REDSTONE_TORCH
-Redstone Torch                           :REDSTONE_WALL_TORCH
-Respawn Anchor                           :RESPAWN_ANCHOR
-Rotten Flesh                             :ROTTEN_FLESH
-Saddle                                   :SADDLE
-Sand                                     :SAND
-Suspicious Sand                          :SUSPICIOUS_SAND
-Red Sand                                 :RED_SAND
-Sandstone                                :SANDSTONE
-Red Sandstone                            :RED_SANDSTONE
-Chiseled Sandstone                       :CHISELED_SANDSTONE
-Sandstone Slab                           :SANDSTONE_SLAB
-Red Sandstone Slab                       :RED_SANDSTONE_SLAB
-Smooth Sandstone Slab                    :SMOOTH_SANDSTONE_SLAB
-Smooth Sandstone                         :SMOOTH_SANDSTONE
-Sandstone Stairs                         :SANDSTONE_STAIRS
-Red Sandstone Stairs                     :RED_SANDSTONE_STAIRS
-Smooth Sandstone Stairs                  :SMOOTH_SANDSTONE_STAIRS
-Sandstone Wall                           :SANDSTONE_WALL
-Red Sandstone Wall                       :RED_SANDSTONE_WALL
-Scaffolding                              :SCAFFOLDING
-Sculk Sensor                             :SCULK_SENSOR
-Calibrated Sculk Sensor                  :CALIBRATED_SCULK_SENSOR
-Turtle Scute                             :TURTLE_SCUTE
-Armadillo Scute                          :ARMADILLO_SCUTE
+
 Sea Lantern                              :SEA_LANTERN
-Sea Pickle                               :SEA_PICKLE
-Seagrass                                 :SEAGRASS
-Tall Seagrass                            :TALL_SEAGRASS
-Sculk                                    :SCULK
-Sculk Catalyst                           :SCULK_CATALYST
-Sculk Shrieker                           :SCULK_SHRIEKER
-Sculk Vein                               :SCULK_VEIN
-Shears                                   :SHEARS
-Shield                                   :SHIELD
 Shroomlight                              :SHROOMLIGHT
-Shulker Box                              :SHULKER_BOX
-White Shulker Box                        :WHITE_SHULKER_BOX
-Light Gray Shulker Box                   :LIGHT_GRAY_SHULKER_BOX
-Gray Shulker Box                         :GRAY_SHULKER_BOX
-Black Shulker Box                        :BLACK_SHULKER_BOX
-Brown Shulker Box                        :BROWN_SHULKER_BOX
-Red Shulker Box                          :RED_SHULKER_BOX
-Orange Shulker Box                       :ORANGE_SHULKER_BOX
-Yellow Shulker Box                       :YELLOW_SHULKER_BOX
-Lime Shulker Box                         :LIME_SHULKER_BOX
-Green Shulker Box                        :GREEN_SHULKER_BOX
-Cyan Shulker Box                         :CYAN_SHULKER_BOX
-Light Blue Shulker Box                   :LIGHT_BLUE_SHULKER_BOX
-Blue Shulker Box                         :BLUE_SHULKER_BOX
-Purple Shulker Box                       :PURPLE_SHULKER_BOX
-Magenta Shulker Box                      :MAGENTA_SHULKER_BOX
-Pink Shulker Box                         :PINK_SHULKER_BOX
-Shulker Shell                            :SHULKER_SHELL
-Skeleton Skull                           :SKELETON_SKULL
-Skeleton Skull                           :SKELETON_WALL_SKULL
-Slime Block                              :SLIME_BLOCK
-Slimeball                                :SLIME_BALL
-Smithing Table                           :SMITHING_TABLE
-Smoker                                   :SMOKER
-Snow                                     :SNOW
-Powder Snow                              :POWDER_SNOW
-Snow Block                               :SNOW_BLOCK
-Snowball                                 :SNOWBALL
 Soul Campfire                            :SOUL_CAMPFIRE
 Soul Lantern                             :SOUL_LANTERN
-Soul Sand                                :SOUL_SAND
-Soul Soil                                :SOUL_SOIL
 Soul Torch                               :SOUL_TORCH
 Soul Torch                               :SOUL_WALL_TORCH
+Tinted Glass                             :TINTED_GLASS
+Torch                                    :TORCH
+Torch                                    :WALL_TORCH
+
+Decorated Pot                            :DECORATED_POT
+Angler Pottery Sherd                     :ANGLER_POTTERY_SHERD
+Archer Pottery Sherd                     :ARCHER_POTTERY_SHERD
+Arms Up Pottery Sherd                    :ARMS_UP_POTTERY_SHERD
+Blade Pottery Sherd                      :BLADE_POTTERY_SHERD
+Brewer Pottery Sherd                     :BREWER_POTTERY_SHERD
+Burn Pottery Sherd                       :BURN_POTTERY_SHERD
+Danger Pottery Sherd                     :DANGER_POTTERY_SHERD
+Explorer Pottery Sherd                   :EXPLORER_POTTERY_SHERD
+Flow Pottery Sherd                       :FLOW_POTTERY_SHERD
+Friend Pottery Sherd                     :FRIEND_POTTERY_SHERD
+Guster Pottery Sherd                     :GUSTER_POTTERY_SHERD
+Heart Pottery Sherd                      :HEART_POTTERY_SHERD
+Heartbreak Pottery Sherd                 :HEARTBREAK_POTTERY_SHERD
+Howl Pottery Sherd                       :HOWL_POTTERY_SHERD
+Miner Pottery Sherd                      :MINER_POTTERY_SHERD
+Mourner Pottery Sherd                    :MOURNER_POTTERY_SHERD
+Plenty Pottery Sherd                     :PLENTY_POTTERY_SHERD
+Prize Pottery Sherd                      :PRIZE_POTTERY_SHERD
+Scrape Pottery Sherd                     :SCRAPE_POTTERY_SHERD
+Sheaf Pottery Sherd                      :SHEAF_POTTERY_SHERD
+Shelter Pottery Sherd                    :SHELTER_POTTERY_SHERD
+Skull Pottery Sherd                      :SKULL_POTTERY_SHERD
+Snort Pottery Sherd                      :SNORT_POTTERY_SHERD
+
+White Wool                               :WHITE_WOOL
+Light Gray Wool                          :LIGHT_GRAY_WOOL
+Gray Wool                                :GRAY_WOOL
+Black Wool                               :BLACK_WOOL
+Brown Wool                               :BROWN_WOOL
+Red Wool                                 :RED_WOOL
+Orange Wool                              :ORANGE_WOOL
+Yellow Wool                              :YELLOW_WOOL
+Lime Wool                                :LIME_WOOL
+Green Wool                               :GREEN_WOOL
+Cyan Wool                                :CYAN_WOOL
+Light Blue Wool                          :LIGHT_BLUE_WOOL
+Blue Wool                                :BLUE_WOOL
+Purple Wool                              :PURPLE_WOOL
+Magenta Wool                             :MAGENTA_WOOL
+Pink Wool                                :PINK_WOOL
+
+Player Head                              :PLAYER_HEAD
+Player Head                              :PLAYER_WALL_HEAD
+Creeper Head                             :CREEPER_HEAD
+Creeper Head                             :CREEPER_WALL_HEAD
+Dragon Head                              :DRAGON_HEAD
+Dragon Head                              :DRAGON_WALL_HEAD
+Piglin Head                              :PIGLIN_HEAD
+Piglin Head                              :PIGLIN_WALL_HEAD
+Zombie Head                              :ZOMBIE_HEAD
+Zombie Head                              :ZOMBIE_WALL_HEAD
+
+#
+# other
+#
+
+Barrier                                  :BARRIER
+Bedrock                                  :BEDROCK
+Book                                     :BOOK
+Book And Quill                           :WRITABLE_BOOK
+Written Book                             :WRITTEN_BOOK
+Command Block                            :COMMAND_BLOCK
+Repeating Command Block                  :REPEATING_COMMAND_BLOCK
+Chain Command Block                      :CHAIN_COMMAND_BLOCK
+Debug Stick                              :DEBUG_STICK
+Dragon Egg                               :DRAGON_EGG
+Echo Shard                               :ECHO_SHARD
+End Gateway                              :END_GATEWAY
+End Portal                               :END_PORTAL
+End Portal Frame                         :END_PORTAL_FRAME
+Jigsaw Block                             :JIGSAW
+Knowledge Book                           :KNOWLEDGE_BOOK
+Lava                                     :LAVA
+Monster Spawner                          :SPAWNER
+
+Music Disc 11                            :MUSIC_DISC_11
+Music Disc 13                            :MUSIC_DISC_13
+Music Disc 5                             :MUSIC_DISC_5
+Music Disc Blocks                        :MUSIC_DISC_BLOCKS
+Music Disc Cat                           :MUSIC_DISC_CAT
+Music Disc Chirp                         :MUSIC_DISC_CHIRP
+Music Disc Far                           :MUSIC_DISC_FAR
+Music Disc Mall                          :MUSIC_DISC_MALL
+Music Disc Mellohi                       :MUSIC_DISC_MELLOHI
+Music Disc Otherside                     :MUSIC_DISC_OTHERSIDE
+Music Disc Pigstep                       :MUSIC_DISC_PIGSTEP
+Music Disc Relic                         :MUSIC_DISC_RELIC
+Music Disc Stal                          :MUSIC_DISC_STAL
+Music Disc Strad                         :MUSIC_DISC_STRAD
+Music Disc Wait                          :MUSIC_DISC_WAIT
+Music Disc Ward                          :MUSIC_DISC_WARD
+Disc Fragment 5                          :DISC_FRAGMENT_5
+
+Nether Portal                            :NETHER_PORTAL
+
 Allay Spawn Egg                          :ALLAY_SPAWN_EGG
 Armadillo Spawn Egg                      :ARMADILLO_SPAWN_EGG
 Axolotl Spawn Egg                        :AXOLOTL_SPAWN_EGG
@@ -1222,252 +1637,11 @@ Zombie Horse Spawn Egg                   :ZOMBIE_HORSE_SPAWN_EGG
 Zombie Spawn Egg                         :ZOMBIE_SPAWN_EGG
 Zombie Villager Spawn Egg                :ZOMBIE_VILLAGER_SPAWN_EGG
 Zombified Piglin Spawn Egg               :ZOMBIFIED_PIGLIN_SPAWN_EGG
-Spider Eye                               :SPIDER_EYE
-Sponge                                   :SPONGE
-Wet Sponge                               :WET_SPONGE
-Spore Blossom                            :SPORE_BLOSSOM
-Spruce Door                              :SPRUCE_DOOR
-Spruce Fence                             :SPRUCE_FENCE
-Spruce Fence Gate                        :SPRUCE_FENCE_GATE
-Spruce Leaves                            :SPRUCE_LEAVES
-Spruce Log                               :SPRUCE_LOG
-Stripped Spruce Log                      :STRIPPED_SPRUCE_LOG
-Spruce Planks                            :SPRUCE_PLANKS
-Spruce Sapling                           :SPRUCE_SAPLING
-Spruce Sign                              :SPRUCE_SIGN
-Spruce Sign                              :SPRUCE_WALL_SIGN
-Spruce Hanging Sign                      :SPRUCE_HANGING_SIGN
-Spruce Hanging Sign                      :SPRUCE_WALL_HANGING_SIGN
-Spruce Slab                              :SPRUCE_SLAB
-Spruce Stairs                            :SPRUCE_STAIRS
-Spruce Trapdoor                          :SPRUCE_TRAPDOOR
-Spruce Wood                              :SPRUCE_WOOD
-Stripped Spruce Wood                     :STRIPPED_SPRUCE_WOOD
-Spyglass                                 :SPYGLASS
-White Stained Glass                      :WHITE_STAINED_GLASS
-Light Gray Stained Glass                 :LIGHT_GRAY_STAINED_GLASS
-Gray Stained Glass                       :GRAY_STAINED_GLASS
-Black Stained Glass                      :BLACK_STAINED_GLASS
-Brown Stained Glass                      :BROWN_STAINED_GLASS
-Red Stained Glass                        :RED_STAINED_GLASS
-Orange Stained Glass                     :ORANGE_STAINED_GLASS
-Yellow Stained Glass                     :YELLOW_STAINED_GLASS
-Lime Stained Glass                       :LIME_STAINED_GLASS
-Green Stained Glass                      :GREEN_STAINED_GLASS
-Cyan Stained Glass                       :CYAN_STAINED_GLASS
-Light Blue Stained Glass                 :LIGHT_BLUE_STAINED_GLASS
-Blue Stained Glass                       :BLUE_STAINED_GLASS
-Purple Stained Glass                     :PURPLE_STAINED_GLASS
-Magenta Stained Glass                    :MAGENTA_STAINED_GLASS
-Pink Stained Glass                       :PINK_STAINED_GLASS
-White Stained Glass Pane                 :WHITE_STAINED_GLASS_PANE
-Light Gray Stained Glass Pane            :LIGHT_GRAY_STAINED_GLASS_PANE
-Gray Stained Glass Pane                  :GRAY_STAINED_GLASS_PANE
-Black Stained Glass Pane                 :BLACK_STAINED_GLASS_PANE
-Brown Stained Glass Pane                 :BROWN_STAINED_GLASS_PANE
-Red Stained Glass Pane                   :RED_STAINED_GLASS_PANE
-Orange Stained Glass Pane                :ORANGE_STAINED_GLASS_PANE
-Yellow Stained Glass Pane                :YELLOW_STAINED_GLASS_PANE
-Lime Stained Glass Pane                  :LIME_STAINED_GLASS_PANE
-Green Stained Glass Pane                 :GREEN_STAINED_GLASS_PANE
-Cyan Stained Glass Pane                  :CYAN_STAINED_GLASS_PANE
-Light Blue Stained Glass Pane            :LIGHT_BLUE_STAINED_GLASS_PANE
-Blue Stained Glass Pane                  :BLUE_STAINED_GLASS_PANE
-Purple Stained Glass Pane                :PURPLE_STAINED_GLASS_PANE
-Magenta Stained Glass Pane               :MAGENTA_STAINED_GLASS_PANE
-Pink Stained Glass Pane                  :PINK_STAINED_GLASS_PANE
-Raw Beef                                 :BEEF
-Steak                                    :COOKED_BEEF
-Stick                                    :STICK
-Sticky Piston                            :STICKY_PISTON
-Stone                                    :STONE
-Infested Stone                           :INFESTED_STONE
-Stone Axe                                :STONE_AXE
-Stone Brick Slab                         :STONE_BRICK_SLAB
-Stone Brick Stairs                       :STONE_BRICK_STAIRS
-Stone Brick Wall                         :STONE_BRICK_WALL
-Stone Bricks                             :STONE_BRICKS
-Infested Stone Bricks                    :INFESTED_STONE_BRICKS
-Chiseled Stone Bricks                    :CHISELED_STONE_BRICKS
-Infested Chiseled Stone Bricks           :INFESTED_CHISELED_STONE_BRICKS
-Cracked Stone Bricks                     :CRACKED_STONE_BRICKS
-Infested Cracked Stone Bricks            :INFESTED_CRACKED_STONE_BRICKS
-Stone Hoe                                :STONE_HOE
-Stone Pickaxe                            :STONE_PICKAXE
-Stone Shovel                             :STONE_SHOVEL
-Stone Slab                               :STONE_SLAB
-Smooth Stone Slab                        :SMOOTH_STONE_SLAB
-Smooth Stone                             :SMOOTH_STONE
-Stone Stairs                             :STONE_STAIRS
-Stone Sword                              :STONE_SWORD
-Stonecutter                              :STONECUTTER
-String                                   :STRING
+
 Structure Block                          :STRUCTURE_BLOCK
 Structure Void                           :STRUCTURE_VOID
-Sugar                                    :SUGAR
-Sugar Cane                               :SUGAR_CANE
-Suspicious Stew                          :SUSPICIOUS_STEW
-Sweet Berries                            :SWEET_BERRIES
-Sweet Berry Bush                         :SWEET_BERRY_BUSH
-Target                                   :TARGET
-Terracotta                               :TERRACOTTA
-White Terracotta                         :WHITE_TERRACOTTA
-Light Gray Terracotta                    :LIGHT_GRAY_TERRACOTTA
-Gray Terracotta                          :GRAY_TERRACOTTA
-Black Terracotta                         :BLACK_TERRACOTTA
-Brown Terracotta                         :BROWN_TERRACOTTA
-Red Terracotta                           :RED_TERRACOTTA
-Orange Terracotta                        :ORANGE_TERRACOTTA
-Yellow Terracotta                        :YELLOW_TERRACOTTA
-Lime Terracotta                          :LIME_TERRACOTTA
-Green Terracotta                         :GREEN_TERRACOTTA
-Cyan Terracotta                          :CYAN_TERRACOTTA
-Light Blue Terracotta                    :LIGHT_BLUE_TERRACOTTA
-Blue Terracotta                          :BLUE_TERRACOTTA
-Purple Terracotta                        :PURPLE_TERRACOTTA
-Magenta Terracotta                       :MAGENTA_TERRACOTTA
-Pink Terracotta                          :PINK_TERRACOTTA
-Deepslate Tile Slab                      :DEEPSLATE_TILE_SLAB
-Deepslate Tile Stairs                    :DEEPSLATE_TILE_STAIRS
-Deepslate Tile Wall                      :DEEPSLATE_TILE_WALL
-Cracked Deepslate Tiles                  :CRACKED_DEEPSLATE_TILES
-Deepslate Tiles                          :DEEPSLATE_TILES
-Tinted Glass                             :TINTED_GLASS
-Tnt                                      :TNT
-Torch                                    :TORCH
-Torch                                    :WALL_TORCH
-Totem Of Undying                         :TOTEM_OF_UNDYING
 Trial Spawner                            :TRIAL_SPAWNER
-Trial Key                                :TRIAL_KEY
-Trident                                  :TRIDENT
-Tripwire                                 :TRIPWIRE
-Tripwire Hook                            :TRIPWIRE_HOOK
-Tuff                                     :TUFF
-Tuff Slab                                :TUFF_SLAB
-Tuff Stairs                              :TUFF_STAIRS
-Tuff Wall                                :TUFF_WALL
-Chiseled Tuff                            :CHISELED_TUFF
-Polished Tuff                            :POLISHED_TUFF
-Polished Tuff Slab                       :POLISHED_TUFF_SLAB
-Polished Tuff Stairs                     :POLISHED_TUFF_STAIRS
-Polished Tuff Wall                       :POLISHED_TUFF_WALL
-Tuff Bricks                              :TUFF_BRICKS
-Tuff Brick Slab                          :TUFF_BRICK_SLAB
-Tuff Brick Stairs                        :TUFF_BRICK_STAIRS
-Tuff Brick Wall                          :TUFF_BRICK_WALL
-Chiseled Tuff Bricks                     :CHISELED_TUFF_BRICKS
-Turtle Egg                               :TURTLE_EGG
-Turtle Shell                             :TURTLE_HELMET
-Twisting Vines                           :TWISTING_VINES
-Twisting Vines Plant                     :TWISTING_VINES_PLANT
 Vault                                    :VAULT
-Vines                                    :VINE
-Cave Vines                               :CAVE_VINES
-Cave Vines Plant                         :CAVE_VINES_PLANT
-Warped Door                              :WARPED_DOOR
-Warped Fence                             :WARPED_FENCE
-Warped Fence Gate                        :WARPED_FENCE_GATE
-Warped Fungus                            :WARPED_FUNGUS
-Warped Fungus On A Stick                 :WARPED_FUNGUS_ON_A_STICK
-Warped Hyphae                            :WARPED_HYPHAE
-Stripped Warped Hyphae                   :STRIPPED_WARPED_HYPHAE
-Warped Nylium                            :WARPED_NYLIUM
-Warped Planks                            :WARPED_PLANKS
-Warped Roots                             :WARPED_ROOTS
-Warped Sign                              :WARPED_SIGN
-Warped Sign                              :WARPED_WALL_SIGN
-Warped Hanging Sign                      :WARPED_HANGING_SIGN
-Warped Hanging Sign                      :WARPED_WALL_HANGING_SIGN
-Warped Slab                              :WARPED_SLAB
-Warped Stairs                            :WARPED_STAIRS
-Warped Stem                              :WARPED_STEM
-Stripped Warped Stem                     :STRIPPED_WARPED_STEM
-Warped Trapdoor                          :WARPED_TRAPDOOR
-Warped Wart Block                        :WARPED_WART_BLOCK
-Weeping Vines                            :WEEPING_VINES
-Weeping Vines Plant                      :WEEPING_VINES_PLANT
-Hay Bale                                 :HAY_BLOCK
-Wheat                                    :WHEAT
-Wheat Seeds                              :WHEAT_SEEDS
-Wind Charge                              :WIND_CHARGE
-Wither Skeleton Skull                    :WITHER_SKELETON_SKULL
-Wither Skeleton Skull                    :WITHER_SKELETON_WALL_SKULL
-Wolf Armor                               :WOLF_ARMOR
-Wooden Axe                               :WOODEN_AXE
-Wooden Hoe                               :WOODEN_HOE
-Wooden Pickaxe                           :WOODEN_PICKAXE
-Wooden Shovel                            :WOODEN_SHOVEL
-Wooden Sword                             :WOODEN_SWORD
-Brush                                    :BRUSH
-Decorated Pot                            :DECORATED_POT
-Angler Pottery Sherd                     :ANGLER_POTTERY_SHERD
-Archer Pottery Sherd                     :ARCHER_POTTERY_SHERD
-Arms Up Pottery Sherd                    :ARMS_UP_POTTERY_SHERD
-Blade Pottery Sherd                      :BLADE_POTTERY_SHERD
-Brewer Pottery Sherd                     :BREWER_POTTERY_SHERD
-Burn Pottery Sherd                       :BURN_POTTERY_SHERD
-Danger Pottery Sherd                     :DANGER_POTTERY_SHERD
-Explorer Pottery Sherd                   :EXPLORER_POTTERY_SHERD
-Flow Pottery Sherd                       :FLOW_POTTERY_SHERD
-Friend Pottery Sherd                     :FRIEND_POTTERY_SHERD
-Guster Pottery Sherd                     :GUSTER_POTTERY_SHERD
-Heart Pottery Sherd                      :HEART_POTTERY_SHERD
-Heartbreak Pottery Sherd                 :HEARTBREAK_POTTERY_SHERD
-Howl Pottery Sherd                       :HOWL_POTTERY_SHERD
-Miner Pottery Sherd                      :MINER_POTTERY_SHERD
-Mourner Pottery Sherd                    :MOURNER_POTTERY_SHERD
-Plenty Pottery Sherd                     :PLENTY_POTTERY_SHERD
-Prize Pottery Sherd                      :PRIZE_POTTERY_SHERD
-Scrape Pottery Sherd                     :SCRAPE_POTTERY_SHERD
-Sheaf Pottery Sherd                      :SHEAF_POTTERY_SHERD
-Shelter Pottery Sherd                    :SHELTER_POTTERY_SHERD
-Skull Pottery Sherd                      :SKULL_POTTERY_SHERD
-Snort Pottery Sherd                      :SNORT_POTTERY_SHERD
-Bolt Armor Trim Smithing Template        :BOLT_ARMOR_TRIM_SMITHING_TEMPLATE
-Coast Armor Trim Smithing Template       :COAST_ARMOR_TRIM_SMITHING_TEMPLATE
-Dune Armor Trim Smithing Template        :DUNE_ARMOR_TRIM_SMITHING_TEMPLATE
-Eye Armor Trim Smithing Template         :EYE_ARMOR_TRIM_SMITHING_TEMPLATE
-Flow Armor Trim Smithing Template        :FLOW_ARMOR_TRIM_SMITHING_TEMPLATE
-Host Armor Trim Smithing Template        :HOST_ARMOR_TRIM_SMITHING_TEMPLATE
-Netherite Upgrade Smithing Template      :NETHERITE_UPGRADE_SMITHING_TEMPLATE
-Raiser Armor Trim Smithing Template      :RAISER_ARMOR_TRIM_SMITHING_TEMPLATE
-Rib Armor Trim Smithing Template         :RIB_ARMOR_TRIM_SMITHING_TEMPLATE
-Sentry Armor Trim Smithing Template      :SENTRY_ARMOR_TRIM_SMITHING_TEMPLATE
-Shaper Armor Trim Smithing Template      :SHAPER_ARMOR_TRIM_SMITHING_TEMPLATE
-Silence Armor Trim Smithing Template     :SILENCE_ARMOR_TRIM_SMITHING_TEMPLATE
-Snout Armor Trim Smithing Template       :SNOUT_ARMOR_TRIM_SMITHING_TEMPLATE
-Spire Armor Trim Smithing Template       :SPIRE_ARMOR_TRIM_SMITHING_TEMPLATE
-Tide Armor Trim Smithing Template        :TIDE_ARMOR_TRIM_SMITHING_TEMPLATE
-Vex Armor Trim Smithing Template         :VEX_ARMOR_TRIM_SMITHING_TEMPLATE
-Ward Armor Trim Smithing Template        :WARD_ARMOR_TRIM_SMITHING_TEMPLATE
-Wayfinder Armor Trim Smithing Template   :WAYFINDER_ARMOR_TRIM_SMITHING_TEMPLATE
-Wild Armor Trim Smithing Template        :WILD_ARMOR_TRIM_SMITHING_TEMPLATE
-White Wool                               :WHITE_WOOL
-Light Gray Wool                          :LIGHT_GRAY_WOOL
-Gray Wool                                :GRAY_WOOL
-Black Wool                               :BLACK_WOOL
-Brown Wool                               :BROWN_WOOL
-Red Wool                                 :RED_WOOL
-Orange Wool                              :ORANGE_WOOL
-Yellow Wool                              :YELLOW_WOOL
-Lime Wool                                :LIME_WOOL
-Green Wool                               :GREEN_WOOL
-Cyan Wool                                :CYAN_WOOL
-Light Blue Wool                          :LIGHT_BLUE_WOOL
-Blue Wool                                :BLUE_WOOL
-Purple Wool                              :PURPLE_WOOL
-Magenta Wool                             :MAGENTA_WOOL
-Pink Wool                                :PINK_WOOL
-Player Head                              :PLAYER_HEAD
-Player Head                              :PLAYER_WALL_HEAD
-Creeper Head                             :CREEPER_HEAD
-Creeper Head                             :CREEPER_WALL_HEAD
-Dragon Head                              :DRAGON_HEAD
-Dragon Head                              :DRAGON_WALL_HEAD
-Piglin Head                              :PIGLIN_HEAD
-Piglin Head                              :PIGLIN_WALL_HEAD
-Zombie Head                              :ZOMBIE_HEAD
-Zombie Head                              :ZOMBIE_WALL_HEAD
 Air                                      :AIR
 Water                                    :WATER
 Water Bubble Column                      :BUBBLE_COLUMN

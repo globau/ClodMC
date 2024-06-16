@@ -33,6 +33,11 @@ spotless {
         indentWithSpaces(4)
         endWithNewline()
     }
+    format 'text', {
+        target 'src/main/resources/*.txt'
+        trimTrailingWhitespace()
+        endWithNewline()
+    }
     java {
         googleJavaFormat('1.19.2').reflowLongStrings().skipJavadocFormatting()
         formatAnnotations()
