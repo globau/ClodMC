@@ -68,7 +68,6 @@ public class AnchorBlock implements ConfigurationSerializable {
   protected Location teleportLocation(@NotNull Player player) {
     // rotate player to avoid facing a wall
     Location bottomLoc = this.blockPos.asLocation().add(0, 1, 0);
-    //    bottomLoc.setYaw(player.getLocation().getYaw());
     bottomLoc.setYaw(Math.round(player.getLocation().getYaw() / 90.0) * 90);
     bottomLoc.setPitch(player.getLocation().getPitch());
     Location topLoc = bottomLoc.clone().add(0, 1, 0);
@@ -76,7 +75,7 @@ public class AnchorBlock implements ConfigurationSerializable {
     // ensure player is facing air
     int attempts = 1;
     while (attempts <= 4 && (this.isFacingSolid(bottomLoc) || this.isFacingSolid(topLoc))) {
-      bottomLoc.setYaw((bottomLoc.getYaw() + 90) % 90);
+      bottomLoc.setYaw(((bottomLoc.getYaw() + 90) + 180) % 360 - 180);
       topLoc.setYaw(bottomLoc.getYaw());
       attempts++;
     }
