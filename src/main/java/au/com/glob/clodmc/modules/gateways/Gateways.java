@@ -140,12 +140,13 @@ public class Gateways implements Module, Listener {
 
     int id = Config.coloursToId(topColour, bottomColour);
     ItemMeta meta = item.getItemMeta();
-    meta.lore(List.of(Component.text(topColour + " :: " + bottomColour)));
+    meta.lore(List.of(Component.text(topColour), Component.text(bottomColour)));
     meta.getPersistentDataContainer().set(Config.networkKey, PersistentDataType.INTEGER, id);
     meta.getPersistentDataContainer().set(Config.topKey, PersistentDataType.STRING, topColour);
     meta.getPersistentDataContainer()
         .set(Config.bottomKey, PersistentDataType.STRING, bottomColour);
     item.setItemMeta(meta);
+    item.setAmount(2);
     event.getInventory().setResult(item);
   }
 
