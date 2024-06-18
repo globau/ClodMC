@@ -44,6 +44,11 @@ public class BlockPos {
   }
 
   @Override
+  public String toString() {
+    return "BlockPos{" + this.x + ", " + this.y + ", " + this.z + '}';
+  }
+
+  @Override
   public boolean equals(Object other) {
     if (this == other) {
       return true;
@@ -68,15 +73,47 @@ public class BlockPos {
     return new BlockPos(loc.getWorld(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ());
   }
 
+  public static BlockPos of(@NotNull Location loc, int deltaX, int deltaY, int deltaZ) {
+    return new BlockPos(
+        loc.getWorld(),
+        loc.getBlockX() + deltaX,
+        loc.getBlockY() + deltaY,
+        loc.getBlockZ() + deltaZ);
+  }
+
   public @NotNull Location asLocation() {
     return new Location(this.world, this.x + 0.5, this.y + this.adjustY, this.z + 0.5);
   }
 
-  private @NotNull Block getBlock() {
+  public @NotNull World getWorld() {
+    return this.world;
+  }
+
+  public int getX() {
+    return this.x;
+  }
+
+  public int getY() {
+    return this.y;
+  }
+
+  public int getZ() {
+    return this.z;
+  }
+
+  public @NotNull BlockPos down() {
+    return new BlockPos(this.world, this.x, this.y - 1, this.z);
+  }
+
+  public @NotNull BlockPos up() {
+    return new BlockPos(this.world, this.x, this.y + 1, this.z);
+  }
+
+  public @NotNull Block getBlock() {
     return this.world.getBlockAt(this.x, this.y, this.z);
   }
 
-  private @NotNull Block getBlockBelow() {
+  @NotNull Block getBlockBelow() {
     return this.world.getBlockAt(this.x, this.y - 1, this.z);
   }
 

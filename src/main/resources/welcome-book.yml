@@ -7,5 +7,5 @@ pages:
   - "<b>Homes</b>\n\n<dark_green>/sethome [name]</dark_green>\n set home loc\n<dark_green>/home [name]</dark_green>\n tp home\n<dark_green>/delhome [name]</dark_green>\n delete home\n<dark_green>/homes</dark_green>\nlist homes\n<dark_green>/back</dark_green>\n tp to last loc\n<dark_green>/spawn</dark_green>\n tp to spawn"
   - "<b>Land Claims</b>\n\nClaim land with a golden shovel.\n\n<click:open_url:https://bit.ly/mcgpuser><blue>bit.ly/mcgpuser</blue></click>"
   - "<b>Invite Players</b>\n\nIf you've played on the server long enough you can invite other players.\n\n<dark_green>/invite java {name}</dark_green>\n invite java player\n<dark_green>/invite bedrock {name}</dark_green>\n invite bedrock player"
-  - "<b>Portals</b>\n\nEnd-game player-built portals\n\n<click:open_url:https://s.glob.au/0Pa><blue>https://s.glob.au/0Pa</blue></click>"
+  - "<b>Gateways</b>\n\nEnd-game player-built gateways"
   - "<b>Other</b>\n\nShift+Right-clicking an container's inventory will sort it"

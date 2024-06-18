@@ -19,6 +19,21 @@ added to the server's whitelist.
 
 - `/invite {java|bedrock} {player-name}`
 
+### Gateways
+
+End game player-craftable point-to-point portals.
+
+Recipe:
+
+```
+PWP    P=EnderPearl  W=Wool
+EWE    E=EndStone    R=Respawn Anchor
+ERE
+```
+
+The two wool blocks set the anchor block's unique colour. Place two blocks in the world with the
+same two colours in the same positions to establish a gateway.
+
 ### Mobs
 
 - mobs will not spawn in admin claims (eg. spawn)

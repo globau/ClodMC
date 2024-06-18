@@ -2,6 +2,8 @@ package au.com.glob.clodmc;
 
 import au.com.glob.clodmc.modules.Module;
 import au.com.glob.clodmc.modules.SimpleCommand;
+import au.com.glob.clodmc.modules.gateways.AnchorBlock;
+import au.com.glob.clodmc.modules.gateways.Gateways;
 import au.com.glob.clodmc.modules.homes.BackCommand;
 import au.com.glob.clodmc.modules.homes.DelHomeCommand;
 import au.com.glob.clodmc.modules.homes.HomeCommand;
@@ -36,6 +38,7 @@ import org.jetbrains.annotations.NotNull;
 
 public final class ClodMC extends JavaPlugin {
   static {
+    ConfigurationSerialization.registerClass(AnchorBlock.class, "Anchor");
     ConfigurationSerialization.registerClass(PlayerLocation.class, "Location");
   }
 
@@ -59,6 +62,9 @@ public final class ClodMC extends JavaPlugin {
     Config.init("config.yml");
     PlayerData.init();
     MaterialUtil.init();
+
+    // gateways
+    this.register(new Gateways());
 
     // homes
     this.register(new Homes());
