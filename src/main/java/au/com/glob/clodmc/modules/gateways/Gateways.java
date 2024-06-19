@@ -5,11 +5,13 @@ import au.com.glob.clodmc.modules.Module;
 import au.com.glob.clodmc.util.BlockPos;
 import java.io.File;
 import java.io.IOException;
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.title.Title;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -288,12 +290,21 @@ public class Gateways implements Module, Listener {
       return;
     }
 
+    // show a message; normally this is only visible if the destination
+    // chunk is slow to load
+    player.showTitle(
+        Title.title(
+            Component.text(""),
+            Component.text("Teleporting"),
+            Title.Times.times(Duration.ZERO, Duration.ofSeconds(2), Duration.ofMillis(500))));
+
     // teleport
     Location teleportPos = anchorBlock.connectedTo.teleportLocation(player);
     player
         .teleportAsync(teleportPos)
         .whenComplete(
             (Boolean result, Throwable e) -> {
+              player.clearTitle();
               if (result != null && result) {
                 this.ignore.put(player, BlockPos.of(teleportPos));
                 player.playSound(teleportPos, Sound.ENTITY_PLAYER_TELEPORT, 1, 1);
