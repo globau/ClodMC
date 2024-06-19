@@ -88,4 +88,12 @@ public class Config {
   protected static Color idToBottomColour(int id) {
     return PARTICLE_COLOURS.get(id & 0x0F);
   }
+
+  protected static String idToTopName(int id) {
+    return COLOUR_INDEX.get((id >> 4) & 0x0F);
+  }
+
+  protected static String idToBottomName(int id) {
+    return COLOUR_INDEX.get(id & 0x0F);
+  }
 }

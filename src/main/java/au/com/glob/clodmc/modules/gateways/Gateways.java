@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -34,6 +35,7 @@ import org.bukkit.inventory.RecipeChoice;
 import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
+import org.jetbrains.annotations.NotNull;
 
 public class Gateways implements Module, Listener {
   private final File configFile = new File(ClodMC.instance.getDataFolder(), "gateways.yml");
@@ -41,16 +43,8 @@ public class Gateways implements Module, Listener {
   private final Map<Player, BlockPos> ignore = new HashMap<>();
 
   public Gateways() {
-    // base object is an enchanted respawn-anchor
-    ItemStack item = new ItemStack(Material.RESPAWN_ANCHOR);
-    ItemMeta meta = item.getItemMeta();
-    meta.displayName(Component.text("Gateway Anchor"));
-    meta.setEnchantmentGlintOverride(true);
-    meta.getPersistentDataContainer().set(Config.recipeKey, PersistentDataType.BOOLEAN, true);
-    item.setItemMeta(meta);
-
     // add recipe
-    ShapedRecipe recipe = new ShapedRecipe(Config.recipeKey, item);
+    ShapedRecipe recipe = new ShapedRecipe(Config.recipeKey, this.createAnchorItem());
     recipe.shape(Config.SHAPE);
     for (Map.Entry<Character, Material> entry : Config.SHAPE_MATERIALS.entrySet()) {
       Material material = entry.getValue();
@@ -109,6 +103,28 @@ public class Gateways implements Module, Listener {
     }
   }
 
+  private @NotNull ItemStack createAnchorItem() {
+    ItemStack item = new ItemStack(Material.RESPAWN_ANCHOR);
+    ItemMeta meta = item.getItemMeta();
+    meta.displayName(Component.text("Gateway Anchor"));
+    meta.setEnchantmentGlintOverride(true);
+    meta.getPersistentDataContainer().set(Config.recipeKey, PersistentDataType.BOOLEAN, true);
+    item.setItemMeta(meta);
+    return item;
+  }
+
+  private void setAnchorItemMeta(@NotNull ItemStack anchorItem, int networkId) {
+    String topColour = Config.idToTopName(networkId);
+    String bottomColour = Config.idToBottomName(networkId);
+    ItemMeta meta = anchorItem.getItemMeta();
+    meta.lore(List.of(Component.text(topColour), Component.text(bottomColour)));
+    meta.getPersistentDataContainer().set(Config.networkKey, PersistentDataType.INTEGER, networkId);
+    meta.getPersistentDataContainer().set(Config.topKey, PersistentDataType.STRING, topColour);
+    meta.getPersistentDataContainer()
+        .set(Config.bottomKey, PersistentDataType.STRING, bottomColour);
+    anchorItem.setItemMeta(meta);
+  }
+
   @EventHandler
   public void onPlayerJoin(PlayerJoinEvent event) {
     event.getPlayer().discoverRecipe(Config.recipeKey);
@@ -138,14 +154,7 @@ public class Gateways implements Module, Listener {
       }
     }
 
-    int id = Config.coloursToId(topColour, bottomColour);
-    ItemMeta meta = item.getItemMeta();
-    meta.lore(List.of(Component.text(topColour), Component.text(bottomColour)));
-    meta.getPersistentDataContainer().set(Config.networkKey, PersistentDataType.INTEGER, id);
-    meta.getPersistentDataContainer().set(Config.topKey, PersistentDataType.STRING, topColour);
-    meta.getPersistentDataContainer()
-        .set(Config.bottomKey, PersistentDataType.STRING, bottomColour);
-    item.setItemMeta(meta);
+    this.setAnchorItemMeta(item, Config.coloursToId(topColour, bottomColour));
     item.setAmount(2);
     event.getInventory().setResult(item);
   }
@@ -235,15 +244,27 @@ public class Gateways implements Module, Listener {
       return;
     }
 
+    // remove portal and disconnect
     anchorBlock.stopParticles();
     this.instances.remove(blockPos);
-
     if (anchorBlock.connectedTo != null) {
       anchorBlock.connectedTo.connectedTo = null;
       anchorBlock.connectedTo.updateParticles();
     }
-
     this.save();
+
+    // drop anchor block
+    if (event.getPlayer().getGameMode() == GameMode.CREATIVE) {
+      return;
+    }
+    event.setDropItems(false);
+
+    ItemStack anchorItem = this.createAnchorItem();
+    this.setAnchorItemMeta(anchorItem, anchorBlock.networkId);
+    anchorBlock
+        .blockPos
+        .getWorld()
+        .dropItemNaturally(anchorBlock.blockPos.asLocation(), anchorItem);
   }
 
   @EventHandler
