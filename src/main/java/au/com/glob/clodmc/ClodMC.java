@@ -18,6 +18,7 @@ import au.com.glob.clodmc.modules.mobs.PreventMobGriefing;
 import au.com.glob.clodmc.modules.mobs.PreventMobSpawn;
 import au.com.glob.clodmc.modules.player.AFK;
 import au.com.glob.clodmc.modules.player.InviteCommand;
+import au.com.glob.clodmc.modules.player.OfflineMessages;
 import au.com.glob.clodmc.modules.player.PlayerData;
 import au.com.glob.clodmc.modules.player.Sleep;
 import au.com.glob.clodmc.modules.server.ConfigureServer;
@@ -40,6 +41,7 @@ public final class ClodMC extends JavaPlugin {
   static {
     ConfigurationSerialization.registerClass(AnchorBlock.class, "Anchor");
     ConfigurationSerialization.registerClass(PlayerLocation.class, "Location");
+    ConfigurationSerialization.registerClass(OfflineMessages.Message.class, "Message");
   }
 
   public static ClodMC instance;
@@ -89,6 +91,7 @@ public final class ClodMC extends JavaPlugin {
     // player
     this.register(new AFK());
     this.register(new InviteCommand());
+    this.register(new OfflineMessages());
     this.register(new Sleep());
 
     // server

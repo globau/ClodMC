@@ -64,18 +64,21 @@ public class PlayerData implements Module, Listener {
 
   public static class Config extends YamlConfiguration {
     private File file;
+    public boolean exists;
 
     public static @NotNull Config of(UUID uuid) {
       File file = new File(instance.playerConfigPath, uuid + ".yml");
       Config config = new Config();
+      config.file = file;
+      config.exists = false;
       try {
         config.load(file);
+        config.exists = true;
       } catch (FileNotFoundException e) {
         // ignore
       } catch (IOException | InvalidConfigurationException e) {
         ClodMC.logWarning("loading " + file + ": " + e);
       }
-      config.file = file;
       return config;
     }
 

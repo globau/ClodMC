@@ -50,3 +50,4 @@ same two colours in the same positions to establish a gateway.
 - indicates when players are afk, use `/afk` to toggle
 - leaves decay quickly
 - `/adminmode` to toggle between player and admin inventories
+- a `/msg` sent to an offline player will be delivered the next time they log in
