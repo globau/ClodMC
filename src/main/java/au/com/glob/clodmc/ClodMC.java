@@ -18,6 +18,7 @@ import au.com.glob.clodmc.modules.mobs.PreventMobGriefing;
 import au.com.glob.clodmc.modules.mobs.PreventMobSpawn;
 import au.com.glob.clodmc.modules.player.AFK;
 import au.com.glob.clodmc.modules.player.InviteCommand;
+import au.com.glob.clodmc.modules.player.PlayerData;
 import au.com.glob.clodmc.modules.player.Sleep;
 import au.com.glob.clodmc.modules.server.ConfigureServer;
 import au.com.glob.clodmc.modules.server.RequiredPlugins;
@@ -26,7 +27,6 @@ import au.com.glob.clodmc.modules.welcome.WelcomeGift;
 import au.com.glob.clodmc.modules.world.FastLeafDecay;
 import au.com.glob.clodmc.util.Config;
 import au.com.glob.clodmc.util.MaterialUtil;
-import au.com.glob.clodmc.util.PlayerData;
 import au.com.glob.clodmc.util.PlayerLocation;
 import java.io.File;
 import java.util.logging.Level;
@@ -60,8 +60,10 @@ public final class ClodMC extends JavaPlugin {
   @Override
   public void onEnable() {
     Config.init("config.yml");
-    PlayerData.init();
     MaterialUtil.init();
+
+    // core - used by other modules
+    this.register(new PlayerData());
 
     // gateways
     this.register(new Gateways());
