@@ -2,6 +2,7 @@ package au.com.glob.clodmc.modules.inventory;
 
 import au.com.glob.clodmc.ClodMC;
 import au.com.glob.clodmc.modules.Module;
+import au.com.glob.clodmc.modules.player.OpAlerts;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -11,10 +12,10 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.StringJoiner;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Donkey;
@@ -34,11 +35,12 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
 
 public class InventorySort implements Listener, Module {
-  private static final Map<String, Integer> materialOrder = new HashMap<>();
+  private static final Map<String, Integer> materialOrder = new HashMap<>(1477);
 
   public InventorySort() {
     super();
 
+    List<String> alerts = new ArrayList<>(0);
     List<String> allMaterials = Arrays.stream(Material.values()).map(Enum::name).toList();
 
     // read inventory_order.txt. format follows.  english name is ignored
@@ -47,7 +49,7 @@ public class InventorySort implements Listener, Module {
     List<String> orderedMaterials = new ArrayList<>();
     InputStream resourceStream = ClodMC.instance.getResource("inventory_order.txt");
     if (resourceStream == null) {
-      throw new RuntimeException("failed to read inventory_order.txt");
+      throw new RuntimeException("failed to read");
     }
     try (BufferedReader reader = new BufferedReader(new InputStreamReader(resourceStream))) {
       String line;
@@ -59,30 +61,28 @@ public class InventorySort implements Listener, Module {
         }
         String[] parts = line.split(":");
         if (parts.length != 2) {
-          throw new RuntimeException("invalid inventory_order.txt: line " + lineNo);
+          alerts.add("inventory_order.txt: invalid line " + lineNo);
+          continue;
         }
         orderedMaterials.add(parts[1]);
       }
     } catch (IOException e) {
-      throw new RuntimeException(e);
+      ClodMC.logError("inventory_order.txt: " + e.getMessage());
+      return;
     }
 
     // build material --> SortItem mapping
-    materialOrder.clear();
-    boolean hasErrors = false;
     int index = 0;
     for (String material : orderedMaterials) {
       // must exist
       if (!allMaterials.contains(material)) {
-        ClodMC.logError("inventory_order.txt: invalid: " + material);
-        hasErrors = true;
+        alerts.add("inventory_order.txt: invalid: " + material);
         continue;
       }
 
       // no duplicates
       if (materialOrder.containsKey(material)) {
-        ClodMC.logError("inventory_order.txt: duplicate: " + material);
-        hasErrors = true;
+        alerts.add("inventory_order.txt: duplicate: " + material);
         continue;
       }
 
@@ -92,13 +92,13 @@ public class InventorySort implements Listener, Module {
 
     for (String name : allMaterials) {
       if (!materialOrder.containsKey(name)) {
-        ClodMC.logError("inventory_order.txt: missing: " + name);
-        hasErrors = true;
+        alerts.add("inventory_order.txt: missing: " + name);
       }
     }
 
-    if (hasErrors) {
-      Bukkit.shutdown();
+    for (String alert : alerts) {
+      ClodMC.logError(alert);
+      OpAlerts.addAlert(alert);
     }
   }
 
@@ -199,12 +199,7 @@ public class InventorySort implements Listener, Module {
       // index into inventory_order.txt
       String material = itemStack.getType().name();
       Integer index = InventorySort.materialOrder.get(material);
-      if (index == null) {
-        ClodMC.logError("SortInventory: failed to find material: " + material);
-        this.materialIndex = 0;
-      } else {
-        this.materialIndex = index;
-      }
+      this.materialIndex = Objects.requireNonNullElse(index, 0);
 
       // visible in-game name
       this.name =
