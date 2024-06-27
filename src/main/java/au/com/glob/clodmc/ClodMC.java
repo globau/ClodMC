@@ -109,6 +109,10 @@ public final class ClodMC extends JavaPlugin {
   }
 
   private void register(@NotNull Module module) {
+    if (module.forceDisable()) {
+      return;
+    }
+
     if (module instanceof Listener listener) {
       Bukkit.getServer().getPluginManager().registerEvents(listener, this);
     }
