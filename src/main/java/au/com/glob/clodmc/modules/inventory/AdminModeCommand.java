@@ -1,5 +1,6 @@
 package au.com.glob.clodmc.modules.inventory;
 
+import au.com.glob.clodmc.ClodMC;
 import au.com.glob.clodmc.modules.CommandError;
 import au.com.glob.clodmc.modules.Module;
 import au.com.glob.clodmc.modules.SimpleCommand;
@@ -77,11 +78,13 @@ public class AdminModeCommand extends SimpleCommand implements Module, Listener 
   }
 
   @EventHandler
-  public void onPluginDisable(PluginDisableEvent pluginDisableEvent) {
-    for (UUID uuid : this.playerInventories.keySet()) {
-      Player player = Bukkit.getPlayer(uuid);
-      if (player != null && player.isOp()) {
-        this.restoreInventory(player);
+  public void onPluginDisable(PluginDisableEvent event) {
+    if (event.getPlugin().equals(ClodMC.instance)) {
+      for (UUID uuid : this.playerInventories.keySet()) {
+        Player player = Bukkit.getPlayer(uuid);
+        if (player != null && player.isOp()) {
+          this.restoreInventory(player);
+        }
       }
     }
   }

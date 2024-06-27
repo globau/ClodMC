@@ -22,7 +22,6 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
-import org.bukkit.event.server.PluginDisableEvent;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
 import org.jetbrains.annotations.NotNull;
@@ -62,13 +61,6 @@ public class AFK extends SimpleCommand implements Listener, Module {
   }
 
   // events
-
-  @EventHandler
-  public void onPluginDisable(PluginDisableEvent event) {
-    for (PlayerState playerState : this.playerStates.values()) {
-      playerState.setBack(false);
-    }
-  }
 
   @EventHandler
   public void onPlayerJoin(PlayerJoinEvent event) {

@@ -19,6 +19,7 @@ import au.com.glob.clodmc.modules.mobs.PreventMobSpawn;
 import au.com.glob.clodmc.modules.player.AFK;
 import au.com.glob.clodmc.modules.player.InviteCommand;
 import au.com.glob.clodmc.modules.player.OfflineMessages;
+import au.com.glob.clodmc.modules.player.OpAlerts;
 import au.com.glob.clodmc.modules.player.PlayerData;
 import au.com.glob.clodmc.modules.player.Sleep;
 import au.com.glob.clodmc.modules.server.ConfigureServer;
@@ -65,6 +66,7 @@ public final class ClodMC extends JavaPlugin {
     MaterialUtil.init();
 
     // core - used by other modules
+    this.register(new OpAlerts());
     this.register(new PlayerData());
 
     // gateways
@@ -95,8 +97,8 @@ public final class ClodMC extends JavaPlugin {
     this.register(new Sleep());
 
     // server
-    this.register(new RequiredPlugins());
     this.register(new ConfigureServer());
+    this.register(new RequiredPlugins());
 
     // welcome
     this.register(new WelcomeGift());
