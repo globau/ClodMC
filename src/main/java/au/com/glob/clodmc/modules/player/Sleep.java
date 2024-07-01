@@ -2,6 +2,7 @@ package au.com.glob.clodmc.modules.player;
 
 import au.com.glob.clodmc.ClodMC;
 import au.com.glob.clodmc.modules.Module;
+import au.com.glob.clodmc.util.MiscUtil;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
@@ -27,23 +28,14 @@ public class Sleep implements Listener, Module {
       return;
     }
 
-    String names;
-    if (sleeping.size() == 1) {
-      names = sleeping.getFirst();
-    } else if (sleeping.size() == 2) {
-      names = String.join(" and ", sleeping);
-    } else {
-      names =
-          String.join(
-              ", and ",
-              List.of(
-                  String.join(", ", sleeping.subList(0, sleeping.size() - 1)), sleeping.getLast()));
-    }
-    String message = "<grey>" + names + " skipped the night</grey>";
-
+    // notify players who slept the night
+    // however, no need to tell the only player who slept
     for (Player player : players) {
       if (player.getWorld().getEnvironment() == World.Environment.NORMAL) {
-        player.sendRichMessage(message);
+        if (sleeping.size() > 1 || !sleeping.getFirst().equals(player.getName())) {
+          player.sendRichMessage(
+              "<grey>" + MiscUtil.joinComma(sleeping) + " skipped the night</grey>");
+        }
       }
     }
   }

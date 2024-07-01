@@ -1,5 +1,6 @@
 package au.com.glob.clodmc.util;
 
+import java.util.List;
 import org.jetbrains.annotations.NotNull;
 
 public class MiscUtil {
@@ -35,5 +36,18 @@ public class MiscUtil {
     } else {
       return yy + "y";
     }
+  }
+
+  public static @NotNull String joinComma(@NotNull List<String> items) {
+    if (items.isEmpty()) {
+      return "";
+    }
+    if (items.size() == 1) {
+      return items.getFirst();
+    }
+    if (items.size() == 2) {
+      return String.join(" and ", items);
+    }
+    return String.join(", ", items.subList(0, items.size() - 1)) + ", and " + items.getLast();
   }
 }
