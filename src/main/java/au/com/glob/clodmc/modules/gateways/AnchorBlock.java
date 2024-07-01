@@ -10,6 +10,7 @@ import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.Particle;
 import org.bukkit.World;
+import org.bukkit.block.Block;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -57,27 +58,48 @@ public class AnchorBlock implements ConfigurationSerializable {
         + '}';
   }
 
-  private boolean isFacingSolid(@NotNull Location location) {
+  private Block facingBlock(@NotNull Location location) {
     double yawRadians = Math.toRadians(location.getYaw());
     double facingX = location.getX() - Math.sin(yawRadians);
     double facingZ = location.getZ() + Math.cos(yawRadians);
     Location facingLoc = new Location(location.getWorld(), facingX, location.getY(), facingZ);
-    return facingLoc.getBlock().isSolid();
+    return facingLoc.getBlock();
+  }
+
+  private boolean isFacingAir(@NotNull Location location) {
+    return this.facingBlock(location).isEmpty();
+  }
+
+  private boolean isFacingSolid(@NotNull Location location) {
+    return this.facingBlock(location).isSolid();
   }
 
   protected Location teleportLocation(@NotNull Player player) {
     // rotate player to avoid facing a wall
+
+    // get top and bottom blocks for the player's location
+    // snapped to 90 degrees of rotation
     Location bottomLoc = this.blockPos.asLocation().add(0, 1, 0);
     bottomLoc.setYaw(Math.round(player.getLocation().getYaw() / 90.0) * 90);
     bottomLoc.setPitch(player.getLocation().getPitch());
     Location topLoc = bottomLoc.clone().add(0, 1, 0);
 
-    // ensure player is facing air
+    // check for air
     int attempts = 1;
-    while (attempts <= 4 && (this.isFacingSolid(bottomLoc) || this.isFacingSolid(topLoc))) {
+    while (attempts <= 4 && !(this.isFacingAir(bottomLoc) && this.isFacingAir(topLoc))) {
       bottomLoc.setYaw(((bottomLoc.getYaw() + 90) + 180) % 360 - 180);
       topLoc.setYaw(bottomLoc.getYaw());
       attempts++;
+    }
+
+    // didn't find air, settle for non-solid
+    if (!(this.isFacingAir(bottomLoc) && this.isFacingAir(topLoc))) {
+      attempts = 1;
+      while (attempts <= 4 && (this.isFacingSolid(bottomLoc) || this.isFacingSolid(topLoc))) {
+        bottomLoc.setYaw(((bottomLoc.getYaw() + 90) + 180) % 360 - 180);
+        topLoc.setYaw(bottomLoc.getYaw());
+        attempts++;
+      }
     }
 
     return bottomLoc;
