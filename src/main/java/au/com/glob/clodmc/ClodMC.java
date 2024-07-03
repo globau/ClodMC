@@ -11,6 +11,7 @@ import au.com.glob.clodmc.modules.homes.Homes;
 import au.com.glob.clodmc.modules.homes.HomesCommand;
 import au.com.glob.clodmc.modules.homes.SetHomeCommand;
 import au.com.glob.clodmc.modules.homes.SpawnCommand;
+import au.com.glob.clodmc.modules.interactions.FastLeafDecay;
 import au.com.glob.clodmc.modules.inventory.AdminModeCommand;
 import au.com.glob.clodmc.modules.inventory.InventorySort;
 import au.com.glob.clodmc.modules.mobs.BetterDrops;
@@ -26,7 +27,6 @@ import au.com.glob.clodmc.modules.server.ConfigureServer;
 import au.com.glob.clodmc.modules.server.RequiredPlugins;
 import au.com.glob.clodmc.modules.welcome.WelcomeCommand;
 import au.com.glob.clodmc.modules.welcome.WelcomeGift;
-import au.com.glob.clodmc.modules.world.FastLeafDecay;
 import au.com.glob.clodmc.util.Config;
 import au.com.glob.clodmc.util.MaterialUtil;
 import au.com.glob.clodmc.util.PlayerLocation;
@@ -81,6 +81,9 @@ public final class ClodMC extends JavaPlugin {
     this.register(new HomesCommand());
     this.register(new SetHomeCommand());
 
+    // interactions
+    this.register(new FastLeafDecay());
+
     // inventory
     this.register(new AdminModeCommand());
     this.register(new InventorySort());
@@ -103,9 +106,6 @@ public final class ClodMC extends JavaPlugin {
     // welcome
     this.register(new WelcomeGift());
     this.register(new WelcomeCommand());
-
-    // world
-    this.register(new FastLeafDecay());
   }
 
   private void register(@NotNull Module module) {
