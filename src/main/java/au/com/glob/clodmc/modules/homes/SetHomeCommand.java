@@ -4,7 +4,7 @@ import au.com.glob.clodmc.ClodMC;
 import au.com.glob.clodmc.modules.CommandError;
 import au.com.glob.clodmc.modules.Module;
 import au.com.glob.clodmc.modules.SimpleCommand;
-import au.com.glob.clodmc.util.BlockPos;
+import au.com.glob.clodmc.util.TeleportUtil;
 import java.util.List;
 import java.util.Map;
 import org.bukkit.Location;
@@ -31,7 +31,7 @@ public class SetHomeCommand extends SimpleCommand implements Module {
       throw new CommandError("You have reached the maximum number of homes (" + maxHomes + ")");
     }
 
-    if (BlockPos.of(player.getLocation()).isUnsafe()) {
+    if (TeleportUtil.isUnsafe(player.getLocation().getBlock(), false)) {
       throw new CommandError("Your current location is not safe");
     }
 

@@ -10,7 +10,27 @@ public class MaterialUtil {
   public static Set<Material> ALWAYS_UNSAFE;
 
   public static void init() {
-    ALWAYS_SAFE = getMatchingMaterials("DIRT_PATH");
+    ALWAYS_SAFE =
+        getMatchingMaterials(
+            "BLACK_CARPET",
+            "BLUE_CARPET",
+            "BROWN_CARPET",
+            "CYAN_CARPET",
+            "GRAY_CARPET",
+            "GREEN_CARPET",
+            "LIGHT_BLUE_CARPET",
+            "LIGHT_GRAY_CARPET",
+            "LIME_CARPET",
+            "MAGENTA_CARPET",
+            "MOSS_CARPET",
+            "ORANGE_CARPET",
+            "PINK_CARPET",
+            "PURPLE_CARPET",
+            "RED_CARPET",
+            "WHITE_CARPET",
+            "YELLOW_CARPET",
+            "DIRT_PATH",
+            "SCAFFOLDING");
     ALWAYS_UNSAFE =
         getMatchingMaterials(
             "CACTUS",

@@ -44,7 +44,7 @@ public class PlayerLocation implements ConfigurationSerializable {
       player.setFlying(this.isFlying);
       loc = this.location;
     } else {
-      loc = BlockPos.of(this.location).getSafePos().asLocation();
+      loc = TeleportUtil.getSafePos(this.location);
       loc.setYaw(this.location.getYaw());
       loc.setPitch(this.location.getPitch());
     }
