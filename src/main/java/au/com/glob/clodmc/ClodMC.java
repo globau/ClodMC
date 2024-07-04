@@ -13,7 +13,7 @@ import au.com.glob.clodmc.modules.homes.SetHomeCommand;
 import au.com.glob.clodmc.modules.homes.SpawnCommand;
 import au.com.glob.clodmc.modules.interactions.Decorations;
 import au.com.glob.clodmc.modules.interactions.FastLeafDecay;
-import au.com.glob.clodmc.modules.inventory.AdminModeCommand;
+import au.com.glob.clodmc.modules.inventory.AdminInvCommand;
 import au.com.glob.clodmc.modules.inventory.InventorySort;
 import au.com.glob.clodmc.modules.mobs.BetterDrops;
 import au.com.glob.clodmc.modules.mobs.PreventMobGriefing;
@@ -87,7 +87,7 @@ public final class ClodMC extends JavaPlugin {
     this.register(new FastLeafDecay());
 
     // inventory
-    this.register(new AdminModeCommand());
+    this.register(new AdminInvCommand());
     this.register(new InventorySort());
 
     // mobs

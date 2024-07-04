@@ -18,12 +18,12 @@ import org.bukkit.event.server.PluginDisableEvent;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
-public class AdminModeCommand extends SimpleCommand implements Module, Listener {
+public class AdminInvCommand extends SimpleCommand implements Module, Listener {
   private final Map<UUID, ItemStack[]> playerInventories = new HashMap<>();
   private final Map<UUID, ItemStack[]> adminInventories = new HashMap<>();
 
-  public AdminModeCommand() {
-    super("adminmode", "Toggle admin/player inventory");
+  public AdminInvCommand() {
+    super("admininv", "Toggle admin/player inventory");
   }
 
   private void storeInventory(@NotNull Player player) {
