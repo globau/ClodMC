@@ -13,6 +13,7 @@ import java.util.Map;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.title.Title;
 import org.bukkit.Bukkit;
+import org.bukkit.Effect;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -308,6 +309,10 @@ public class Gateways implements Module, Listener {
               if (result != null && result) {
                 this.ignore.put(player, BlockPos.of(teleportPos));
                 player.playSound(teleportPos, Sound.ENTITY_PLAYER_TELEPORT, 1, 1);
+                player
+                    .getLocation()
+                    .getWorld()
+                    .playEffect(player.getLocation(), Effect.ENDER_SIGNAL, 0);
               }
             });
   }

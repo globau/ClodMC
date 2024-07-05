@@ -3,6 +3,7 @@ package au.com.glob.clodmc.modules.gateways;
 import au.com.glob.clodmc.ClodMC;
 import au.com.glob.clodmc.util.BlockPos;
 import com.destroystokyo.paper.ParticleBuilder;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import org.bukkit.Bukkit;
@@ -114,15 +115,16 @@ public class AnchorBlock implements ConfigurationSerializable {
               .runTaskTimer(
                   ClodMC.instance,
                   () -> {
+                    Collection<Player> players = this.getNearbyPlayers(8);
                     new ParticleBuilder(Particle.DUST)
                         .location(this.topLocation)
-                        .receivers(8)
+                        .receivers(players)
                         .data(new Particle.DustOptions(this.topColour, 1))
                         .count(1)
                         .spawn();
                     new ParticleBuilder(Particle.DUST)
                         .location(this.bottomLocation)
-                        .receivers(8)
+                        .receivers(players)
                         .data(new Particle.DustOptions(this.bottomColour, 1))
                         .count(1)
                         .spawn();
@@ -135,22 +137,40 @@ public class AnchorBlock implements ConfigurationSerializable {
               .runTaskTimer(
                   ClodMC.instance,
                   () -> {
+                    Collection<Player> players = this.getNearbyPlayers(12);
                     new ParticleBuilder(Particle.DUST)
                         .location(this.topLocation)
-                        .receivers(12)
                         .data(new Particle.DustOptions(this.topColour, 2))
+                        .receivers(players)
                         .count(5)
                         .spawn();
                     new ParticleBuilder(Particle.DUST)
                         .location(this.bottomLocation)
-                        .receivers(12)
                         .data(new Particle.DustOptions(this.bottomColour, 2))
+                        .receivers(players)
                         .count(5)
                         .spawn();
                   },
                   0,
-                  5);
+                  20);
     }
+  }
+
+  private @NotNull Collection<Player> getNearbyPlayers(int radius) {
+    // nearby players, excluding those standing on the anchor
+    return this.bottomLocation
+        .getWorld()
+        .getNearbyPlayers(this.bottomLocation, radius, radius, radius)
+        .stream()
+        .filter(
+            player -> {
+              Location playerLoc = player.getLocation();
+              return !(playerLoc.getWorld().equals(this.bottomLocation.getWorld())
+                  && playerLoc.getBlockX() == this.bottomLocation.getBlockX()
+                  && playerLoc.getBlockY() == this.bottomLocation.getBlockY()
+                  && playerLoc.getBlockZ() == this.bottomLocation.getBlockZ());
+            })
+        .toList();
   }
 
   public void stopParticles() {
