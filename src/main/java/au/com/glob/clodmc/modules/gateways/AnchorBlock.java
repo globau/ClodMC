@@ -5,6 +5,7 @@ import au.com.glob.clodmc.util.BlockPos;
 import com.destroystokyo.paper.ParticleBuilder;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
@@ -109,12 +110,13 @@ public class AnchorBlock implements ConfigurationSerializable {
   }
 
   protected void updateVisuals() {
-    this.stopVisuals();
+    this.updateLights(this.connectedTo == null ? 0 : 12);
+
+    if (this.particleTask != null) {
+      this.particleTask.cancel();
+    }
 
     if (this.connectedTo == null) {
-      Block block = this.bottomLocation.getWorld().getBlockAt(this.bottomLocation);
-      block.setType(Material.AIR);
-
       this.particleTask =
           Bukkit.getScheduler()
               .runTaskTimer(
@@ -137,12 +139,6 @@ public class AnchorBlock implements ConfigurationSerializable {
                   0,
                   20);
     } else {
-      Block block = this.bottomLocation.getWorld().getBlockAt(this.bottomLocation);
-      block.setType(Material.LIGHT);
-      Light light = (Light) block.getBlockData();
-      light.setLevel(12);
-      block.setBlockData(light);
-
       this.particleTask =
           Bukkit.getScheduler()
               .runTaskTimer(
@@ -167,6 +163,21 @@ public class AnchorBlock implements ConfigurationSerializable {
     }
   }
 
+  private void updateLights(int lightLevel) {
+    World world = this.blockPos.getWorld();
+    for (Location loc : List.of(this.topLocation, this.bottomLocation)) {
+      Block block = world.getBlockAt(loc);
+      if (lightLevel == 0) {
+        block.setType(Material.AIR);
+      } else {
+        block.setType(Material.LIGHT);
+        Light light = (Light) block.getBlockData();
+        light.setLevel(lightLevel);
+        block.setBlockData(light);
+      }
+    }
+  }
+
   private @NotNull Collection<Player> getNearbyPlayers(int radius) {
     // nearby players, excluding those standing on the anchor
     return this.bottomLocation
@@ -188,10 +199,8 @@ public class AnchorBlock implements ConfigurationSerializable {
     if (this.particleTask != null) {
       this.particleTask.cancel();
       this.particleTask = null;
-
-      Block block = this.bottomLocation.getWorld().getBlockAt(this.bottomLocation);
-      block.setType(Material.AIR);
     }
+    this.updateLights(0);
   }
 
   @Override
