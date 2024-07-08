@@ -27,6 +27,15 @@ invite:
 required-plugins:
   # list of plugins that must be loaded.  if any of these
   # are not running, players will not be able to join
-  - ChunkyBorder
   - GriefPrevention
-  - LuckPerms
+
+# circular world borders
+border:
+  world:
+    x: 158.5
+    z: 2.5
+    radius: 7500
+  world_nether:
+    x: 6.5
+    z: 0.5
+    radius: 7500

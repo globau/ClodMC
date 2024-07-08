@@ -24,6 +24,7 @@ import au.com.glob.clodmc.modules.player.OfflineMessages;
 import au.com.glob.clodmc.modules.player.OpAlerts;
 import au.com.glob.clodmc.modules.player.PlayerData;
 import au.com.glob.clodmc.modules.player.Sleep;
+import au.com.glob.clodmc.modules.server.CircularWorldBorder;
 import au.com.glob.clodmc.modules.server.ConfigureServer;
 import au.com.glob.clodmc.modules.server.RequiredPlugins;
 import au.com.glob.clodmc.modules.welcome.WelcomeCommand;
@@ -102,6 +103,7 @@ public final class ClodMC extends JavaPlugin {
     this.register(new Sleep());
 
     // server
+    this.register(new CircularWorldBorder());
     this.register(new ConfigureServer());
     this.register(new RequiredPlugins());
 
