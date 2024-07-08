@@ -9,9 +9,11 @@ import java.util.Map;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.World;
 import org.bukkit.block.Block;
+import org.bukkit.block.data.type.Light;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -106,10 +108,13 @@ public class AnchorBlock implements ConfigurationSerializable {
     return bottomLoc;
   }
 
-  protected void updateParticles() {
-    this.stopParticles();
+  protected void updateVisuals() {
+    this.stopVisuals();
 
     if (this.connectedTo == null) {
+      Block block = this.bottomLocation.getWorld().getBlockAt(this.bottomLocation);
+      block.setType(Material.AIR);
+
       this.particleTask =
           Bukkit.getScheduler()
               .runTaskTimer(
@@ -132,6 +137,12 @@ public class AnchorBlock implements ConfigurationSerializable {
                   0,
                   20);
     } else {
+      Block block = this.bottomLocation.getWorld().getBlockAt(this.bottomLocation);
+      block.setType(Material.LIGHT);
+      Light light = (Light) block.getBlockData();
+      light.setLevel(12);
+      block.setBlockData(light);
+
       this.particleTask =
           Bukkit.getScheduler()
               .runTaskTimer(
@@ -173,10 +184,13 @@ public class AnchorBlock implements ConfigurationSerializable {
         .toList();
   }
 
-  public void stopParticles() {
+  public void stopVisuals() {
     if (this.particleTask != null) {
       this.particleTask.cancel();
       this.particleTask = null;
+
+      Block block = this.bottomLocation.getWorld().getBlockAt(this.bottomLocation);
+      block.setType(Material.AIR);
     }
   }
 

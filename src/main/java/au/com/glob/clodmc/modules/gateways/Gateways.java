@@ -95,7 +95,7 @@ public class Gateways implements Module, Listener {
 
     // emit particles
     for (AnchorBlock anchorBlock : this.instances.values()) {
-      anchorBlock.updateParticles();
+      anchorBlock.updateVisuals();
     }
   }
 
@@ -217,11 +217,11 @@ public class Gateways implements Module, Listener {
     // connect anchor
     AnchorBlock anchorBlock = new AnchorBlock(networkId, event.getBlock().getLocation());
     anchorBlock.connectedTo = otherAnchorBlock;
-    anchorBlock.updateParticles();
+    anchorBlock.updateVisuals();
 
     if (otherAnchorBlock != null) {
       otherAnchorBlock.connectedTo = anchorBlock;
-      otherAnchorBlock.updateParticles();
+      otherAnchorBlock.updateVisuals();
     }
 
     // save
@@ -251,11 +251,11 @@ public class Gateways implements Module, Listener {
     }
 
     // remove portal and disconnect
-    anchorBlock.stopParticles();
+    anchorBlock.stopVisuals();
     this.instances.remove(blockPos);
     if (anchorBlock.connectedTo != null) {
       anchorBlock.connectedTo.connectedTo = null;
-      anchorBlock.connectedTo.updateParticles();
+      anchorBlock.connectedTo.updateVisuals();
     }
     this.save();
 
