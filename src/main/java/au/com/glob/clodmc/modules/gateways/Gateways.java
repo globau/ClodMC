@@ -19,6 +19,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.entity.FallingBlock;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -46,6 +47,8 @@ public class Gateways implements Module, Listener {
   private final Map<Player, BlockPos> ignore = new HashMap<>();
 
   public Gateways() {
+    ConfigurationSerialization.registerClass(AnchorBlock.class);
+
     // add recipe
     ShapedRecipe recipe = new ShapedRecipe(Config.recipeKey, this.createAnchorItem());
     recipe.shape(Config.SHAPE);

@@ -12,6 +12,7 @@ import java.util.regex.Pattern;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
+import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -23,6 +24,10 @@ import org.jetbrains.annotations.NotNull;
 
 public class OfflineMessages implements Module, Listener {
   Pattern msgPattern = Pattern.compile("^/?msg\\s+(\\S+)\\s+(.+)$");
+
+  public OfflineMessages() {
+    ConfigurationSerialization.registerClass(OfflineMessages.Message.class);
+  }
 
   private boolean handleOfflineMsg(Sender sender, String recipient, String message) {
     // most messages will be directed at online players, check that first

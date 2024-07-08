@@ -5,12 +5,6 @@ package au.com.glob.clodmc.modules.server;
 import au.com.glob.clodmc.ClodMC;
 import au.com.glob.clodmc.modules.Module;
 import au.com.glob.clodmc.util.Config;
-import de.bluecolored.bluemap.api.BlueMapAPI;
-import de.bluecolored.bluemap.api.BlueMapWorld;
-import de.bluecolored.bluemap.api.markers.MarkerSet;
-import de.bluecolored.bluemap.api.markers.ShapeMarker;
-import de.bluecolored.bluemap.api.math.Color;
-import de.bluecolored.bluemap.api.math.Shape;
 import io.papermc.paper.entity.TeleportFlag;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -41,7 +35,6 @@ public class CircularWorldBorder implements Module, Listener {
   private static final int maxParticleDistance = 8;
   private static final int maxParticleDistanceSquared = maxParticleDistance * maxParticleDistance;
   private static final org.bukkit.Color visualizerColour = org.bukkit.Color.fromRGB(0x20A0FF);
-  private static final int mapColour = 0xA52A2A;
 
   private final Map<World, Border> borders = new HashMap<>();
   private final Map<UUID, Location> lastPlayerLoc = new HashMap<>();
@@ -148,35 +141,13 @@ public class CircularWorldBorder implements Module, Listener {
   @EventHandler
   public void onServerLoaded(ServerLoadEvent event) {
     if (!Bukkit.getPluginManager().isPluginEnabled("BlueMap")) {
+      ClodMC.logWarning(
+          this.getClass().getSimpleName()
+              + " cannot load BlueMap integration: BlueMap is not enabled");
       return;
     }
 
-    BlueMapAPI.onEnable(
-        (BlueMapAPI blueMapAPI) -> {
-          for (Map.Entry<World, Border> entry : CircularWorldBorder.this.borders.entrySet()) {
-            World world = entry.getKey();
-            Border border = entry.getValue();
-
-            Shape shape = Shape.createCircle(border.x, border.z, border.r, 100);
-            ShapeMarker marker =
-                ShapeMarker.builder()
-                    .label("World Border")
-                    .shape(shape, world.getSeaLevel())
-                    .lineColor(new Color(CircularWorldBorder.mapColour, 0xFF))
-                    .fillColor(new Color(0))
-                    .lineWidth(3)
-                    .depthTestEnabled(false)
-                    .build();
-
-            MarkerSet markerSet = MarkerSet.builder().label("World Border").build();
-            markerSet.getMarkers().put("ClodMC", marker);
-            blueMapAPI
-                .getWorld(world.getName())
-                .map(BlueMapWorld::getMaps)
-                .ifPresent(
-                    maps -> maps.forEach(map -> map.getMarkerSets().put("ClodMC", markerSet)));
-          }
-        });
+    CircularWorldBorderBlueMap.register(this.borders);
   }
 
   // events
@@ -207,7 +178,7 @@ public class CircularWorldBorder implements Module, Listener {
     return border != null && !border.isBounding(location.getX(), location.getZ());
   }
 
-  private record Border(double x, double z, double r) {
+  public record Border(double x, double z, double r) {
     public Vector2 center() {
       return new Vector2(this.x, this.z);
     }
@@ -219,7 +190,7 @@ public class CircularWorldBorder implements Module, Listener {
     }
   }
 
-  private record Vector2(double x, double z) {}
+  public record Vector2(double x, double z) {}
 
   private static @NotNull List<Vector> getParticlesAt(
       @NotNull Player player, @NotNull Border border, double offsetPercent) {

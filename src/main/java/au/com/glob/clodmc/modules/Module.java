@@ -1,7 +1,9 @@
 package au.com.glob.clodmc.modules;
 
+import org.jetbrains.annotations.Nullable;
+
 public interface Module {
-  default boolean forceDisable() {
-    return false;
+  default @Nullable String dependsOn() {
+    return null;
   }
 }

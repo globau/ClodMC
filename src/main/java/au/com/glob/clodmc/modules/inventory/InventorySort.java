@@ -91,7 +91,7 @@ public class InventorySort implements Listener, Module {
     }
 
     for (String name : allMaterials) {
-      if (!materialOrder.containsKey(name)) {
+      if (!name.startsWith("LEGACY_") && !materialOrder.containsKey(name)) {
         alerts.add("inventory_order.txt: missing: " + name);
       }
     }

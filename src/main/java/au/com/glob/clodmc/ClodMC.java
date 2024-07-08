@@ -2,7 +2,6 @@ package au.com.glob.clodmc;
 
 import au.com.glob.clodmc.modules.Module;
 import au.com.glob.clodmc.modules.SimpleCommand;
-import au.com.glob.clodmc.modules.gateways.AnchorBlock;
 import au.com.glob.clodmc.modules.gateways.Gateways;
 import au.com.glob.clodmc.modules.homes.BackCommand;
 import au.com.glob.clodmc.modules.homes.DelHomeCommand;
@@ -36,22 +35,20 @@ import java.io.File;
 import java.util.logging.Level;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
+import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.server.ServerLoadEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 
-public final class ClodMC extends JavaPlugin {
-  static {
-    ConfigurationSerialization.registerClass(AnchorBlock.class, "Anchor");
-    ConfigurationSerialization.registerClass(PlayerLocation.class, "Location");
-    ConfigurationSerialization.registerClass(OfflineMessages.Message.class, "Message");
-  }
-
+public final class ClodMC extends JavaPlugin implements Listener {
   public static ClodMC instance;
 
   public ClodMC() {
     super();
     instance = this;
+
+    ConfigurationSerialization.registerClass(PlayerLocation.class);
   }
 
   @Override
@@ -66,6 +63,7 @@ public final class ClodMC extends JavaPlugin {
   public void onEnable() {
     Config.init("config.yml");
     MaterialUtil.init();
+    Bukkit.getPluginManager().registerEvents(this, this);
 
     // core - used by other modules
     this.register(new OpAlerts());
@@ -112,8 +110,20 @@ public final class ClodMC extends JavaPlugin {
     this.register(new WelcomeCommand());
   }
 
+  @EventHandler
+  public void onServerLoad(ServerLoadEvent event) {
+    ClodMC.logInfo("clod-mc started");
+  }
+
   private void register(@NotNull Module module) {
-    if (module.forceDisable()) {
+    String dependsOn = module.dependsOn();
+    if (dependsOn != null && !Bukkit.getPluginManager().isPluginEnabled(dependsOn)) {
+      logWarning(
+          "Cannot load "
+              + module.getClass().getSimpleName()
+              + ": depends on plugin "
+              + dependsOn
+              + " which is not enabled");
       return;
     }
 

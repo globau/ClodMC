@@ -1,0 +1,17 @@
+name: ClodMC
+version: '${version}'
+main: au.com.glob.clodmc.ClodMC
+api-version: '1.21'
+authors: [ glob ]
+dependencies:
+  bootstrap:
+    GriefPrevention:
+      load: BEFORE
+      required: false
+  server:
+    GriefPrevention:
+      load: BEFORE
+      required: false
+    BlueMap:
+      load: BEFORE
+      required: false
