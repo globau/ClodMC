@@ -35,7 +35,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
 
 public class InventorySort implements Listener, Module {
-  private static final Map<String, Integer> materialOrder = new HashMap<>(1477);
+  private static final @NotNull Map<String, Integer> materialOrder = new HashMap<>(1477);
 
   public InventorySort() {
     super();
@@ -186,10 +186,10 @@ public class InventorySort implements Listener, Module {
   }
 
   private static class InventoryItem implements Comparable<InventoryItem> {
-    private final ItemStack itemStack;
+    private final @NotNull ItemStack itemStack;
     private final int materialIndex;
-    private final String name;
-    private final String extra;
+    private final @NotNull String name;
+    private final @NotNull String extra;
     private final int amount;
     private final int damage;
 
@@ -236,7 +236,7 @@ public class InventorySort implements Listener, Module {
     }
 
     @Override
-    public String toString() {
+    public @NotNull String toString() {
       StringJoiner joiner = new StringJoiner(":", "[", "]");
       joiner.add(String.valueOf(this.materialIndex));
       joiner.add(this.name);
@@ -246,7 +246,7 @@ public class InventorySort implements Listener, Module {
       return joiner.toString();
     }
 
-    public ItemStack getItemStack() {
+    public @NotNull ItemStack getItemStack() {
       return this.itemStack;
     }
 

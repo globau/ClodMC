@@ -10,9 +10,10 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.jetbrains.annotations.NotNull;
 
 public class Decorations implements Module, Listener {
-  private static final Set<Material> PRESSURE_PLATES =
+  private static final @NotNull Set<Material> PRESSURE_PLATES =
       EnumSet.of(
           Material.ACACIA_PRESSURE_PLATE,
           Material.BIRCH_PRESSURE_PLATE,
@@ -28,7 +29,7 @@ public class Decorations implements Module, Listener {
           Material.STONE_PRESSURE_PLATE,
           Material.WARPED_PRESSURE_PLATE);
 
-  private static final Set<Material> TRAPDOORS =
+  private static final @NotNull Set<Material> TRAPDOORS =
       EnumSet.of(
           Material.ACACIA_TRAPDOOR,
           Material.BAMBOO_TRAPDOOR,

@@ -17,7 +17,7 @@ public class Mailer {
   private Mailer() {}
 
   public static class MailerError extends Exception {
-    public MailerError(String message) {
+    public MailerError(@NotNull String message) {
       super(message);
     }
   }
@@ -63,10 +63,10 @@ public class Mailer {
   }
 
   private static class SMTP implements Closeable {
-    private final DateFormat df = DateFormat.getDateInstance(DateFormat.FULL, Locale.US);
-    private final Socket socket;
-    private final BufferedReader inStream;
-    private final DataOutputStream outStream;
+    private final @NotNull DateFormat df = DateFormat.getDateInstance(DateFormat.FULL, Locale.US);
+    private final @NotNull Socket socket;
+    private final @NotNull BufferedReader inStream;
+    private final @NotNull DataOutputStream outStream;
 
     SMTP(@NotNull String hostname) throws IOException {
       this.socket = new Socket(hostname, 25);

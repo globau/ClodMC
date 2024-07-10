@@ -37,7 +37,7 @@ public class DelHomeCommand extends SimpleCommand implements Module {
 
   @Override
   public @NotNull List<String> tabComplete(
-      @NotNull CommandSender sender, @NotNull String alias, @NotNull String[] args)
+      @NotNull CommandSender sender, @NotNull String alias, @NotNull String @NotNull [] args)
       throws IllegalArgumentException {
     Player player = this.toPlayer(sender);
     if (args.length == 0) {

@@ -25,9 +25,10 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class AFK extends SimpleCommand implements Listener, Module {
-  private final HashMap<UUID, PlayerState> playerStates = new HashMap<>();
+  private final @NotNull HashMap<UUID, PlayerState> playerStates = new HashMap<>();
   private final int idleTime;
 
   public AFK() {
@@ -75,7 +76,7 @@ public class AFK extends SimpleCommand implements Listener, Module {
   }
 
   @EventHandler
-  public void onPlayerChat(AsyncChatEvent event) {
+  public void onPlayerChat(@NotNull AsyncChatEvent event) {
     Bukkit.getScheduler()
         .runTask(
             ClodMC.instance,
@@ -115,10 +116,10 @@ public class AFK extends SimpleCommand implements Listener, Module {
   }
 
   private static final class PlayerState {
-    private final Player player;
-    private Team scoreboardTeam;
+    private final @NotNull Player player;
+    private final @NotNull Team scoreboardTeam;
     private long lastInteractionTime;
-    private BlockPos awayBlockPos;
+    private @Nullable BlockPos awayBlockPos;
     private boolean isAway;
 
     private PlayerState(@NotNull Player player) {
@@ -128,13 +129,14 @@ public class AFK extends SimpleCommand implements Listener, Module {
 
       // use scoreboard to append "(afk)" to the player's name
       Scoreboard scoreboard = this.player.getScoreboard();
-      this.scoreboardTeam = scoreboard.getTeam("AFK");
-      if (this.scoreboardTeam == null) {
-        this.scoreboardTeam = scoreboard.registerNewTeam("AFK");
-        this.scoreboardTeam.setOption(Team.Option.NAME_TAG_VISIBILITY, Team.OptionStatus.ALWAYS);
-        this.scoreboardTeam.setOption(Team.Option.COLLISION_RULE, Team.OptionStatus.ALWAYS);
-        this.scoreboardTeam.suffix(MiniMessage.miniMessage().deserialize(" <grey>(afk)</grey>"));
+      Team scoreboardTeam = scoreboard.getTeam("AFK");
+      if (scoreboardTeam == null) {
+        scoreboardTeam = scoreboard.registerNewTeam("AFK");
+        scoreboardTeam.setOption(Team.Option.NAME_TAG_VISIBILITY, Team.OptionStatus.ALWAYS);
+        scoreboardTeam.setOption(Team.Option.COLLISION_RULE, Team.OptionStatus.ALWAYS);
+        scoreboardTeam.suffix(MiniMessage.miniMessage().deserialize(" <grey>(afk)</grey>"));
       }
+      this.scoreboardTeam = scoreboardTeam;
     }
 
     public void onMove() {
@@ -142,6 +144,7 @@ public class AFK extends SimpleCommand implements Listener, Module {
         // clear afk only when the player moves to a different block
         // ie. looking around shouldn't clear afk status
         BlockPos playerPos = BlockPos.of(this.player.getLocation());
+        assert this.awayBlockPos != null;
         if (playerPos.equals(this.awayBlockPos)) {
           return;
         }

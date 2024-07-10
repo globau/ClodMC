@@ -11,7 +11,7 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 public abstract class SimpleCommand extends Command {
-  private static final List<String> commandNames = new ArrayList<>();
+  private static final @NotNull List<String> commandNames = new ArrayList<>();
 
   protected SimpleCommand(@NotNull String name, @NotNull String description) {
     this(name, description, "/" + name);
@@ -42,7 +42,9 @@ public abstract class SimpleCommand extends Command {
 
   @Override
   public boolean execute(
-      @NotNull CommandSender sender, @NotNull String commandLabel, @NotNull String[] args) {
+      @NotNull CommandSender sender,
+      @NotNull String commandLabel,
+      @NotNull String @NotNull [] args) {
     try {
       this.execute(sender, new ArrayList<>(List.of(args)));
     } catch (CommandError e) {
@@ -84,7 +86,7 @@ public abstract class SimpleCommand extends Command {
 
   @Override
   public @NotNull List<String> tabComplete(
-      @NotNull CommandSender sender, @NotNull String alias, @NotNull String[] args)
+      @NotNull CommandSender sender, @NotNull String alias, @NotNull String @NotNull [] args)
       throws IllegalArgumentException {
     return List.of();
   }

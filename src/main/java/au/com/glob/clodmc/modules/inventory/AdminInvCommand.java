@@ -19,8 +19,8 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 public class AdminInvCommand extends SimpleCommand implements Module, Listener {
-  private final Map<UUID, ItemStack[]> playerInventories = new HashMap<>();
-  private final Map<UUID, ItemStack[]> adminInventories = new HashMap<>();
+  private final @NotNull Map<UUID, ItemStack[]> playerInventories = new HashMap<>();
+  private final @NotNull Map<UUID, ItemStack[]> adminInventories = new HashMap<>();
 
   public AdminInvCommand() {
     super("admininv", "Toggle admin/player inventory");

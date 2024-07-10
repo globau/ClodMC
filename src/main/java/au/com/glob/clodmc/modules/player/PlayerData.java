@@ -26,10 +26,12 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class PlayerData implements Module, Listener {
-  private static PlayerData instance;
-  private final File playerConfigPath;
-  private final Map<UUID, Config> onlinePlayers = new HashMap<>();
-  private final DateTimeFormatter dateFormatter =
+  @SuppressWarnings("NotNullFieldNotInitialized")
+  private static @NotNull PlayerData instance;
+
+  private final @NotNull File playerConfigPath;
+  private final @NotNull Map<UUID, Config> onlinePlayers = new HashMap<>();
+  private final @NotNull DateTimeFormatter dateFormatter =
       DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
   public PlayerData() {
@@ -89,23 +91,26 @@ public class PlayerData implements Module, Listener {
   }
 
   public static class Config extends YamlConfiguration {
-    private File file;
+    private final @NotNull File file;
     public boolean exists;
 
-    public static @NotNull Config of(UUID uuid) {
-      File file = new File(instance.playerConfigPath, uuid + ".yml");
-      Config config = new Config();
-      config.file = file;
-      config.exists = false;
+    public Config(@NotNull File file) {
+      super();
+      this.file = file;
+
+      this.exists = false;
       try {
-        config.load(file);
-        config.exists = true;
+        this.load(file);
+        this.exists = true;
       } catch (FileNotFoundException e) {
         // ignore
       } catch (IOException | InvalidConfigurationException e) {
         ClodMC.logWarning("loading " + file + ": " + e);
       }
-      return config;
+    }
+
+    public static @NotNull Config of(@NotNull UUID uuid) {
+      return new Config(new File(instance.playerConfigPath, uuid + ".yml"));
     }
 
     private void save() {
@@ -138,7 +143,7 @@ public class PlayerData implements Module, Listener {
   }
 
   public static class Update implements AutoCloseable {
-    private final Config config;
+    private final @NotNull Config config;
     private boolean modified;
 
     public Update(@NotNull Player player) {
@@ -169,7 +174,7 @@ public class PlayerData implements Module, Listener {
       return this.config.getConfigurationSection(path);
     }
 
-    public List<?> getList(@NotNull String path) {
+    public @Nullable List<?> getList(@NotNull String path) {
       return this.config.getList(path);
     }
   }

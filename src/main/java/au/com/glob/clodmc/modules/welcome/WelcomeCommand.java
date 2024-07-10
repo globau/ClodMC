@@ -31,7 +31,7 @@ public class WelcomeCommand extends SimpleCommand implements Module {
 
   @Override
   public @NotNull List<String> tabComplete(
-      @NotNull CommandSender sender, @NotNull String alias, @NotNull String[] args)
+      @NotNull CommandSender sender, @NotNull String alias, @NotNull String @NotNull [] args)
       throws IllegalArgumentException {
     String arg = args.length == 0 ? "" : args[0].toLowerCase();
     return Bukkit.getOnlinePlayers().stream()

@@ -18,7 +18,7 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.jetbrains.annotations.NotNull;
 
 public class SeenCommand extends SimpleCommand implements Module, Listener {
-  private final Map<String, UUID> validNames = new HashMap<>();
+  private final @NotNull Map<String, UUID> validNames = new HashMap<>();
 
   public SeenCommand() {
     super("seen", "/seen <player>", "Show time since player's last login");
@@ -36,7 +36,7 @@ public class SeenCommand extends SimpleCommand implements Module, Listener {
   }
 
   @EventHandler
-  public void onPlayerQuit(PlayerQuitEvent event) {
+  public void onPlayerQuit(@NotNull PlayerQuitEvent event) {
     this.updateValidNames();
   }
 
@@ -84,7 +84,7 @@ public class SeenCommand extends SimpleCommand implements Module, Listener {
 
   @Override
   public @NotNull List<String> tabComplete(
-      @NotNull CommandSender sender, @NotNull String alias, @NotNull String[] args)
+      @NotNull CommandSender sender, @NotNull String alias, @NotNull String @NotNull [] args)
       throws IllegalArgumentException {
     return this.validNames.keySet().stream()
         .sorted(String.CASE_INSENSITIVE_ORDER)

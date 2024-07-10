@@ -47,9 +47,10 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 
 public final class ClodMC extends JavaPlugin implements Listener {
-  public static ClodMC instance;
+  @SuppressWarnings("NotNullFieldNotInitialized")
+  public static @NotNull ClodMC instance;
 
-  private final List<BlueMapModule> blueMapModules = new ArrayList<>();
+  private final @NotNull List<BlueMapModule> blueMapModules = new ArrayList<>();
 
   public ClodMC() {
     super();
@@ -126,7 +127,7 @@ public final class ClodMC extends JavaPlugin implements Listener {
   }
 
   @EventHandler
-  public void onServerLoad(ServerLoadEvent event) {
+  public void onServerLoad(@NotNull ServerLoadEvent event) {
     ClodMC.logInfo("clod-mc started");
   }
 

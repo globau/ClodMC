@@ -4,10 +4,14 @@ import java.lang.reflect.Field;
 import java.util.EnumSet;
 import java.util.Set;
 import org.bukkit.Material;
+import org.jetbrains.annotations.NotNull;
 
 public class MaterialUtil {
-  public static Set<Material> ALWAYS_SAFE;
-  public static Set<Material> ALWAYS_UNSAFE;
+  @SuppressWarnings("NotNullFieldNotInitialized")
+  public static @NotNull Set<Material> ALWAYS_SAFE;
+
+  @SuppressWarnings("NotNullFieldNotInitialized")
+  public static @NotNull Set<Material> ALWAYS_UNSAFE;
 
   public static void init() {
     ALWAYS_SAFE =

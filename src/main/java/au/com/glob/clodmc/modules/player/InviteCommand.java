@@ -155,7 +155,7 @@ public class InviteCommand extends SimpleCommand implements Module {
 
   @Override
   public @NotNull List<String> tabComplete(
-      @NotNull CommandSender sender, @NotNull String alias, @NotNull String[] args)
+      @NotNull CommandSender sender, @NotNull String alias, @NotNull String @NotNull [] args)
       throws IllegalArgumentException {
     List<String> types = List.of("java", "bedrock");
     if (args.length == 0) {

@@ -14,7 +14,8 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class Homes implements Listener, Module {
-  protected static Homes instance;
+  @SuppressWarnings("NotNullFieldNotInitialized")
+  protected static @NotNull Homes instance;
 
   public Homes() {
     super();

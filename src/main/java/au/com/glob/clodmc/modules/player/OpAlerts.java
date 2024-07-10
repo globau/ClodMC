@@ -7,22 +7,24 @@ import java.util.List;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerLoginEvent;
+import org.jetbrains.annotations.NotNull;
 
 public class OpAlerts implements Module, Listener {
-  private final List<String> alerts = new ArrayList<>();
+  @SuppressWarnings("NotNullFieldNotInitialized")
+  private static @NotNull OpAlerts instance;
 
-  private static OpAlerts instance;
+  private final @NotNull List<String> alerts = new ArrayList<>();
 
   public OpAlerts() {
     instance = this;
   }
 
-  public static void addAlert(String alert) {
+  public static void addAlert(@NotNull String alert) {
     instance.alerts.add(alert);
   }
 
   @EventHandler
-  public void onPlayerLogin(PlayerLoginEvent event) {
+  public void onPlayerLogin(@NotNull PlayerLoginEvent event) {
     if (this.alerts.isEmpty() || !event.getPlayer().isOp()) {
       return;
     }

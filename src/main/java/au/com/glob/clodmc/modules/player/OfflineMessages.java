@@ -21,15 +21,17 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.server.ServerCommandEvent;
 import org.bukkit.util.NumberConversions;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class OfflineMessages implements Module, Listener {
-  Pattern msgPattern = Pattern.compile("^/?msg\\s+(\\S+)\\s+(.+)$");
+  @NotNull final Pattern msgPattern = Pattern.compile("^/?msg\\s+(\\S+)\\s+(.+)$");
 
   public OfflineMessages() {
     ConfigurationSerialization.registerClass(OfflineMessages.Message.class);
   }
 
-  private boolean handleOfflineMsg(Sender sender, String recipient, String message) {
+  private boolean handleOfflineMsg(
+      @NotNull Sender sender, @NotNull String recipient, @NotNull String message) {
     // most messages will be directed at online players, check that first
     Player player = Bukkit.getPlayerExact(recipient);
     if (player != null && player.isOnline()) {
@@ -58,11 +60,11 @@ public class OfflineMessages implements Module, Listener {
     return true;
   }
 
-  private List<Message> loadMessages(Player player) {
+  private List<Message> loadMessages(@NotNull Player player) {
     return this.loadMessages(PlayerData.of(player).getList("messages"));
   }
 
-  private List<Message> loadMessages(List<?> configValue) {
+  private List<Message> loadMessages(@Nullable List<?> configValue) {
     List<Message> messages = new ArrayList<>();
     if (configValue != null) {
       for (Object obj : configValue) {
@@ -147,10 +149,10 @@ public class OfflineMessages implements Module, Listener {
 
   public static class Message implements ConfigurationSerializable {
     private final long timestamp;
-    private final String sender;
-    private final String message;
+    private final @NotNull String sender;
+    private final @NotNull String message;
 
-    public Message(long timestamp, String sender, String message) {
+    public Message(long timestamp, @NotNull String sender, @NotNull String message) {
       this.timestamp = timestamp;
       this.sender = sender;
       this.message = message;

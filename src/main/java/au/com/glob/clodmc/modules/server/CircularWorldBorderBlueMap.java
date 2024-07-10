@@ -13,6 +13,8 @@ import org.bukkit.World;
 
 public class CircularWorldBorderBlueMap {
   public CircularWorldBorderBlueMap(CircularWorldBorder circularWorldBorder) {
+    assert BlueMap.api != null;
+
     for (Map.Entry<World, CircularWorldBorder.Border> entry :
         circularWorldBorder.getBorders().entrySet()) {
       World world = entry.getKey();

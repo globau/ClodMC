@@ -42,9 +42,10 @@ import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
 
 public class Gateways implements Module, Listener {
-  private final File configFile = new File(ClodMC.instance.getDataFolder(), "gateways.yml");
-  private final Map<BlockPos, AnchorBlock> instances = new HashMap<>();
-  private final Map<Player, BlockPos> ignore = new HashMap<>();
+  private final @NotNull File configFile =
+      new File(ClodMC.instance.getDataFolder(), "gateways.yml");
+  private final @NotNull Map<BlockPos, AnchorBlock> instances = new HashMap<>();
+  private final @NotNull Map<Player, BlockPos> ignore = new HashMap<>();
 
   public Gateways() {
     ConfigurationSerialization.registerClass(AnchorBlock.class);

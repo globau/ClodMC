@@ -16,7 +16,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class TeleportUtil {
   private static final int CHECK_RADIUS = 3;
-  private static final Vector3D[] SHIFT_VECTORS;
+  private static final Vector3D @NotNull [] SHIFT_VECTORS;
 
   private record Vector3D(int x, int y, int z) {}
 

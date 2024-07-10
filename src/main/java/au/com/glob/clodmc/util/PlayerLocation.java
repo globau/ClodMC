@@ -12,7 +12,7 @@ import org.jetbrains.annotations.NotNull;
 
 @SerializableAs("Location")
 public class PlayerLocation implements ConfigurationSerializable {
-  private final Location location;
+  private final @NotNull Location location;
   private final boolean isFlying;
 
   private PlayerLocation(@NotNull Location location, boolean isFlying) {

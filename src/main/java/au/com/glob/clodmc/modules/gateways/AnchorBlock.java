@@ -22,19 +22,20 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.util.NumberConversions;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class AnchorBlock implements ConfigurationSerializable {
-  protected final BlockPos blockPos;
-  protected final Location topLocation;
-  protected final Location bottomLocation;
+  protected final @NotNull BlockPos blockPos;
+  protected final @NotNull Location topLocation;
+  protected final @NotNull Location bottomLocation;
   protected final int networkId;
-  protected final Color topColour;
-  protected final Color bottomColour;
+  protected final @NotNull Color topColour;
+  protected final @NotNull Color bottomColour;
 
-  protected AnchorBlock connectedTo = null;
-  private BukkitTask particleTask = null;
+  protected @Nullable AnchorBlock connectedTo = null;
+  private @Nullable BukkitTask particleTask = null;
 
-  public AnchorBlock(int networkId, Location location) {
+  public AnchorBlock(int networkId, @NotNull Location location) {
     this.networkId = networkId;
     this.blockPos = BlockPos.of(location);
     this.topLocation = location.clone().add(0.5, 2.5, 0.5);
@@ -49,7 +50,7 @@ public class AnchorBlock implements ConfigurationSerializable {
   }
 
   @Override
-  public String toString() {
+  public @NotNull String toString() {
     return "AnchorBlock{"
         + "blockPos="
         + this.blockPos
@@ -78,7 +79,7 @@ public class AnchorBlock implements ConfigurationSerializable {
     return this.facingBlock(location).isSolid();
   }
 
-  protected Location teleportLocation(@NotNull Player player) {
+  protected @NotNull Location teleportLocation(@NotNull Player player) {
     // rotate player to avoid facing a wall
 
     // get top and bottom blocks for the player's location

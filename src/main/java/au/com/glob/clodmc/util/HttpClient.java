@@ -13,9 +13,9 @@ import org.jetbrains.annotations.Nullable;
 public class HttpClient {
   private HttpClient() {}
 
-  private static final String USER_AGENT = "glob.au/clod-mc";
+  private static final @NotNull String USER_AGENT = "glob.au/clod-mc";
 
-  private static final Gson gson = new Gson();
+  private static final @NotNull Gson gson = new Gson();
 
   @NotNull public static JsonHttpResponse getJSON(@NotNull String urlString) {
     return readJsonResponse(request(urlString));
@@ -71,7 +71,7 @@ public class HttpClient {
   }
 
   public static class HttpResponse<T> {
-    private final T response;
+    private final @Nullable T response;
 
     public HttpResponse(@Nullable T response) {
       this.response = response;

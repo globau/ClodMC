@@ -34,10 +34,11 @@ import org.jetbrains.annotations.NotNull;
 public class CircularWorldBorder implements Module, BlueMapModule, Listener {
   private static final int maxParticleDistance = 8;
   private static final int maxParticleDistanceSquared = maxParticleDistance * maxParticleDistance;
-  private static final org.bukkit.Color visualizerColour = org.bukkit.Color.fromRGB(0x20A0FF);
+  private static final org.bukkit.@NotNull Color visualizerColour =
+      org.bukkit.Color.fromRGB(0x20A0FF);
 
-  private final Map<World, Border> borders = new HashMap<>();
-  private final Map<UUID, Location> lastPlayerLoc = new HashMap<>();
+  private final @NotNull Map<World, Border> borders = new HashMap<>();
+  private final @NotNull Map<UUID, Location> lastPlayerLoc = new HashMap<>();
 
   public CircularWorldBorder() {
     Config config = ClodMC.instance.getConfig();

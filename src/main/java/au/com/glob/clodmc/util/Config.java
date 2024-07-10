@@ -13,9 +13,9 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.jetbrains.annotations.NotNull;
 
 public class Config extends YamlConfiguration {
-  private static final Map<String, Config> instances = new HashMap<>();
+  private static final @NotNull Map<String, Config> instances = new HashMap<>();
 
-  private final File file;
+  private final @NotNull File file;
   private long mtime;
 
   @NotNull public static Config getInstance(@NotNull String filename) {

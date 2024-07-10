@@ -11,7 +11,7 @@ import org.bukkit.inventory.meta.BookMeta;
 import org.jetbrains.annotations.Nullable;
 
 public class WelcomeBook {
-  private static ItemStack welcomeBookItemStack;
+  private static @Nullable ItemStack welcomeBookItemStack;
   private static long configLastModified = -1;
 
   public static @Nullable ItemStack build() {

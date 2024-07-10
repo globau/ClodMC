@@ -9,6 +9,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.jetbrains.annotations.NotNull;
 
 public class WelcomeGift implements Listener, Module {
   public WelcomeGift() {
@@ -17,7 +18,7 @@ public class WelcomeGift implements Listener, Module {
   }
 
   @EventHandler
-  public void onJoin(PlayerJoinEvent event) {
+  public void onJoin(@NotNull PlayerJoinEvent event) {
     new BukkitRunnable() {
       @Override
       public void run() {

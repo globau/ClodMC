@@ -20,9 +20,10 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.LeavesDecayEvent;
+import org.jetbrains.annotations.NotNull;
 
 public class FastLeafDecay implements Listener, Module {
-  private final List<Block> scheduledBlocks = new ArrayList<>();
+  private final @NotNull List<Block> scheduledBlocks = new ArrayList<>();
 
   @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
   public void onBlockBreak(BlockBreakEvent event) {
@@ -71,7 +72,7 @@ public class FastLeafDecay implements Listener, Module {
     }
   }
 
-  private void decay(Block block) {
+  private void decay(@NotNull Block block) {
     // make sure we're decaying a loaded leaf block
     if (!this.scheduledBlocks.remove(block)
         || !block.getWorld().isChunkLoaded(block.getX() >> 4, block.getZ() >> 4)

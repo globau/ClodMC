@@ -5,12 +5,13 @@ import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class BlockPos {
-  final World world;
-  int x;
-  int y;
-  int z;
+  final @NotNull World world;
+  final int x;
+  final int y;
+  final int z;
 
   private BlockPos(@NotNull World world, int x, int y, int z) {
     this.world = world;
@@ -20,12 +21,12 @@ public class BlockPos {
   }
 
   @Override
-  public String toString() {
+  public @NotNull String toString() {
     return "BlockPos{" + this.x + ", " + this.y + ", " + this.z + '}';
   }
 
   @Override
-  public boolean equals(Object other) {
+  public boolean equals(@Nullable Object other) {
     if (this == other) {
       return true;
     }

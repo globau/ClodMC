@@ -11,12 +11,13 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.server.ServerLoadEvent;
+import org.jetbrains.annotations.NotNull;
 
 public class RequiredPlugins implements Listener, Module {
   private boolean preventLogin = true;
 
   @EventHandler
-  public void onServerLoaded(ServerLoadEvent event) {
+  public void onServerLoaded(@NotNull ServerLoadEvent event) {
     List<String> required =
         ClodMC.instance.getConfig().getStringList("required-plugins").stream().sorted().toList();
 
@@ -36,7 +37,7 @@ public class RequiredPlugins implements Listener, Module {
   }
 
   @EventHandler
-  public void onPlayerLogin(PlayerLoginEvent event) {
+  public void onPlayerLogin(@NotNull PlayerLoginEvent event) {
     if (!this.preventLogin || event.getPlayer().isOp()) {
       return;
     }
