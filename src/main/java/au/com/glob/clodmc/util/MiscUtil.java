@@ -41,4 +41,15 @@ public class MiscUtil {
     }
     return String.join(", ", items.subList(0, items.size() - 1)) + ", and " + items.getLast();
   }
+
+  public static @NotNull String toTitleCase(@NotNull String value) {
+    StringBuilder titleCase = new StringBuilder();
+    for (String word : value.split("\\s+")) {
+      titleCase
+          .append(Character.toUpperCase(word.charAt(0)))
+          .append(word.substring(1).toLowerCase())
+          .append(" ");
+    }
+    return titleCase.toString().trim();
+  }
 }

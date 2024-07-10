@@ -2,6 +2,7 @@ package au.com.glob.clodmc.modules.gateways;
 
 import au.com.glob.clodmc.ClodMC;
 import au.com.glob.clodmc.util.BlockPos;
+import au.com.glob.clodmc.util.MiscUtil;
 import com.destroystokyo.paper.ParticleBuilder;
 import java.util.Collection;
 import java.util.HashMap;
@@ -28,6 +29,7 @@ public class AnchorBlock implements ConfigurationSerializable {
   protected final int networkId;
   protected final @NotNull BlockPos blockPos;
   protected final @Nullable String name;
+  protected final @NotNull String displayName;
 
   protected final @NotNull Location topLocation;
   protected final @NotNull Location bottomLocation;
@@ -46,6 +48,16 @@ public class AnchorBlock implements ConfigurationSerializable {
     this.bottomLocation = location.clone().add(0.5, 1.5, 0.5);
     this.topColour = Config.idToTopColour(networkId);
     this.bottomColour = Config.idToBottomColour(networkId);
+
+    this.displayName =
+        this.prettyColourName(Config.idToTopName(this.networkId))
+            + " :: "
+            + this.prettyColourName(Config.idToBottomName(this.networkId))
+            + (this.name == null ? "" : " (" + this.name + ")");
+  }
+
+  private @NotNull String prettyColourName(@NotNull String name) {
+    return MiscUtil.toTitleCase(name.replace('_', ' '));
   }
 
   protected static boolean isAnchor(@NotNull ItemStack item) {

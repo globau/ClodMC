@@ -13,6 +13,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import net.kyori.adventure.title.Title;
 import org.bukkit.Bukkit;
@@ -304,7 +305,7 @@ public class Gateways implements Module, BlueMapModule, Listener {
   }
 
   @EventHandler
-  public void onPlayerMoveEvent(PlayerMoveEvent event) {
+  public void onPlayerMove(PlayerMoveEvent event) {
     Player player = event.getPlayer();
     Location playerLocation = player.getLocation();
     BlockPos playerPos = BlockPos.of(playerLocation);
@@ -320,7 +321,15 @@ public class Gateways implements Module, BlueMapModule, Listener {
     // check for anchorblock
     BlockPos standingOnPos = BlockPos.of(playerLocation, 0, -1, 0);
     AnchorBlock anchorBlock = this.instances.get(standingOnPos);
-    if (anchorBlock == null || anchorBlock.connectedTo == null) {
+    if (anchorBlock == null) {
+      return;
+    }
+
+    // if standing on a disconnected anchor, show the colour
+    if (anchorBlock.connectedTo == null) {
+      player.sendActionBar(
+          MiniMessage.miniMessage()
+              .deserialize("<yellow>" + anchorBlock.displayName + "</yellow> is not connected"));
       return;
     }
 
