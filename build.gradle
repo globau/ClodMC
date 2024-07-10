@@ -21,11 +21,26 @@ dependencies {
 group = 'au.com.glob'
 version = './src/build/version.py'.execute().text.trim()
 description = 'ClodMC'
-java.sourceCompatibility = JavaVersion.VERSION_21
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
+}
 
 tasks.withType(JavaCompile).configureEach {
     options.encoding = 'UTF-8'
     options.compilerArgs << '-Xlint:deprecation'
+}
+
+checkstyle {
+    toolVersion '10.14.0'
+    maxWarnings = 0
+}
+
+configurations.checkstyle {
+    resolutionStrategy.capabilitiesResolution.withCapability('com.google.collections:google-collections') {
+        select('com.google.guava:guava:23.0')
+    }
 }
 
 spotless {

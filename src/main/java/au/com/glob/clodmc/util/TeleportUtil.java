@@ -29,7 +29,7 @@ public class TeleportUtil {
         }
       }
     }
-    pos.sort(Comparator.comparingInt(a -> a.x * a.x + a.y * a.y + a.z * a.z));
+    pos.sort(Comparator.comparingInt((Vector3D a) -> a.x * a.x + a.y * a.y + a.z * a.z));
     SHIFT_VECTORS = pos.toArray(new Vector3D[0]);
   }
 

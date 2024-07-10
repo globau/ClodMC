@@ -37,7 +37,7 @@ public class WelcomeCommand extends SimpleCommand implements Module {
     return Bukkit.getOnlinePlayers().stream()
         .map(Player::getName)
         .map(String::toLowerCase)
-        .filter(name -> name.startsWith(arg))
+        .filter((String name) -> name.startsWith(arg))
         .toList();
   }
 }

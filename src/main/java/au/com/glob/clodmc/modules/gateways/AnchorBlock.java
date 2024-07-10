@@ -185,7 +185,7 @@ public class AnchorBlock implements ConfigurationSerializable {
         .getNearbyPlayers(this.bottomLocation, radius, radius, radius)
         .stream()
         .filter(
-            player -> {
+            (Player player) -> {
               Location playerLoc = player.getLocation();
               return !(playerLoc.getWorld().equals(this.bottomLocation.getWorld())
                   && playerLoc.getBlockX() == this.bottomLocation.getBlockX()

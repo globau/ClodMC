@@ -58,7 +58,7 @@ public class PlayerData implements Module, Listener {
     return ymlFiles == null
         ? List.of()
         : Arrays.stream(ymlFiles)
-            .map(file -> file.getName().substring(0, file.getName().indexOf(".")))
+            .map((File file) -> file.getName().substring(0, file.getName().indexOf(".")))
             .map(UUID::fromString)
             .toList();
   }
