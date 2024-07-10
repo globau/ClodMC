@@ -39,26 +39,25 @@ public class Homes implements Listener, Module {
   }
 
   protected void setHomes(@NotNull Player player, @NotNull Map<String, Location> homes) {
-    PlayerData.Config config = PlayerData.of(player);
-    ConfigurationSection section = config.getConfigurationSection("homes");
-    if (section != null) {
-      for (String name : section.getKeys(false)) {
-        if (!homes.containsKey(name)) {
-          section.set(name, null);
+    try (PlayerData.Update config = new PlayerData.Update(player)) {
+      ConfigurationSection section = config.getConfigurationSection("homes");
+      if (section != null) {
+        for (String name : section.getKeys(false)) {
+          if (!homes.containsKey(name)) {
+            section.set(name, null);
+          }
         }
       }
+      for (String name : homes.keySet()) {
+        config.set("homes." + name, homes.get(name));
+      }
     }
-    for (String name : homes.keySet()) {
-      config.set("homes." + name, homes.get(name));
-    }
-    config.save();
   }
 
   protected void setBackLocation(@NotNull Player player) {
-    PlayerLocation playerLocation = PlayerLocation.of(player);
-    PlayerData.Config config = PlayerData.of(player);
-    config.set("homes_internal.back", playerLocation);
-    config.save();
+    try (PlayerData.Update config = new PlayerData.Update(player)) {
+      config.set("homes_internal.back", PlayerLocation.of(player));
+    }
   }
 
   protected @Nullable PlayerLocation getBackLocation(@NotNull Player player) {

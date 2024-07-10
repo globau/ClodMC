@@ -39,43 +39,39 @@ public class OfflineMessages implements Module, Listener {
     // offline player check might make a web request to fetch uuid
     OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(recipient);
 
-    // get config
-    PlayerData.Config config = PlayerData.of(offlinePlayer.getUniqueId());
-    if (!config.exists) {
-      return false;
-    }
+    try (PlayerData.Update config = new PlayerData.Update(offlinePlayer.getUniqueId())) {
+      if (!config.exists()) {
+        return false;
+      }
 
-    List<Message> messages = this.loadMessages(config);
-    if (messages.size() >= 10) {
-      sender.sendRichMessage("<red>" + recipient + "'s mailbox is full");
-      return false;
+      List<Message> messages = this.loadMessages(config.getList("messages"));
+      if (messages.size() >= 10) {
+        sender.sendRichMessage("<red>" + recipient + "'s mailbox is full");
+        return false;
+      }
+      messages.add(new Message(System.currentTimeMillis() / 1000L, sender.getName(), message));
+
+      config.set("messages", messages);
     }
-    messages.add(new Message(System.currentTimeMillis() / 1000L, sender.getName(), message));
-    this.saveMessages(config, messages);
 
     sender.sendRichMessage("<yellow><i>message queued for delivery");
     return true;
   }
 
-  private List<Message> loadMessages(PlayerData.Config config) {
+  private List<Message> loadMessages(Player player) {
+    return this.loadMessages(PlayerData.of(player).getList("messages"));
+  }
+
+  private List<Message> loadMessages(List<?> configValue) {
     List<Message> messages = new ArrayList<>();
-    if (config == null) {
-      return messages;
-    }
-    List<?> rawList = config.getList("messages");
-    if (rawList != null) {
-      for (Object obj : rawList) {
+    if (configValue != null) {
+      for (Object obj : configValue) {
         if (obj instanceof Message message) {
           messages.add(message);
         }
       }
     }
     return messages;
-  }
-
-  private void saveMessages(PlayerData.Config config, List<Message> messages) {
-    config.set("messages", messages.isEmpty() ? null : messages);
-    config.save();
   }
 
   @EventHandler
@@ -100,11 +96,11 @@ public class OfflineMessages implements Module, Listener {
   @EventHandler
   public void onPlayerJoin(PlayerJoinEvent event) {
     Player player = event.getPlayer();
-    PlayerData.Config config = PlayerData.of(player.getUniqueId());
-    List<Message> messages = this.loadMessages(config);
+    List<Message> messages = this.loadMessages(player);
     if (messages.isEmpty()) {
       return;
     }
+
     Bukkit.getScheduler()
         .runTaskLater(
             ClodMC.instance,
@@ -112,8 +108,9 @@ public class OfflineMessages implements Module, Listener {
               for (Message message : messages) {
                 message.sendTo(player);
               }
-              messages.clear();
-              this.saveMessages(config, messages);
+              try (PlayerData.Update config = new PlayerData.Update(player)) {
+                config.set("messages", null);
+              }
             },
             20 * 3);
   }

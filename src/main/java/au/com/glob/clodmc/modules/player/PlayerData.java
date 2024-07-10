@@ -8,8 +8,10 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
@@ -18,6 +20,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class PlayerData implements Module, Listener {
   private static PlayerData instance;
@@ -82,12 +85,49 @@ public class PlayerData implements Module, Listener {
       return config;
     }
 
-    public void save() {
+    private void save() {
       try {
         this.save(this.file);
       } catch (IOException e) {
         ClodMC.logError(instance.playerConfigPath + ": save failed: " + e);
       }
+    }
+  }
+
+  public static class Update implements AutoCloseable {
+    private final Config config;
+    private boolean modified;
+
+    public Update(@NotNull Player player) {
+      this.config = PlayerData.of(player.getUniqueId());
+    }
+
+    public Update(@NotNull UUID uuid) {
+      this.config = PlayerData.of(uuid);
+    }
+
+    @Override
+    public void close() {
+      if (this.modified) {
+        this.config.save();
+      }
+    }
+
+    public boolean exists() {
+      return this.config.exists;
+    }
+
+    public void set(@NotNull String path, @Nullable Object value) {
+      this.config.set(path, value);
+      this.modified = true;
+    }
+
+    public @Nullable ConfigurationSection getConfigurationSection(@NotNull String path) {
+      return this.config.getConfigurationSection(path);
+    }
+
+    public List<?> getList(@NotNull String path) {
+      return this.config.getList(path);
     }
   }
 }
