@@ -25,19 +25,23 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class AnchorBlock implements ConfigurationSerializable {
+  protected final int networkId;
   protected final @NotNull BlockPos blockPos;
+  protected final @Nullable String name;
+
   protected final @NotNull Location topLocation;
   protected final @NotNull Location bottomLocation;
-  protected final int networkId;
   protected final @NotNull Color topColour;
   protected final @NotNull Color bottomColour;
 
   protected @Nullable AnchorBlock connectedTo = null;
   private @Nullable BukkitTask particleTask = null;
 
-  public AnchorBlock(int networkId, @NotNull Location location) {
+  public AnchorBlock(int networkId, @NotNull Location location, @Nullable String name) {
     this.networkId = networkId;
     this.blockPos = BlockPos.of(location);
+    this.name = name;
+
     this.topLocation = location.clone().add(0.5, 2.5, 0.5);
     this.bottomLocation = location.clone().add(0.5, 1.5, 0.5);
     this.topColour = Config.idToTopColour(networkId);
@@ -213,6 +217,9 @@ public class AnchorBlock implements ConfigurationSerializable {
     serialised.put("y", this.blockPos.getY());
     serialised.put("z", this.blockPos.getZ());
     serialised.put("id", this.networkId);
+    if (this.name != null) {
+      serialised.put("name", this.name);
+    }
     return serialised;
   }
 
@@ -229,6 +236,7 @@ public class AnchorBlock implements ConfigurationSerializable {
             world,
             NumberConversions.toInt(args.get("x")),
             NumberConversions.toInt(args.get("y")),
-            NumberConversions.toInt(args.get("z"))));
+            NumberConversions.toInt(args.get("z"))),
+        (String) args.get("name"));
   }
 }

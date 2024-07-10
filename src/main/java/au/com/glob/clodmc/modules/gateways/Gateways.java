@@ -1,16 +1,19 @@
 package au.com.glob.clodmc.modules.gateways;
 
 import au.com.glob.clodmc.ClodMC;
+import au.com.glob.clodmc.modules.BlueMapModule;
 import au.com.glob.clodmc.modules.Module;
 import au.com.glob.clodmc.util.BlockPos;
 import java.io.File;
 import java.io.IOException;
 import java.time.Duration;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import net.kyori.adventure.title.Title;
 import org.bukkit.Bukkit;
 import org.bukkit.Effect;
@@ -40,12 +43,14 @@ import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-public class Gateways implements Module, Listener {
+public class Gateways implements Module, BlueMapModule, Listener {
   private final @NotNull File configFile =
       new File(ClodMC.instance.getDataFolder(), "gateways.yml");
   private final @NotNull Map<BlockPos, AnchorBlock> instances = new HashMap<>();
   private final @NotNull Map<Player, BlockPos> ignore = new HashMap<>();
+  private @Nullable GatewaysBlueMap gatewaysBlueMap;
 
   public Gateways() {
     ConfigurationSerialization.registerClass(AnchorBlock.class);
@@ -105,9 +110,22 @@ public class Gateways implements Module, Listener {
     config.set("anchors", new ArrayList<>(this.instances.values()));
     try {
       config.save(this.configFile);
+
+      if (this.gatewaysBlueMap != null) {
+        this.gatewaysBlueMap.update(this);
+      }
     } catch (IOException e) {
       ClodMC.logError(this.configFile + ": save failed: " + e);
     }
+  }
+
+  @Override
+  public void onBlueMapEnable() {
+    this.gatewaysBlueMap = new GatewaysBlueMap(this);
+  }
+
+  public @NotNull Collection<AnchorBlock> getAnchorBlocks() {
+    return this.instances.values();
   }
 
   private @NotNull ItemStack createAnchorItem() {
@@ -120,10 +138,14 @@ public class Gateways implements Module, Listener {
     return item;
   }
 
-  private void setAnchorItemMeta(@NotNull ItemStack anchorItem, int networkId) {
+  private void setAnchorItemMeta(
+      @NotNull ItemStack anchorItem, int networkId, @Nullable String name) {
     String topColour = Config.idToTopName(networkId);
     String bottomColour = Config.idToBottomName(networkId);
     ItemMeta meta = anchorItem.getItemMeta();
+    if (name != null) {
+      meta.displayName(Component.text(name));
+    }
     meta.lore(List.of(Component.text(topColour), Component.text(bottomColour)));
     meta.getPersistentDataContainer().set(Config.networkKey, PersistentDataType.INTEGER, networkId);
     meta.getPersistentDataContainer().set(Config.topKey, PersistentDataType.STRING, topColour);
@@ -161,7 +183,7 @@ public class Gateways implements Module, Listener {
       }
     }
 
-    this.setAnchorItemMeta(item, Config.coloursToId(topColour, bottomColour));
+    this.setAnchorItemMeta(item, Config.coloursToId(topColour, bottomColour), null);
     item.setAmount(2);
     event.getInventory().setResult(item);
   }
@@ -215,8 +237,15 @@ public class Gateways implements Module, Listener {
       return;
     }
 
+    String name = null;
+    if (meta.hasDisplayName()) {
+      Component displayName = meta.displayName();
+      assert displayName != null;
+      name = PlainTextComponentSerializer.plainText().serialize(displayName);
+    }
+
     // connect anchor
-    AnchorBlock anchorBlock = new AnchorBlock(networkId, event.getBlock().getLocation());
+    AnchorBlock anchorBlock = new AnchorBlock(networkId, event.getBlock().getLocation(), name);
     anchorBlock.connectedTo = otherAnchorBlock;
     anchorBlock.updateVisuals();
 
@@ -267,7 +296,7 @@ public class Gateways implements Module, Listener {
     event.setDropItems(false);
 
     ItemStack anchorItem = this.createAnchorItem();
-    this.setAnchorItemMeta(anchorItem, anchorBlock.networkId);
+    this.setAnchorItemMeta(anchorItem, anchorBlock.networkId, anchorBlock.name);
     anchorBlock
         .blockPos
         .getWorld()
