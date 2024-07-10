@@ -7,10 +7,13 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import org.bukkit.Statistic;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -26,6 +29,8 @@ public class PlayerData implements Module, Listener {
   private static PlayerData instance;
   private final File playerConfigPath;
   private final Map<UUID, Config> onlinePlayers = new HashMap<>();
+  private final DateTimeFormatter dateFormatter =
+      DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
   public PlayerData() {
     instance = this;
@@ -47,14 +52,23 @@ public class PlayerData implements Module, Listener {
     return of(player.getUniqueId());
   }
 
+  public static @NotNull List<UUID> seenUUIDs() {
+    File[] ymlFiles =
+        instance.playerConfigPath.listFiles((File file) -> file.getName().endsWith(".yml"));
+    return ymlFiles == null
+        ? List.of()
+        : Arrays.stream(ymlFiles)
+            .map(file -> file.getName().substring(0, file.getName().indexOf(".")))
+            .map(UUID::fromString)
+            .toList();
+  }
+
   @EventHandler
   public void onPlayerJoin(@NotNull PlayerJoinEvent event) {
     Player player = event.getPlayer();
     Config config = Config.of(player.getUniqueId());
     config.set("player.name", player.getName());
-    config.set(
-        "player.last_login",
-        LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+    config.set("player.last_login", LocalDateTime.now().format(this.dateFormatter));
     config.save();
 
     this.onlinePlayers.put(player.getUniqueId(), config);
@@ -62,7 +76,16 @@ public class PlayerData implements Module, Listener {
 
   @EventHandler
   public void onPlayerQuit(@NotNull PlayerQuitEvent event) {
-    this.onlinePlayers.remove(event.getPlayer().getUniqueId());
+    Player player = event.getPlayer();
+
+    this.onlinePlayers.remove(player.getUniqueId());
+
+    try (Update config = new Update(player)) {
+      config.set("player.last_logout", LocalDateTime.now().format(this.dateFormatter));
+      config.set(
+          "player.playtime_min",
+          Math.round(player.getStatistic(Statistic.PLAY_ONE_MINUTE) / 20.0 / 60.0));
+    }
   }
 
   public static class Config extends YamlConfiguration {
@@ -90,6 +113,26 @@ public class PlayerData implements Module, Listener {
         this.save(this.file);
       } catch (IOException e) {
         ClodMC.logError(instance.playerConfigPath + ": save failed: " + e);
+      }
+    }
+
+    public @NotNull String getPlayerName() {
+      return this.getString("player.name", "");
+    }
+
+    public @Nullable LocalDateTime getLastLogin() {
+      return this.getDateTime("player.last_login");
+    }
+
+    public @Nullable LocalDateTime getLastLogout() {
+      return this.getDateTime("player.last_logout");
+    }
+
+    private @Nullable LocalDateTime getDateTime(@NotNull String path) {
+      try {
+        return LocalDateTime.parse(this.getString(path, ""), PlayerData.instance.dateFormatter);
+      } catch (DateTimeParseException e) {
+        return null;
       }
     }
   }

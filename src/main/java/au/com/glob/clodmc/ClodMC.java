@@ -22,6 +22,7 @@ import au.com.glob.clodmc.modules.player.InviteCommand;
 import au.com.glob.clodmc.modules.player.OfflineMessages;
 import au.com.glob.clodmc.modules.player.OpAlerts;
 import au.com.glob.clodmc.modules.player.PlayerData;
+import au.com.glob.clodmc.modules.player.SeenCommand;
 import au.com.glob.clodmc.modules.player.Sleep;
 import au.com.glob.clodmc.modules.server.CircularWorldBorder;
 import au.com.glob.clodmc.modules.server.ConfigureServer;
@@ -98,6 +99,7 @@ public final class ClodMC extends JavaPlugin implements Listener {
     this.register(new AFK());
     this.register(new InviteCommand());
     this.register(new OfflineMessages());
+    this.register(new SeenCommand());
     this.register(new Sleep());
 
     // server

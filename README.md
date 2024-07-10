@@ -48,6 +48,7 @@ same two colours in the same positions to establish a gateway.
 - shift+right-click to sort a container
 - the server announces the name of the player who skipped the night
 - indicates when players are afk, use `/afk` to toggle
+- a `/msg` sent to an offline player will be delivered the next time they log in
+- `/seen` to show when a player last logged out
 - leaves decay quickly
 - `/admininv` to toggle between player and admin inventories
-- a `/msg` sent to an offline player will be delivered the next time they log in
