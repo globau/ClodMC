@@ -1,5 +1,6 @@
 package au.com.glob.clodmc;
 
+import au.com.glob.clodmc.modules.BlueMapModule;
 import au.com.glob.clodmc.modules.Module;
 import au.com.glob.clodmc.modules.SimpleCommand;
 import au.com.glob.clodmc.modules.gateways.Gateways;
@@ -29,10 +30,13 @@ import au.com.glob.clodmc.modules.server.ConfigureServer;
 import au.com.glob.clodmc.modules.server.RequiredPlugins;
 import au.com.glob.clodmc.modules.welcome.WelcomeCommand;
 import au.com.glob.clodmc.modules.welcome.WelcomeGift;
+import au.com.glob.clodmc.util.BlueMap;
 import au.com.glob.clodmc.util.Config;
 import au.com.glob.clodmc.util.MaterialUtil;
 import au.com.glob.clodmc.util.PlayerLocation;
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
@@ -44,6 +48,8 @@ import org.jetbrains.annotations.NotNull;
 
 public final class ClodMC extends JavaPlugin implements Listener {
   public static ClodMC instance;
+
+  private final List<BlueMapModule> blueMapModules = new ArrayList<>();
 
   public ClodMC() {
     super();
@@ -110,6 +116,13 @@ public final class ClodMC extends JavaPlugin implements Listener {
     // welcome
     this.register(new WelcomeGift());
     this.register(new WelcomeCommand());
+
+    // bluemap
+    if (Bukkit.getPluginManager().isPluginEnabled("BlueMap")) {
+      BlueMap.onEnable(this.blueMapModules);
+    } else {
+      ClodMC.logWarning("Cannot load BlueMap integration: BlueMap is not enabled");
+    }
   }
 
   @EventHandler
@@ -135,6 +148,10 @@ public final class ClodMC extends JavaPlugin implements Listener {
 
     if (module instanceof SimpleCommand command) {
       this.getServer().getCommandMap().register("clod-mc", command);
+    }
+
+    if (module instanceof BlueMapModule blueMapModule) {
+      this.blueMapModules.add(blueMapModule);
     }
   }
 

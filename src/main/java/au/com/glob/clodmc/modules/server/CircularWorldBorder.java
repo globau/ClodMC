@@ -3,6 +3,7 @@ package au.com.glob.clodmc.modules.server;
 // inspired by https://github.com/pop4959/ChunkyBorder/
 
 import au.com.glob.clodmc.ClodMC;
+import au.com.glob.clodmc.modules.BlueMapModule;
 import au.com.glob.clodmc.modules.Module;
 import au.com.glob.clodmc.util.Config;
 import io.papermc.paper.entity.TeleportFlag;
@@ -27,11 +28,10 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
-import org.bukkit.event.server.ServerLoadEvent;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 
-public class CircularWorldBorder implements Module, Listener {
+public class CircularWorldBorder implements Module, BlueMapModule, Listener {
   private static final int maxParticleDistance = 8;
   private static final int maxParticleDistanceSquared = maxParticleDistance * maxParticleDistance;
   private static final org.bukkit.Color visualizerColour = org.bukkit.Color.fromRGB(0x20A0FF);
@@ -138,16 +138,13 @@ public class CircularWorldBorder implements Module, Listener {
             1L);
   }
 
-  @EventHandler
-  public void onServerLoaded(ServerLoadEvent event) {
-    if (!Bukkit.getPluginManager().isPluginEnabled("BlueMap")) {
-      ClodMC.logWarning(
-          this.getClass().getSimpleName()
-              + " cannot load BlueMap integration: BlueMap is not enabled");
-      return;
-    }
+  @Override
+  public void onBlueMapEnable() {
+    new CircularWorldBorderBlueMap(this);
+  }
 
-    CircularWorldBorderBlueMap.register(this.borders);
+  protected @NotNull Map<World, Border> getBorders() {
+    return this.borders;
   }
 
   // events
