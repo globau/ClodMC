@@ -132,7 +132,7 @@ public class Gateways implements Module, BlueMapModule, Listener {
   private @NotNull ItemStack createAnchorItem() {
     ItemStack item = new ItemStack(Material.RESPAWN_ANCHOR);
     ItemMeta meta = item.getItemMeta();
-    meta.displayName(Component.text("Gateway Anchor"));
+    meta.displayName(Component.text(Config.DEFAULT_ANCHOR_NAME));
     meta.setEnchantmentGlintOverride(true);
     meta.getPersistentDataContainer().set(Config.recipeKey, PersistentDataType.BOOLEAN, true);
     item.setItemMeta(meta);
@@ -190,7 +190,7 @@ public class Gateways implements Module, BlueMapModule, Listener {
   }
 
   @EventHandler
-  public void onBlockPlaced(BlockPlaceEvent event) {
+  public void onBlockPlace(BlockPlaceEvent event) {
     // prevent placing blocks in the 2 blocks above an anchorBlock
     BlockPos below1Pos = BlockPos.of(event.getBlock().getLocation()).down();
     BlockPos below2Pos = below1Pos.down();
@@ -242,7 +242,10 @@ public class Gateways implements Module, BlueMapModule, Listener {
     if (meta.hasDisplayName()) {
       Component displayName = meta.displayName();
       assert displayName != null;
-      name = PlainTextComponentSerializer.plainText().serialize(displayName);
+      String plainTextName = PlainTextComponentSerializer.plainText().serialize(displayName);
+      if (!plainTextName.equals(Config.DEFAULT_ANCHOR_NAME)) {
+        name = plainTextName;
+      }
     }
 
     // connect anchor
@@ -297,7 +300,10 @@ public class Gateways implements Module, BlueMapModule, Listener {
     event.setDropItems(false);
 
     ItemStack anchorItem = this.createAnchorItem();
-    this.setAnchorItemMeta(anchorItem, anchorBlock.networkId, anchorBlock.name);
+    this.setAnchorItemMeta(
+        anchorItem,
+        anchorBlock.networkId,
+        anchorBlock.name == null ? Config.DEFAULT_ANCHOR_NAME : anchorBlock.name);
     anchorBlock
         .blockPos
         .getWorld()

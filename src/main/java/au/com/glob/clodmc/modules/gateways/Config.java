@@ -9,6 +9,9 @@ import org.jetbrains.annotations.NotNull;
 
 public class Config {
   protected static final @NotNull NamespacedKey recipeKey = new NamespacedKey("clod-mc", "anchor");
+
+  protected static final @NotNull String DEFAULT_ANCHOR_NAME = "Gateway Anchor";
+
   protected static final @NotNull NamespacedKey networkKey =
       new NamespacedKey("clod-mc", "network");
   protected static final @NotNull NamespacedKey topKey =
