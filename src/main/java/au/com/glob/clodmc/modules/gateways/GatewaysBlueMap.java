@@ -1,11 +1,18 @@
 package au.com.glob.clodmc.modules.gateways;
 
+import au.com.glob.clodmc.ClodMC;
 import au.com.glob.clodmc.util.BlueMap;
+import com.flowpowered.math.vector.Vector2i;
 import com.flowpowered.math.vector.Vector3d;
 import de.bluecolored.bluemap.api.BlueMapMap;
 import de.bluecolored.bluemap.api.BlueMapWorld;
 import de.bluecolored.bluemap.api.markers.MarkerSet;
 import de.bluecolored.bluemap.api.markers.POIMarker;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -15,11 +22,31 @@ import org.bukkit.World;
 import org.jetbrains.annotations.NotNull;
 
 public class GatewaysBlueMap {
+  private static final @NotNull String MARKER_FILENAME = "gateway.svg";
+
   private final @NotNull Map<World, MarkerSet> markerSets = new HashMap<>(3);
 
   public GatewaysBlueMap(@NotNull Gateways gateways) {
+    assert BlueMap.api != null;
+
+    // create svg
+    Path gatewayFilePath =
+        BlueMap.api.getWebApp().getWebRoot().resolve("assets").resolve(MARKER_FILENAME);
+    try {
+      Files.createDirectories(gatewayFilePath.getParent());
+      try (OutputStream out = Files.newOutputStream(gatewayFilePath)) {
+        InputStream svgStream = ClodMC.instance.getResource(MARKER_FILENAME);
+        assert svgStream != null;
+        svgStream.transferTo(out);
+      }
+    } catch (IOException e) {
+      ClodMC.logError("failed to create " + gatewayFilePath + ": " + e);
+    }
+
+    // create markers
     for (World world : Bukkit.getWorlds()) {
-      this.markerSets.put(world, MarkerSet.builder().label("Gateways").defaultHidden(true).build());
+      this.markerSets.put(
+          world, MarkerSet.builder().label("Gateways").defaultHidden(false).build());
     }
     this.update(gateways);
   }
@@ -63,7 +90,7 @@ public class GatewaysBlueMap {
                           anchorBlock.blockPos.getX() + 0.5,
                           anchorBlock.blockPos.getY() + 0.5,
                           anchorBlock.blockPos.getZ() + 0.5))
-                  .styleClasses("gw-anchor-block")
+                  .icon("assets/" + MARKER_FILENAME, new Vector2i(25, 45))
                   .build());
     }
 
