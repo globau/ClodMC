@@ -8,15 +8,15 @@ import org.bukkit.NamespacedKey;
 import org.jetbrains.annotations.NotNull;
 
 public class Config {
-  protected static final @NotNull NamespacedKey recipeKey = new NamespacedKey("clod-mc", "anchor");
+  protected static final @NotNull NamespacedKey RECIPE_KEY = new NamespacedKey("clod-mc", "anchor");
 
   protected static final @NotNull String DEFAULT_ANCHOR_NAME = "Gateway Anchor";
 
-  protected static final @NotNull NamespacedKey networkKey =
+  protected static final @NotNull NamespacedKey NETWORK_KEY =
       new NamespacedKey("clod-mc", "network");
-  protected static final @NotNull NamespacedKey topKey =
+  protected static final @NotNull NamespacedKey TOP_KEY =
       new NamespacedKey("clod-mc", "network-top");
-  protected static final @NotNull NamespacedKey bottomKey =
+  protected static final @NotNull NamespacedKey BOTTOM_KEY =
       new NamespacedKey("clod-mc", "network-bottom");
 
   protected static final String @NotNull [] SHAPE = new String[] {"PWP", "EWE", "ERE"};

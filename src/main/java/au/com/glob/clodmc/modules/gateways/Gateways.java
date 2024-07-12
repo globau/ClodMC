@@ -57,7 +57,7 @@ public class Gateways implements Module, BlueMapModule, Listener {
     ConfigurationSerialization.registerClass(AnchorBlock.class);
 
     // add recipe
-    ShapedRecipe recipe = new ShapedRecipe(Config.recipeKey, this.createAnchorItem());
+    ShapedRecipe recipe = new ShapedRecipe(Config.RECIPE_KEY, this.createAnchorItem());
     recipe.shape(Config.SHAPE);
     for (Map.Entry<Character, Material> entry : Config.SHAPE_MATERIALS.entrySet()) {
       Material material = entry.getValue();
@@ -134,7 +134,7 @@ public class Gateways implements Module, BlueMapModule, Listener {
     ItemMeta meta = item.getItemMeta();
     meta.displayName(Component.text(Config.DEFAULT_ANCHOR_NAME));
     meta.setEnchantmentGlintOverride(true);
-    meta.getPersistentDataContainer().set(Config.recipeKey, PersistentDataType.BOOLEAN, true);
+    meta.getPersistentDataContainer().set(Config.RECIPE_KEY, PersistentDataType.BOOLEAN, true);
     item.setItemMeta(meta);
     return item;
   }
@@ -148,16 +148,17 @@ public class Gateways implements Module, BlueMapModule, Listener {
       meta.displayName(Component.text(name));
     }
     meta.lore(List.of(Component.text(topColour), Component.text(bottomColour)));
-    meta.getPersistentDataContainer().set(Config.networkKey, PersistentDataType.INTEGER, networkId);
-    meta.getPersistentDataContainer().set(Config.topKey, PersistentDataType.STRING, topColour);
     meta.getPersistentDataContainer()
-        .set(Config.bottomKey, PersistentDataType.STRING, bottomColour);
+        .set(Config.NETWORK_KEY, PersistentDataType.INTEGER, networkId);
+    meta.getPersistentDataContainer().set(Config.TOP_KEY, PersistentDataType.STRING, topColour);
+    meta.getPersistentDataContainer()
+        .set(Config.BOTTOM_KEY, PersistentDataType.STRING, bottomColour);
     anchorItem.setItemMeta(meta);
   }
 
   @EventHandler
   public void onPlayerJoin(PlayerJoinEvent event) {
-    event.getPlayer().discoverRecipe(Config.recipeKey);
+    event.getPlayer().discoverRecipe(Config.RECIPE_KEY);
   }
 
   @EventHandler
@@ -201,7 +202,7 @@ public class Gateways implements Module, BlueMapModule, Listener {
 
     // check if item being placed is an anchor block
     ItemMeta meta = event.getItemInHand().getItemMeta();
-    if (meta == null || !meta.getPersistentDataContainer().has(Config.recipeKey)) {
+    if (meta == null || !meta.getPersistentDataContainer().has(Config.RECIPE_KEY)) {
       return;
     }
 
@@ -216,7 +217,7 @@ public class Gateways implements Module, BlueMapModule, Listener {
 
     // extract network id
     Integer networkIdBoxed =
-        meta.getPersistentDataContainer().get(Config.networkKey, PersistentDataType.INTEGER);
+        meta.getPersistentDataContainer().get(Config.NETWORK_KEY, PersistentDataType.INTEGER);
     if (networkIdBoxed == null) {
       return;
     }

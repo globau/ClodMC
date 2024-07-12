@@ -62,7 +62,7 @@ public class AnchorBlock implements ConfigurationSerializable {
 
   protected static boolean isAnchor(@NotNull ItemStack item) {
     ItemMeta meta = item.getItemMeta();
-    return meta != null && meta.getPersistentDataContainer().has(Config.recipeKey);
+    return meta != null && meta.getPersistentDataContainer().has(Config.RECIPE_KEY);
   }
 
   @Override

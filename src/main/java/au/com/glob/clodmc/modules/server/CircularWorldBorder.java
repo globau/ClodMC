@@ -32,9 +32,10 @@ import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 
 public class CircularWorldBorder implements Module, BlueMapModule, Listener {
-  private static final int maxParticleDistance = 8;
-  private static final int maxParticleDistanceSquared = maxParticleDistance * maxParticleDistance;
-  private static final org.bukkit.@NotNull Color visualizerColour =
+  private static final int MAX_PARTICLE_DISTANCE = 8;
+  private static final int MAX_PARTICLE_DISTANCE_SQUARED =
+      MAX_PARTICLE_DISTANCE * MAX_PARTICLE_DISTANCE;
+  private static final org.bukkit.@NotNull Color VISUALIZER_COLOUR =
       org.bukkit.Color.fromRGB(0x20A0FF);
 
   private final @NotNull Map<World, Border> borders = new HashMap<>();
@@ -102,7 +103,7 @@ public class CircularWorldBorder implements Module, BlueMapModule, Listener {
   }
 
   private void startVisualisationTask() {
-    Particle.DustOptions visualizerOptions = new Particle.DustOptions(visualizerColour, 1);
+    Particle.DustOptions visualizerOptions = new Particle.DustOptions(VISUALIZER_COLOUR, 1);
     AtomicLong tick = new AtomicLong();
     Bukkit.getServer()
         .getScheduler()
@@ -282,7 +283,7 @@ public class CircularWorldBorder implements Module, BlueMapModule, Listener {
     }
 
     Vector start = new Vector(offsetX, y - offsetPercent, offsetZ);
-    if (playerPos.distanceSquared(start) > maxParticleDistanceSquared) {
+    if (playerPos.distanceSquared(start) > MAX_PARTICLE_DISTANCE_SQUARED) {
       return points;
     }
     points.add(start);
@@ -292,8 +293,9 @@ public class CircularWorldBorder implements Module, BlueMapModule, Listener {
       double down = y - dy;
       Vector upPos = new Vector(offsetX, up - offsetPercent, offsetZ);
       Vector downPos = new Vector(offsetX, down - offsetPercent, offsetZ);
-      boolean upInsideDistance = playerPos.distanceSquared(upPos) <= maxParticleDistanceSquared;
-      boolean downInsideDistance = playerPos.distanceSquared(downPos) <= maxParticleDistanceSquared;
+      boolean upInsideDistance = playerPos.distanceSquared(upPos) <= MAX_PARTICLE_DISTANCE_SQUARED;
+      boolean downInsideDistance =
+          playerPos.distanceSquared(downPos) <= MAX_PARTICLE_DISTANCE_SQUARED;
       if (!upInsideDistance && !downInsideDistance) {
         break;
       }
