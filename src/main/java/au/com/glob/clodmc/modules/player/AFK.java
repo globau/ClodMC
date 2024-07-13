@@ -29,10 +29,14 @@ import org.jetbrains.annotations.Nullable;
 
 public class AFK extends SimpleCommand implements Listener, Module {
   private final @NotNull HashMap<UUID, PlayerState> playerStates = new HashMap<>();
-  private final int idleTime;
+  private int idleTime = 300;
 
   public AFK() {
     super("afk", "toggle afk status");
+  }
+
+  @Override
+  public void loadConfig() {
     this.idleTime = ClodMC.instance.getConfig().getInt("afk.idle-time", 300);
 
     // check for away players every second

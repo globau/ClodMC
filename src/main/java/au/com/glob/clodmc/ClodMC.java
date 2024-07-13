@@ -1,5 +1,6 @@
 package au.com.glob.clodmc;
 
+import au.com.glob.clodmc.config.Config;
 import au.com.glob.clodmc.modules.BlueMapModule;
 import au.com.glob.clodmc.modules.Module;
 import au.com.glob.clodmc.modules.SimpleCommand;
@@ -22,7 +23,7 @@ import au.com.glob.clodmc.modules.player.AFK;
 import au.com.glob.clodmc.modules.player.InviteCommand;
 import au.com.glob.clodmc.modules.player.OfflineMessages;
 import au.com.glob.clodmc.modules.player.OpAlerts;
-import au.com.glob.clodmc.modules.player.PlayerData;
+import au.com.glob.clodmc.modules.player.PlayerTracker;
 import au.com.glob.clodmc.modules.player.SeenCommand;
 import au.com.glob.clodmc.modules.player.Sleep;
 import au.com.glob.clodmc.modules.server.CircularWorldBorder;
@@ -32,15 +33,12 @@ import au.com.glob.clodmc.modules.server.SpawnMarker;
 import au.com.glob.clodmc.modules.welcome.WelcomeCommand;
 import au.com.glob.clodmc.modules.welcome.WelcomeGift;
 import au.com.glob.clodmc.util.BlueMap;
-import au.com.glob.clodmc.util.Config;
 import au.com.glob.clodmc.util.MaterialUtil;
-import au.com.glob.clodmc.util.PlayerLocation;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import org.bukkit.Bukkit;
-import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.server.ServerLoadEvent;
@@ -51,13 +49,12 @@ public final class ClodMC extends JavaPlugin implements Listener {
   @SuppressWarnings("NotNullFieldNotInitialized")
   public static @NotNull ClodMC instance;
 
-  private final @NotNull List<BlueMapModule> blueMapModules = new ArrayList<>();
+  private final @NotNull List<Module> modules = new ArrayList<>();
+  private boolean shuttingDown;
 
   public ClodMC() {
     super();
     instance = this;
-
-    ConfigurationSerialization.registerClass(PlayerLocation.class);
   }
 
   @Override
@@ -70,13 +67,11 @@ public final class ClodMC extends JavaPlugin implements Listener {
 
   @Override
   public void onEnable() {
-    Config.init("config.yml");
     MaterialUtil.init();
     Bukkit.getPluginManager().registerEvents(this, this);
 
     // core - used by other modules
     this.register(new OpAlerts());
-    this.register(new PlayerData());
 
     // gateways
     this.register(new Gateways());
@@ -107,6 +102,7 @@ public final class ClodMC extends JavaPlugin implements Listener {
     this.register(new AFK());
     this.register(new InviteCommand());
     this.register(new OfflineMessages());
+    this.register(new PlayerTracker());
     this.register(new SeenCommand());
     this.register(new Sleep());
 
@@ -120,9 +116,29 @@ public final class ClodMC extends JavaPlugin implements Listener {
     this.register(new WelcomeGift());
     this.register(new WelcomeCommand());
 
+    // load configs after sanity checking
+    try {
+      Config.sanityCheckConfigs();
+    } catch (RuntimeException e) {
+      // turns out this doesn't set Bukkit.isStopping, and bukkit will complete
+      // the startup process before immediately shutting down; this might cause
+      // the wrong error to be shown in addition to the sanity check failures.
+      Bukkit.shutdown();
+      this.shuttingDown = true;
+      return;
+    }
+    Config.preload("config.yml");
+    for (Module module : this.modules) {
+      module.loadConfig();
+    }
+
     // bluemap
     if (Bukkit.getPluginManager().isPluginEnabled("BlueMap")) {
-      BlueMap.onEnable(this.blueMapModules);
+      BlueMap.onEnable(
+          this.modules.stream()
+              .filter((Module module) -> module instanceof BlueMapModule)
+              .map((Module module) -> (BlueMapModule) module)
+              .toList());
     } else {
       ClodMC.logWarning("Cannot load BlueMap integration: BlueMap is not enabled");
     }
@@ -130,7 +146,10 @@ public final class ClodMC extends JavaPlugin implements Listener {
 
   @EventHandler
   public void onServerLoad(@NotNull ServerLoadEvent event) {
-    ClodMC.logInfo("clod-mc started");
+    // sadly can't use Bukkit.isStopping()
+    if (!this.shuttingDown) {
+      ClodMC.logInfo("clod-mc started");
+    }
   }
 
   private void register(@NotNull Module module) {
@@ -145,16 +164,14 @@ public final class ClodMC extends JavaPlugin implements Listener {
       return;
     }
 
+    this.modules.add(module);
+
     if (module instanceof Listener listener) {
       Bukkit.getServer().getPluginManager().registerEvents(listener, this);
     }
 
     if (module instanceof SimpleCommand command) {
       this.getServer().getCommandMap().register("clod-mc", command);
-    }
-
-    if (module instanceof BlueMapModule blueMapModule) {
-      this.blueMapModules.add(blueMapModule);
     }
   }
 
@@ -165,7 +182,7 @@ public final class ClodMC extends JavaPlugin implements Listener {
 
   @Override
   public @NotNull Config getConfig() {
-    return Config.getInstance("config.yml");
+    return Config.of("config.yml");
   }
 
   public static void logInfo(@NotNull String message) {

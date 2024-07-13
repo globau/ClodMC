@@ -1,6 +1,7 @@
 package au.com.glob.clodmc.util;
 
 import au.com.glob.clodmc.ClodMC;
+import au.com.glob.clodmc.config.Config;
 import java.io.BufferedReader;
 import java.io.Closeable;
 import java.io.DataOutputStream;

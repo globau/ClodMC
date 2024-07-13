@@ -71,11 +71,10 @@ public class Gateways implements Module, BlueMapModule, Listener {
       }
     }
     Bukkit.addRecipe(recipe);
-
-    this.load();
   }
 
-  private void load() {
+  @Override
+  public void loadConfig() {
     this.instances.clear();
     this.ignore.clear();
 

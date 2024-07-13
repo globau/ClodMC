@@ -39,7 +39,10 @@ public class InventorySort implements Listener, Module {
 
   public InventorySort() {
     super();
+  }
 
+  @Override
+  public void loadConfig() {
     List<String> alerts = new ArrayList<>(0);
     List<String> allMaterials = Arrays.stream(Material.values()).map(Enum::name).toList();
 

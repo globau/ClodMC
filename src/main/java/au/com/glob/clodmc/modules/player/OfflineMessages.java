@@ -1,6 +1,8 @@
 package au.com.glob.clodmc.modules.player;
 
 import au.com.glob.clodmc.ClodMC;
+import au.com.glob.clodmc.config.PlayerConfig;
+import au.com.glob.clodmc.config.PlayerConfigUpdater;
 import au.com.glob.clodmc.modules.Module;
 import au.com.glob.clodmc.util.MiscUtil;
 import java.util.ArrayList;
@@ -13,6 +15,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
+import org.bukkit.configuration.serialization.SerializableAs;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -23,6 +26,7 @@ import org.bukkit.util.NumberConversions;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+@SerializableAs("ClodMC.Message")
 public class OfflineMessages implements Module, Listener {
   @NotNull final Pattern msgPattern = Pattern.compile("^/?msg\\s+(\\S+)\\s+(.+)$");
 
@@ -41,8 +45,8 @@ public class OfflineMessages implements Module, Listener {
     // offline player check might make a web request to fetch uuid
     OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(recipient);
 
-    try (PlayerData.Update config = new PlayerData.Update(offlinePlayer.getUniqueId())) {
-      if (!config.exists()) {
+    try (PlayerConfigUpdater config = PlayerConfigUpdater.of(offlinePlayer.getUniqueId())) {
+      if (!config.fileExists()) {
         return false;
       }
 
@@ -61,7 +65,7 @@ public class OfflineMessages implements Module, Listener {
   }
 
   private List<Message> loadMessages(@NotNull Player player) {
-    return this.loadMessages(PlayerData.of(player).getList("messages"));
+    return this.loadMessages(PlayerConfig.of(player).getList("messages"));
   }
 
   private List<Message> loadMessages(@Nullable List<?> configValue) {
@@ -110,8 +114,8 @@ public class OfflineMessages implements Module, Listener {
               for (Message message : messages) {
                 message.sendTo(player);
               }
-              try (PlayerData.Update config = new PlayerData.Update(player)) {
-                config.set("messages", null);
+              try (PlayerConfigUpdater config = PlayerConfigUpdater.of(player)) {
+                config.remove("messages");
               }
             },
             20 * 3);

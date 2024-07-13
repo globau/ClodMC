@@ -1,30 +1,22 @@
 package au.com.glob.clodmc.modules.welcome;
 
 import au.com.glob.clodmc.ClodMC;
-import au.com.glob.clodmc.util.Config;
+import au.com.glob.clodmc.config.Config;
 import java.util.List;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BookMeta;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class WelcomeBook {
-  private static @Nullable ItemStack welcomeBookItemStack;
-  private static long configLastModified = -1;
+  private static final @NotNull String FILENAME = "welcome-book.yml";
 
   public static @Nullable ItemStack build() {
     // build an ItemStack book from welcome-book.yml
-
-    Config config = Config.getInstance("welcome-book.yml");
-
-    long mtime = config.lastModified();
-    if (mtime == configLastModified) {
-      return welcomeBookItemStack;
-    }
-    welcomeBookItemStack = null;
-    configLastModified = mtime;
+    Config config = Config.of(FILENAME);
 
     MiniMessage miniMessage = MiniMessage.miniMessage();
     ItemStack bookItem = new ItemStack(Material.WRITTEN_BOOK);
@@ -44,8 +36,8 @@ public class WelcomeBook {
         .author(Component.text(config.getString("author", "")));
 
     bookItem.setItemMeta(builder.build());
-    welcomeBookItemStack = bookItem;
 
-    return welcomeBookItemStack;
+    Config.unload(FILENAME);
+    return bookItem;
   }
 }

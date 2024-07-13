@@ -6,4 +6,6 @@ public interface Module {
   default @Nullable String dependsOn() {
     return null;
   }
+
+  default void loadConfig() {}
 }

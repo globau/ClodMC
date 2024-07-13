@@ -1,5 +1,6 @@
 package au.com.glob.clodmc.modules.player;
 
+import au.com.glob.clodmc.config.PlayerConfig;
 import au.com.glob.clodmc.modules.Module;
 import au.com.glob.clodmc.modules.SimpleCommand;
 import au.com.glob.clodmc.util.MiscUtil;
@@ -14,6 +15,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.jetbrains.annotations.NotNull;
 
@@ -22,17 +24,21 @@ public class SeenCommand extends SimpleCommand implements Module, Listener {
 
   public SeenCommand() {
     super("seen", "/seen <player>", "Show time since player's last login");
-    this.updateValidNames();
   }
 
   private void updateValidNames() {
     this.validNames.clear();
-    for (UUID uuid : PlayerData.seenUUIDs()) {
-      PlayerData.Config config = PlayerData.of(uuid);
+    for (UUID uuid : PlayerConfig.knownUUIDs()) {
+      PlayerConfig config = PlayerConfig.of(uuid);
       if (config.getInt("player.playtime_min", 0) > 10) {
         this.validNames.put(config.getPlayerName(), uuid);
       }
     }
+  }
+
+  @EventHandler
+  public void onPlayerJoin(@NotNull PlayerJoinEvent event) {
+    this.updateValidNames();
   }
 
   @EventHandler
@@ -55,14 +61,14 @@ public class SeenCommand extends SimpleCommand implements Module, Listener {
       return;
     }
 
-    PlayerData.Config config =
+    PlayerConfig config =
         this.validNames.entrySet().stream()
             .filter((Map.Entry<String, UUID> entry) -> entry.getKey().equalsIgnoreCase(playerName))
-            .map((Map.Entry<String, UUID> entry) -> PlayerData.of(entry.getValue()))
+            .map((Map.Entry<String, UUID> entry) -> PlayerConfig.of(entry.getValue()))
             .findFirst()
             .orElse(null);
 
-    if (config == null || !config.exists) {
+    if (config == null || !config.fileExists()) {
       sender.sendRichMessage("<yellow>" + playerName + " doesn't play on this server");
       return;
     }

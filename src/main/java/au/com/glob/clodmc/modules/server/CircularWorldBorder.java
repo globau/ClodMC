@@ -3,9 +3,9 @@ package au.com.glob.clodmc.modules.server;
 // inspired by https://github.com/pop4959/ChunkyBorder/
 
 import au.com.glob.clodmc.ClodMC;
+import au.com.glob.clodmc.config.Config;
 import au.com.glob.clodmc.modules.BlueMapModule;
 import au.com.glob.clodmc.modules.Module;
-import au.com.glob.clodmc.util.Config;
 import io.papermc.paper.entity.TeleportFlag;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -41,7 +41,8 @@ public class CircularWorldBorder implements Module, BlueMapModule, Listener {
   private final @NotNull Map<World, Border> borders = new HashMap<>();
   private final @NotNull Map<UUID, Location> lastPlayerLoc = new HashMap<>();
 
-  public CircularWorldBorder() {
+  @Override
+  public void loadConfig() {
     Config config = ClodMC.instance.getConfig();
 
     for (World world : Bukkit.getWorlds()) {

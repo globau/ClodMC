@@ -1,7 +1,8 @@
 package au.com.glob.clodmc.modules.homes;
 
+import au.com.glob.clodmc.config.PlayerConfig;
+import au.com.glob.clodmc.config.PlayerConfigUpdater;
 import au.com.glob.clodmc.modules.Module;
-import au.com.glob.clodmc.modules.player.PlayerData;
 import au.com.glob.clodmc.util.PlayerLocation;
 import java.util.HashMap;
 import java.util.Map;
@@ -18,12 +19,12 @@ public class Homes implements Listener, Module {
   protected static @NotNull Homes instance;
 
   public Homes() {
-    super();
     instance = this;
   }
 
   protected @NotNull Map<String, Location> getHomes(@NotNull Player player) {
-    PlayerData.Config config = PlayerData.of(player);
+    PlayerConfig config = PlayerConfig.of(player);
+
     ConfigurationSection section = config.getConfigurationSection("homes");
     if (section == null) {
       return new HashMap<>(0);
@@ -40,7 +41,7 @@ public class Homes implements Listener, Module {
   }
 
   protected void setHomes(@NotNull Player player, @NotNull Map<String, Location> homes) {
-    try (PlayerData.Update config = new PlayerData.Update(player)) {
+    try (PlayerConfigUpdater config = PlayerConfigUpdater.of(player)) {
       ConfigurationSection section = config.getConfigurationSection("homes");
       if (section != null) {
         for (String name : section.getKeys(false)) {
@@ -56,13 +57,13 @@ public class Homes implements Listener, Module {
   }
 
   protected void setBackLocation(@NotNull Player player) {
-    try (PlayerData.Update config = new PlayerData.Update(player)) {
+    try (PlayerConfigUpdater config = PlayerConfigUpdater.of(player)) {
       config.set("homes_internal.back", PlayerLocation.of(player));
     }
   }
 
   protected @Nullable PlayerLocation getBackLocation(@NotNull Player player) {
-    PlayerData.Config config = PlayerData.of(player);
+    PlayerConfig config = PlayerConfig.of(player);
     return (PlayerLocation) config.get("homes_internal.back");
   }
 }

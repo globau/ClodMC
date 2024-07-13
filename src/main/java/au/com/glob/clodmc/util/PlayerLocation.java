@@ -10,7 +10,7 @@ import org.bukkit.entity.Horse;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-@SerializableAs("Location")
+@SerializableAs("ClodMC.Location")
 public class PlayerLocation implements ConfigurationSerializable {
   private final @NotNull Location location;
   private final boolean isFlying;
@@ -54,12 +54,15 @@ public class PlayerLocation implements ConfigurationSerializable {
   @Override
   public @NotNull Map<String, Object> serialize() {
     Map<String, Object> serialised = this.location.serialize();
-    serialised.put("isFlying", this.isFlying);
+    if (this.isFlying) {
+      serialised.put("isFlying", true);
+    }
     return serialised;
   }
 
   @SuppressWarnings("unused")
   public static @NotNull PlayerLocation deserialize(@NotNull Map<String, Object> args) {
-    return new PlayerLocation(Location.deserialize(args), (Boolean) args.get("isFlying"));
+    return new PlayerLocation(
+        Location.deserialize(args), (Boolean) args.getOrDefault("isFlying", false));
   }
 }
