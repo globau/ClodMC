@@ -6,7 +6,6 @@ import au.com.glob.clodmc.modules.SimpleCommand;
 import au.com.glob.clodmc.util.PlayerLocation;
 import java.util.List;
 import java.util.Map;
-import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -21,7 +20,7 @@ public class HomeCommand extends SimpleCommand implements Module {
     Player player = this.toPlayer(sender);
     String name = this.popArg(args, "home");
 
-    Map<String, Location> homes = Homes.instance.getHomes(player);
+    Map<String, PlayerLocation> homes = Homes.instance.getHomes(player);
     if (homes.isEmpty() || !homes.containsKey(name)) {
       throw new CommandError(name.equals("home") ? "No home set" : "No such home '" + name + "'");
     }
@@ -32,7 +31,7 @@ public class HomeCommand extends SimpleCommand implements Module {
         "<grey>Teleporting you "
             + (name.equals("home") ? "home" : "to '" + name + "'")
             + "</grey>");
-    PlayerLocation playerLoc = PlayerLocation.of(homes.get(name));
+    PlayerLocation playerLoc = homes.get(name);
     playerLoc.teleportPlayer(player);
   }
 
@@ -45,7 +44,7 @@ public class HomeCommand extends SimpleCommand implements Module {
       return List.of();
     }
 
-    Map<String, Location> homes = Homes.instance.getHomes(player);
+    Map<String, PlayerLocation> homes = Homes.instance.getHomes(player);
     return homes.keySet().stream()
         .filter((String name) -> name.startsWith(args[0]))
         .sorted(String::compareToIgnoreCase)

@@ -4,10 +4,10 @@ import au.com.glob.clodmc.ClodMC;
 import au.com.glob.clodmc.modules.CommandError;
 import au.com.glob.clodmc.modules.Module;
 import au.com.glob.clodmc.modules.SimpleCommand;
+import au.com.glob.clodmc.util.PlayerLocation;
 import au.com.glob.clodmc.util.TeleportUtil;
 import java.util.List;
 import java.util.Map;
-import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -24,7 +24,7 @@ public class SetHomeCommand extends SimpleCommand implements Module {
 
     int maxHomes = ClodMC.instance.getConfig().getInt("homes.max-allowed");
 
-    Map<String, Location> homes = Homes.instance.getHomes(player);
+    Map<String, PlayerLocation> homes = Homes.instance.getHomes(player);
     boolean existing = homes.containsKey(name);
 
     if (!existing && homes.size() >= maxHomes) {
@@ -35,7 +35,7 @@ public class SetHomeCommand extends SimpleCommand implements Module {
       throw new CommandError("Your current location is not safe");
     }
 
-    homes.put(name, player.getLocation());
+    homes.put(name, PlayerLocation.of(player));
     Homes.instance.setHomes(player, homes);
 
     if (name.equals("home")) {

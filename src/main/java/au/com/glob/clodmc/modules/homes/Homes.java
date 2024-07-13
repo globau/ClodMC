@@ -6,8 +6,7 @@ import au.com.glob.clodmc.modules.Module;
 import au.com.glob.clodmc.util.PlayerLocation;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.stream.Collectors;
-import org.bukkit.Location;
+import java.util.Objects;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
@@ -22,25 +21,23 @@ public class Homes implements Listener, Module {
     instance = this;
   }
 
-  protected @NotNull Map<String, Location> getHomes(@NotNull Player player) {
+  protected @NotNull Map<String, PlayerLocation> getHomes(@NotNull Player player) {
     PlayerConfig config = PlayerConfig.of(player);
 
     ConfigurationSection section = config.getConfigurationSection("homes");
     if (section == null) {
       return new HashMap<>(0);
     }
-    return section.getKeys(false).stream()
-        .collect(
-            Collectors.toMap(
-                (String name) -> name,
-                (String name) -> {
-                  Location location = config.getLocation("homes." + name, null);
-                  assert location != null;
-                  return location;
-                }));
+    Map<String, PlayerLocation> result = new HashMap<>();
+    for (String name : section.getKeys(false)) {
+      PlayerLocation playerLocation =
+          config.getSerializable("homes." + name, PlayerLocation.class, null);
+      result.put(name, Objects.requireNonNull(playerLocation));
+    }
+    return result;
   }
 
-  protected void setHomes(@NotNull Player player, @NotNull Map<String, Location> homes) {
+  protected void setHomes(@NotNull Player player, @NotNull Map<String, PlayerLocation> homes) {
     try (PlayerConfigUpdater config = PlayerConfigUpdater.of(player)) {
       ConfigurationSection section = config.getConfigurationSection("homes");
       if (section != null) {
