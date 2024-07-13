@@ -21,9 +21,9 @@ public class SpawnMarkerBlueMap {
               .label("Spawn")
               .position(
                   Vector3d.from(
-                      world.getSpawnLocation().getX(),
+                      world.getSpawnLocation().getX() + 0.5,
                       world.getSpawnLocation().getY(),
-                      world.getSpawnLocation().getZ()))
+                      world.getSpawnLocation().getZ() + 0.5))
               .build());
       BlueMap.api
           .getWorld(world)
