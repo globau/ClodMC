@@ -37,6 +37,8 @@ public class AnchorBlock implements ConfigurationSerializable {
   protected final @NotNull Location bottomLocation;
   protected final @NotNull Color topColour;
   protected final @NotNull Color bottomColour;
+  protected final @NotNull String topColourName;
+  protected final @NotNull String bottomColourName;
 
   protected @Nullable AnchorBlock connectedTo = null;
   private @Nullable BukkitTask particleTask = null;
@@ -50,11 +52,13 @@ public class AnchorBlock implements ConfigurationSerializable {
     this.bottomLocation = location.clone().add(0.5, 1.5, 0.5);
     this.topColour = Config.idToTopColour(networkId);
     this.bottomColour = Config.idToBottomColour(networkId);
+    this.topColourName = this.prettyColourName(Config.idToTopName(networkId));
+    this.bottomColourName = this.prettyColourName(Config.idToBottomName(networkId));
 
     this.displayName =
-        this.prettyColourName(Config.idToTopName(this.networkId))
+        this.topColourName
             + " :: "
-            + this.prettyColourName(Config.idToBottomName(this.networkId))
+            + this.bottomColourName
             + (this.name == null ? "" : " (" + this.name + ")");
   }
 

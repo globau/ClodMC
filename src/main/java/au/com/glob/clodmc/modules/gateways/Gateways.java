@@ -3,6 +3,7 @@ package au.com.glob.clodmc.modules.gateways;
 import au.com.glob.clodmc.ClodMC;
 import au.com.glob.clodmc.modules.BlueMapModule;
 import au.com.glob.clodmc.modules.Module;
+import au.com.glob.clodmc.modules.SimpleCommand;
 import au.com.glob.clodmc.util.BlockPos;
 import java.io.File;
 import java.io.IOException;
@@ -12,6 +13,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
@@ -22,6 +24,7 @@ import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
+import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.entity.FallingBlock;
@@ -46,7 +49,7 @@ import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class Gateways implements Module, BlueMapModule, Listener {
+public class Gateways extends SimpleCommand implements Module, BlueMapModule, Listener {
   private final @NotNull File configFile =
       new File(ClodMC.instance.getDataFolder(), "gateways.yml");
   private final @NotNull Map<BlockPos, AnchorBlock> instances = new HashMap<>();
@@ -54,6 +57,8 @@ public class Gateways implements Module, BlueMapModule, Listener {
   private @Nullable GatewaysBlueMap gatewaysBlueMap;
 
   public Gateways() {
+    super("gateways", "List gateways in use");
+
     ConfigurationSerialization.registerClass(AnchorBlock.class);
 
     // add recipe
@@ -71,6 +76,24 @@ public class Gateways implements Module, BlueMapModule, Listener {
       }
     }
     Bukkit.addRecipe(recipe);
+  }
+
+  @Override
+  protected void execute(@NotNull CommandSender sender, @NotNull List<String> args) {
+    if (this.instances.isEmpty()) {
+      sender.sendRichMessage("<yellow>No gateways");
+      return;
+    }
+
+    String gateways =
+        this.instances.values().stream()
+            .map(
+                (AnchorBlock anchorBlock) ->
+                    anchorBlock.topColourName + " :: " + anchorBlock.bottomColourName)
+            .distinct()
+            .sorted()
+            .collect(Collectors.joining(", "));
+    sender.sendRichMessage("<yellow>" + gateways);
   }
 
   @Override
