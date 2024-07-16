@@ -77,9 +77,9 @@ public class AnchorBlock implements ConfigurationSerializable {
         + "blockPos="
         + this.blockPos
         + ", topColour="
-        + this.topColour
+        + this.topColourName
         + ", bottomColour="
-        + this.bottomColour
+        + this.bottomColourName
         + ", connected="
         + (this.connectedTo != null)
         + '}';
@@ -230,6 +230,7 @@ public class AnchorBlock implements ConfigurationSerializable {
   public @NotNull Map<String, Object> serialize() {
     // note: doesn't store adjustY
     Map<String, Object> serialised = new HashMap<>();
+    serialised.put("title", this.displayName);
     serialised.put("world", this.blockPos.getWorld().getName());
     serialised.put("x", this.blockPos.getX());
     serialised.put("y", this.blockPos.getY());

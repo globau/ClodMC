@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import net.kyori.adventure.title.Title;
@@ -36,6 +37,7 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityChangeBlockEvent;
+import org.bukkit.event.inventory.CraftItemEvent;
 import org.bukkit.event.inventory.PrepareItemCraftEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
@@ -162,14 +164,19 @@ public class Gateways extends SimpleCommand implements Module, BlueMapModule, Li
   }
 
   private void setAnchorItemMeta(
-      @NotNull ItemStack anchorItem, int networkId, @Nullable String name) {
+      @NotNull ItemStack anchorItem, int networkId, @Nullable String name, boolean isDuplicate) {
     String topColour = Config.idToTopName(networkId);
     String bottomColour = Config.idToBottomName(networkId);
     ItemMeta meta = anchorItem.getItemMeta();
     if (name != null) {
       meta.displayName(Component.text(name));
     }
-    meta.lore(List.of(Component.text(topColour), Component.text(bottomColour)));
+    List<TextComponent> lore =
+        new ArrayList<>(List.of(Component.text(topColour), Component.text(bottomColour)));
+    if (isDuplicate) {
+      lore.add(Component.text("(duplicate)"));
+    }
+    meta.lore(lore);
     meta.getPersistentDataContainer()
         .set(Config.NETWORK_KEY, PersistentDataType.INTEGER, networkId);
     meta.getPersistentDataContainer().set(Config.TOP_KEY, PersistentDataType.STRING, topColour);
@@ -207,9 +214,34 @@ public class Gateways extends SimpleCommand implements Module, BlueMapModule, Li
       }
     }
 
-    this.setAnchorItemMeta(item, Config.coloursToId(topColour, bottomColour), null);
+    int networkId = Config.coloursToId(topColour, bottomColour);
+    boolean isDuplicate =
+        this.instances.values().stream()
+            .anyMatch((AnchorBlock anchorBlock) -> anchorBlock.networkId == networkId);
+
+    this.setAnchorItemMeta(item, networkId, null, isDuplicate);
     item.setAmount(2);
     event.getInventory().setResult(item);
+  }
+
+  @EventHandler
+  public void onCraftItemEvent(CraftItemEvent event) {
+    if (event.getCurrentItem() == null) {
+      return;
+    }
+    ItemMeta meta = event.getCurrentItem().getItemMeta();
+    if (meta == null || !meta.getPersistentDataContainer().has(Config.RECIPE_KEY)) {
+      return;
+    }
+
+    Integer networkIdBoxed =
+        meta.getPersistentDataContainer().get(Config.NETWORK_KEY, PersistentDataType.INTEGER);
+    if (networkIdBoxed == null) {
+      return;
+    }
+    int networkId = networkIdBoxed;
+
+    this.setAnchorItemMeta(event.getCurrentItem(), networkId, null, false);
   }
 
   @EventHandler
@@ -326,7 +358,8 @@ public class Gateways extends SimpleCommand implements Module, BlueMapModule, Li
     this.setAnchorItemMeta(
         anchorItem,
         anchorBlock.networkId,
-        anchorBlock.name == null ? Config.DEFAULT_ANCHOR_NAME : anchorBlock.name);
+        anchorBlock.name == null ? Config.DEFAULT_ANCHOR_NAME : anchorBlock.name,
+        false);
     anchorBlock
         .blockPos
         .getWorld()
