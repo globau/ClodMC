@@ -63,10 +63,10 @@ public class AdminInvCommand extends SimpleCommand implements Module, Listener {
 
     if (this.hasStoredInventory(player)) {
       this.restoreInventory(player);
-      player.sendRichMessage("<yellow>Switched to Player inventory");
+      ClodMC.info(player, "Switched to Player inventory");
     } else {
       this.storeInventory(player);
-      player.sendRichMessage("<yellow>Switched to Admin inventory");
+      ClodMC.info(player, "Switched to Admin inventory");
     }
   }
 

@@ -81,7 +81,7 @@ public class Gateways extends SimpleCommand implements Module, BlueMapModule, Li
   @Override
   protected void execute(@NotNull CommandSender sender, @NotNull List<String> args) {
     if (this.instances.isEmpty()) {
-      sender.sendRichMessage("<yellow>No gateways");
+      ClodMC.warning(sender, "No gateways");
       return;
     }
 
@@ -93,7 +93,7 @@ public class Gateways extends SimpleCommand implements Module, BlueMapModule, Li
             .distinct()
             .sorted()
             .collect(Collectors.joining(", "));
-    sender.sendRichMessage("<yellow>" + gateways);
+    ClodMC.info(sender, "Existing gateways: " + gateways);
   }
 
   @Override
@@ -233,7 +233,7 @@ public class Gateways extends SimpleCommand implements Module, BlueMapModule, Li
     BlockPos above2Pos = above1Pos.up();
     if (!(above1Pos.getBlock().isEmpty() && above2Pos.getBlock().isEmpty())) {
       event.setCancelled(true);
-      event.getPlayer().sendRichMessage("<yellow>Anchors require two air blocks above</yellow>");
+      ClodMC.error(event.getPlayer(), "Anchors require two air blocks above");
       return;
     }
 
@@ -257,7 +257,7 @@ public class Gateways extends SimpleCommand implements Module, BlueMapModule, Li
 
     if (matching > 1) {
       event.setCancelled(true);
-      event.getPlayer().sendRichMessage("<yellow>Anchors already connected</yellow>");
+      ClodMC.error(event.getPlayer(), "Anchors already connected");
       return;
     }
 

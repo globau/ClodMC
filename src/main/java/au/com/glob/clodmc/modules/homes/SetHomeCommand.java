@@ -39,9 +39,9 @@ public class SetHomeCommand extends SimpleCommand implements Module {
     Homes.instance.setHomes(player, homes);
 
     if (name.equals("home")) {
-      player.sendMessage("Home " + (existing ? "updated" : "set") + " to you current location");
+      ClodMC.info(player, "Home " + (existing ? "updated" : "set") + " to you current location");
     } else {
-      player.sendMessage("Home '" + name + "' " + (existing ? "updated" : "created"));
+      ClodMC.info(player, "Home '" + name + "' " + (existing ? "updated" : "created"));
     }
   }
 }

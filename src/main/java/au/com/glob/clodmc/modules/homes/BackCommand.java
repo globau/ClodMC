@@ -1,5 +1,6 @@
 package au.com.glob.clodmc.modules.homes;
 
+import au.com.glob.clodmc.ClodMC;
 import au.com.glob.clodmc.modules.CommandError;
 import au.com.glob.clodmc.modules.Module;
 import au.com.glob.clodmc.modules.SimpleCommand;
@@ -25,7 +26,7 @@ public class BackCommand extends SimpleCommand implements Module {
 
     Homes.instance.setBackLocation(player);
 
-    player.sendRichMessage("<grey>Teleporting you back</grey>");
+    ClodMC.fyi(player, "Teleporting you back");
     location.teleportPlayer(player);
   }
 }

@@ -1,5 +1,6 @@
 package au.com.glob.clodmc.modules.homes;
 
+import au.com.glob.clodmc.ClodMC;
 import au.com.glob.clodmc.modules.Module;
 import au.com.glob.clodmc.modules.SimpleCommand;
 import au.com.glob.clodmc.util.PlayerLocation;
@@ -21,13 +22,13 @@ public class HomesCommand extends SimpleCommand implements Module {
     Map<String, PlayerLocation> homes = Homes.instance.getHomes(player);
 
     if (homes.isEmpty()) {
-      player.sendRichMessage("Homes: <italic>None</italic>");
+      ClodMC.warning(player, "No homes");
     } else {
       StringJoiner joiner = new StringJoiner(", ");
       for (String name : homes.keySet().stream().sorted().toList()) {
         joiner.add(name);
       }
-      player.sendMessage("Homes: " + joiner);
+      ClodMC.info(player, "Homes: " + joiner);
     }
   }
 }

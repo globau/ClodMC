@@ -34,8 +34,7 @@ public class Sleep implements Listener, Module {
     for (Player player : players) {
       if (player.getWorld().getEnvironment() == World.Environment.NORMAL) {
         if (sleeping.size() > 1 || !sleeping.getFirst().equals(player.getName())) {
-          player.sendRichMessage(
-              "<grey>" + MiscUtil.joinComma(sleeping) + " skipped the night</grey>");
+          ClodMC.fyi(player, MiscUtil.joinComma(sleeping) + " skipped the night");
         }
       }
     }

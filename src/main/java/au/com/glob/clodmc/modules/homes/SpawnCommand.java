@@ -31,7 +31,7 @@ public class SpawnCommand extends SimpleCommand implements Module {
 
     Homes.instance.setBackLocation(player);
 
-    player.sendRichMessage("<grey>Teleporting you to spawn</grey>");
+    ClodMC.fyi(player, "Teleporting you to spawn");
 
     // find random location around spawn point
     // governed by the SpawnRadius gamerule

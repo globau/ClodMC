@@ -1,5 +1,6 @@
 package au.com.glob.clodmc.modules.welcome;
 
+import au.com.glob.clodmc.ClodMC;
 import au.com.glob.clodmc.modules.CommandError;
 import au.com.glob.clodmc.modules.Module;
 import au.com.glob.clodmc.modules.SimpleCommand;
@@ -25,7 +26,7 @@ public class WelcomeCommand extends SimpleCommand implements Module {
     ItemStack book = WelcomeBook.build();
     if (book != null) {
       player.getInventory().addItem(book);
-      sender.sendRichMessage("Gave welcome book to " + player.getName());
+      ClodMC.fyi(sender, "Gave welcome book to " + player.getName());
     }
   }
 

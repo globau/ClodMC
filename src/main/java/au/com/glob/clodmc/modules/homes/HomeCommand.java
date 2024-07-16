@@ -1,5 +1,6 @@
 package au.com.glob.clodmc.modules.homes;
 
+import au.com.glob.clodmc.ClodMC;
 import au.com.glob.clodmc.modules.CommandError;
 import au.com.glob.clodmc.modules.Module;
 import au.com.glob.clodmc.modules.SimpleCommand;
@@ -27,10 +28,7 @@ public class HomeCommand extends SimpleCommand implements Module {
 
     Homes.instance.setBackLocation(player);
 
-    player.sendRichMessage(
-        "<grey>Teleporting you "
-            + (name.equals("home") ? "home" : "to '" + name + "'")
-            + "</grey>");
+    ClodMC.fyi(player, "Teleporting you " + (name.equals("home") ? "home" : "to '" + name + "'"));
     PlayerLocation playerLoc = homes.get(name);
     playerLoc.teleportPlayer(player);
   }

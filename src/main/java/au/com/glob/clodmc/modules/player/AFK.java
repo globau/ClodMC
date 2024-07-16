@@ -192,13 +192,13 @@ public class AFK extends SimpleCommand implements Listener, Module {
     private void announce() {
       for (Player player : Bukkit.getOnlinePlayers()) {
         if (player.equals(this.player)) {
-          player.sendRichMessage(
-              this.isAway ? "<grey>You are now AFK" : "<grey>You are no longer AFK");
+          ClodMC.fyi(player, this.isAway ? "You are now AFK" : "You are no longer AFK");
         } else {
-          player.sendRichMessage(
+          ClodMC.fyi(
+              player,
               this.isAway
-                  ? "<grey>" + this.player.getName() + " is now AFK"
-                  : "<grey>" + this.player.getName() + " is no longer AFK");
+                  ? this.player.getName() + " is now AFK"
+                  : this.player.getName() + " is no longer AFK");
         }
       }
     }

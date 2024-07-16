@@ -48,10 +48,10 @@ public abstract class SimpleCommand extends Command {
     try {
       this.execute(sender, new ArrayList<>(List.of(args)));
     } catch (CommandError e) {
-      sender.sendRichMessage("<red>" + e.getMessage() + "</red>");
+      ClodMC.error(sender, e.getMessage());
     } catch (Throwable e) {
       String message = e.getMessage() == null ? e.getClass().getSimpleName() : e.getMessage();
-      sender.sendRichMessage("<red>internal command error: " + message + "</red>");
+      ClodMC.error(sender, "Internal command error: " + message);
       ClodMC.logException(e);
     }
     return true;

@@ -68,7 +68,7 @@ public class InviteCommand extends SimpleCommand implements Module {
 
                 JsonObject response = result.getResponse();
                 if (response == null) {
-                  sender.sendRichMessage("<red>player lookup failed</red>");
+                  ClodMC.error(sender, "Player lookup failed");
                   ClodMC.logWarning(url + " failed: null response");
                   return;
                 }
@@ -88,7 +88,7 @@ public class InviteCommand extends SimpleCommand implements Module {
 
                 JsonObject response = result.getResponse();
                 if (response == null) {
-                  sender.sendRichMessage("<red>player lookup failed</red>");
+                  ClodMC.error(sender, "Player lookup failed");
                   ClodMC.logWarning(url + " failed: null response");
                   return;
                 }
@@ -103,19 +103,19 @@ public class InviteCommand extends SimpleCommand implements Module {
               @Override
               public void run() {
                 if (error != null) {
-                  sender.sendRichMessage("<red>" + error + "</red>");
+                  ClodMC.error(sender, error.toString());
                   return;
                 }
                 if (normalisedName == null) {
-                  sender.sendRichMessage(
-                      "<red>"
-                          + name
+                  ClodMC.error(
+                      sender,
+                      name
                           + " is not a valid "
                           + (isJava ? "Java" : "Bedrock")
                           + " player name</red>");
                   if (!isJava) {
-                    sender.sendRichMessage(
-                        "<yellow>Ask " + name + " to try to connect, then try again</yellow>");
+                    ClodMC.info(
+                        sender, "Something went wrong inviting " + name + ", contact an admin");
                   }
                   return;
                 }
@@ -128,8 +128,7 @@ public class InviteCommand extends SimpleCommand implements Module {
                             (isJava ? "whitelist" : "fwhitelist") + " add " + name);
 
                 if (success) {
-                  sender.sendRichMessage(
-                      "<yellow>" + normalisedName + " added to the whitelist</yellow>");
+                  ClodMC.info(sender, normalisedName + " added to the whitelist");
                   Bukkit.getScheduler()
                       .runTaskAsynchronously(
                           ClodMC.instance,

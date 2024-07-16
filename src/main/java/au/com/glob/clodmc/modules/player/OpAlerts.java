@@ -36,7 +36,7 @@ public class OpAlerts implements Module, Listener {
             ClodMC.instance,
             () -> {
               for (String alert : this.alerts) {
-                event.getPlayer().sendRichMessage("[ClodMC] <red>" + alert + "</red>");
+                ClodMC.error(event.getPlayer(), "[ClodMC] " + alert);
               }
             },
             20);

@@ -13,6 +13,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.configuration.serialization.SerializableAs;
@@ -52,15 +53,15 @@ public class OfflineMessages implements Module, Listener {
 
       List<Message> messages = this.loadMessages(config.getList("messages"));
       if (messages.size() >= 10) {
-        sender.sendRichMessage("<red>" + recipient + "'s mailbox is full");
+        sender.error(recipient + "'s mailbox is full");
         return false;
       }
-      messages.add(new Message(System.currentTimeMillis() / 1000L, sender.getName(), message));
+      messages.add(new Message(System.currentTimeMillis() / 1000L, sender.name, message));
 
       config.set("messages", messages);
     }
 
-    sender.sendRichMessage("<yellow><i>message queued for delivery");
+    sender.fyi("message queued for delivery");
     return true;
   }
 
@@ -85,7 +86,9 @@ public class OfflineMessages implements Module, Listener {
     Matcher matcher = this.msgPattern.matcher(event.getMessage());
     if (matcher.matches()
         && this.handleOfflineMsg(
-            new PlayerSender(event.getPlayer()), matcher.group(1), matcher.group(2))) {
+            new Sender(event.getPlayer(), event.getPlayer().getName()),
+            matcher.group(1),
+            matcher.group(2))) {
       event.setCancelled(true);
     }
   }
@@ -94,7 +97,10 @@ public class OfflineMessages implements Module, Listener {
   public void onServerCommand(ServerCommandEvent event) {
     Matcher matcher = this.msgPattern.matcher(event.getCommand());
     if (matcher.matches()
-        && this.handleOfflineMsg(new ConsoleSender(), matcher.group(1), matcher.group(2))) {
+        && this.handleOfflineMsg(
+            new Sender(Bukkit.getConsoleSender(), "[server]"),
+            matcher.group(1),
+            matcher.group(2))) {
       event.setCancelled(true);
     }
   }
@@ -121,33 +127,13 @@ public class OfflineMessages implements Module, Listener {
             20 * 3);
   }
 
-  private interface Sender {
-    @NotNull String getName();
-
-    void sendRichMessage(@NotNull String message);
-  }
-
-  private record PlayerSender(Player player) implements Sender {
-    private PlayerSender(@NotNull Player player) {
-      this.player = player;
+  private record Sender(@NotNull CommandSender recipient, @NotNull String name) {
+    void fyi(@NotNull String message) {
+      ClodMC.fyi(this.recipient, message);
     }
 
-    public @NotNull String getName() {
-      return this.player.getName();
-    }
-
-    public void sendRichMessage(@NotNull String message) {
-      this.player.sendRichMessage(message);
-    }
-  }
-
-  private static class ConsoleSender implements Sender {
-    public @NotNull String getName() {
-      return "[server]";
-    }
-
-    public void sendRichMessage(@NotNull String message) {
-      Bukkit.getConsoleSender().sendRichMessage(message);
+    void error(@NotNull String message) {
+      ClodMC.error(this.recipient, message);
     }
   }
 
@@ -163,9 +149,9 @@ public class OfflineMessages implements Module, Listener {
     }
 
     public void sendTo(@NotNull Player player) {
-      player.sendRichMessage(
-          "<grey><i>"
-              + MiscUtil.relativeTime(System.currentTimeMillis() / 1000L - this.timestamp)
+      ClodMC.whisper(
+          player,
+          MiscUtil.relativeTime(System.currentTimeMillis() / 1000L - this.timestamp)
               + " ago "
               + this.sender
               + " whispered to you: "

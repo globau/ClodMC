@@ -1,5 +1,6 @@
 package au.com.glob.clodmc.modules.homes;
 
+import au.com.glob.clodmc.ClodMC;
 import au.com.glob.clodmc.modules.CommandError;
 import au.com.glob.clodmc.modules.Module;
 import au.com.glob.clodmc.modules.SimpleCommand;
@@ -29,9 +30,9 @@ public class DelHomeCommand extends SimpleCommand implements Module {
     Homes.instance.setHomes(player, homes);
 
     if (name.equals("home")) {
-      player.sendMessage("Deleted home");
+      ClodMC.info(player, "Deleted home");
     } else {
-      player.sendMessage("Deleted home '" + name + "'");
+      ClodMC.info(player, "Deleted home '" + name + "'");
     }
   }
 
