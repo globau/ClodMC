@@ -26,12 +26,11 @@ import au.com.glob.clodmc.modules.player.OpAlerts;
 import au.com.glob.clodmc.modules.player.PlayerTracker;
 import au.com.glob.clodmc.modules.player.SeenCommand;
 import au.com.glob.clodmc.modules.player.Sleep;
+import au.com.glob.clodmc.modules.player.WelcomeBook;
 import au.com.glob.clodmc.modules.server.CircularWorldBorder;
 import au.com.glob.clodmc.modules.server.ConfigureServer;
 import au.com.glob.clodmc.modules.server.RequiredPlugins;
 import au.com.glob.clodmc.modules.server.SpawnMarker;
-import au.com.glob.clodmc.modules.welcome.WelcomeCommand;
-import au.com.glob.clodmc.modules.welcome.WelcomeGift;
 import au.com.glob.clodmc.util.BlueMap;
 import au.com.glob.clodmc.util.MaterialUtil;
 import java.io.File;
@@ -108,16 +107,13 @@ public final class ClodMC extends JavaPlugin implements Listener {
     this.register(new PlayerTracker());
     this.register(new SeenCommand());
     this.register(new Sleep());
+    this.register(new WelcomeBook());
 
     // server
     this.register(new CircularWorldBorder());
     this.register(new ConfigureServer());
     this.register(new RequiredPlugins());
     this.register(new SpawnMarker());
-
-    // welcome
-    this.register(new WelcomeGift());
-    this.register(new WelcomeCommand());
 
     // load configs after sanity checking
     try {
