@@ -1,6 +1,7 @@
 package au.com.glob.clodmc.modules.player;
 
 import au.com.glob.clodmc.ClodMC;
+import au.com.glob.clodmc.config.PlayerConfig;
 import au.com.glob.clodmc.modules.CommandError;
 import au.com.glob.clodmc.modules.Module;
 import au.com.glob.clodmc.modules.SimpleCommand;
@@ -10,9 +11,9 @@ import com.google.gson.JsonObject;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import org.bukkit.Bukkit;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.Statistic;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -45,12 +46,10 @@ public class InviteCommand extends SimpleCommand implements Module {
     }
 
     // ensure player isn't already whitelisted
-    for (OfflinePlayer offlinePlayer : Bukkit.getServer().getWhitelistedPlayers()) {
-      String offlineName = offlinePlayer.getName();
-      if (offlineName == null) {
-        continue;
-      }
-      if (offlineName.equalsIgnoreCase(name)) {
+    // checking player files is easier than checking the actual whitelist for bedrock
+    for (UUID uuid : PlayerConfig.knownUUIDs()) {
+      PlayerConfig config = PlayerConfig.of(uuid);
+      if (config.getPlayerName().equalsIgnoreCase(name)) {
         throw new CommandError(name + " is already whitelisted");
       }
     }
