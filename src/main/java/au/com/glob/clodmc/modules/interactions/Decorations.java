@@ -50,7 +50,6 @@ public class Decorations implements Module, Listener {
           Material.WAXED_EXPOSED_COPPER_TRAPDOOR,
           Material.WAXED_WEATHERED_COPPER_TRAPDOOR,
           Material.WAXED_OXIDIZED_COPPER_TRAPDOOR,
-          Material.TRAPPED_CHEST,
           Material.IRON_TRAPDOOR);
 
   @EventHandler
