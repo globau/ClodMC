@@ -8,7 +8,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -16,7 +15,7 @@ import java.util.Objects;
 import java.util.StringJoiner;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
-import org.bukkit.Material;
+import org.bukkit.Registry;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Donkey;
 import org.bukkit.entity.HumanEntity;
@@ -44,7 +43,7 @@ public class InventorySort implements Listener, Module {
   @Override
   public void loadConfig() {
     List<String> alerts = new ArrayList<>(0);
-    List<String> allMaterials = Arrays.stream(Material.values()).map(Enum::name).toList();
+    List<String> allMaterials = Registry.MATERIAL.stream().map(Enum::name).toList();
 
     // read inventory_order.txt. format follows.  english name is ignored
     // # comment
@@ -94,7 +93,7 @@ public class InventorySort implements Listener, Module {
     }
 
     for (String name : allMaterials) {
-      if (!name.startsWith("LEGACY_") && !materialOrder.containsKey(name)) {
+      if (!materialOrder.containsKey(name)) {
         alerts.add("inventory_order.txt: missing: " + name);
       }
     }
