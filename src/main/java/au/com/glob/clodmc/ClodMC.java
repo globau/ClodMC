@@ -28,7 +28,6 @@ import au.com.glob.clodmc.modules.player.SeenCommand;
 import au.com.glob.clodmc.modules.player.Sleep;
 import au.com.glob.clodmc.modules.player.WelcomeBook;
 import au.com.glob.clodmc.modules.server.CircularWorldBorder;
-import au.com.glob.clodmc.modules.server.ConfigureServer;
 import au.com.glob.clodmc.modules.server.RequiredPlugins;
 import au.com.glob.clodmc.modules.server.SpawnMarker;
 import au.com.glob.clodmc.util.BlueMap;
@@ -111,7 +110,6 @@ public final class ClodMC extends JavaPlugin implements Listener {
 
     // server
     this.register(new CircularWorldBorder());
-    this.register(new ConfigureServer());
     this.register(new RequiredPlugins());
     this.register(new SpawnMarker());
 
