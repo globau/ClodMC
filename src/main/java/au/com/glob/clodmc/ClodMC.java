@@ -20,6 +20,7 @@ import au.com.glob.clodmc.modules.mobs.BetterDrops;
 import au.com.glob.clodmc.modules.mobs.PreventMobGriefing;
 import au.com.glob.clodmc.modules.mobs.PreventMobSpawn;
 import au.com.glob.clodmc.modules.player.AFK;
+import au.com.glob.clodmc.modules.player.GameModeCommand;
 import au.com.glob.clodmc.modules.player.InviteCommand;
 import au.com.glob.clodmc.modules.player.OfflineMessages;
 import au.com.glob.clodmc.modules.player.OpAlerts;
@@ -99,6 +100,7 @@ public final class ClodMC extends JavaPlugin implements Listener {
 
     // player
     this.register(new AFK());
+    this.register(new GameModeCommand());
     this.register(new InviteCommand());
     this.register(new OfflineMessages());
     this.register(new PlayerTracker());
