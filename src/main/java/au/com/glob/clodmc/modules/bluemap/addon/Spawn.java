@@ -1,18 +1,24 @@
-package au.com.glob.clodmc.modules.server;
+package au.com.glob.clodmc.modules.bluemap.addon;
 
-import au.com.glob.clodmc.util.BlueMap;
+import au.com.glob.clodmc.modules.bluemap.BlueMapAddon;
+import au.com.glob.clodmc.modules.bluemap.BlueMapSource;
 import com.flowpowered.math.vector.Vector3d;
+import de.bluecolored.bluemap.api.BlueMapAPI;
 import de.bluecolored.bluemap.api.BlueMapMap;
 import de.bluecolored.bluemap.api.BlueMapWorld;
 import de.bluecolored.bluemap.api.markers.MarkerSet;
 import de.bluecolored.bluemap.api.markers.POIMarker;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
+import org.jetbrains.annotations.NotNull;
 
-public class SpawnMarkerBlueMap {
-  public SpawnMarkerBlueMap() {
-    assert BlueMap.api != null;
+public class Spawn extends BlueMapAddon {
+  public Spawn(@NotNull BlueMapAPI api) {
+    super(api, BlueMapSource.SPAWN, false);
+  }
 
+  @Override
+  public void onUpdate() {
     for (World world : Bukkit.getWorlds()) {
       MarkerSet markerSet = MarkerSet.builder().label("Spawn").defaultHidden(false).build();
       markerSet.put(
@@ -25,7 +31,7 @@ public class SpawnMarkerBlueMap {
                       world.getSpawnLocation().getY(),
                       world.getSpawnLocation().getZ() + 0.5))
               .build());
-      BlueMap.api
+      this.api
           .getWorld(world)
           .ifPresent(
               (BlueMapWorld blueMapWorld) -> {

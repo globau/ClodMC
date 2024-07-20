@@ -4,7 +4,6 @@ package au.com.glob.clodmc.modules.server;
 
 import au.com.glob.clodmc.ClodMC;
 import au.com.glob.clodmc.config.Config;
-import au.com.glob.clodmc.modules.BlueMapModule;
 import au.com.glob.clodmc.modules.Module;
 import io.papermc.paper.entity.TeleportFlag;
 import java.util.ArrayList;
@@ -31,7 +30,7 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 
-public class CircularWorldBorder implements Module, BlueMapModule, Listener {
+public class CircularWorldBorder implements Module, Listener {
   private static final int MAX_PARTICLE_DISTANCE = 8;
   private static final int MAX_PARTICLE_DISTANCE_SQUARED =
       MAX_PARTICLE_DISTANCE * MAX_PARTICLE_DISTANCE;
@@ -141,12 +140,7 @@ public class CircularWorldBorder implements Module, BlueMapModule, Listener {
             1L);
   }
 
-  @Override
-  public void onBlueMapEnable() {
-    new CircularWorldBorderBlueMap(this);
-  }
-
-  protected @NotNull Map<World, Border> getBorders() {
+  public @NotNull Map<World, Border> getBorders() {
     return this.borders;
   }
 

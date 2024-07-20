@@ -1,9 +1,14 @@
-package au.com.glob.clodmc.modules.gateways;
+package au.com.glob.clodmc.modules.bluemap.addon;
 
 import au.com.glob.clodmc.ClodMC;
-import au.com.glob.clodmc.util.BlueMap;
+import au.com.glob.clodmc.modules.bluemap.BlueMapAddon;
+import au.com.glob.clodmc.modules.bluemap.BlueMapSource;
+import au.com.glob.clodmc.modules.gateways.AnchorBlock;
+import au.com.glob.clodmc.modules.gateways.Config;
+import au.com.glob.clodmc.modules.gateways.Gateways;
 import com.flowpowered.math.vector.Vector2i;
 import com.flowpowered.math.vector.Vector3d;
+import de.bluecolored.bluemap.api.BlueMapAPI;
 import de.bluecolored.bluemap.api.BlueMapMap;
 import de.bluecolored.bluemap.api.BlueMapWorld;
 import de.bluecolored.bluemap.api.markers.MarkerSet;
@@ -21,17 +26,18 @@ import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.jetbrains.annotations.NotNull;
 
-public class GatewaysBlueMap {
+public class Anchors extends BlueMapAddon {
   private static final @NotNull String MARKER_FILENAME = "gateway.svg";
 
   private final @NotNull Map<World, MarkerSet> markerSets = new HashMap<>(3);
+  private final @NotNull Gateways module;
 
-  public GatewaysBlueMap(@NotNull Gateways gateways) {
-    assert BlueMap.api != null;
+  public Anchors(@NotNull BlueMapAPI api, @NotNull Gateways module) {
+    super(api, BlueMapSource.ANCHORS, true);
+    this.module = module;
 
     // create svg
-    Path gatewayFilePath =
-        BlueMap.api.getWebApp().getWebRoot().resolve("assets").resolve(MARKER_FILENAME);
+    Path gatewayFilePath = api.getWebApp().getWebRoot().resolve("assets").resolve(MARKER_FILENAME);
     try {
       Files.createDirectories(gatewayFilePath.getParent());
       try (OutputStream out = Files.newOutputStream(gatewayFilePath)) {
@@ -48,18 +54,16 @@ public class GatewaysBlueMap {
       this.markerSets.put(
           world, MarkerSet.builder().label("Gateways").defaultHidden(false).build());
     }
-    this.update(gateways);
   }
 
-  public void update(@NotNull Gateways gateways) {
-    assert BlueMap.api != null;
-
+  @Override
+  public void onUpdate() {
     for (MarkerSet markerSet : this.markerSets.values()) {
       markerSet.getMarkers().clear();
     }
 
     Set<String> seenColours = new HashSet<>();
-    for (AnchorBlock anchorBlock : gateways.getAnchorBlocks()) {
+    for (AnchorBlock anchorBlock : this.module.getAnchorBlocks()) {
       if (anchorBlock.name == null) {
         continue;
       }
@@ -96,7 +100,7 @@ public class GatewaysBlueMap {
 
     for (Map.Entry<World, MarkerSet> entry : this.markerSets.entrySet()) {
       String mapId = "gw-" + entry.getKey().getName();
-      BlueMap.api
+      this.api
           .getWorld(entry.getKey())
           .ifPresent(
               (BlueMapWorld world) -> {

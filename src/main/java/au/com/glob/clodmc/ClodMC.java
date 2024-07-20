@@ -1,9 +1,9 @@
 package au.com.glob.clodmc;
 
 import au.com.glob.clodmc.config.Config;
-import au.com.glob.clodmc.modules.BlueMapModule;
 import au.com.glob.clodmc.modules.Module;
 import au.com.glob.clodmc.modules.SimpleCommand;
+import au.com.glob.clodmc.modules.bluemap.BlueMap;
 import au.com.glob.clodmc.modules.gateways.Gateways;
 import au.com.glob.clodmc.modules.homes.BackCommand;
 import au.com.glob.clodmc.modules.homes.DelHomeCommand;
@@ -29,12 +29,10 @@ import au.com.glob.clodmc.modules.player.Sleep;
 import au.com.glob.clodmc.modules.player.WelcomeBook;
 import au.com.glob.clodmc.modules.server.CircularWorldBorder;
 import au.com.glob.clodmc.modules.server.RequiredPlugins;
-import au.com.glob.clodmc.modules.server.SpawnMarker;
-import au.com.glob.clodmc.util.BlueMap;
 import au.com.glob.clodmc.util.MaterialUtil;
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Level;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
@@ -48,7 +46,7 @@ public final class ClodMC extends JavaPlugin implements Listener {
   @SuppressWarnings("NotNullFieldNotInitialized")
   public static @NotNull ClodMC instance;
 
-  private final @NotNull List<Module> modules = new ArrayList<>();
+  private final @NotNull Map<Class<? extends Module>, Module> modules = new HashMap<>();
   private boolean shuttingDown;
 
   // init
@@ -111,7 +109,9 @@ public final class ClodMC extends JavaPlugin implements Listener {
     // server
     this.register(new CircularWorldBorder());
     this.register(new RequiredPlugins());
-    this.register(new SpawnMarker());
+
+    // bluemap
+    this.register(new BlueMap());
 
     // load configs after sanity checking
     try {
@@ -125,19 +125,8 @@ public final class ClodMC extends JavaPlugin implements Listener {
       return;
     }
     Config.preload("config.yml");
-    for (Module module : this.modules) {
+    for (Module module : this.modules.values()) {
       module.loadConfig();
-    }
-
-    // bluemap
-    if (Bukkit.getPluginManager().isPluginEnabled("BlueMap")) {
-      BlueMap.onEnable(
-          this.modules.stream()
-              .filter((Module module) -> module instanceof BlueMapModule)
-              .map((Module module) -> (BlueMapModule) module)
-              .toList());
-    } else {
-      ClodMC.logWarning("Cannot load BlueMap integration: BlueMap is not enabled");
     }
   }
 
@@ -161,7 +150,7 @@ public final class ClodMC extends JavaPlugin implements Listener {
       return;
     }
 
-    this.modules.add(module);
+    this.modules.put(module.getClass(), module);
 
     if (module instanceof Listener listener) {
       Bukkit.getServer().getPluginManager().registerEvents(listener, this);
@@ -170,6 +159,13 @@ public final class ClodMC extends JavaPlugin implements Listener {
     if (module instanceof SimpleCommand command) {
       this.getServer().getCommandMap().register("clod-mc", command);
     }
+  }
+
+  @SuppressWarnings("unchecked")
+  public static @NotNull <T extends Module> T getModule(@NotNull Class<T> moduleClass) {
+    Module module = instance.modules.get(moduleClass);
+    assert module != null;
+    return (T) module;
   }
 
   @Override

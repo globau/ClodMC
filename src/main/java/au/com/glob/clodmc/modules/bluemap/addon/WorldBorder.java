@@ -1,6 +1,9 @@
-package au.com.glob.clodmc.modules.server;
+package au.com.glob.clodmc.modules.bluemap.addon;
 
-import au.com.glob.clodmc.util.BlueMap;
+import au.com.glob.clodmc.modules.bluemap.BlueMapAddon;
+import au.com.glob.clodmc.modules.bluemap.BlueMapSource;
+import au.com.glob.clodmc.modules.server.CircularWorldBorder;
+import de.bluecolored.bluemap.api.BlueMapAPI;
 import de.bluecolored.bluemap.api.BlueMapMap;
 import de.bluecolored.bluemap.api.BlueMapWorld;
 import de.bluecolored.bluemap.api.markers.MarkerSet;
@@ -10,13 +13,19 @@ import de.bluecolored.bluemap.api.math.Shape;
 import java.util.Collection;
 import java.util.Map;
 import org.bukkit.World;
+import org.jetbrains.annotations.NotNull;
 
-public class CircularWorldBorderBlueMap {
-  public CircularWorldBorderBlueMap(CircularWorldBorder circularWorldBorder) {
-    assert BlueMap.api != null;
+public class WorldBorder extends BlueMapAddon {
+  private final @NotNull CircularWorldBorder module;
 
-    for (Map.Entry<World, CircularWorldBorder.Border> entry :
-        circularWorldBorder.getBorders().entrySet()) {
+  public WorldBorder(@NotNull BlueMapAPI api, @NotNull CircularWorldBorder module) {
+    super(api, BlueMapSource.WORLD_BORDER, false);
+    this.module = module;
+  }
+
+  @Override
+  public void onUpdate() {
+    for (Map.Entry<World, CircularWorldBorder.Border> entry : this.module.getBorders().entrySet()) {
       World world = entry.getKey();
       CircularWorldBorder.Border border = entry.getValue();
 
@@ -33,7 +42,7 @@ public class CircularWorldBorderBlueMap {
 
       MarkerSet markerSet = MarkerSet.builder().label("World Border").build();
       markerSet.getMarkers().put("ClodMC", marker);
-      BlueMap.api
+      this.api
           .getWorld(world.getName())
           .map(BlueMapWorld::getMaps)
           .ifPresent(

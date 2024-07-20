@@ -1,9 +1,10 @@
 package au.com.glob.clodmc.modules.gateways;
 
 import au.com.glob.clodmc.ClodMC;
-import au.com.glob.clodmc.modules.BlueMapModule;
 import au.com.glob.clodmc.modules.Module;
 import au.com.glob.clodmc.modules.SimpleCommand;
+import au.com.glob.clodmc.modules.bluemap.BlueMapSource;
+import au.com.glob.clodmc.modules.bluemap.BlueMapUpdateEvent;
 import au.com.glob.clodmc.util.BlockPos;
 import java.io.File;
 import java.io.IOException;
@@ -51,12 +52,11 @@ import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class Gateways extends SimpleCommand implements Module, BlueMapModule, Listener {
+public class Gateways extends SimpleCommand implements Module, Listener {
   private final @NotNull File configFile =
       new File(ClodMC.instance.getDataFolder(), "gateways.yml");
   private final @NotNull Map<BlockPos, AnchorBlock> instances = new HashMap<>();
   private final @NotNull Map<Player, BlockPos> ignore = new HashMap<>();
-  private @Nullable GatewaysBlueMap gatewaysBlueMap;
 
   public Gateways() {
     super("gateways", "List gateways in use");
@@ -136,21 +136,12 @@ public class Gateways extends SimpleCommand implements Module, BlueMapModule, Li
     try {
       config.save(this.configFile);
 
-      if (this.gatewaysBlueMap != null) {
-        this.gatewaysBlueMap.update(this);
-      }
+      Bukkit.getServer()
+          .getPluginManager()
+          .callEvent(new BlueMapUpdateEvent(BlueMapSource.ANCHORS));
     } catch (IOException e) {
       ClodMC.logError(this.configFile + ": save failed: " + e);
     }
-  }
-
-  @Override
-  public void onBlueMapEnable() {
-    this.gatewaysBlueMap = new GatewaysBlueMap(this);
-  }
-
-  public @NotNull Collection<AnchorBlock> getAnchorBlocks() {
-    return this.instances.values();
   }
 
   private @NotNull ItemStack createAnchorItem() {
@@ -447,5 +438,9 @@ public class Gateways extends SimpleCommand implements Module, BlueMapModule, Li
     AnchorBlock anchorBlock =
         this.instances.get(BlockPos.of(event.getClickedBlock().getLocation()));
     event.setCancelled(anchorBlock != null);
+  }
+
+  public @NotNull Collection<AnchorBlock> getAnchorBlocks() {
+    return this.instances.values();
   }
 }

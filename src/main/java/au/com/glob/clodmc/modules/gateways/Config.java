@@ -8,26 +8,24 @@ import org.bukkit.NamespacedKey;
 import org.jetbrains.annotations.NotNull;
 
 public class Config {
-  protected static final @NotNull NamespacedKey RECIPE_KEY = new NamespacedKey("clod-mc", "anchor");
+  public static final @NotNull NamespacedKey RECIPE_KEY = new NamespacedKey("clod-mc", "anchor");
 
-  protected static final @NotNull String DEFAULT_ANCHOR_NAME = "Gateway Anchor";
+  public static final @NotNull String DEFAULT_ANCHOR_NAME = "Gateway Anchor";
 
-  protected static final @NotNull NamespacedKey NETWORK_KEY =
-      new NamespacedKey("clod-mc", "network");
-  protected static final @NotNull NamespacedKey TOP_KEY =
-      new NamespacedKey("clod-mc", "network-top");
-  protected static final @NotNull NamespacedKey BOTTOM_KEY =
+  public static final @NotNull NamespacedKey NETWORK_KEY = new NamespacedKey("clod-mc", "network");
+  public static final @NotNull NamespacedKey TOP_KEY = new NamespacedKey("clod-mc", "network-top");
+  public static final @NotNull NamespacedKey BOTTOM_KEY =
       new NamespacedKey("clod-mc", "network-bottom");
 
-  protected static final String @NotNull [] SHAPE = new String[] {"PWP", "EWE", "ERE"};
-  protected static final @NotNull Map<Character, Material> SHAPE_MATERIALS =
+  public static final String @NotNull [] SHAPE = new String[] {"PWP", "EWE", "ERE"};
+  public static final @NotNull Map<Character, Material> SHAPE_MATERIALS =
       Map.of(
           'P', Material.ENDER_PEARL,
           'W', Material.AIR,
           'E', Material.END_STONE,
           'R', Material.RESPAWN_ANCHOR);
 
-  protected static final @NotNull Map<Material, String> NETWORK_CRAFT =
+  public static final @NotNull Map<Material, String> NETWORK_CRAFT =
       Map.ofEntries(
           Map.entry(Material.WHITE_WOOL, "white"),
           Map.entry(Material.ORANGE_WOOL, "orange"),
@@ -46,7 +44,7 @@ public class Config {
           Map.entry(Material.RED_WOOL, "red"),
           Map.entry(Material.BLACK_WOOL, "black"));
 
-  protected static final @NotNull List<String> COLOUR_INDEX =
+  public static final @NotNull List<String> COLOUR_INDEX =
       List.of(
           "white",
           "orange",
@@ -65,7 +63,7 @@ public class Config {
           "red",
           "black");
 
-  protected static final @NotNull List<Color> PARTICLE_COLOURS =
+  public static final @NotNull List<Color> PARTICLE_COLOURS =
       List.of(
           Color.fromRGB(0xf9ffff),
           Color.fromRGB(0xf9801d),
@@ -84,23 +82,23 @@ public class Config {
           Color.fromRGB(0xb02e26),
           Color.fromRGB(0x1d1c21));
 
-  protected static int coloursToId(@NotNull String topColour, @NotNull String bottomColour) {
+  public static int coloursToId(@NotNull String topColour, @NotNull String bottomColour) {
     return (COLOUR_INDEX.indexOf(topColour) << 4) | COLOUR_INDEX.indexOf(bottomColour);
   }
 
-  protected static @NotNull Color idToTopColour(int id) {
+  public static @NotNull Color idToTopColour(int id) {
     return PARTICLE_COLOURS.get((id >> 4) & 0x0F);
   }
 
-  protected static @NotNull Color idToBottomColour(int id) {
+  public static @NotNull Color idToBottomColour(int id) {
     return PARTICLE_COLOURS.get(id & 0x0F);
   }
 
-  protected static @NotNull String idToTopName(int id) {
+  public static @NotNull String idToTopName(int id) {
     return COLOUR_INDEX.get((id >> 4) & 0x0F);
   }
 
-  protected static @NotNull String idToBottomName(int id) {
+  public static @NotNull String idToBottomName(int id) {
     return COLOUR_INDEX.get(id & 0x0F);
   }
 }

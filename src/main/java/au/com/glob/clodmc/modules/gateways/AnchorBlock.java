@@ -28,19 +28,19 @@ import org.jetbrains.annotations.Nullable;
 
 @SerializableAs("ClodMC.AnchorBlock")
 public class AnchorBlock implements ConfigurationSerializable {
-  protected final int networkId;
-  protected final @NotNull BlockPos blockPos;
-  protected final @Nullable String name;
-  protected final @NotNull String displayName;
+  public final int networkId;
+  public final @NotNull BlockPos blockPos;
+  public final @Nullable String name;
+  public final @NotNull String displayName;
 
-  protected final @NotNull Location topLocation;
-  protected final @NotNull Location bottomLocation;
-  protected final @NotNull Color topColour;
-  protected final @NotNull Color bottomColour;
-  protected final @NotNull String topColourName;
-  protected final @NotNull String bottomColourName;
+  public final @NotNull Location topLocation;
+  public final @NotNull Location bottomLocation;
+  public final @NotNull Color topColour;
+  public final @NotNull Color bottomColour;
+  public final @NotNull String topColourName;
+  public final @NotNull String bottomColourName;
 
-  protected @Nullable AnchorBlock connectedTo = null;
+  public @Nullable AnchorBlock connectedTo = null;
   private @Nullable BukkitTask particleTask = null;
 
   public AnchorBlock(int networkId, @NotNull Location location, @Nullable String name) {
