@@ -4,7 +4,6 @@ import au.com.glob.clodmc.ClodMC;
 import au.com.glob.clodmc.modules.bluemap.BlueMapAddon;
 import au.com.glob.clodmc.modules.bluemap.BlueMapSource;
 import au.com.glob.clodmc.modules.gateways.AnchorBlock;
-import au.com.glob.clodmc.modules.gateways.Config;
 import au.com.glob.clodmc.modules.gateways.Gateways;
 import com.flowpowered.math.vector.Vector2i;
 import com.flowpowered.math.vector.Vector3d;
@@ -64,36 +63,32 @@ public class Anchors extends BlueMapAddon {
 
     Set<String> seenColours = new HashSet<>();
     for (AnchorBlock anchorBlock : this.module.getAnchorBlocks()) {
-      if (anchorBlock.name == null) {
+      if (anchorBlock.getName() == null) {
         continue;
       }
 
       String id =
-          "gw-"
-              + Config.idToTopName(anchorBlock.networkId)
-              + "-"
-              + Config.idToBottomName(anchorBlock.networkId)
-              + "-";
+          "gw-" + anchorBlock.getTopColour().name + "-" + anchorBlock.getBottomColour().name + "-";
       id = id + (seenColours.contains(id) ? "b" : "a");
       seenColours.add(id);
 
       this.markerSets
-          .get(anchorBlock.blockPos.getWorld())
+          .get(anchorBlock.getBlockPos().getWorld())
           .getMarkers()
           .put(
               id,
               POIMarker.builder()
                   .label(
-                      anchorBlock.name
+                      anchorBlock.getName()
                           + "\n"
-                          + anchorBlock.blockPos.getX()
+                          + anchorBlock.getBlockPos().getX()
                           + ", "
-                          + anchorBlock.blockPos.getZ())
+                          + anchorBlock.getBlockPos().getZ())
                   .position(
                       Vector3d.from(
-                          anchorBlock.blockPos.getX() + 0.5,
-                          anchorBlock.blockPos.getY() + 0.5,
-                          anchorBlock.blockPos.getZ() + 0.5))
+                          anchorBlock.getBlockPos().getX() + 0.5,
+                          anchorBlock.getBlockPos().getY() + 0.5,
+                          anchorBlock.getBlockPos().getZ() + 0.5))
                   .icon("assets/" + MARKER_FILENAME, new Vector2i(25, 45))
                   .build());
     }

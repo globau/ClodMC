@@ -16,15 +16,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.minimessage.MiniMessage;
-import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import net.kyori.adventure.title.Title;
 import org.bukkit.Bukkit;
 import org.bukkit.Effect;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -45,12 +42,7 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.RecipeChoice;
-import org.bukkit.inventory.ShapedRecipe;
-import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 public class Gateways extends SimpleCommand implements Module, Listener {
   private final @NotNull File configFile =
@@ -62,22 +54,7 @@ public class Gateways extends SimpleCommand implements Module, Listener {
     super("gateways", "List gateways in use");
 
     ConfigurationSerialization.registerClass(AnchorBlock.class);
-
-    // add recipe
-    ShapedRecipe recipe = new ShapedRecipe(Config.RECIPE_KEY, this.createAnchorItem());
-    recipe.shape(Config.SHAPE);
-    for (Map.Entry<Character, Material> entry : Config.SHAPE_MATERIALS.entrySet()) {
-      Material material = entry.getValue();
-      if (material == Material.AIR) {
-        recipe.setIngredient(
-            entry.getKey(),
-            new RecipeChoice.MaterialChoice(
-                Config.NETWORK_CRAFT.keySet().toArray(new Material[0])));
-      } else {
-        recipe.setIngredient(entry.getKey(), material);
-      }
-    }
-    Bukkit.addRecipe(recipe);
+    Bukkit.addRecipe(AnchorItem.getRecipe());
   }
 
   @Override
@@ -89,9 +66,7 @@ public class Gateways extends SimpleCommand implements Module, Listener {
 
     String gateways =
         this.instances.values().stream()
-            .map(
-                (AnchorBlock anchorBlock) ->
-                    anchorBlock.topColourName + " :: " + anchorBlock.bottomColourName)
+            .map(AnchorBlock::getColourPair)
             .distinct()
             .sorted()
             .collect(Collectors.joining(", "));
@@ -144,95 +119,44 @@ public class Gateways extends SimpleCommand implements Module, Listener {
     }
   }
 
-  private @NotNull ItemStack createAnchorItem() {
-    ItemStack item = new ItemStack(Material.RESPAWN_ANCHOR);
-    ItemMeta meta = item.getItemMeta();
-    meta.displayName(Component.text(Config.DEFAULT_ANCHOR_NAME));
-    meta.setEnchantmentGlintOverride(true);
-    meta.getPersistentDataContainer().set(Config.RECIPE_KEY, PersistentDataType.BOOLEAN, true);
-    item.setItemMeta(meta);
-    return item;
-  }
-
-  private void setAnchorItemMeta(
-      @NotNull ItemStack anchorItem, int networkId, @Nullable String name, boolean isDuplicate) {
-    String topColour = Config.idToTopName(networkId);
-    String bottomColour = Config.idToBottomName(networkId);
-    ItemMeta meta = anchorItem.getItemMeta();
-    if (name != null) {
-      meta.displayName(Component.text(name));
-    }
-    List<TextComponent> lore =
-        new ArrayList<>(List.of(Component.text(topColour), Component.text(bottomColour)));
-    if (isDuplicate) {
-      lore.add(Component.text("(duplicate)"));
-    }
-    meta.lore(lore);
-    meta.getPersistentDataContainer()
-        .set(Config.NETWORK_KEY, PersistentDataType.INTEGER, networkId);
-    meta.getPersistentDataContainer().set(Config.TOP_KEY, PersistentDataType.STRING, topColour);
-    meta.getPersistentDataContainer()
-        .set(Config.BOTTOM_KEY, PersistentDataType.STRING, bottomColour);
-    anchorItem.setItemMeta(meta);
-  }
-
   @EventHandler
   public void onPlayerJoin(PlayerJoinEvent event) {
-    event.getPlayer().discoverRecipe(Config.RECIPE_KEY);
+    event.getPlayer().discoverRecipe(AnchorItem.RECIPE_KEY);
   }
 
   @EventHandler
   public void onPrepareItemCraftEvent(PrepareItemCraftEvent event) {
     ItemStack item = event.getInventory().getResult();
-    if (item == null || !AnchorBlock.isAnchor(item)) {
+    if (!AnchorItem.isAnchor(item)) {
       return;
     }
 
     // add lore and metadata to crafted anchors
-    String topColour = "";
-    String bottomColour = "";
-    for (ItemStack ingredient : event.getInventory().getMatrix()) {
-      if (ingredient == null) {
-        continue;
-      }
-      Material material = ingredient.getType();
-      if (Config.NETWORK_CRAFT.containsKey(material)) {
-        if (topColour.isEmpty()) {
-          topColour = Config.NETWORK_CRAFT.get(material);
-        } else {
-          bottomColour = Config.NETWORK_CRAFT.get(material);
-        }
-      }
+    ItemStack[] matrix = event.getInventory().getMatrix();
+    Colours.Colour topColour = Colours.of(matrix[1]);
+    Colours.Colour bottomColour = Colours.of(matrix[4]);
+    if (topColour == null || bottomColour == null) {
+      ClodMC.logError("failed to craft anchor block: invalid colour material");
+      return;
     }
-
-    int networkId = Config.coloursToId(topColour, bottomColour);
+    int networkId = Colours.coloursToNetworkId(topColour, bottomColour);
     boolean isDuplicate =
         this.instances.values().stream()
             .anyMatch((AnchorBlock anchorBlock) -> anchorBlock.networkId == networkId);
 
-    this.setAnchorItemMeta(item, networkId, null, isDuplicate);
+    AnchorItem.setMeta(item, networkId, isDuplicate);
     item.setAmount(2);
     event.getInventory().setResult(item);
   }
 
   @EventHandler
   public void onCraftItemEvent(CraftItemEvent event) {
-    if (event.getCurrentItem() == null) {
-      return;
-    }
-    ItemMeta meta = event.getCurrentItem().getItemMeta();
-    if (meta == null || !meta.getPersistentDataContainer().has(Config.RECIPE_KEY)) {
-      return;
-    }
+    ItemStack item = event.getCurrentItem();
 
-    Integer networkIdBoxed =
-        meta.getPersistentDataContainer().get(Config.NETWORK_KEY, PersistentDataType.INTEGER);
-    if (networkIdBoxed == null) {
-      return;
+    if (AnchorItem.isAnchor(item)) {
+      // remove duplicate indicator
+      AnchorItem.setMeta(item, false);
     }
-    int networkId = networkIdBoxed;
-
-    this.setAnchorItemMeta(event.getCurrentItem(), networkId, null, false);
   }
 
   @EventHandler
@@ -245,9 +169,8 @@ public class Gateways extends SimpleCommand implements Module, Listener {
       return;
     }
 
-    // check if item being placed is an anchor block
-    ItemMeta meta = event.getItemInHand().getItemMeta();
-    if (meta == null || !meta.getPersistentDataContainer().has(Config.RECIPE_KEY)) {
+    ItemStack item = event.getItemInHand();
+    if (!AnchorItem.isAnchor(item)) {
       return;
     }
 
@@ -260,15 +183,8 @@ public class Gateways extends SimpleCommand implements Module, Listener {
       return;
     }
 
-    // extract network id
-    Integer networkIdBoxed =
-        meta.getPersistentDataContainer().get(Config.NETWORK_KEY, PersistentDataType.INTEGER);
-    if (networkIdBoxed == null) {
-      return;
-    }
-    int networkId = networkIdBoxed;
-
     // find connecting anchor block
+    int networkId = AnchorItem.getNetworkId(item);
     AnchorBlock otherAnchorBlock = null;
     int matching = 0;
     for (AnchorBlock a : this.instances.values()) {
@@ -284,18 +200,9 @@ public class Gateways extends SimpleCommand implements Module, Listener {
       return;
     }
 
-    String name = null;
-    if (meta.hasDisplayName()) {
-      Component displayName = meta.displayName();
-      assert displayName != null;
-      String plainTextName = PlainTextComponentSerializer.plainText().serialize(displayName);
-      if (!plainTextName.equals(Config.DEFAULT_ANCHOR_NAME)) {
-        name = plainTextName;
-      }
-    }
-
     // connect anchor
-    AnchorBlock anchorBlock = new AnchorBlock(networkId, event.getBlock().getLocation(), name);
+    AnchorBlock anchorBlock =
+        new AnchorBlock(networkId, event.getBlock().getLocation(), AnchorItem.getName(item));
     anchorBlock.connectedTo = otherAnchorBlock;
     anchorBlock.updateVisuals();
 
@@ -345,16 +252,9 @@ public class Gateways extends SimpleCommand implements Module, Listener {
     }
     event.setDropItems(false);
 
-    ItemStack anchorItem = this.createAnchorItem();
-    this.setAnchorItemMeta(
-        anchorItem,
-        anchorBlock.networkId,
-        anchorBlock.name == null ? Config.DEFAULT_ANCHOR_NAME : anchorBlock.name,
-        false);
-    anchorBlock
-        .blockPos
-        .getWorld()
-        .dropItemNaturally(anchorBlock.blockPos.asLocation(), anchorItem);
+    ItemStack anchorItem = AnchorItem.create();
+    AnchorItem.setMeta(anchorItem, anchorBlock.networkId, anchorBlock.name, false);
+    anchorBlock.blockPos.getWorld().dropItem(anchorBlock.blockPos.asLocation(), anchorItem);
   }
 
   @EventHandler

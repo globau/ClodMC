@@ -2,14 +2,12 @@ package au.com.glob.clodmc.modules.gateways;
 
 import au.com.glob.clodmc.ClodMC;
 import au.com.glob.clodmc.util.BlockPos;
-import au.com.glob.clodmc.util.MiscUtil;
 import com.destroystokyo.paper.ParticleBuilder;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.bukkit.Bukkit;
-import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Particle;
@@ -19,8 +17,6 @@ import org.bukkit.block.data.type.Light;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.configuration.serialization.SerializableAs;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.util.NumberConversions;
 import org.jetbrains.annotations.NotNull;
@@ -28,20 +24,18 @@ import org.jetbrains.annotations.Nullable;
 
 @SerializableAs("ClodMC.AnchorBlock")
 public class AnchorBlock implements ConfigurationSerializable {
-  public final int networkId;
-  public final @NotNull BlockPos blockPos;
-  public final @Nullable String name;
-  public final @NotNull String displayName;
+  protected final int networkId;
+  protected final @NotNull BlockPos blockPos;
+  protected final @Nullable String name;
+  protected final @NotNull String displayName;
 
-  public final @NotNull Location topLocation;
-  public final @NotNull Location bottomLocation;
-  public final @NotNull Color topColour;
-  public final @NotNull Color bottomColour;
-  public final @NotNull String topColourName;
-  public final @NotNull String bottomColourName;
+  protected final @NotNull Location topLocation;
+  protected final @NotNull Location bottomLocation;
+  protected final @NotNull Colours.Colour topColour;
+  protected final @NotNull Colours.Colour bottomColour;
 
-  public @Nullable AnchorBlock connectedTo = null;
-  private @Nullable BukkitTask particleTask = null;
+  protected @Nullable AnchorBlock connectedTo = null;
+  protected @Nullable BukkitTask particleTask = null;
 
   public AnchorBlock(int networkId, @NotNull Location location, @Nullable String name) {
     this.networkId = networkId;
@@ -50,25 +44,12 @@ public class AnchorBlock implements ConfigurationSerializable {
 
     this.topLocation = location.clone().add(0.5, 2.5, 0.5);
     this.bottomLocation = location.clone().add(0.5, 1.5, 0.5);
-    this.topColour = Config.idToTopColour(networkId);
-    this.bottomColour = Config.idToBottomColour(networkId);
-    this.topColourName = this.prettyColourName(Config.idToTopName(networkId));
-    this.bottomColourName = this.prettyColourName(Config.idToBottomName(networkId));
 
-    this.displayName =
-        this.topColourName
-            + " :: "
-            + this.bottomColourName
-            + (this.name == null ? "" : " (" + this.name + ")");
-  }
+    Colours.Network network = Colours.networkIdToColours(networkId);
+    this.topColour = network.top;
+    this.bottomColour = network.bottom;
 
-  private @NotNull String prettyColourName(@NotNull String name) {
-    return MiscUtil.toTitleCase(name.replace('_', ' '));
-  }
-
-  protected static boolean isAnchor(@NotNull ItemStack item) {
-    ItemMeta meta = item.getItemMeta();
-    return meta != null && meta.getPersistentDataContainer().has(Config.RECIPE_KEY);
+    this.displayName = this.getColourPair() + (this.name == null ? "" : " (" + this.name + ")");
   }
 
   @Override
@@ -77,12 +58,32 @@ public class AnchorBlock implements ConfigurationSerializable {
         + "blockPos="
         + this.blockPos
         + ", topColour="
-        + this.topColourName
+        + this.topColour
         + ", bottomColour="
-        + this.bottomColourName
+        + this.bottomColour
         + ", connected="
         + (this.connectedTo != null)
         + '}';
+  }
+
+  public @NotNull BlockPos getBlockPos() {
+    return this.blockPos;
+  }
+
+  public @Nullable String getName() {
+    return this.name;
+  }
+
+  public @NotNull Colours.Colour getTopColour() {
+    return this.topColour;
+  }
+
+  public @NotNull Colours.Colour getBottomColour() {
+    return this.bottomColour;
+  }
+
+  public @NotNull String getColourPair() {
+    return this.topColour.getDisplayName() + " :: " + this.bottomColour.getDisplayName();
   }
 
   private Block facingBlock(@NotNull Location location) {
@@ -149,13 +150,13 @@ public class AnchorBlock implements ConfigurationSerializable {
                     new ParticleBuilder(Particle.DUST)
                         .location(this.topLocation)
                         .receivers(players)
-                        .data(new Particle.DustOptions(this.topColour, 1))
+                        .data(new Particle.DustOptions(this.topColour.color, 1))
                         .count(1)
                         .spawn();
                     new ParticleBuilder(Particle.DUST)
                         .location(this.bottomLocation)
                         .receivers(players)
-                        .data(new Particle.DustOptions(this.bottomColour, 1))
+                        .data(new Particle.DustOptions(this.bottomColour.color, 1))
                         .count(1)
                         .spawn();
                   },
@@ -170,13 +171,13 @@ public class AnchorBlock implements ConfigurationSerializable {
                     Collection<Player> players = this.getNearbyPlayers(12);
                     new ParticleBuilder(Particle.DUST)
                         .location(this.topLocation)
-                        .data(new Particle.DustOptions(this.topColour, 2))
+                        .data(new Particle.DustOptions(this.topColour.color, 2))
                         .receivers(players)
                         .count(5)
                         .spawn();
                     new ParticleBuilder(Particle.DUST)
                         .location(this.bottomLocation)
-                        .data(new Particle.DustOptions(this.bottomColour, 2))
+                        .data(new Particle.DustOptions(this.bottomColour.color, 2))
                         .receivers(players)
                         .count(5)
                         .spawn();
