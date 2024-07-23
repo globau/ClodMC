@@ -12,8 +12,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.jetbrains.annotations.NotNull;
 
-public class Spawn extends BlueMapAddon {
-  public Spawn(@NotNull BlueMapAPI api) {
+public class SpawnAddon extends BlueMapAddon {
+  public SpawnAddon(@NotNull BlueMapAPI api) {
     super(api, BlueMapSource.SPAWN, false);
   }
 

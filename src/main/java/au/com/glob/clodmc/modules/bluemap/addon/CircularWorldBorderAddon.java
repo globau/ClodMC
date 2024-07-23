@@ -15,10 +15,10 @@ import java.util.Map;
 import org.bukkit.World;
 import org.jetbrains.annotations.NotNull;
 
-public class WorldBorder extends BlueMapAddon {
+public class CircularWorldBorderAddon extends BlueMapAddon {
   private final @NotNull CircularWorldBorder module;
 
-  public WorldBorder(@NotNull BlueMapAPI api, @NotNull CircularWorldBorder module) {
+  public CircularWorldBorderAddon(@NotNull BlueMapAPI api, @NotNull CircularWorldBorder module) {
     super(api, BlueMapSource.WORLD_BORDER, false);
     this.module = module;
   }

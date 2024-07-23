@@ -25,13 +25,13 @@ import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.jetbrains.annotations.NotNull;
 
-public class Anchors extends BlueMapAddon {
+public class GatewaysAddon extends BlueMapAddon {
   private static final @NotNull String MARKER_FILENAME = "gateway.svg";
 
   private final @NotNull Map<World, MarkerSet> markerSets = new HashMap<>(3);
   private final @NotNull Gateways module;
 
-  public Anchors(@NotNull BlueMapAPI api, @NotNull Gateways module) {
+  public GatewaysAddon(@NotNull BlueMapAPI api, @NotNull Gateways module) {
     super(api, BlueMapSource.ANCHORS, true);
     this.module = module;
 
