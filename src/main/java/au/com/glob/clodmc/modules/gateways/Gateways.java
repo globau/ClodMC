@@ -3,8 +3,6 @@ package au.com.glob.clodmc.modules.gateways;
 import au.com.glob.clodmc.ClodMC;
 import au.com.glob.clodmc.modules.Module;
 import au.com.glob.clodmc.modules.SimpleCommand;
-import au.com.glob.clodmc.modules.bluemap.BlueMapSource;
-import au.com.glob.clodmc.modules.bluemap.BlueMapUpdateEvent;
 import au.com.glob.clodmc.util.BlockPos;
 import java.io.File;
 import java.io.IOException;
@@ -111,9 +109,7 @@ public class Gateways extends SimpleCommand implements Module, Listener {
     try {
       config.save(this.configFile);
 
-      Bukkit.getServer()
-          .getPluginManager()
-          .callEvent(new BlueMapUpdateEvent(BlueMapSource.ANCHORS));
+      Bukkit.getServer().getPluginManager().callEvent(new GatewayChangeEvent());
     } catch (IOException e) {
       ClodMC.logError(this.configFile + ": save failed: " + e);
     }

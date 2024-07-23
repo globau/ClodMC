@@ -2,7 +2,6 @@ package au.com.glob.clodmc.modules.bluemap.addon;
 
 import au.com.glob.clodmc.ClodMC;
 import au.com.glob.clodmc.modules.bluemap.BlueMapAddon;
-import au.com.glob.clodmc.modules.bluemap.BlueMapSource;
 import com.flowpowered.math.vector.Vector2d;
 import de.bluecolored.bluemap.api.BlueMapAPI;
 import de.bluecolored.bluemap.api.BlueMapMap;
@@ -32,7 +31,7 @@ public class GriefPreventionAddon extends BlueMapAddon implements Listener {
   private final @NotNull Map<World, MarkerSet> markerSets = new HashMap<>(3);
 
   public GriefPreventionAddon(@NotNull BlueMapAPI api) {
-    super(api, BlueMapSource.GRIEF_PREVENTION, true);
+    super(api);
 
     for (World world : Bukkit.getWorlds()) {
       this.markerSets.put(world, MarkerSet.builder().label("Claims").defaultHidden(true).build());
@@ -42,7 +41,7 @@ public class GriefPreventionAddon extends BlueMapAddon implements Listener {
   }
 
   @Override
-  protected void onUpdate() {
+  protected void updateMarkers() {
     for (MarkerSet markerSet : this.markerSets.values()) {
       markerSet.getMarkers().clear();
     }
@@ -99,26 +98,26 @@ public class GriefPreventionAddon extends BlueMapAddon implements Listener {
 
   @EventHandler(priority = EventPriority.MONITOR)
   public void onClaimCreated(@NotNull ClaimCreatedEvent event) {
-    this.onUpdate();
+    this.updateMarkers();
   }
 
   @EventHandler(priority = EventPriority.MONITOR)
   public void onClaimResize(@NotNull ClaimResizeEvent event) {
-    this.onUpdate();
+    this.updateMarkers();
   }
 
   @EventHandler(priority = EventPriority.MONITOR)
   public void onClaimChange(@NotNull ClaimChangeEvent event) {
-    this.onUpdate();
+    this.updateMarkers();
   }
 
   @EventHandler(priority = EventPriority.MONITOR)
   public void onClaimExtend(@NotNull ClaimExtendEvent event) {
-    this.onUpdate();
+    this.updateMarkers();
   }
 
   @EventHandler(priority = EventPriority.MONITOR)
   public void onClaimDelete(@NotNull ClaimDeletedEvent event) {
-    this.onUpdate();
+    this.updateMarkers();
   }
 }

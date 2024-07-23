@@ -2,8 +2,8 @@ package au.com.glob.clodmc.modules.bluemap.addon;
 
 import au.com.glob.clodmc.ClodMC;
 import au.com.glob.clodmc.modules.bluemap.BlueMapAddon;
-import au.com.glob.clodmc.modules.bluemap.BlueMapSource;
 import au.com.glob.clodmc.modules.gateways.AnchorBlock;
+import au.com.glob.clodmc.modules.gateways.GatewayChangeEvent;
 import au.com.glob.clodmc.modules.gateways.Gateways;
 import com.flowpowered.math.vector.Vector2i;
 import com.flowpowered.math.vector.Vector3d;
@@ -23,17 +23,19 @@ import java.util.Map;
 import java.util.Set;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
 import org.jetbrains.annotations.NotNull;
 
-public class GatewaysAddon extends BlueMapAddon {
+public class GatewaysAddon extends BlueMapAddon implements Listener {
   private static final @NotNull String MARKER_FILENAME = "gateway.svg";
 
   private final @NotNull Map<World, MarkerSet> markerSets = new HashMap<>(3);
   private final @NotNull Gateways module;
 
-  public GatewaysAddon(@NotNull BlueMapAPI api, @NotNull Gateways module) {
-    super(api, BlueMapSource.ANCHORS, true);
-    this.module = module;
+  public GatewaysAddon(@NotNull BlueMapAPI api) {
+    super(api);
+    this.module = ClodMC.getModule(Gateways.class);
 
     // create svg
     Path gatewayFilePath = api.getWebApp().getWebRoot().resolve("assets").resolve(MARKER_FILENAME);
@@ -53,10 +55,12 @@ public class GatewaysAddon extends BlueMapAddon {
       this.markerSets.put(
           world, MarkerSet.builder().label("Gateways").defaultHidden(false).build());
     }
+
+    Bukkit.getPluginManager().registerEvents(this, ClodMC.instance);
   }
 
   @Override
-  public void onUpdate() {
+  public void updateMarkers() {
     for (MarkerSet markerSet : this.markerSets.values()) {
       markerSet.getMarkers().clear();
     }
@@ -108,5 +112,10 @@ public class GatewaysAddon extends BlueMapAddon {
                 }
               });
     }
+  }
+
+  @EventHandler
+  public void onGatewayChange(@NotNull GatewayChangeEvent event) {
+    this.updateMarkers();
   }
 }

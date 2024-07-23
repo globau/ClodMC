@@ -1,7 +1,6 @@
 package au.com.glob.clodmc.modules.bluemap.addon;
 
 import au.com.glob.clodmc.modules.bluemap.BlueMapAddon;
-import au.com.glob.clodmc.modules.bluemap.BlueMapSource;
 import com.flowpowered.math.vector.Vector3d;
 import de.bluecolored.bluemap.api.BlueMapAPI;
 import de.bluecolored.bluemap.api.BlueMapMap;
@@ -14,11 +13,11 @@ import org.jetbrains.annotations.NotNull;
 
 public class SpawnAddon extends BlueMapAddon {
   public SpawnAddon(@NotNull BlueMapAPI api) {
-    super(api, BlueMapSource.SPAWN, false);
+    super(api);
   }
 
   @Override
-  public void onUpdate() {
+  public void updateMarkers() {
     for (World world : Bukkit.getWorlds()) {
       MarkerSet markerSet = MarkerSet.builder().label("Spawn").defaultHidden(false).build();
       markerSet.put(
