@@ -14,15 +14,14 @@ import org.bukkit.event.server.ServerLoadEvent;
 import org.jetbrains.annotations.NotNull;
 
 public class RequiredPlugins implements Listener, Module {
+  private static final @NotNull List<String> REQUIRED = List.of("GriefPrevention");
+
   private boolean preventLogin = true;
 
   @EventHandler
   public void onServerLoaded(@NotNull ServerLoadEvent event) {
-    List<String> required =
-        ClodMC.instance.getConfig().getStringList("required-plugins").stream().sorted().toList();
-
     StringJoiner missing = new StringJoiner(" ");
-    for (String name : required) {
+    for (String name : REQUIRED) {
       if (!Bukkit.getPluginManager().isPluginEnabled(name)) {
         missing.add(name);
       }

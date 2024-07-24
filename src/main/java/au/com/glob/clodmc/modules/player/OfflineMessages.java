@@ -1,10 +1,10 @@
 package au.com.glob.clodmc.modules.player;
 
 import au.com.glob.clodmc.ClodMC;
-import au.com.glob.clodmc.config.PlayerConfig;
-import au.com.glob.clodmc.config.PlayerConfigUpdater;
 import au.com.glob.clodmc.modules.Module;
 import au.com.glob.clodmc.util.MiscUtil;
+import au.com.glob.clodmc.util.PlayerDataFile;
+import au.com.glob.clodmc.util.PlayerDataUpdater;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -46,7 +46,7 @@ public class OfflineMessages implements Module, Listener {
     // offline player check might make a web request to fetch uuid
     OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(recipient);
 
-    try (PlayerConfigUpdater config = PlayerConfigUpdater.of(offlinePlayer.getUniqueId())) {
+    try (PlayerDataUpdater config = PlayerDataUpdater.of(offlinePlayer.getUniqueId())) {
       if (!config.fileExists()) {
         return false;
       }
@@ -61,12 +61,12 @@ public class OfflineMessages implements Module, Listener {
       config.set("messages", messages);
     }
 
-    sender.fyi("message queued for delivery");
+    sender.fyi(recipient + " will receive your message next time they log in");
     return true;
   }
 
   private List<Message> loadMessages(@NotNull Player player) {
-    return this.loadMessages(PlayerConfig.of(player).getList("messages"));
+    return this.loadMessages(PlayerDataFile.of(player).getList("messages"));
   }
 
   private List<Message> loadMessages(@Nullable List<?> configValue) {
@@ -120,7 +120,7 @@ public class OfflineMessages implements Module, Listener {
               for (Message message : messages) {
                 message.sendTo(player);
               }
-              try (PlayerConfigUpdater config = PlayerConfigUpdater.of(player)) {
+              try (PlayerDataUpdater config = PlayerDataUpdater.of(player)) {
                 config.remove("messages");
               }
             },

@@ -1,4 +1,4 @@
-package au.com.glob.clodmc.config;
+package au.com.glob.clodmc.util;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -8,20 +8,20 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class PlayerConfigUpdater implements AutoCloseable {
-  private final @NotNull PlayerConfig config;
+public class PlayerDataUpdater implements AutoCloseable {
+  private final @NotNull PlayerDataFile config;
   private boolean modified;
 
-  private PlayerConfigUpdater(@NotNull UUID uuid) {
-    this.config = PlayerConfig.of(uuid);
+  private PlayerDataUpdater(@NotNull UUID uuid) {
+    this.config = PlayerDataFile.of(uuid);
   }
 
-  public static @NotNull PlayerConfigUpdater of(@NotNull Player player) {
-    return new PlayerConfigUpdater(player.getUniqueId());
+  public static @NotNull PlayerDataUpdater of(@NotNull Player player) {
+    return new PlayerDataUpdater(player.getUniqueId());
   }
 
-  public static @NotNull PlayerConfigUpdater of(@NotNull UUID uuid) {
-    return new PlayerConfigUpdater(uuid);
+  public static @NotNull PlayerDataUpdater of(@NotNull UUID uuid) {
+    return new PlayerDataUpdater(uuid);
   }
 
   @Override

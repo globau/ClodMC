@@ -1,8 +1,8 @@
 package au.com.glob.clodmc.modules.homes;
 
-import au.com.glob.clodmc.config.PlayerConfig;
-import au.com.glob.clodmc.config.PlayerConfigUpdater;
 import au.com.glob.clodmc.modules.Module;
+import au.com.glob.clodmc.util.PlayerDataFile;
+import au.com.glob.clodmc.util.PlayerDataUpdater;
 import au.com.glob.clodmc.util.PlayerLocation;
 import java.util.HashMap;
 import java.util.Map;
@@ -17,12 +17,15 @@ public class Homes implements Listener, Module {
   @SuppressWarnings("NotNullFieldNotInitialized")
   protected static @NotNull Homes instance;
 
+  protected static final int MAX_HOMES = 3;
+  protected static final @NotNull String OVERWORLD_NAME = "world";
+
   public Homes() {
     instance = this;
   }
 
   protected @NotNull Map<String, PlayerLocation> getHomes(@NotNull Player player) {
-    PlayerConfig config = PlayerConfig.of(player);
+    PlayerDataFile config = PlayerDataFile.of(player);
 
     ConfigurationSection section = config.getConfigurationSection("homes");
     if (section == null) {
@@ -38,7 +41,7 @@ public class Homes implements Listener, Module {
   }
 
   protected void setHomes(@NotNull Player player, @NotNull Map<String, PlayerLocation> homes) {
-    try (PlayerConfigUpdater config = PlayerConfigUpdater.of(player)) {
+    try (PlayerDataUpdater config = PlayerDataUpdater.of(player)) {
       ConfigurationSection section = config.getConfigurationSection("homes");
       if (section != null) {
         for (String name : section.getKeys(false)) {
@@ -54,13 +57,13 @@ public class Homes implements Listener, Module {
   }
 
   protected void setBackLocation(@NotNull Player player) {
-    try (PlayerConfigUpdater config = PlayerConfigUpdater.of(player)) {
+    try (PlayerDataUpdater config = PlayerDataUpdater.of(player)) {
       config.set("homes_internal.back", PlayerLocation.of(player));
     }
   }
 
   protected @Nullable PlayerLocation getBackLocation(@NotNull Player player) {
-    PlayerConfig config = PlayerConfig.of(player);
+    PlayerDataFile config = PlayerDataFile.of(player);
     return (PlayerLocation) config.get("homes_internal.back");
   }
 }

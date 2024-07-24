@@ -1,6 +1,5 @@
 package au.com.glob.clodmc;
 
-import au.com.glob.clodmc.config.Config;
 import au.com.glob.clodmc.modules.Module;
 import au.com.glob.clodmc.modules.SimpleCommand;
 import au.com.glob.clodmc.modules.bluemap.BlueMap;
@@ -31,22 +30,34 @@ import au.com.glob.clodmc.modules.player.WelcomeBook;
 import au.com.glob.clodmc.modules.server.CircularWorldBorder;
 import au.com.glob.clodmc.modules.server.RequiredPlugins;
 import au.com.glob.clodmc.util.MaterialUtil;
+import au.com.glob.clodmc.util.PlayerLocation;
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.StringJoiner;
 import java.util.logging.Level;
+import java.util.stream.Stream;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.server.ServerLoadEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
+import org.yaml.snakeyaml.error.YAMLException;
 
 public final class ClodMC extends JavaPlugin implements Listener {
   @SuppressWarnings("NotNullFieldNotInitialized")
   public static @NotNull ClodMC instance;
 
+  public static boolean sanityChecked;
   private final @NotNull Map<Class<? extends Module>, Module> modules = new HashMap<>();
   private boolean shuttingDown;
 
@@ -117,7 +128,7 @@ public final class ClodMC extends JavaPlugin implements Listener {
 
     // load configs after sanity checking
     try {
-      Config.sanityCheckConfigs();
+      this.sanityCheckConfigs();
     } catch (RuntimeException e) {
       // turns out this doesn't set Bukkit.isStopping, and bukkit will complete
       // the startup process before immediately shutting down; this might cause
@@ -126,10 +137,46 @@ public final class ClodMC extends JavaPlugin implements Listener {
       this.shuttingDown = true;
       return;
     }
-    Config.preload("config.yml");
     for (Module module : this.modules.values()) {
       module.loadConfig();
     }
+  }
+
+  private void sanityCheckConfigs() throws RuntimeException {
+    ConfigurationSerialization.registerClass(PlayerLocation.class);
+
+    // ensure all configs can be deserialised, halt server if not to avoid dataloss
+    List<String> errors = new ArrayList<>(0);
+    try (Stream<Path> paths = Files.walk(ClodMC.instance.getDataFolder().toPath())) {
+      paths
+          .filter(Files::isRegularFile)
+          .filter((Path path) -> path.toString().endsWith(".yml"))
+          .sorted()
+          .map(Path::toFile)
+          .forEach(
+              (File file) -> {
+                try {
+                  YamlConfiguration.loadConfiguration(file);
+                } catch (YAMLException e) {
+                  StringJoiner message = new StringJoiner(": ");
+                  message.add(file.toString());
+                  message.add(e.getMessage());
+                  if (e.getCause() != null) {
+                    message.add(e.getCause().getMessage());
+                  }
+                  errors.add(message.toString());
+                }
+              });
+    } catch (IOException e) {
+      errors.add(e.getMessage());
+    }
+    if (!errors.isEmpty()) {
+      for (String error : errors) {
+        ClodMC.logError(error);
+      }
+      throw new RuntimeException();
+    }
+    sanityChecked = true;
   }
 
   @EventHandler
@@ -173,13 +220,6 @@ public final class ClodMC extends JavaPlugin implements Listener {
   @Override
   public void onDisable() {
     SimpleCommand.unregisterAll();
-  }
-
-  // helpers
-
-  @Override
-  public @NotNull Config getConfig() {
-    return Config.of("config.yml");
   }
 
   // messages

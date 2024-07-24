@@ -1,12 +1,12 @@
 package au.com.glob.clodmc.modules.player;
 
 import au.com.glob.clodmc.ClodMC;
-import au.com.glob.clodmc.config.PlayerConfig;
 import au.com.glob.clodmc.modules.CommandError;
 import au.com.glob.clodmc.modules.Module;
 import au.com.glob.clodmc.modules.SimpleCommand;
 import au.com.glob.clodmc.util.HttpClient;
 import au.com.glob.clodmc.util.Mailer;
+import au.com.glob.clodmc.util.PlayerDataFile;
 import com.google.gson.JsonObject;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
@@ -21,6 +21,8 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 
 public class InviteCommand extends SimpleCommand implements Module {
+  private static final int PLAY_TIME = 240; // minutes
+
   public InviteCommand() {
     super("invite", "/invite <java | bedrock> <player>", "Teleport to previous location");
   }
@@ -39,16 +41,15 @@ public class InviteCommand extends SimpleCommand implements Module {
     if (sender instanceof Player player && !player.isOp()) {
       int ticks = player.getStatistic(Statistic.PLAY_ONE_MINUTE);
       long minutesPlayed = Math.round(ticks / 20.0 / 60.0);
-      int minPlaytime = ClodMC.instance.getConfig().getInt("invite.playtime-minutes");
-      if (minutesPlayed < minPlaytime) {
+      if (minutesPlayed < PLAY_TIME) {
         throw new CommandError("You have not played long enough on this server to invite others");
       }
     }
 
     // ensure player isn't already whitelisted
     // checking player files is easier than checking the actual whitelist for bedrock
-    for (UUID uuid : PlayerConfig.knownUUIDs()) {
-      PlayerConfig config = PlayerConfig.of(uuid);
+    for (UUID uuid : PlayerDataFile.knownUUIDs()) {
+      PlayerDataFile config = PlayerDataFile.of(uuid);
       if (config.getPlayerName().equalsIgnoreCase(name)) {
         throw new CommandError(name + " is already whitelisted");
       }

@@ -1,7 +1,5 @@
 package au.com.glob.clodmc.util;
 
-import au.com.glob.clodmc.ClodMC;
-import au.com.glob.clodmc.config.Config;
 import java.io.BufferedReader;
 import java.io.Closeable;
 import java.io.DataOutputStream;
@@ -11,10 +9,14 @@ import java.net.Socket;
 import java.text.DateFormat;
 import java.util.Date;
 import java.util.Locale;
-import java.util.Objects;
 import org.jetbrains.annotations.NotNull;
 
 public class Mailer {
+  private static final @NotNull String ADMIN_ADDR = "clod@glob.au";
+  private static final @NotNull String HOSTNAME = "in1-smtp.messagingengine.com";
+  private static final @NotNull String SENDER_NAME = "Clod Minecraft Server";
+  private static final @NotNull String SENDER_ADDR = "clod@glob.au";
+
   private Mailer() {}
 
   public static class MailerError extends Exception {
@@ -28,28 +30,21 @@ public class Mailer {
   }
 
   public static void emailAdmin(@NotNull String subject, @NotNull String body) throws MailerError {
-    String addr = ClodMC.instance.getConfig().getString("mailer.admin-addr");
-    if (addr != null) {
-      send(addr, subject, body);
-    }
+    send(ADMIN_ADDR, subject, body);
   }
 
   public static void send(@NotNull String recipient, @NotNull String subject, @NotNull String body)
       throws MailerError {
-    Config config = ClodMC.instance.getConfig();
-    String hostname = config.getString("mailer.hostname");
-    String senderAddr = config.getString("mailer.sender-addr");
-    String senderName = config.getString("mailer.sender-name");
 
     try {
-      try (SMTP smtp = new SMTP(Objects.requireNonNull(hostname))) {
+      try (SMTP smtp = new SMTP()) {
         smtp.waitFor("220 ");
         smtp.sendAndWait("HELO glob.au", "250 ");
-        smtp.sendAndWait("MAIL FROM: " + senderAddr, "250 ");
+        smtp.sendAndWait("MAIL FROM: " + SENDER_ADDR, "250 ");
         smtp.sendAndWait("RCPT TO: " + recipient, "250 ");
         smtp.sendAndWait("DATA", "354 ");
         smtp.sendLine("Date: " + smtp.currentDate());
-        smtp.sendLine("From: " + senderName + " <" + senderAddr + ">");
+        smtp.sendLine("From: " + SENDER_NAME + " <" + SENDER_ADDR + ">");
         smtp.sendLine("To: " + recipient);
         smtp.sendLine("Subject: " + subject);
         smtp.sendLine("");
@@ -69,8 +64,8 @@ public class Mailer {
     private final @NotNull BufferedReader inStream;
     private final @NotNull DataOutputStream outStream;
 
-    SMTP(@NotNull String hostname) throws IOException {
-      this.socket = new Socket(hostname, 25);
+    SMTP() throws IOException {
+      this.socket = new Socket(HOSTNAME, 25);
       this.socket.setSoTimeout(5000);
       this.inStream = new BufferedReader(new InputStreamReader(this.socket.getInputStream()));
       this.outStream = new DataOutputStream(this.socket.getOutputStream());

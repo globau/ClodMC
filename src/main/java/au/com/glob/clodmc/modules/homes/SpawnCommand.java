@@ -23,8 +23,7 @@ public class SpawnCommand extends SimpleCommand implements Module {
   protected void execute(@NotNull CommandSender sender, @NotNull List<String> args) {
     Player player = this.toPlayer(sender);
 
-    String worldName = ClodMC.instance.getConfig().getString("homes.overworld-name", "world");
-    World world = Bukkit.getWorld(worldName);
+    World world = Bukkit.getWorld(Homes.OVERWORLD_NAME);
     if (world == null) {
       return;
     }

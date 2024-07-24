@@ -22,13 +22,12 @@ public class SetHomeCommand extends SimpleCommand implements Module {
     Player player = this.toPlayer(sender);
     String name = this.popArg(args, "home");
 
-    int maxHomes = ClodMC.instance.getConfig().getInt("homes.max-allowed");
-
     Map<String, PlayerLocation> homes = Homes.instance.getHomes(player);
     boolean existing = homes.containsKey(name);
 
-    if (!existing && homes.size() >= maxHomes) {
-      throw new CommandError("You have reached the maximum number of homes (" + maxHomes + ")");
+    if (!existing && homes.size() >= Homes.MAX_HOMES) {
+      throw new CommandError(
+          "You have reached the maximum number of homes (" + Homes.MAX_HOMES + ")");
     }
 
     if (TeleportUtil.isUnsafe(player.getLocation().getBlock(), false)) {

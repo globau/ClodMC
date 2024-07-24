@@ -1,7 +1,7 @@
 package au.com.glob.clodmc.modules.bluemap.addon;
 
-import au.com.glob.clodmc.ClodMC;
 import au.com.glob.clodmc.modules.bluemap.BlueMapAddon;
+import au.com.glob.clodmc.modules.bluemap.BlueMapSource;
 import au.com.glob.clodmc.modules.server.CircularWorldBorder;
 import de.bluecolored.bluemap.api.BlueMapAPI;
 import de.bluecolored.bluemap.api.BlueMapMap;
@@ -16,14 +16,16 @@ import org.bukkit.World;
 import org.jetbrains.annotations.NotNull;
 
 public class CircularWorldBorderAddon extends BlueMapAddon {
-  public CircularWorldBorderAddon(@NotNull BlueMapAPI api) {
-    super(api);
+  private final @NotNull CircularWorldBorder module;
+
+  public CircularWorldBorderAddon(@NotNull BlueMapAPI api, @NotNull CircularWorldBorder module) {
+    super(api, BlueMapSource.WORLD_BORDER, false);
+    this.module = module;
   }
 
   @Override
-  public void updateMarkers() {
-    CircularWorldBorder module = ClodMC.getModule(CircularWorldBorder.class);
-    for (Map.Entry<World, CircularWorldBorder.Border> entry : module.getBorders().entrySet()) {
+  public void onUpdate() {
+    for (Map.Entry<World, CircularWorldBorder.Border> entry : this.module.getBorders().entrySet()) {
       World world = entry.getKey();
       CircularWorldBorder.Border border = entry.getValue();
 

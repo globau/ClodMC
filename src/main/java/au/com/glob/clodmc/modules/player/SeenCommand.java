@@ -1,10 +1,10 @@
 package au.com.glob.clodmc.modules.player;
 
 import au.com.glob.clodmc.ClodMC;
-import au.com.glob.clodmc.config.PlayerConfig;
 import au.com.glob.clodmc.modules.Module;
 import au.com.glob.clodmc.modules.SimpleCommand;
 import au.com.glob.clodmc.util.MiscUtil;
+import au.com.glob.clodmc.util.PlayerDataFile;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.HashMap;
@@ -29,8 +29,8 @@ public class SeenCommand extends SimpleCommand implements Module, Listener {
 
   private void updateValidNames() {
     this.validNames.clear();
-    for (UUID uuid : PlayerConfig.knownUUIDs()) {
-      PlayerConfig config = PlayerConfig.of(uuid);
+    for (UUID uuid : PlayerDataFile.knownUUIDs()) {
+      PlayerDataFile config = PlayerDataFile.of(uuid);
       if (config.getInt("player.playtime_min", 0) > 10) {
         this.validNames.put(config.getPlayerName(), uuid);
       }
@@ -62,10 +62,10 @@ public class SeenCommand extends SimpleCommand implements Module, Listener {
       return;
     }
 
-    PlayerConfig config =
+    PlayerDataFile config =
         this.validNames.entrySet().stream()
             .filter((Map.Entry<String, UUID> entry) -> entry.getKey().equalsIgnoreCase(playerName))
-            .map((Map.Entry<String, UUID> entry) -> PlayerConfig.of(entry.getValue()))
+            .map((Map.Entry<String, UUID> entry) -> PlayerDataFile.of(entry.getValue()))
             .findFirst()
             .orElse(null);
 

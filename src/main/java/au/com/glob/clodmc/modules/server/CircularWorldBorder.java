@@ -3,7 +3,6 @@ package au.com.glob.clodmc.modules.server;
 // inspired by https://github.com/pop4959/ChunkyBorder/
 
 import au.com.glob.clodmc.ClodMC;
-import au.com.glob.clodmc.config.Config;
 import au.com.glob.clodmc.modules.Module;
 import io.papermc.paper.entity.TeleportFlag;
 import java.util.ArrayList;
@@ -31,6 +30,11 @@ import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 
 public class CircularWorldBorder implements Module, Listener {
+  private static final @NotNull List<Config> BORDERS =
+      List.of(
+          new Config("world", new Border(158.5, 2.5, 7500)),
+          new Config("world_nether", new Border(6.5, 0.5, 7500)));
+
   private static final int MAX_PARTICLE_DISTANCE = 8;
   private static final int MAX_PARTICLE_DISTANCE_SQUARED =
       MAX_PARTICLE_DISTANCE * MAX_PARTICLE_DISTANCE;
@@ -42,23 +46,20 @@ public class CircularWorldBorder implements Module, Listener {
 
   @Override
   public void loadConfig() {
-    Config config = ClodMC.instance.getConfig();
-
-    for (World world : Bukkit.getWorlds()) {
-      String path = "border." + world.getName();
-      if (config.contains(path)) {
-        this.borders.put(
-            world,
-            new Border(
-                config.getDouble(path + ".x"),
-                config.getDouble(path + ".z"),
-                config.getDouble(path + ".radius")));
+    for (Config config : BORDERS) {
+      World world = Bukkit.getWorld(config.world);
+      if (world == null) {
+        ClodMC.logError("CircularWorldBorder: invalid world: " + config.world);
+        continue;
       }
+      this.borders.put(world, config.border);
     }
 
     this.startBorderCheckTask();
     this.startVisualisationTask();
   }
+
+  private record Config(@NotNull String world, @NotNull Border border) {}
 
   private void startBorderCheckTask() {
     Bukkit.getServer()

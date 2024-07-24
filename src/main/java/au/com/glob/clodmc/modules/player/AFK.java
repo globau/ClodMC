@@ -31,8 +31,9 @@ public class AFK extends SimpleCommand implements Listener, Module {
   @SuppressWarnings("NotNullFieldNotInitialized")
   public static @NotNull AFK instance;
 
+  private static final int IDLE_TIME = 300; // seconds
+
   private final @NotNull HashMap<UUID, PlayerState> playerStates = new HashMap<>();
-  private int idleTime = 300;
 
   public AFK() {
     super("afk", "toggle afk status");
@@ -57,8 +58,6 @@ public class AFK extends SimpleCommand implements Listener, Module {
 
   @Override
   public void loadConfig() {
-    this.idleTime = ClodMC.instance.getConfig().getInt("afk.idle-time", 300);
-
     // check for away players every second
     Bukkit.getScheduler()
         .runTaskTimer(
@@ -67,7 +66,7 @@ public class AFK extends SimpleCommand implements Listener, Module {
               long now = System.currentTimeMillis() / 1000;
               for (PlayerState playerState : this.playerStates.values()) {
                 if (playerState.player.isOnline() && !playerState.isAway) {
-                  if (now - playerState.lastInteractionTime >= this.idleTime) {
+                  if (now - playerState.lastInteractionTime >= IDLE_TIME) {
                     playerState.setAway(true);
                   }
                 }
