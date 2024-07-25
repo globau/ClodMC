@@ -13,6 +13,7 @@ import au.com.glob.clodmc.modules.homes.SetHomeCommand;
 import au.com.glob.clodmc.modules.homes.SpawnCommand;
 import au.com.glob.clodmc.modules.interactions.Decorations;
 import au.com.glob.clodmc.modules.interactions.FastLeafDecay;
+import au.com.glob.clodmc.modules.interactions.NamedStorage;
 import au.com.glob.clodmc.modules.inventory.AdminInvCommand;
 import au.com.glob.clodmc.modules.inventory.InventorySort;
 import au.com.glob.clodmc.modules.mobs.BetterDrops;
@@ -99,6 +100,7 @@ public final class ClodMC extends JavaPlugin implements Listener {
     // interactions
     this.register(new Decorations());
     this.register(new FastLeafDecay());
+    this.register(new NamedStorage());
 
     // inventory
     this.register(new AdminInvCommand());

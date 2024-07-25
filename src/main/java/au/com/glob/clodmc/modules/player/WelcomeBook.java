@@ -93,7 +93,9 @@ public class WelcomeBook extends SimpleCommand implements Module, Listener {
           """
               <b>Other</b>
 
-              Shift+Right-clicking an container's inventory will sort it""");
+              Shift+Right-clicking an container's inventory will sort it.
+
+              A named container will be visible when looking at it.""");
 
   public WelcomeBook() {
     super("welcome", "/welcome <player>", "Give specified player the welcome book");
