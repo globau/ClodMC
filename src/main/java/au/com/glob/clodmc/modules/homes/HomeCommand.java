@@ -26,8 +26,6 @@ public class HomeCommand extends SimpleCommand implements Module {
       throw new CommandError(name.equals("home") ? "No home set" : "No such home '" + name + "'");
     }
 
-    Homes.instance.setBackLocation(player);
-
     ClodMC.fyi(player, "Teleporting you " + (name.equals("home") ? "home" : "to '" + name + "'"));
     PlayerLocation playerLoc = homes.get(name);
     playerLoc.teleportPlayer(player);

@@ -11,14 +11,12 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 public class Homes implements Listener, Module {
   @SuppressWarnings("NotNullFieldNotInitialized")
   protected static @NotNull Homes instance;
 
   protected static final int MAX_HOMES = 3;
-  protected static final @NotNull String OVERWORLD_NAME = "world";
 
   public Homes() {
     instance = this;
@@ -54,16 +52,5 @@ public class Homes implements Listener, Module {
         config.set("homes." + name, homes.get(name));
       }
     }
-  }
-
-  protected void setBackLocation(@NotNull Player player) {
-    try (PlayerDataUpdater config = PlayerDataUpdater.of(player)) {
-      config.set("homes_internal.back", PlayerLocation.of(player));
-    }
-  }
-
-  protected @Nullable PlayerLocation getBackLocation(@NotNull Player player) {
-    PlayerDataFile config = PlayerDataFile.of(player);
-    return (PlayerLocation) config.get("homes_internal.back");
   }
 }

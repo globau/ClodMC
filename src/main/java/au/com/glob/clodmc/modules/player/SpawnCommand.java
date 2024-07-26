@@ -1,4 +1,4 @@
-package au.com.glob.clodmc.modules.homes;
+package au.com.glob.clodmc.modules.player;
 
 import au.com.glob.clodmc.ClodMC;
 import au.com.glob.clodmc.modules.Module;
@@ -23,12 +23,10 @@ public class SpawnCommand extends SimpleCommand implements Module {
   protected void execute(@NotNull CommandSender sender, @NotNull List<String> args) {
     Player player = this.toPlayer(sender);
 
-    World world = Bukkit.getWorld(Homes.OVERWORLD_NAME);
+    World world = Bukkit.getWorld("world");
     if (world == null) {
       return;
     }
-
-    Homes.instance.setBackLocation(player);
 
     ClodMC.fyi(player, "Teleporting you to spawn");
 

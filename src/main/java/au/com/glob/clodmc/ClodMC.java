@@ -4,13 +4,11 @@ import au.com.glob.clodmc.modules.Module;
 import au.com.glob.clodmc.modules.SimpleCommand;
 import au.com.glob.clodmc.modules.bluemap.BlueMap;
 import au.com.glob.clodmc.modules.gateways.Gateways;
-import au.com.glob.clodmc.modules.homes.BackCommand;
 import au.com.glob.clodmc.modules.homes.DelHomeCommand;
 import au.com.glob.clodmc.modules.homes.HomeCommand;
 import au.com.glob.clodmc.modules.homes.Homes;
 import au.com.glob.clodmc.modules.homes.HomesCommand;
 import au.com.glob.clodmc.modules.homes.SetHomeCommand;
-import au.com.glob.clodmc.modules.homes.SpawnCommand;
 import au.com.glob.clodmc.modules.interactions.Decorations;
 import au.com.glob.clodmc.modules.interactions.FastLeafDecay;
 import au.com.glob.clodmc.modules.interactions.NamedStorage;
@@ -20,6 +18,7 @@ import au.com.glob.clodmc.modules.mobs.BetterDrops;
 import au.com.glob.clodmc.modules.mobs.PreventMobGriefing;
 import au.com.glob.clodmc.modules.mobs.PreventMobSpawn;
 import au.com.glob.clodmc.modules.player.AFK;
+import au.com.glob.clodmc.modules.player.BackCommand;
 import au.com.glob.clodmc.modules.player.GameModeCommand;
 import au.com.glob.clodmc.modules.player.InviteCommand;
 import au.com.glob.clodmc.modules.player.OfflineMessages;
@@ -27,6 +26,7 @@ import au.com.glob.clodmc.modules.player.OpAlerts;
 import au.com.glob.clodmc.modules.player.PlayerTracker;
 import au.com.glob.clodmc.modules.player.SeenCommand;
 import au.com.glob.clodmc.modules.player.Sleep;
+import au.com.glob.clodmc.modules.player.SpawnCommand;
 import au.com.glob.clodmc.modules.player.WelcomeBook;
 import au.com.glob.clodmc.modules.server.CircularWorldBorder;
 import au.com.glob.clodmc.modules.server.RequiredPlugins;
@@ -90,10 +90,8 @@ public final class ClodMC extends JavaPlugin implements Listener {
 
     // homes
     this.register(new Homes());
-    this.register(new BackCommand());
     this.register(new DelHomeCommand());
     this.register(new HomeCommand());
-    this.register(new SpawnCommand());
     this.register(new HomesCommand());
     this.register(new SetHomeCommand());
 
@@ -113,12 +111,14 @@ public final class ClodMC extends JavaPlugin implements Listener {
 
     // player
     this.register(new AFK());
+    this.register(new BackCommand());
     this.register(new GameModeCommand());
     this.register(new InviteCommand());
     this.register(new OfflineMessages());
     this.register(new PlayerTracker());
     this.register(new SeenCommand());
     this.register(new Sleep());
+    this.register(new SpawnCommand());
     this.register(new WelcomeBook());
 
     // server

@@ -50,6 +50,14 @@ public class PlayerDataUpdater implements AutoCloseable {
     this.modified = true;
   }
 
+  public boolean contains(@NotNull String path) {
+    return this.config.contains(path);
+  }
+
+  public @Nullable Object get(@NotNull String path) {
+    return this.config.get(path);
+  }
+
   public @Nullable ConfigurationSection getConfigurationSection(@NotNull String path) {
     return this.config.getConfigurationSection(path);
   }
