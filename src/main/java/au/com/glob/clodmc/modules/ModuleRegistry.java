@@ -28,6 +28,7 @@ import au.com.glob.clodmc.modules.player.Sleep;
 import au.com.glob.clodmc.modules.player.SpawnCommand;
 import au.com.glob.clodmc.modules.player.WelcomeBook;
 import au.com.glob.clodmc.modules.server.CircularWorldBorder;
+import au.com.glob.clodmc.modules.server.ClodServerLinks;
 import au.com.glob.clodmc.modules.server.RequiredPlugins;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
@@ -115,6 +116,7 @@ public class ModuleRegistry {
 
     // server
     this.register(CircularWorldBorder.class);
+    this.register(ClodServerLinks.class);
     this.register(RequiredPlugins.class);
 
     // bluemap
