@@ -18,6 +18,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.server.ServerLoadEvent;
 import org.jetbrains.annotations.NotNull;
 
 public class SeenCommand extends SimpleCommand implements Module, Listener {
@@ -35,6 +36,11 @@ public class SeenCommand extends SimpleCommand implements Module, Listener {
         this.validNames.put(config.getPlayerName(), uuid);
       }
     }
+  }
+
+  @EventHandler
+  public void onServerLoad(@NotNull ServerLoadEvent event) {
+    this.updateValidNames();
   }
 
   @EventHandler
