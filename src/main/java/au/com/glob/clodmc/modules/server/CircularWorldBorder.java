@@ -26,6 +26,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 
@@ -95,6 +96,7 @@ public class CircularWorldBorder implements Module, Listener {
                 player.playSound(teleportLoc, Sound.ENTITY_PLAYER_TELEPORT, 1, 1);
                 player.teleport(
                     teleportLoc,
+                    PlayerTeleportEvent.TeleportCause.PLUGIN,
                     TeleportFlag.EntityState.RETAIN_VEHICLE,
                     TeleportFlag.EntityState.RETAIN_PASSENGERS);
               }

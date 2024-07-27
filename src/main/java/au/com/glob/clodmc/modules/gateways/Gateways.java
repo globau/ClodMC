@@ -41,6 +41,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
@@ -297,7 +298,7 @@ public class Gateways extends SimpleCommand implements Module, Listener {
     // teleport
     Location teleportPos = anchorBlock.connectedTo.teleportLocation(player);
     player
-        .teleportAsync(teleportPos)
+        .teleportAsync(teleportPos, PlayerTeleportEvent.TeleportCause.PLUGIN)
         .whenComplete(
             (Boolean result, Throwable e) -> {
               player.clearTitle();

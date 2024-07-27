@@ -9,6 +9,7 @@ import org.bukkit.configuration.serialization.SerializableAs;
 import org.bukkit.entity.Boat;
 import org.bukkit.entity.Horse;
 import org.bukkit.entity.Player;
+import org.bukkit.event.player.PlayerTeleportEvent;
 import org.jetbrains.annotations.NotNull;
 
 @SerializableAs("ClodMC.Location")
@@ -49,7 +50,7 @@ public class PlayerLocation implements ConfigurationSerializable {
       loc.setYaw(this.location.getYaw());
       loc.setPitch(this.location.getPitch());
     }
-    player.teleportAsync(loc);
+    player.teleportAsync(loc, PlayerTeleportEvent.TeleportCause.COMMAND);
   }
 
   @Override
