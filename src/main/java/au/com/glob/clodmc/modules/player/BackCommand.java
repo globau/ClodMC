@@ -36,8 +36,10 @@ public class BackCommand extends SimpleCommand implements Module, Listener {
 
   @EventHandler
   public void onPlayerTeleport(@NotNull PlayerTeleportEvent event) {
-    try (PlayerDataUpdater config = PlayerDataUpdater.of(event.getPlayer())) {
-      config.set("back", PlayerLocation.of(event.getFrom()));
+    if (event.getCause() == PlayerTeleportEvent.TeleportCause.COMMAND) {
+      try (PlayerDataUpdater config = PlayerDataUpdater.of(event.getPlayer())) {
+        config.set("back", PlayerLocation.of(event.getFrom()));
+      }
     }
   }
 
