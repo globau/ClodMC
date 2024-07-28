@@ -26,7 +26,6 @@ import au.com.glob.clodmc.modules.player.WelcomeBook;
 import au.com.glob.clodmc.modules.server.CircularWorldBorder;
 import au.com.glob.clodmc.modules.server.ClodServerLinks;
 import au.com.glob.clodmc.modules.server.RequiredPlugins;
-import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -37,17 +36,7 @@ import org.jetbrains.annotations.NotNull;
 public class ModuleRegistry {
   private final @NotNull Map<Class<? extends Module>, Module> modules = new HashMap<>();
 
-  private void register(@NotNull Class<? extends Module> moduleClass) {
-    Module module;
-    try {
-      module = moduleClass.getDeclaredConstructor().newInstance();
-    } catch (InstantiationException
-        | IllegalAccessException
-        | InvocationTargetException
-        | NoSuchMethodException e) {
-      throw new RuntimeException(e);
-    }
-
+  private void register(@NotNull Module module) {
     String dependsOn = module.dependsOn();
     if (dependsOn != null && !Bukkit.getPluginManager().isPluginEnabled(dependsOn)) {
       ClodMC.logWarning(
@@ -59,7 +48,7 @@ public class ModuleRegistry {
       return;
     }
 
-    this.modules.put(moduleClass, module);
+    this.modules.put(module.getClass(), module);
 
     if (module instanceof Listener listener) {
       Bukkit.getServer().getPluginManager().registerEvents(listener, ClodMC.instance);
@@ -76,45 +65,45 @@ public class ModuleRegistry {
 
   public void registerAll() {
     // core - used by other modules
-    this.register(OpAlerts.class);
+    this.register(new OpAlerts());
 
     // gateways
-    this.register(Gateways.class);
+    this.register(new Gateways());
 
     // interactions
-    this.register(Decorations.class);
-    this.register(FastLeafDecay.class);
-    this.register(NamedStorage.class);
+    this.register(new Decorations());
+    this.register(new FastLeafDecay());
+    this.register(new NamedStorage());
 
     // inventory
-    this.register(AdminInvCommand.class);
-    this.register(InventorySort.class);
+    this.register(new AdminInvCommand());
+    this.register(new InventorySort());
 
     // mobs
-    this.register(BetterDrops.class);
-    this.register(PreventMobGriefing.class);
-    this.register(PreventMobSpawn.class);
+    this.register(new BetterDrops());
+    this.register(new PreventMobGriefing());
+    this.register(new PreventMobSpawn());
 
     // player
-    this.register(AFK.class);
-    this.register(BackCommand.class);
-    this.register(GameModeCommand.class);
-    this.register(Homes.class);
-    this.register(InviteCommand.class);
-    this.register(OfflineMessages.class);
-    this.register(PlayerTracker.class);
-    this.register(SeenCommand.class);
-    this.register(Sleep.class);
-    this.register(SpawnCommand.class);
-    this.register(WelcomeBook.class);
+    this.register(new AFK());
+    this.register(new BackCommand());
+    this.register(new GameModeCommand());
+    this.register(new Homes());
+    this.register(new InviteCommand());
+    this.register(new OfflineMessages());
+    this.register(new PlayerTracker());
+    this.register(new SeenCommand());
+    this.register(new Sleep());
+    this.register(new SpawnCommand());
+    this.register(new WelcomeBook());
 
     // server
-    this.register(CircularWorldBorder.class);
-    this.register(ClodServerLinks.class);
-    this.register(RequiredPlugins.class);
+    this.register(new CircularWorldBorder());
+    this.register(new ClodServerLinks());
+    this.register(new RequiredPlugins());
 
     // bluemap
-    this.register(BlueMap.class);
+    this.register(new BlueMap());
   }
 
   @SuppressWarnings("unchecked")
