@@ -30,7 +30,7 @@ public class PlayerDataFile extends YamlConfiguration {
   protected PlayerDataFile(@NotNull String filename) {
     super();
 
-    if (!ClodMC.sanityChecked) {
+    if (!ConfigUtil.sanityChecked) {
       Bukkit.shutdown();
       throw new RuntimeException("config file loaded before sanity checks");
     }

@@ -3,34 +3,22 @@ package au.com.glob.clodmc;
 import au.com.glob.clodmc.modules.Module;
 import au.com.glob.clodmc.modules.ModuleRegistry;
 import au.com.glob.clodmc.modules.SimpleCommand;
+import au.com.glob.clodmc.util.ConfigUtil;
 import au.com.glob.clodmc.util.MaterialUtil;
-import au.com.glob.clodmc.util.PlayerLocation;
 import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.StringJoiner;
 import java.util.logging.Level;
-import java.util.stream.Stream;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
-import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.server.ServerLoadEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
-import org.yaml.snakeyaml.error.YAMLException;
 
 public final class ClodMC extends JavaPlugin implements Listener {
   @SuppressWarnings("NotNullFieldNotInitialized")
   public static @NotNull ClodMC instance;
 
-  public static boolean sanityChecked;
-  private boolean shuttingDown;
   private final @NotNull ModuleRegistry moduleRegistry = new ModuleRegistry();
 
   // init
@@ -52,69 +40,26 @@ public final class ClodMC extends JavaPlugin implements Listener {
   public void onEnable() {
     MaterialUtil.init();
     Bukkit.getPluginManager().registerEvents(this, this);
-
     this.moduleRegistry.registerAll();
 
-    // load configs after sanity checking
-    try {
-      this.sanityCheckConfigs();
-    } catch (RuntimeException e) {
-      // turns out this doesn't set Bukkit.isStopping, and bukkit will complete
-      // the startup process before immediately shutting down; this might cause
-      // the wrong error to be shown in addition to the sanity check failures.
-      Bukkit.shutdown();
-      this.shuttingDown = true;
-      return;
-    }
-
-    for (Module module : this.moduleRegistry.all()) {
-      module.loadConfig();
-    }
-  }
-
-  private void sanityCheckConfigs() throws RuntimeException {
-    ConfigurationSerialization.registerClass(PlayerLocation.class);
-
     // ensure all configs can be deserialised, halt server if not to avoid dataloss
-    List<String> errors = new ArrayList<>(0);
-    try (Stream<Path> paths = Files.walk(ClodMC.instance.getDataFolder().toPath())) {
-      paths
-          .filter(Files::isRegularFile)
-          .filter((Path path) -> path.toString().endsWith(".yml"))
-          .sorted()
-          .map(Path::toFile)
-          .forEach(
-              (File file) -> {
-                try {
-                  YamlConfiguration.loadConfiguration(file);
-                } catch (YAMLException e) {
-                  StringJoiner message = new StringJoiner(": ");
-                  message.add(file.toString());
-                  message.add(e.getMessage());
-                  if (e.getCause() != null) {
-                    message.add(e.getCause().getMessage());
-                  }
-                  errors.add(message.toString());
-                }
-              });
-    } catch (IOException e) {
-      errors.add(e.getMessage());
-    }
-    if (!errors.isEmpty()) {
-      for (String error : errors) {
-        ClodMC.logError(error);
+    try {
+      ConfigUtil.sanityCheckConfigs();
+
+      for (Module module : this.moduleRegistry.all()) {
+        module.loadConfig();
       }
-      throw new RuntimeException();
+    } catch (ConfigUtil.InvalidConfig e) {
+      e.logErrors();
+      // disable plugins to prevent firing onServerLoad and similar events
+      Bukkit.getPluginManager().disablePlugins();
+      Bukkit.shutdown();
     }
-    sanityChecked = true;
   }
 
   @EventHandler
   public void onServerLoad(@NotNull ServerLoadEvent event) {
-    // sadly can't use Bukkit.isStopping()
-    if (!this.shuttingDown) {
-      ClodMC.logInfo("clod-mc started");
-    }
+    ClodMC.logInfo("clod-mc started");
   }
 
   public static @NotNull <T extends Module> T getModule(@NotNull Class<T> moduleClass) {

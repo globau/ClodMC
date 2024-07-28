@@ -6,6 +6,7 @@ import au.com.glob.clodmc.modules.SimpleCommand;
 import au.com.glob.clodmc.modules.bluemap.BlueMapSource;
 import au.com.glob.clodmc.modules.bluemap.BlueMapUpdateEvent;
 import au.com.glob.clodmc.util.BlockPos;
+import au.com.glob.clodmc.util.ConfigUtil;
 import java.io.File;
 import java.io.IOException;
 import java.time.Duration;
@@ -76,6 +77,11 @@ public class Gateways extends SimpleCommand implements Module, Listener {
 
   @Override
   public void loadConfig() {
+    if (!ConfigUtil.sanityChecked) {
+      Bukkit.shutdown();
+      throw new RuntimeException("config file loaded before sanity checks");
+    }
+
     this.instances.clear();
     this.ignore.clear();
 
