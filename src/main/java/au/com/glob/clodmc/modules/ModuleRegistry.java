@@ -3,11 +3,6 @@ package au.com.glob.clodmc.modules;
 import au.com.glob.clodmc.ClodMC;
 import au.com.glob.clodmc.modules.bluemap.BlueMap;
 import au.com.glob.clodmc.modules.gateways.Gateways;
-import au.com.glob.clodmc.modules.homes.DelHomeCommand;
-import au.com.glob.clodmc.modules.homes.HomeCommand;
-import au.com.glob.clodmc.modules.homes.Homes;
-import au.com.glob.clodmc.modules.homes.HomesCommand;
-import au.com.glob.clodmc.modules.homes.SetHomeCommand;
 import au.com.glob.clodmc.modules.interactions.Decorations;
 import au.com.glob.clodmc.modules.interactions.FastLeafDecay;
 import au.com.glob.clodmc.modules.interactions.NamedStorage;
@@ -19,6 +14,7 @@ import au.com.glob.clodmc.modules.mobs.PreventMobSpawn;
 import au.com.glob.clodmc.modules.player.AFK;
 import au.com.glob.clodmc.modules.player.BackCommand;
 import au.com.glob.clodmc.modules.player.GameModeCommand;
+import au.com.glob.clodmc.modules.player.Homes;
 import au.com.glob.clodmc.modules.player.InviteCommand;
 import au.com.glob.clodmc.modules.player.OfflineMessages;
 import au.com.glob.clodmc.modules.player.OpAlerts;
@@ -72,6 +68,10 @@ public class ModuleRegistry {
     if (module instanceof SimpleCommand command) {
       Bukkit.getServer().getCommandMap().register("clod-mc", command);
     }
+
+    for (SimpleCommand command : module.getCommands()) {
+      Bukkit.getServer().getCommandMap().register("clod-mc", command);
+    }
   }
 
   public void registerAll() {
@@ -80,13 +80,6 @@ public class ModuleRegistry {
 
     // gateways
     this.register(Gateways.class);
-
-    // homes
-    this.register(Homes.class);
-    this.register(DelHomeCommand.class);
-    this.register(HomeCommand.class);
-    this.register(HomesCommand.class);
-    this.register(SetHomeCommand.class);
 
     // interactions
     this.register(Decorations.class);
@@ -106,6 +99,7 @@ public class ModuleRegistry {
     this.register(AFK.class);
     this.register(BackCommand.class);
     this.register(GameModeCommand.class);
+    this.register(Homes.class);
     this.register(InviteCommand.class);
     this.register(OfflineMessages.class);
     this.register(PlayerTracker.class);
