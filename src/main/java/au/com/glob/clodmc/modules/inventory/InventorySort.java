@@ -3,6 +3,7 @@ package au.com.glob.clodmc.modules.inventory;
 import au.com.glob.clodmc.ClodMC;
 import au.com.glob.clodmc.modules.Module;
 import au.com.glob.clodmc.modules.player.OpAlerts;
+import au.com.glob.clodmc.util.MiscUtil;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -13,8 +14,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.StringJoiner;
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
+import org.bukkit.MusicInstrument;
 import org.bukkit.Registry;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Donkey;
@@ -31,6 +31,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.MusicInstrumentMeta;
 import org.jetbrains.annotations.NotNull;
 
 public class InventorySort implements Listener, Module {
@@ -199,24 +200,28 @@ public class InventorySort implements Listener, Module {
       this.itemStack = itemStack;
 
       // index into inventory_order.txt
-      String material = itemStack.getType().name();
-      Integer index = InventorySort.materialOrder.get(material);
+      Integer index = InventorySort.materialOrder.get(itemStack.getType().name());
       this.materialIndex = Objects.requireNonNullElse(index, 0);
 
       // visible in-game name
-      this.name =
-          PlainTextComponentSerializer.plainText().serialize(Component.translatable(itemStack));
+      this.name = MiscUtil.translate(itemStack);
 
       ItemMeta meta = itemStack.getItemMeta();
       if (meta != null) {
         StringJoiner extraJoiner = new StringJoiner(".");
 
-        // enchantment storage (eg. book)
         if (meta instanceof EnchantmentStorageMeta enchantmentStorageMeta) {
+          // enchantment storage (eg. book)
           for (Map.Entry<Enchantment, Integer> entry :
               enchantmentStorageMeta.getStoredEnchants().entrySet()) {
-            extraJoiner.add(entry.getKey().getKey().getKey());
+            extraJoiner.add(MiscUtil.translate(entry.getKey()));
             extraJoiner.add(String.valueOf(entry.getValue()));
+          }
+        } else if (meta instanceof MusicInstrumentMeta musicInstrumentMeta) {
+          // goat horns
+          MusicInstrument instrument = musicInstrumentMeta.getInstrument();
+          if (instrument != null) {
+            extraJoiner.add(MiscUtil.translate(instrument));
           }
         }
 

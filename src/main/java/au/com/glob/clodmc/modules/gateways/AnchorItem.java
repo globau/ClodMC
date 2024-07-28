@@ -1,11 +1,11 @@
 package au.com.glob.clodmc.modules.gateways;
 
+import au.com.glob.clodmc.util.MiscUtil;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
-import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
@@ -80,7 +80,7 @@ public class AnchorItem {
   protected static @Nullable String getName(@NotNull ItemStack item) {
     Component displayName = item.getItemMeta().displayName();
     assert displayName != null;
-    String plainTextName = PlainTextComponentSerializer.plainText().serialize(displayName);
+    String plainTextName = MiscUtil.translate(displayName);
     return plainTextName.equals(DEFAULT_ANCHOR_NAME) ? null : plainTextName;
   }
 

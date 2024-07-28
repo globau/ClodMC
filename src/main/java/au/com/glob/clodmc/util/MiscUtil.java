@@ -1,7 +1,12 @@
 package au.com.glob.clodmc.util;
 
 import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.TimeUnit;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
+import net.kyori.adventure.translation.GlobalTranslator;
+import net.kyori.adventure.translation.Translatable;
 import org.jetbrains.annotations.NotNull;
 
 public class MiscUtil {
@@ -51,5 +56,15 @@ public class MiscUtil {
           .append(" ");
     }
     return titleCase.toString().trim();
+  }
+
+  public static @NotNull String translate(@NotNull Translatable component) {
+    return translate(
+        GlobalTranslator.render(
+            Component.translatable(component.translationKey()), Locale.ENGLISH));
+  }
+
+  public static @NotNull String translate(@NotNull Component component) {
+    return PlainTextComponentSerializer.plainText().serialize(component);
   }
 }
