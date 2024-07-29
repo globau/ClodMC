@@ -1,7 +1,6 @@
 package au.com.glob.clodmc.modules.bluemap.addon;
 
 import au.com.glob.clodmc.modules.bluemap.BlueMapAddon;
-import au.com.glob.clodmc.modules.bluemap.BlueMapSource;
 import au.com.glob.clodmc.modules.server.CircularWorldBorder;
 import de.bluecolored.bluemap.api.BlueMapAPI;
 import de.bluecolored.bluemap.api.BlueMapMap;
@@ -19,7 +18,7 @@ public class CircularWorldBorderAddon extends BlueMapAddon {
   private final @NotNull CircularWorldBorder module;
 
   public CircularWorldBorderAddon(@NotNull BlueMapAPI api, @NotNull CircularWorldBorder module) {
-    super(api, BlueMapSource.WORLD_BORDER, false);
+    super(api, null);
     this.module = module;
   }
 

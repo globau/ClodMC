@@ -2,7 +2,6 @@ package au.com.glob.clodmc.modules.bluemap.addon;
 
 import au.com.glob.clodmc.ClodMC;
 import au.com.glob.clodmc.modules.bluemap.BlueMapAddon;
-import au.com.glob.clodmc.modules.bluemap.BlueMapSource;
 import au.com.glob.clodmc.modules.gateways.AnchorBlock;
 import au.com.glob.clodmc.modules.gateways.Gateways;
 import com.flowpowered.math.vector.Vector2i;
@@ -32,7 +31,7 @@ public class GatewaysAddon extends BlueMapAddon {
   private final @NotNull Gateways module;
 
   public GatewaysAddon(@NotNull BlueMapAPI api, @NotNull Gateways module) {
-    super(api, BlueMapSource.ANCHORS, true);
+    super(api, Gateways.class);
     this.module = module;
 
     // create svg

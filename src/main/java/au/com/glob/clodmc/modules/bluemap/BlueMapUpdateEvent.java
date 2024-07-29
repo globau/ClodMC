@@ -1,19 +1,20 @@
 package au.com.glob.clodmc.modules.bluemap;
 
+import au.com.glob.clodmc.modules.Module;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 import org.jetbrains.annotations.NotNull;
 
 public class BlueMapUpdateEvent extends Event {
   private static final @NotNull HandlerList handlers = new HandlerList();
-  private final @NotNull BlueMapSource source;
+  private final @NotNull Class<? extends Module> sender;
 
-  public BlueMapUpdateEvent(@NotNull BlueMapSource source) {
-    this.source = source;
+  public BlueMapUpdateEvent(@NotNull Class<? extends Module> sender) {
+    this.sender = sender;
   }
 
-  public @NotNull BlueMapSource getSource() {
-    return this.source;
+  public @NotNull Class<? extends Module> getSender() {
+    return this.sender;
   }
 
   public @NotNull HandlerList getHandlers() {

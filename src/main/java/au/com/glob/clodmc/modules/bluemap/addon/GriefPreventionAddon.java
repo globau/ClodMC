@@ -2,7 +2,6 @@ package au.com.glob.clodmc.modules.bluemap.addon;
 
 import au.com.glob.clodmc.ClodMC;
 import au.com.glob.clodmc.modules.bluemap.BlueMapAddon;
-import au.com.glob.clodmc.modules.bluemap.BlueMapSource;
 import com.flowpowered.math.vector.Vector2d;
 import de.bluecolored.bluemap.api.BlueMapAPI;
 import de.bluecolored.bluemap.api.BlueMapMap;
@@ -32,7 +31,7 @@ public class GriefPreventionAddon extends BlueMapAddon implements Listener {
   private final @NotNull Map<World, MarkerSet> markerSets = new HashMap<>(3);
 
   public GriefPreventionAddon(@NotNull BlueMapAPI api) {
-    super(api, BlueMapSource.GRIEF_PREVENTION, true);
+    super(api, null);
 
     for (World world : Bukkit.getWorlds()) {
       this.markerSets.put(world, MarkerSet.builder().label("Claims").defaultHidden(true).build());

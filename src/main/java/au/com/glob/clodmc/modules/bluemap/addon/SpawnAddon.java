@@ -1,7 +1,6 @@
 package au.com.glob.clodmc.modules.bluemap.addon;
 
 import au.com.glob.clodmc.modules.bluemap.BlueMapAddon;
-import au.com.glob.clodmc.modules.bluemap.BlueMapSource;
 import com.flowpowered.math.vector.Vector3d;
 import de.bluecolored.bluemap.api.BlueMapAPI;
 import de.bluecolored.bluemap.api.BlueMapMap;
@@ -14,7 +13,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class SpawnAddon extends BlueMapAddon {
   public SpawnAddon(@NotNull BlueMapAPI api) {
-    super(api, BlueMapSource.SPAWN, false);
+    super(api, null);
   }
 
   @Override
