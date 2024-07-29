@@ -1,6 +1,6 @@
 package au.com.glob.clodmc.modules.gateways;
 
-import au.com.glob.clodmc.util.MiscUtil;
+import au.com.glob.clodmc.util.StringUtil;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -80,7 +80,7 @@ public class AnchorItem {
   protected static @Nullable String getName(@NotNull ItemStack item) {
     Component displayName = item.getItemMeta().displayName();
     assert displayName != null;
-    String plainTextName = MiscUtil.translate(displayName);
+    String plainTextName = StringUtil.translate(displayName);
     return plainTextName.equals(DEFAULT_ANCHOR_NAME) ? null : plainTextName;
   }
 

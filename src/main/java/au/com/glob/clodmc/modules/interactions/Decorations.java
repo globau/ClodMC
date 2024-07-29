@@ -8,10 +8,11 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.jetbrains.annotations.NotNull;
 
 public class Decorations implements Module, Listener {
   @EventHandler
-  public void onPlayerInteract(PlayerInteractEvent event) {
+  public void onPlayerInteract(@NotNull PlayerInteractEvent event) {
     if (event.getAction() == Action.PHYSICAL) {
       Block block = event.getClickedBlock();
       // pressure plates on top of trapdoors are purely decorative, cancel interaction

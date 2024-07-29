@@ -87,14 +87,14 @@ public class AFK extends SimpleCommand implements Listener, Module {
   // events
 
   @EventHandler
-  public void onPlayerJoin(PlayerJoinEvent event) {
+  public void onPlayerJoin(@NotNull PlayerJoinEvent event) {
     PlayerState playerState = new PlayerState(event.getPlayer());
     playerState.setBack(false);
     this.playerStates.put(event.getPlayer().getUniqueId(), playerState);
   }
 
   @EventHandler
-  public void onPlayerQuit(PlayerQuitEvent event) {
+  public void onPlayerQuit(@NotNull PlayerQuitEvent event) {
     PlayerState playerState = this.playerStates.get(event.getPlayer().getUniqueId());
     playerState.setBack(false);
     this.playerStates.remove(event.getPlayer().getUniqueId());
@@ -109,19 +109,19 @@ public class AFK extends SimpleCommand implements Listener, Module {
   }
 
   @EventHandler
-  public void onPlayerMove(PlayerMoveEvent event) {
+  public void onPlayerMove(@NotNull PlayerMoveEvent event) {
     this.playerStates.get(event.getPlayer().getUniqueId()).onMove();
   }
 
   @EventHandler
-  public void onEntityDamage(EntityDamageByEntityEvent event) {
+  public void onEntityDamage(@NotNull EntityDamageByEntityEvent event) {
     if (event.getDamager() instanceof Player player) {
       this.playerStates.get(player.getUniqueId()).onAction();
     }
   }
 
   @EventHandler
-  public void onPlayerCommand(PlayerCommandPreprocessEvent event) {
+  public void onPlayerCommand(@NotNull PlayerCommandPreprocessEvent event) {
     if (event.getMessage().equals("/afk") || event.getMessage().startsWith("/afk ")) {
       return;
     }
@@ -129,17 +129,17 @@ public class AFK extends SimpleCommand implements Listener, Module {
   }
 
   @EventHandler
-  public void onPlayerInteract(PlayerInteractEvent event) {
+  public void onPlayerInteract(@NotNull PlayerInteractEvent event) {
     this.playerStates.get(event.getPlayer().getUniqueId()).onAction();
   }
 
   @EventHandler
-  public void onPlayerBlockPlace(BlockPlaceEvent event) {
+  public void onPlayerBlockPlace(@NotNull BlockPlaceEvent event) {
     this.playerStates.get(event.getPlayer().getUniqueId()).onAction();
   }
 
   @EventHandler
-  public void onPlayerBlockBreak(BlockBreakEvent event) {
+  public void onPlayerBlockBreak(@NotNull BlockBreakEvent event) {
     this.playerStates.get(event.getPlayer().getUniqueId()).onAction();
   }
 

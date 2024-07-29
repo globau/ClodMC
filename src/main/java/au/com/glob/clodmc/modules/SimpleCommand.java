@@ -42,9 +42,7 @@ public abstract class SimpleCommand extends Command {
 
   @Override
   public boolean execute(
-      @NotNull CommandSender sender,
-      @NotNull String commandLabel,
-      @NotNull String @NotNull [] args) {
+      @NotNull CommandSender sender, @NotNull String commandLabel, String @NotNull [] args) {
     try {
       this.execute(sender, new ArrayList<>(List.of(args)));
     } catch (CommandError e) {
@@ -86,7 +84,7 @@ public abstract class SimpleCommand extends Command {
 
   @Override
   public @NotNull List<String> tabComplete(
-      @NotNull CommandSender sender, @NotNull String alias, @NotNull String @NotNull [] args)
+      @NotNull CommandSender sender, @NotNull String alias, String @NotNull [] args)
       throws IllegalArgumentException {
     return List.of();
   }

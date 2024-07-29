@@ -124,12 +124,12 @@ public class Gateways extends SimpleCommand implements Module, Listener {
   }
 
   @EventHandler
-  public void onPlayerJoin(PlayerJoinEvent event) {
+  public void onPlayerJoin(@NotNull PlayerJoinEvent event) {
     event.getPlayer().discoverRecipe(AnchorItem.RECIPE_KEY);
   }
 
   @EventHandler
-  public void onPrepareItemCraftEvent(PrepareItemCraftEvent event) {
+  public void onPrepareItemCraftEvent(@NotNull PrepareItemCraftEvent event) {
     ItemStack item = event.getInventory().getResult();
     if (!AnchorItem.isAnchor(item)) {
       return;
@@ -154,7 +154,7 @@ public class Gateways extends SimpleCommand implements Module, Listener {
   }
 
   @EventHandler
-  public void onCraftItemEvent(CraftItemEvent event) {
+  public void onCraftItemEvent(@NotNull CraftItemEvent event) {
     ItemStack item = event.getCurrentItem();
 
     if (AnchorItem.isAnchor(item)) {
@@ -164,7 +164,7 @@ public class Gateways extends SimpleCommand implements Module, Listener {
   }
 
   @EventHandler
-  public void onBlockPlace(BlockPlaceEvent event) {
+  public void onBlockPlace(@NotNull BlockPlaceEvent event) {
     // prevent placing blocks in the 2 blocks above an anchorBlock
     BlockPos below1Pos = BlockPos.of(event.getBlock().getLocation()).down();
     BlockPos below2Pos = below1Pos.down();
@@ -221,7 +221,7 @@ public class Gateways extends SimpleCommand implements Module, Listener {
   }
 
   @EventHandler
-  public void onEntityChangeBlock(EntityChangeBlockEvent event) {
+  public void onEntityChangeBlock(@NotNull EntityChangeBlockEvent event) {
     // if a falling entity turns into a block inside the gateway, break the block
     if (event.getEntity() instanceof FallingBlock fallingBlock) {
       BlockPos belowPos = BlockPos.of(event.getBlock().getLocation()).down();
@@ -234,7 +234,7 @@ public class Gateways extends SimpleCommand implements Module, Listener {
   }
 
   @EventHandler
-  public void onBlockBreak(BlockBreakEvent event) {
+  public void onBlockBreak(@NotNull BlockBreakEvent event) {
     BlockPos blockPos = BlockPos.of(event.getBlock().getLocation());
     AnchorBlock anchorBlock = this.instances.get(blockPos);
     if (anchorBlock == null) {
@@ -262,7 +262,7 @@ public class Gateways extends SimpleCommand implements Module, Listener {
   }
 
   @EventHandler
-  public void onPlayerMove(PlayerMoveEvent event) {
+  public void onPlayerMove(@NotNull PlayerMoveEvent event) {
     Player player = event.getPlayer();
     Location playerLocation = player.getLocation();
     BlockPos playerPos = BlockPos.of(playerLocation);
@@ -317,7 +317,7 @@ public class Gateways extends SimpleCommand implements Module, Listener {
   }
 
   @EventHandler
-  public void onPlayerJoinEvent(PlayerJoinEvent event) {
+  public void onPlayerJoinEvent(@NotNull PlayerJoinEvent event) {
     // if player spawns on an anchor block don't immediately teleport
     Player player = event.getPlayer();
     BlockPos standingOnPos = BlockPos.of(player.getLocation(), 0, -1, 0);
@@ -328,12 +328,12 @@ public class Gateways extends SimpleCommand implements Module, Listener {
   }
 
   @EventHandler
-  public void onPlayerQuitEvent(PlayerQuitEvent event) {
+  public void onPlayerQuitEvent(@NotNull PlayerQuitEvent event) {
     this.ignore.remove(event.getPlayer());
   }
 
   @EventHandler(priority = EventPriority.LOWEST)
-  public void onPlayerInteractEvent(PlayerInteractEvent event) {
+  public void onPlayerInteractEvent(@NotNull PlayerInteractEvent event) {
     if (event.getAction() != Action.RIGHT_CLICK_BLOCK || event.getClickedBlock() == null) {
       return;
     }

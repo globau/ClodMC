@@ -3,7 +3,7 @@ package au.com.glob.clodmc.modules.inventory;
 import au.com.glob.clodmc.ClodMC;
 import au.com.glob.clodmc.modules.Module;
 import au.com.glob.clodmc.modules.player.OpAlerts;
-import au.com.glob.clodmc.util.MiscUtil;
+import au.com.glob.clodmc.util.StringUtil;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -106,7 +106,7 @@ public class InventorySort implements Listener, Module {
   }
 
   @EventHandler(priority = EventPriority.HIGHEST)
-  public void onInventoryClick(InventoryClickEvent event) {
+  public void onInventoryClick(@NotNull InventoryClickEvent event) {
     if (!(event.getWhoClicked() instanceof Player
         && event.getClick() == ClickType.SHIFT_RIGHT
         && event.getSlotType() == InventoryType.SlotType.CONTAINER)) {
@@ -204,7 +204,7 @@ public class InventorySort implements Listener, Module {
       this.materialIndex = Objects.requireNonNullElse(index, 0);
 
       // visible in-game name
-      this.name = MiscUtil.translate(itemStack);
+      this.name = StringUtil.translate(itemStack);
 
       ItemMeta meta = itemStack.getItemMeta();
       if (meta != null) {
@@ -214,14 +214,14 @@ public class InventorySort implements Listener, Module {
           // enchantment storage (eg. book)
           for (Map.Entry<Enchantment, Integer> entry :
               enchantmentStorageMeta.getStoredEnchants().entrySet()) {
-            extraJoiner.add(MiscUtil.translate(entry.getKey()));
+            extraJoiner.add(StringUtil.translate(entry.getKey()));
             extraJoiner.add(String.valueOf(entry.getValue()));
           }
         } else if (meta instanceof MusicInstrumentMeta musicInstrumentMeta) {
           // goat horns
           MusicInstrument instrument = musicInstrumentMeta.getInstrument();
           if (instrument != null) {
-            extraJoiner.add(MiscUtil.translate(instrument));
+            extraJoiner.add(StringUtil.translate(instrument));
           }
         }
 

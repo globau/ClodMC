@@ -6,10 +6,11 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
 public class BetterDrops implements Listener, Module {
   @EventHandler
-  public void onEntityDeath(EntityDeathEvent event) {
+  public void onEntityDeath(@NotNull EntityDeathEvent event) {
     // adjust drops for mobs killed by players
     if (event.getEntity().getKiller() == null) {
       return;

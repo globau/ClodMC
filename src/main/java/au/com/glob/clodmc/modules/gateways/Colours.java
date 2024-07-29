@@ -1,6 +1,6 @@
 package au.com.glob.clodmc.modules.gateways;
 
-import au.com.glob.clodmc.util.MiscUtil;
+import au.com.glob.clodmc.util.StringUtil;
 import java.util.List;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
@@ -30,7 +30,7 @@ public class Colours {
     }
 
     public @NotNull String getDisplayName() {
-      return MiscUtil.toTitleCase(this.name.replace('_', ' '));
+      return StringUtil.toTitleCase(this.name.replace('_', ' '));
     }
 
     public @NotNull TextComponent getText() {

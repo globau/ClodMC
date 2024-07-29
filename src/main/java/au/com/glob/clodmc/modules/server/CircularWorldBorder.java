@@ -150,21 +150,21 @@ public class CircularWorldBorder implements Module, Listener {
   // events
 
   @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
-  public void onCreatureSpawn(CreatureSpawnEvent event) {
+  public void onCreatureSpawn(@NotNull CreatureSpawnEvent event) {
     if (this.isOutsideBorder(event.getLocation())) {
       event.setCancelled(true);
     }
   }
 
   @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
-  public void onBlockPlace(BlockPlaceEvent event) {
+  public void onBlockPlace(@NotNull BlockPlaceEvent event) {
     if (this.isOutsideBorder(event.getBlock().getLocation())) {
       event.setCancelled(true);
     }
   }
 
   @EventHandler
-  public void onPlayerQuit(PlayerQuitEvent event) {
+  public void onPlayerQuit(@NotNull PlayerQuitEvent event) {
     this.lastPlayerLoc.remove(event.getPlayer().getUniqueId());
   }
 

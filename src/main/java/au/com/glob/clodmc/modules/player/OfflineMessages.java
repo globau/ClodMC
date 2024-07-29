@@ -2,9 +2,9 @@ package au.com.glob.clodmc.modules.player;
 
 import au.com.glob.clodmc.ClodMC;
 import au.com.glob.clodmc.modules.Module;
-import au.com.glob.clodmc.util.MiscUtil;
 import au.com.glob.clodmc.util.PlayerDataFile;
 import au.com.glob.clodmc.util.PlayerDataUpdater;
+import au.com.glob.clodmc.util.StringUtil;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -82,7 +82,7 @@ public class OfflineMessages implements Module, Listener {
   }
 
   @EventHandler
-  public void onPlayerCommand(PlayerCommandPreprocessEvent event) {
+  public void onPlayerCommand(@NotNull PlayerCommandPreprocessEvent event) {
     Matcher matcher = this.msgPattern.matcher(event.getMessage());
     if (matcher.matches()
         && this.handleOfflineMsg(
@@ -94,7 +94,7 @@ public class OfflineMessages implements Module, Listener {
   }
 
   @EventHandler
-  public void onServerCommand(ServerCommandEvent event) {
+  public void onServerCommand(@NotNull ServerCommandEvent event) {
     Matcher matcher = this.msgPattern.matcher(event.getCommand());
     if (matcher.matches()
         && this.handleOfflineMsg(
@@ -106,7 +106,7 @@ public class OfflineMessages implements Module, Listener {
   }
 
   @EventHandler
-  public void onPlayerJoin(PlayerJoinEvent event) {
+  public void onPlayerJoin(@NotNull PlayerJoinEvent event) {
     Player player = event.getPlayer();
     List<Message> messages = this.loadMessages(player);
     if (messages.isEmpty()) {
@@ -151,7 +151,7 @@ public class OfflineMessages implements Module, Listener {
     public void sendTo(@NotNull Player player) {
       ClodMC.whisper(
           player,
-          MiscUtil.relativeTime(System.currentTimeMillis() / 1000L - this.timestamp)
+          StringUtil.relativeTime(System.currentTimeMillis() / 1000L - this.timestamp)
               + " ago "
               + this.sender
               + " whispered to you: "

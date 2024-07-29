@@ -3,8 +3,8 @@ package au.com.glob.clodmc.modules.player;
 import au.com.glob.clodmc.ClodMC;
 import au.com.glob.clodmc.modules.Module;
 import au.com.glob.clodmc.modules.SimpleCommand;
-import au.com.glob.clodmc.util.MiscUtil;
 import au.com.glob.clodmc.util.PlayerDataFile;
+import au.com.glob.clodmc.util.StringUtil;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.HashMap;
@@ -90,14 +90,14 @@ public class SeenCommand extends SimpleCommand implements Module, Listener {
     }
 
     String dateAgo =
-        MiscUtil.relativeTime(
+        StringUtil.relativeTime(
             System.currentTimeMillis() / 1000L - date.toEpochSecond(ZoneOffset.of("+8")));
     ClodMC.info(sender, playerName + " was last seen " + dateAgo + " ago");
   }
 
   @Override
   public @NotNull List<String> tabComplete(
-      @NotNull CommandSender sender, @NotNull String alias, @NotNull String @NotNull [] args)
+      @NotNull CommandSender sender, @NotNull String alias, String @NotNull [] args)
       throws IllegalArgumentException {
     return this.validNames.keySet().stream()
         .sorted(String.CASE_INSENSITIVE_ORDER)

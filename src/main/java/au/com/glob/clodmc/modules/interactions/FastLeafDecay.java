@@ -26,13 +26,13 @@ public class FastLeafDecay implements Listener, Module {
   private final @NotNull List<Block> scheduledBlocks = new ArrayList<>();
 
   @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
-  public void onBlockBreak(BlockBreakEvent event) {
+  public void onBlockBreak(@NotNull BlockBreakEvent event) {
     // start trying to break leaves immediately after a log is broken
     this.onBlockRemove(event.getBlock(), 5);
   }
 
   @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
-  public void onLeavesDecay(LeavesDecayEvent event) {
+  public void onLeavesDecay(@NotNull LeavesDecayEvent event) {
     // check neighbours when a leaf decays to trigger a cascade
     this.onBlockRemove(event.getBlock(), 2);
   }

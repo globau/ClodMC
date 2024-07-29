@@ -8,10 +8,11 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityChangeBlockEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
+import org.jetbrains.annotations.NotNull;
 
 public class PreventMobGriefing implements Listener, Module {
   @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
-  public void onEntityExplode(EntityExplodeEvent event) {
+  public void onEntityExplode(@NotNull EntityExplodeEvent event) {
     // stop creeper explosions from destroying blocks
     if (event.getEntity() instanceof Creeper) {
       event.blockList().clear();
@@ -19,7 +20,7 @@ public class PreventMobGriefing implements Listener, Module {
   }
 
   @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
-  public void onEntityChangeBlock(EntityChangeBlockEvent event) {
+  public void onEntityChangeBlock(@NotNull EntityChangeBlockEvent event) {
     // stop endermen from picking up blocks
     if (event.getEntity() instanceof Enderman) {
       event.setCancelled(true);

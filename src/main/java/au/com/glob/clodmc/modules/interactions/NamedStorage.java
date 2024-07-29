@@ -1,7 +1,7 @@
 package au.com.glob.clodmc.modules.interactions;
 
 import au.com.glob.clodmc.modules.Module;
-import au.com.glob.clodmc.util.MiscUtil;
+import au.com.glob.clodmc.util.StringUtil;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.block.Block;
@@ -27,7 +27,7 @@ public class NamedStorage implements Module, Listener {
       Component name = container.customName();
       if (name != null) {
         player.sendActionBar(
-            MiniMessage.miniMessage().deserialize("<yellow>" + MiscUtil.translate(name)));
+            MiniMessage.miniMessage().deserialize("<yellow>" + StringUtil.translate(name)));
       }
     }
   }

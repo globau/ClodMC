@@ -2,7 +2,7 @@ package au.com.glob.clodmc.modules.player;
 
 import au.com.glob.clodmc.ClodMC;
 import au.com.glob.clodmc.modules.Module;
-import au.com.glob.clodmc.util.MiscUtil;
+import au.com.glob.clodmc.util.StringUtil;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
@@ -34,7 +34,7 @@ public class Sleep implements Listener, Module {
     for (Player player : players) {
       if (player.getWorld().getEnvironment() == World.Environment.NORMAL) {
         if (sleeping.size() > 1 || !sleeping.getFirst().equals(player.getName())) {
-          ClodMC.fyi(player, MiscUtil.joinComma(sleeping) + " skipped the night");
+          ClodMC.fyi(player, StringUtil.joinComma(sleeping) + " skipped the night");
         }
       }
     }

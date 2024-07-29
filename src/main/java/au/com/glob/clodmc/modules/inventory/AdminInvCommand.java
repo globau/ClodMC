@@ -71,14 +71,14 @@ public class AdminInvCommand extends SimpleCommand implements Module, Listener {
   }
 
   @EventHandler
-  public void onPlayerQuit(PlayerQuitEvent event) {
+  public void onPlayerQuit(@NotNull PlayerQuitEvent event) {
     if (event.getPlayer().isOp()) {
       this.restoreInventory(event.getPlayer());
     }
   }
 
   @EventHandler
-  public void onPluginDisable(PluginDisableEvent event) {
+  public void onPluginDisable(@NotNull PluginDisableEvent event) {
     if (event.getPlugin().equals(ClodMC.instance)) {
       for (UUID uuid : this.playerInventories.keySet()) {
         Player player = Bukkit.getPlayer(uuid);

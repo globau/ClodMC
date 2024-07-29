@@ -4,7 +4,7 @@ import au.com.glob.clodmc.ClodMC;
 import au.com.glob.clodmc.modules.CommandError;
 import au.com.glob.clodmc.modules.Module;
 import au.com.glob.clodmc.modules.SimpleCommand;
-import au.com.glob.clodmc.util.MiscUtil;
+import au.com.glob.clodmc.util.StringUtil;
 import java.util.List;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
@@ -54,7 +54,7 @@ public class GameModeCommand extends SimpleCommand implements Module {
     }
 
     target.setGameMode(gameMode);
-    mode = MiscUtil.toTitleCase(mode);
+    mode = StringUtil.toTitleCase(mode);
 
     if (sender.equals(target)) {
       ClodMC.fyi(sender, "Set own game mode to " + mode);
@@ -66,7 +66,7 @@ public class GameModeCommand extends SimpleCommand implements Module {
 
   @Override
   public @NotNull List<String> tabComplete(
-      @NotNull CommandSender sender, @NotNull String alias, @NotNull String @NotNull [] args)
+      @NotNull CommandSender sender, @NotNull String alias, String @NotNull [] args)
       throws IllegalArgumentException {
     if (args.length == 0) {
       return MODES;
