@@ -1,8 +1,8 @@
 package au.com.glob.clodmc.modules.player;
 
-import au.com.glob.clodmc.ClodMC;
 import au.com.glob.clodmc.modules.Module;
 import au.com.glob.clodmc.modules.SimpleCommand;
+import au.com.glob.clodmc.util.Chat;
 import au.com.glob.clodmc.util.PlayerLocation;
 import java.util.List;
 import java.util.Random;
@@ -28,7 +28,7 @@ public class SpawnCommand extends SimpleCommand implements Module {
       return;
     }
 
-    ClodMC.fyi(player, "Teleporting you to spawn");
+    Chat.fyi(player, "Teleporting you to spawn");
 
     // find random location around spawn point
     // governed by the SpawnRadius gamerule

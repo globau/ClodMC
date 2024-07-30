@@ -1,9 +1,9 @@
 package au.com.glob.clodmc.modules.player;
 
-import au.com.glob.clodmc.ClodMC;
 import au.com.glob.clodmc.modules.CommandError;
 import au.com.glob.clodmc.modules.Module;
 import au.com.glob.clodmc.modules.SimpleCommand;
+import au.com.glob.clodmc.util.Chat;
 import au.com.glob.clodmc.util.PlayerDataFile;
 import au.com.glob.clodmc.util.PlayerDataUpdater;
 import au.com.glob.clodmc.util.PlayerLocation;
@@ -53,7 +53,7 @@ public class BackCommand extends SimpleCommand implements Module, Listener {
       throw new CommandError("No previous location");
     }
 
-    ClodMC.fyi(player, "Teleporting you back");
+    Chat.fyi(player, "Teleporting you back");
     location.teleportPlayer(player);
   }
 }

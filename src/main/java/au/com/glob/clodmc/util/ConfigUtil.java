@@ -32,7 +32,7 @@ public class ConfigUtil {
 
     public void logErrors() {
       for (String line : this.errors) {
-        ClodMC.logError(line);
+        Logger.error(line);
       }
     }
   }

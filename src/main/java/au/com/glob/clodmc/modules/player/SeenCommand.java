@@ -1,8 +1,8 @@
 package au.com.glob.clodmc.modules.player;
 
-import au.com.glob.clodmc.ClodMC;
 import au.com.glob.clodmc.modules.Module;
 import au.com.glob.clodmc.modules.SimpleCommand;
+import au.com.glob.clodmc.util.Chat;
 import au.com.glob.clodmc.util.PlayerDataFile;
 import au.com.glob.clodmc.util.StringUtil;
 import java.time.LocalDateTime;
@@ -58,13 +58,13 @@ public class SeenCommand extends SimpleCommand implements Module, Listener {
     String playerName = this.popArg(args);
 
     if (sender instanceof Player player && playerName.equalsIgnoreCase(player.getName())) {
-      ClodMC.info(sender, "You're online now");
+      Chat.info(sender, "You're online now");
       return;
     }
 
     Player player = Bukkit.getPlayerExact(playerName);
     if (player != null) {
-      ClodMC.info(sender, playerName + " is online now");
+      Chat.info(sender, playerName + " is online now");
       return;
     }
 
@@ -76,7 +76,7 @@ public class SeenCommand extends SimpleCommand implements Module, Listener {
             .orElse(null);
 
     if (config == null || !config.fileExists()) {
-      ClodMC.error(sender, playerName + " doesn't play on this server");
+      Chat.error(sender, playerName + " doesn't play on this server");
       return;
     }
 
@@ -85,14 +85,14 @@ public class SeenCommand extends SimpleCommand implements Module, Listener {
       date = config.getLastLogin();
     }
     if (date == null) {
-      ClodMC.warning(sender, "Not sure when " + playerName + " last played");
+      Chat.warning(sender, "Not sure when " + playerName + " last played");
       return;
     }
 
     String dateAgo =
         StringUtil.relativeTime(
             System.currentTimeMillis() / 1000L - date.toEpochSecond(ZoneOffset.of("+8")));
-    ClodMC.info(sender, playerName + " was last seen " + dateAgo + " ago");
+    Chat.info(sender, playerName + " was last seen " + dateAgo + " ago");
   }
 
   @Override

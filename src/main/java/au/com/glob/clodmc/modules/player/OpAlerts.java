@@ -2,6 +2,7 @@ package au.com.glob.clodmc.modules.player;
 
 import au.com.glob.clodmc.ClodMC;
 import au.com.glob.clodmc.modules.Module;
+import au.com.glob.clodmc.util.Chat;
 import java.util.ArrayList;
 import java.util.List;
 import org.bukkit.event.EventHandler;
@@ -36,7 +37,7 @@ public class OpAlerts implements Module, Listener {
             ClodMC.instance,
             () -> {
               for (String alert : this.alerts) {
-                ClodMC.error(event.getPlayer(), "[ClodMC] " + alert);
+                Chat.error(event.getPlayer(), "[ClodMC] " + alert);
               }
             },
             20);

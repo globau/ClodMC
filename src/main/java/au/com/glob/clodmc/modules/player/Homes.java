@@ -1,9 +1,9 @@
 package au.com.glob.clodmc.modules.player;
 
-import au.com.glob.clodmc.ClodMC;
 import au.com.glob.clodmc.modules.CommandError;
 import au.com.glob.clodmc.modules.Module;
 import au.com.glob.clodmc.modules.SimpleCommand;
+import au.com.glob.clodmc.util.Chat;
 import au.com.glob.clodmc.util.PlayerDataFile;
 import au.com.glob.clodmc.util.PlayerDataUpdater;
 import au.com.glob.clodmc.util.PlayerLocation;
@@ -101,9 +101,9 @@ public class Homes implements Listener, Module {
       instance.setHomes(player, homes);
 
       if (name.equals("home")) {
-        ClodMC.info(player, "Deleted home");
+        Chat.info(player, "Deleted home");
       } else {
-        ClodMC.info(player, "Deleted home '" + name + "'");
+        Chat.info(player, "Deleted home '" + name + "'");
       }
     }
 
@@ -130,7 +130,7 @@ public class Homes implements Listener, Module {
         throw new CommandError(name.equals("home") ? "No home set" : "No such home '" + name + "'");
       }
 
-      ClodMC.fyi(player, "Teleporting you " + (name.equals("home") ? "home" : "to '" + name + "'"));
+      Chat.fyi(player, "Teleporting you " + (name.equals("home") ? "home" : "to '" + name + "'"));
       PlayerLocation playerLoc = homes.get(name);
       playerLoc.teleportPlayer(player);
     }
@@ -154,13 +154,13 @@ public class Homes implements Listener, Module {
       Map<String, PlayerLocation> homes = instance.getHomes(player);
 
       if (homes.isEmpty()) {
-        ClodMC.warning(player, "No homes");
+        Chat.warning(player, "No homes");
       } else {
         StringJoiner joiner = new StringJoiner(", ");
         for (String name : homes.keySet().stream().sorted().toList()) {
           joiner.add(name);
         }
-        ClodMC.info(player, "Homes: " + joiner);
+        Chat.info(player, "Homes: " + joiner);
       }
     }
   }
@@ -190,9 +190,9 @@ public class Homes implements Listener, Module {
       instance.setHomes(player, homes);
 
       if (name.equals("home")) {
-        ClodMC.info(player, "Home " + (existing ? "updated" : "set") + " to you current location");
+        Chat.info(player, "Home " + (existing ? "updated" : "set") + " to you current location");
       } else {
-        ClodMC.info(player, "Home '" + name + "' " + (existing ? "updated" : "created"));
+        Chat.info(player, "Home '" + name + "' " + (existing ? "updated" : "created"));
       }
     }
   }

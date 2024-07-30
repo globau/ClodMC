@@ -2,6 +2,7 @@ package au.com.glob.clodmc.modules.player;
 
 import au.com.glob.clodmc.ClodMC;
 import au.com.glob.clodmc.modules.Module;
+import au.com.glob.clodmc.util.Chat;
 import au.com.glob.clodmc.util.PlayerDataFile;
 import au.com.glob.clodmc.util.PlayerDataUpdater;
 import au.com.glob.clodmc.util.StringUtil;
@@ -129,11 +130,11 @@ public class OfflineMessages implements Module, Listener {
 
   private record Sender(@NotNull CommandSender recipient, @NotNull String name) {
     void fyi(@NotNull String message) {
-      ClodMC.fyi(this.recipient, message);
+      Chat.fyi(this.recipient, message);
     }
 
     void error(@NotNull String message) {
-      ClodMC.error(this.recipient, message);
+      Chat.error(this.recipient, message);
     }
   }
 
@@ -149,7 +150,7 @@ public class OfflineMessages implements Module, Listener {
     }
 
     public void sendTo(@NotNull Player player) {
-      ClodMC.whisper(
+      Chat.whisper(
           player,
           StringUtil.relativeTime(System.currentTimeMillis() / 1000L - this.timestamp)
               + " ago "

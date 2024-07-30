@@ -5,7 +5,9 @@ import au.com.glob.clodmc.modules.Module;
 import au.com.glob.clodmc.modules.SimpleCommand;
 import au.com.glob.clodmc.modules.bluemap.BlueMapUpdateEvent;
 import au.com.glob.clodmc.util.BlockPos;
+import au.com.glob.clodmc.util.Chat;
 import au.com.glob.clodmc.util.ConfigUtil;
+import au.com.glob.clodmc.util.Logger;
 import java.io.File;
 import java.io.IOException;
 import java.time.Duration;
@@ -61,7 +63,7 @@ public class Gateways extends SimpleCommand implements Module, Listener {
   @Override
   protected void execute(@NotNull CommandSender sender, @NotNull List<String> args) {
     if (this.instances.isEmpty()) {
-      ClodMC.warning(sender, "No gateways");
+      Chat.warning(sender, "No gateways");
       return;
     }
 
@@ -71,7 +73,7 @@ public class Gateways extends SimpleCommand implements Module, Listener {
             .distinct()
             .sorted()
             .collect(Collectors.joining(", "));
-    ClodMC.info(sender, "Existing gateways: " + gateways);
+    Chat.info(sender, "Existing gateways: " + gateways);
   }
 
   @Override
@@ -119,7 +121,7 @@ public class Gateways extends SimpleCommand implements Module, Listener {
 
       Bukkit.getServer().getPluginManager().callEvent(new BlueMapUpdateEvent(Gateways.class));
     } catch (IOException e) {
-      ClodMC.logError(this.configFile + ": save failed: " + e);
+      Logger.error(this.configFile + ": save failed: " + e);
     }
   }
 
@@ -140,7 +142,7 @@ public class Gateways extends SimpleCommand implements Module, Listener {
     Colours.Colour topColour = Colours.of(matrix[1]);
     Colours.Colour bottomColour = Colours.of(matrix[4]);
     if (topColour == null || bottomColour == null) {
-      ClodMC.logError("failed to craft anchor block: invalid colour material");
+      Logger.error("failed to craft anchor block: invalid colour material");
       return;
     }
     int networkId = Colours.coloursToNetworkId(topColour, bottomColour);
@@ -183,7 +185,7 @@ public class Gateways extends SimpleCommand implements Module, Listener {
     BlockPos above2Pos = above1Pos.up();
     if (!(above1Pos.getBlock().isEmpty() && above2Pos.getBlock().isEmpty())) {
       event.setCancelled(true);
-      ClodMC.error(event.getPlayer(), "Anchors require two air blocks above");
+      Chat.error(event.getPlayer(), "Anchors require two air blocks above");
       return;
     }
 
@@ -200,7 +202,7 @@ public class Gateways extends SimpleCommand implements Module, Listener {
 
     if (matching > 1) {
       event.setCancelled(true);
-      ClodMC.error(event.getPlayer(), "Anchors already connected");
+      Chat.error(event.getPlayer(), "Anchors already connected");
       return;
     }
 

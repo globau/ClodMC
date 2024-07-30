@@ -4,6 +4,7 @@ import au.com.glob.clodmc.ClodMC;
 import au.com.glob.clodmc.modules.CommandError;
 import au.com.glob.clodmc.modules.Module;
 import au.com.glob.clodmc.modules.SimpleCommand;
+import au.com.glob.clodmc.util.Chat;
 import java.util.List;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
@@ -147,7 +148,7 @@ public class WelcomeBook extends SimpleCommand implements Module, Listener {
 
     recipient.getInventory().addItem(bookItem);
     if (sender != null) {
-      ClodMC.fyi(sender, "Gave welcome book to " + recipient.getName());
+      Chat.fyi(sender, "Gave welcome book to " + recipient.getName());
     }
   }
 }

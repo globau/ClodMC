@@ -1,6 +1,8 @@
 package au.com.glob.clodmc.modules;
 
 import au.com.glob.clodmc.ClodMC;
+import au.com.glob.clodmc.util.Chat;
+import au.com.glob.clodmc.util.Logger;
 import java.util.ArrayList;
 import java.util.List;
 import org.bukkit.Bukkit;
@@ -46,11 +48,11 @@ public abstract class SimpleCommand extends Command {
     try {
       this.execute(sender, new ArrayList<>(List.of(args)));
     } catch (CommandError e) {
-      ClodMC.error(sender, e.getMessage());
+      Chat.error(sender, e.getMessage());
     } catch (Throwable e) {
       String message = e.getMessage() == null ? e.getClass().getSimpleName() : e.getMessage();
-      ClodMC.error(sender, "Internal command error: " + message);
-      ClodMC.logException(e);
+      Chat.error(sender, "Internal command error: " + message);
+      Logger.exception(e);
     }
     return true;
   }

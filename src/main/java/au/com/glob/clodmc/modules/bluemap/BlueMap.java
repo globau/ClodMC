@@ -8,6 +8,7 @@ import au.com.glob.clodmc.modules.bluemap.addon.GriefPreventionAddon;
 import au.com.glob.clodmc.modules.bluemap.addon.SpawnAddon;
 import au.com.glob.clodmc.modules.gateways.Gateways;
 import au.com.glob.clodmc.modules.server.CircularWorldBorder;
+import au.com.glob.clodmc.util.Logger;
 import de.bluecolored.bluemap.api.BlueMapAPI;
 import java.util.ArrayList;
 import java.util.List;
@@ -41,7 +42,7 @@ public class BlueMap implements Module, Listener {
             try {
               addon.onUpdate();
             } catch (Exception e) {
-              ClodMC.logException(e);
+              Logger.exception(e);
             }
           }
         });
@@ -54,7 +55,7 @@ public class BlueMap implements Module, Listener {
         try {
           addon.onUpdate();
         } catch (Exception e) {
-          ClodMC.logException(e);
+          Logger.exception(e);
         }
         break;
       }

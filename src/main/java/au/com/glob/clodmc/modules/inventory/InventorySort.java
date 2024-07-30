@@ -3,6 +3,7 @@ package au.com.glob.clodmc.modules.inventory;
 import au.com.glob.clodmc.ClodMC;
 import au.com.glob.clodmc.modules.Module;
 import au.com.glob.clodmc.modules.player.OpAlerts;
+import au.com.glob.clodmc.util.Logger;
 import au.com.glob.clodmc.util.StringUtil;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -70,7 +71,7 @@ public class InventorySort implements Listener, Module {
         orderedMaterials.add(parts[1]);
       }
     } catch (IOException e) {
-      ClodMC.logError("inventory_order.txt: " + e.getMessage());
+      Logger.error("inventory_order.txt: " + e.getMessage());
       return;
     }
 
@@ -100,7 +101,7 @@ public class InventorySort implements Listener, Module {
     }
 
     for (String alert : alerts) {
-      ClodMC.logError(alert);
+      Logger.error(alert);
       OpAlerts.addAlert(alert);
     }
   }

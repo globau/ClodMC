@@ -4,6 +4,7 @@ import au.com.glob.clodmc.ClodMC;
 import au.com.glob.clodmc.modules.CommandError;
 import au.com.glob.clodmc.modules.Module;
 import au.com.glob.clodmc.modules.SimpleCommand;
+import au.com.glob.clodmc.util.Chat;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -63,10 +64,10 @@ public class AdminInvCommand extends SimpleCommand implements Module, Listener {
 
     if (this.hasStoredInventory(player)) {
       this.restoreInventory(player);
-      ClodMC.info(player, "Switched to Player inventory");
+      Chat.info(player, "Switched to Player inventory");
     } else {
       this.storeInventory(player);
-      ClodMC.info(player, "Switched to Admin inventory");
+      Chat.info(player, "Switched to Admin inventory");
     }
   }
 

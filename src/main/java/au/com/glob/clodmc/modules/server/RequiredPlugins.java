@@ -1,8 +1,8 @@
 package au.com.glob.clodmc.modules.server;
 
-import au.com.glob.clodmc.ClodMC;
 import au.com.glob.clodmc.modules.Module;
 import au.com.glob.clodmc.modules.player.OpAlerts;
+import au.com.glob.clodmc.util.Logger;
 import java.util.List;
 import java.util.StringJoiner;
 import net.kyori.adventure.text.minimessage.MiniMessage;
@@ -31,7 +31,7 @@ public class RequiredPlugins implements Listener, Module {
     if (this.preventLogin) {
       String alert = "Missing required plugin(s): " + missing;
       OpAlerts.addAlert(alert);
-      ClodMC.logError("\n***\n*** " + alert + "\n***");
+      Logger.error("\n***\n*** " + alert + "\n***");
     }
   }
 

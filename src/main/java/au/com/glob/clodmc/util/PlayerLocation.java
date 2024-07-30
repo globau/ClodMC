@@ -1,6 +1,5 @@
 package au.com.glob.clodmc.util;
 
-import au.com.glob.clodmc.ClodMC;
 import java.util.Map;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -33,11 +32,11 @@ public class PlayerLocation implements ConfigurationSerializable {
   public void teleportPlayer(@NotNull Player player) {
     if (player.isInsideVehicle()) {
       if (player.getVehicle() instanceof Horse) {
-        ClodMC.fyi(player, "Dismounting your horse");
+        Chat.fyi(player, "Dismounting your horse");
       } else if (player.getVehicle() instanceof Boat) {
-        ClodMC.fyi(player, "Dismounting your boat");
+        Chat.fyi(player, "Dismounting your boat");
       } else {
-        ClodMC.fyi(player, "Dismounting");
+        Chat.fyi(player, "Dismounting");
       }
     }
 

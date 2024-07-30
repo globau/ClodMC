@@ -26,6 +26,7 @@ import au.com.glob.clodmc.modules.player.WelcomeBook;
 import au.com.glob.clodmc.modules.server.CircularWorldBorder;
 import au.com.glob.clodmc.modules.server.ClodServerLinks;
 import au.com.glob.clodmc.modules.server.RequiredPlugins;
+import au.com.glob.clodmc.util.Logger;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -39,7 +40,7 @@ public class ModuleRegistry {
   private void register(@NotNull Module module) {
     String dependsOn = module.dependsOn();
     if (dependsOn != null && !Bukkit.getPluginManager().isPluginEnabled(dependsOn)) {
-      ClodMC.logWarning(
+      Logger.warning(
           "Cannot load "
               + module.getClass().getSimpleName()
               + ": depends on plugin "

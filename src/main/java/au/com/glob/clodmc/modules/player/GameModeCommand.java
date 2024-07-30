@@ -1,9 +1,9 @@
 package au.com.glob.clodmc.modules.player;
 
-import au.com.glob.clodmc.ClodMC;
 import au.com.glob.clodmc.modules.CommandError;
 import au.com.glob.clodmc.modules.Module;
 import au.com.glob.clodmc.modules.SimpleCommand;
+import au.com.glob.clodmc.util.Chat;
 import au.com.glob.clodmc.util.StringUtil;
 import java.util.List;
 import org.bukkit.Bukkit;
@@ -57,10 +57,10 @@ public class GameModeCommand extends SimpleCommand implements Module {
     mode = StringUtil.toTitleCase(mode);
 
     if (sender.equals(target)) {
-      ClodMC.fyi(sender, "Set own game mode to " + mode);
+      Chat.fyi(sender, "Set own game mode to " + mode);
     } else {
-      ClodMC.fyi(sender, "Set " + target.getName() + "'s game mode to " + mode);
-      ClodMC.info(target, "Your game mode has been changed to " + mode);
+      Chat.fyi(sender, "Set " + target.getName() + "'s game mode to " + mode);
+      Chat.info(target, "Your game mode has been changed to " + mode);
     }
   }
 

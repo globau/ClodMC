@@ -4,7 +4,9 @@ import au.com.glob.clodmc.ClodMC;
 import au.com.glob.clodmc.modules.CommandError;
 import au.com.glob.clodmc.modules.Module;
 import au.com.glob.clodmc.modules.SimpleCommand;
+import au.com.glob.clodmc.util.Chat;
 import au.com.glob.clodmc.util.HttpClient;
+import au.com.glob.clodmc.util.Logger;
 import au.com.glob.clodmc.util.Mailer;
 import au.com.glob.clodmc.util.PlayerDataFile;
 import com.google.gson.JsonObject;
@@ -69,8 +71,8 @@ public class InviteCommand extends SimpleCommand implements Module {
 
                 JsonObject response = result.getResponse();
                 if (response == null) {
-                  ClodMC.error(sender, "Player lookup failed");
-                  ClodMC.logWarning(url + " failed: null response");
+                  Chat.error(sender, "Player lookup failed");
+                  Logger.warning(url + " failed: null response");
                   return;
                 }
 
@@ -89,8 +91,8 @@ public class InviteCommand extends SimpleCommand implements Module {
 
                 JsonObject response = result.getResponse();
                 if (response == null) {
-                  ClodMC.error(sender, "Player lookup failed");
-                  ClodMC.logWarning(url + " failed: null response");
+                  Chat.error(sender, "Player lookup failed");
+                  Logger.warning(url + " failed: null response");
                   return;
                 }
 
@@ -104,18 +106,18 @@ public class InviteCommand extends SimpleCommand implements Module {
               @Override
               public void run() {
                 if (error != null) {
-                  ClodMC.error(sender, error.toString());
+                  Chat.error(sender, error.toString());
                   return;
                 }
                 if (normalisedName == null) {
-                  ClodMC.error(
+                  Chat.error(
                       sender,
                       name
                           + " is not a valid "
                           + (isJava ? "Java" : "Bedrock")
                           + " player name</red>");
                   if (!isJava) {
-                    ClodMC.info(
+                    Chat.info(
                         sender, "Something went wrong inviting " + name + ", contact an admin");
                   }
                   return;
@@ -129,7 +131,7 @@ public class InviteCommand extends SimpleCommand implements Module {
                             (isJava ? "whitelist" : "fwhitelist") + " add " + name);
 
                 if (success) {
-                  ClodMC.info(sender, normalisedName + " added to the whitelist");
+                  Chat.info(sender, normalisedName + " added to the whitelist");
                   Bukkit.getScheduler()
                       .runTaskAsynchronously(
                           ClodMC.instance,
@@ -144,7 +146,7 @@ public class InviteCommand extends SimpleCommand implements Module {
                                       + " added to the whitelist by "
                                       + sender.getName());
                             } catch (Mailer.MailerError e) {
-                              ClodMC.logWarning(e.getMessage());
+                              Logger.warning(e.getMessage());
                             }
                           });
                 }

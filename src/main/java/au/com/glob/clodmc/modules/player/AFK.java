@@ -4,6 +4,7 @@ import au.com.glob.clodmc.ClodMC;
 import au.com.glob.clodmc.modules.Module;
 import au.com.glob.clodmc.modules.SimpleCommand;
 import au.com.glob.clodmc.util.BlockPos;
+import au.com.glob.clodmc.util.Chat;
 import io.papermc.paper.event.player.AsyncChatEvent;
 import java.util.HashMap;
 import java.util.List;
@@ -204,9 +205,9 @@ public class AFK extends SimpleCommand implements Listener, Module {
     private void announce() {
       for (Player player : Bukkit.getOnlinePlayers()) {
         if (player.equals(this.player)) {
-          ClodMC.fyi(player, this.isAway ? "You are now AFK" : "You are no longer AFK");
+          Chat.fyi(player, this.isAway ? "You are now AFK" : "You are no longer AFK");
         } else {
-          ClodMC.fyi(
+          Chat.fyi(
               player,
               this.isAway
                   ? this.player.getName() + " is now AFK"

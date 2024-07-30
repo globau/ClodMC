@@ -4,6 +4,7 @@ import au.com.glob.clodmc.ClodMC;
 import au.com.glob.clodmc.modules.bluemap.BlueMapAddon;
 import au.com.glob.clodmc.modules.gateways.AnchorBlock;
 import au.com.glob.clodmc.modules.gateways.Gateways;
+import au.com.glob.clodmc.util.Logger;
 import com.flowpowered.math.vector.Vector2i;
 import com.flowpowered.math.vector.Vector3d;
 import de.bluecolored.bluemap.api.BlueMapAPI;
@@ -44,7 +45,7 @@ public class GatewaysAddon extends BlueMapAddon {
         svgStream.transferTo(out);
       }
     } catch (IOException e) {
-      ClodMC.logError("failed to create " + gatewayFilePath + ": " + e);
+      Logger.error("failed to create " + gatewayFilePath + ": " + e);
     }
 
     // create markers

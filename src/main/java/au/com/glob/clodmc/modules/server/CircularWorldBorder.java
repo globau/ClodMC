@@ -4,6 +4,7 @@ package au.com.glob.clodmc.modules.server;
 
 import au.com.glob.clodmc.ClodMC;
 import au.com.glob.clodmc.modules.Module;
+import au.com.glob.clodmc.util.Logger;
 import io.papermc.paper.entity.TeleportFlag;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -50,7 +51,7 @@ public class CircularWorldBorder implements Module, Listener {
     for (Config config : BORDERS) {
       World world = Bukkit.getWorld(config.world);
       if (world == null) {
-        ClodMC.logError("CircularWorldBorder: invalid world: " + config.world);
+        Logger.error("CircularWorldBorder: invalid world: " + config.world);
         continue;
       }
       this.borders.put(world, config.border);

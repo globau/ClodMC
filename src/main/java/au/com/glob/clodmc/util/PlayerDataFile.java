@@ -40,9 +40,9 @@ public class PlayerDataFile extends YamlConfiguration {
       this.load(this.file);
       this.exists = true;
     } catch (IOException e) {
-      ClodMC.logError("failed to load " + this.file + ": " + e);
+      Logger.error("failed to load " + this.file + ": " + e);
     } catch (InvalidConfigurationException e) {
-      ClodMC.logError("malformed " + this.file + ": " + e);
+      Logger.error("malformed " + this.file + ": " + e);
     }
   }
 
@@ -53,11 +53,11 @@ public class PlayerDataFile extends YamlConfiguration {
   protected void save() {
     try {
       if (!this.file.getParentFile().exists() && !this.file.getParentFile().mkdirs()) {
-        ClodMC.logError(this.file + ": mkdir failed");
+        Logger.error(this.file + ": mkdir failed");
       }
       this.save(this.file);
     } catch (IOException e) {
-      ClodMC.logError(this.file + ": save failed: " + e);
+      Logger.error(this.file + ": save failed: " + e);
     }
   }
 
