@@ -3,6 +3,7 @@ package au.com.glob.clodmc.util;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Set;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Tag;
@@ -32,6 +33,41 @@ public class TeleportUtil {
     pos.sort(Comparator.comparingInt((Vector3D a) -> a.x * a.x + a.y * a.y + a.z * a.z));
     SHIFT_VECTORS = pos.toArray(new Vector3D[0]);
   }
+
+  private static final @NotNull Set<Material> ALWAYS_SAFE =
+      Set.of(
+          Material.BLACK_CARPET,
+          Material.BLUE_CARPET,
+          Material.BROWN_CARPET,
+          Material.CYAN_CARPET,
+          Material.GRAY_CARPET,
+          Material.GREEN_CARPET,
+          Material.LIGHT_BLUE_CARPET,
+          Material.LIGHT_GRAY_CARPET,
+          Material.LIME_CARPET,
+          Material.MAGENTA_CARPET,
+          Material.MOSS_CARPET,
+          Material.ORANGE_CARPET,
+          Material.PINK_CARPET,
+          Material.PURPLE_CARPET,
+          Material.RED_CARPET,
+          Material.WHITE_CARPET,
+          Material.YELLOW_CARPET,
+          Material.DIRT_PATH,
+          Material.SCAFFOLDING);
+  private static final @NotNull Set<Material> ALWAYS_UNSAFE =
+      Set.of(
+          Material.CACTUS,
+          Material.CAMPFIRE,
+          Material.END_PORTAL,
+          Material.FIRE,
+          Material.LAVA,
+          Material.MAGMA_BLOCK,
+          Material.NETHER_PORTAL,
+          Material.SOUL_CAMPFIRE,
+          Material.SOUL_FIRE,
+          Material.SWEET_BERRY_BUSH,
+          Material.WITHER_ROSE);
 
   public static @NotNull Location getSafePos(@NotNull Location location) {
     World world = location.getWorld();
@@ -100,11 +136,11 @@ public class TeleportUtil {
   }
 
   public static boolean isUnsafe(@NotNull Block block, boolean slabsAreUnsafe) {
-    return (!MaterialUtil.ALWAYS_SAFE.contains(block.getType())
+    return (!ALWAYS_SAFE.contains(block.getType())
             || (slabsAreUnsafe && block.getState().getBlockData() instanceof Slab))
-        && (MaterialUtil.ALWAYS_UNSAFE.contains(block.getType())
+        && (ALWAYS_UNSAFE.contains(block.getType())
             || block.isSolid()
-            || MaterialUtil.ALWAYS_UNSAFE.contains(block.getRelative(BlockFace.DOWN).getType())
+            || ALWAYS_UNSAFE.contains(block.getRelative(BlockFace.DOWN).getType())
             || block.getRelative(BlockFace.UP).isSolid());
   }
 }

@@ -4,7 +4,6 @@ import au.com.glob.clodmc.modules.Module;
 import au.com.glob.clodmc.modules.ModuleRegistry;
 import au.com.glob.clodmc.modules.SimpleCommand;
 import au.com.glob.clodmc.util.ConfigUtil;
-import au.com.glob.clodmc.util.MaterialUtil;
 import java.io.File;
 import java.util.logging.Level;
 import org.bukkit.Bukkit;
@@ -38,7 +37,6 @@ public final class ClodMC extends JavaPlugin implements Listener {
 
   @Override
   public void onEnable() {
-    MaterialUtil.init();
     Bukkit.getPluginManager().registerEvents(this, this);
     this.moduleRegistry.registerAll();
 
