@@ -11,6 +11,7 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.jetbrains.annotations.NotNull;
 
+/** Collect data about players */
 public class PlayerTracker implements Module, Listener {
   @EventHandler
   public void onPlayerJoin(@NotNull PlayerJoinEvent event) {

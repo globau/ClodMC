@@ -16,6 +16,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.jetbrains.annotations.NotNull;
 
+/** /back command to return to where you last teleported from */
 public class BackCommand extends SimpleCommand implements Module, Listener {
   public BackCommand() {
     super("back", "Teleport to previous location");

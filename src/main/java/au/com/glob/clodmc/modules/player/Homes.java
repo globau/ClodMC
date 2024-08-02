@@ -19,6 +19,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.jetbrains.annotations.NotNull;
 
+/** Set limited number of named teleport locations */
 public class Homes implements Listener, Module {
   @SuppressWarnings("NotNullFieldNotInitialized")
   protected static @NotNull Homes instance;

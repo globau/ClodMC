@@ -3,6 +3,7 @@ package au.com.glob.clodmc.util;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 
+/** Standardised styling for messages sent to players via chat */
 public final class Chat {
   private enum Style {
     FYI("<grey>"),

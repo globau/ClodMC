@@ -10,6 +10,7 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.jetbrains.annotations.NotNull;
 
+/** Behavioural changes to allow some items to work better as purely decorative */
 public class Decorations implements Module, Listener {
   @EventHandler
   public void onPlayerInteract(@NotNull PlayerInteractEvent event) {

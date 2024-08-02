@@ -10,6 +10,7 @@ import org.bukkit.event.entity.EntityChangeBlockEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.jetbrains.annotations.NotNull;
 
+/** Prevent some mobs from breaking or moving blocks */
 public class PreventMobGriefing implements Listener, Module {
   @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
   public void onEntityExplode(@NotNull EntityExplodeEvent event) {

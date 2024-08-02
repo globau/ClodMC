@@ -13,6 +13,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.jetbrains.annotations.NotNull;
 
+/** If a container has been named in an anvil, show that name when looking at it */
 public class NamedStorage implements Module, Listener {
   @EventHandler
   public void onPlayerMove(@NotNull PlayerMoveEvent event) {

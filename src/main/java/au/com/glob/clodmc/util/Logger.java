@@ -4,6 +4,7 @@ import au.com.glob.clodmc.ClodMC;
 import java.util.logging.Level;
 import org.jetbrains.annotations.NotNull;
 
+/** logfile helpers */
 public final class Logger {
   public static void info(@NotNull String message) {
     ClodMC.instance.getLogger().info(message);

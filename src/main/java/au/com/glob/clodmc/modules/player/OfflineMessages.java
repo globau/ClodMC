@@ -28,7 +28,7 @@ import org.bukkit.util.NumberConversions;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-@SerializableAs("ClodMC.Message")
+/** Queue and deliver whispers sent to offline players */
 public class OfflineMessages implements Module, Listener {
   @NotNull final Pattern msgPattern = Pattern.compile("^/?msg\\s+(\\S+)\\s+(.+)$");
 
@@ -138,6 +138,7 @@ public class OfflineMessages implements Module, Listener {
     }
   }
 
+  @SerializableAs("ClodMC.Message")
   public static class Message implements ConfigurationSerializable {
     private final long timestamp;
     private final @NotNull String sender;

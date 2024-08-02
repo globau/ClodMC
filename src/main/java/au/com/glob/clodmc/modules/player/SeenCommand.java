@@ -21,6 +21,7 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.server.ServerLoadEvent;
 import org.jetbrains.annotations.NotNull;
 
+/** /seen command; show how long it's been since the server last saw the player */
 public class SeenCommand extends SimpleCommand implements Module, Listener {
   private final @NotNull Map<String, UUID> validNames = new HashMap<>();
 

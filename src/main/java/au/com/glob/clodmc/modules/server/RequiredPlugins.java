@@ -13,6 +13,7 @@ import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.server.ServerLoadEvent;
 import org.jetbrains.annotations.NotNull;
 
+/** Don't allow non-op players to connect unless all required plugins are loaded */
 public class RequiredPlugins implements Listener, Module {
   private static final @NotNull List<String> REQUIRED = List.of("GriefPrevention");
 

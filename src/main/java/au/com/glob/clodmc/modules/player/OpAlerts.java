@@ -10,6 +10,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerLoginEvent;
 import org.jetbrains.annotations.NotNull;
 
+/** Collect startup alerts and send them to the first operator that logs in */
 public class OpAlerts implements Module, Listener {
   @SuppressWarnings("NotNullFieldNotInitialized")
   private static @NotNull OpAlerts instance;

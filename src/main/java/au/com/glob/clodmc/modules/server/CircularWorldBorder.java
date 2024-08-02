@@ -31,6 +31,7 @@ import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 
+/** Implement a circular world border */
 public class CircularWorldBorder implements Module, Listener {
   private static final @NotNull List<Config> BORDERS =
       List.of(

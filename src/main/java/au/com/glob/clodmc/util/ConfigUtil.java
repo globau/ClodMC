@@ -15,6 +15,7 @@ import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.jetbrains.annotations.NotNull;
 import org.yaml.snakeyaml.error.YAMLException;
 
+/** config file helpers */
 public class ConfigUtil {
   public static boolean sanityChecked = false;
 

@@ -15,6 +15,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.world.TimeSkipEvent;
 import org.jetbrains.annotations.NotNull;
 
+/** Tell players who slept and skipped the night */
 public class Sleep implements Listener, Module {
   @EventHandler
   public void onTimeSkip(@NotNull TimeSkipEvent event) {

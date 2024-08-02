@@ -15,6 +15,7 @@ import org.bukkit.block.data.type.Slab;
 import org.bukkit.block.data.type.Snow;
 import org.jetbrains.annotations.NotNull;
 
+/** player teleport helpers */
 public class TeleportUtil {
   private static final int CHECK_RADIUS = 3;
   private static final Vector3D @NotNull [] SHIFT_VECTORS;

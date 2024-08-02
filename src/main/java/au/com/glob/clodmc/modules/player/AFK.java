@@ -28,6 +28,7 @@ import org.bukkit.scoreboard.Team;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+/** Automatic and manual afk; players are visibly afk in the tab-list */
 public class AFK extends SimpleCommand implements Listener, Module {
   @SuppressWarnings("NotNullFieldNotInitialized")
   public static @NotNull AFK instance;

@@ -22,6 +22,7 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.LeavesDecayEvent;
 import org.jetbrains.annotations.NotNull;
 
+/** Nearly instant decaying of leafs */
 public class FastLeafDecay implements Listener, Module {
   private final @NotNull List<Block> scheduledBlocks = new ArrayList<>();
 

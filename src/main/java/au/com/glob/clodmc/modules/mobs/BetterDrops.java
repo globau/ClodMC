@@ -8,6 +8,7 @@ import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
+/** Improve the drop rates of selected entities */
 public class BetterDrops implements Listener, Module {
   @EventHandler
   public void onEntityDeath(@NotNull EntityDeathEvent event) {

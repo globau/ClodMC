@@ -12,6 +12,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
+/** /gamemode that doesn't announce */
 public class GameModeCommand extends SimpleCommand implements Module {
   private static final @NotNull List<String> MODES = List.of("survival", "creative", "spectator");
 

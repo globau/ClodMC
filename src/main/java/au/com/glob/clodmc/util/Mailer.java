@@ -11,6 +11,7 @@ import java.util.Date;
 import java.util.Locale;
 import org.jetbrains.annotations.NotNull;
 
+/** email helpers */
 public class Mailer {
   private static final @NotNull String ADMIN_ADDR = "clod@glob.au";
   private static final @NotNull String HOSTNAME = "in1-smtp.messagingengine.com";

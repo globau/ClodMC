@@ -22,6 +22,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 
+/** Allows players with enough playtime on the server to add others to the whitelist */
 public class InviteCommand extends SimpleCommand implements Module {
   private static final int PLAY_TIME = 240; // minutes
 

@@ -9,6 +9,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerLinksSendEvent;
 import org.jetbrains.annotations.NotNull;
 
+/** Set server links in MC client pause screen */
 @SuppressWarnings("UnstableApiUsage")
 public class ClodServerLinks implements Module, Listener {
   @EventHandler

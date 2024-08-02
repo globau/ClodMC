@@ -7,6 +7,7 @@ import org.bukkit.block.Block;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+/** Same as Location, but for the block */
 public class BlockPos {
   final @NotNull World world;
   final int x;

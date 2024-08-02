@@ -10,6 +10,7 @@ import java.net.URL;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+/** HTTP client helpers */
 public class HttpClient {
   private HttpClient() {}
 

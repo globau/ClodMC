@@ -14,6 +14,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
+/** Teleport to spawn */
 public class SpawnCommand extends SimpleCommand implements Module {
   public SpawnCommand() {
     super("spawn", "Teleport to spawn");

@@ -18,6 +18,7 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+/** player data file management */
 public class PlayerDataFile extends YamlConfiguration {
   protected static final @NotNull Map<String, PlayerDataFile> instances = new HashMap<>();
 

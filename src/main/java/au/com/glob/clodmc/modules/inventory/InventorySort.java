@@ -35,6 +35,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.MusicInstrumentMeta;
 import org.jetbrains.annotations.NotNull;
 
+/** Sort containers by shift+right-clicking in the inventory screen */
 public class InventorySort implements Listener, Module {
   private static final @NotNull Map<String, Integer> materialOrder = new HashMap<>(1477);
 

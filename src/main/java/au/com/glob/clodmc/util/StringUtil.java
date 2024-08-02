@@ -9,6 +9,7 @@ import net.kyori.adventure.translation.GlobalTranslator;
 import net.kyori.adventure.translation.Translatable;
 import org.jetbrains.annotations.NotNull;
 
+/** String helpers */
 public class StringUtil {
   public static @NotNull String relativeTime(long seconds) {
     long ss = Math.round(seconds);

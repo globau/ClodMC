@@ -21,6 +21,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+/** Give players the Welcome Book, with rules and customisations */
 public class WelcomeBook extends SimpleCommand implements Module, Listener {
   private static final @NotNull String TITLE = "Welcome to Clod-MC";
   private static final @NotNull String AUTHOR = "glob";

@@ -17,6 +17,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.jetbrains.annotations.NotNull;
 
+/** Bridge between ClodMC modules and BlueMap */
 public class BlueMap implements Module, Listener {
   private final @NotNull List<BlueMapAddon> addons = new ArrayList<>(3);
 

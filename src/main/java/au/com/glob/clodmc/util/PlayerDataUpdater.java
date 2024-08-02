@@ -8,6 +8,7 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+/** Preferred way to update a player data file */
 public class PlayerDataUpdater implements AutoCloseable {
   private final @NotNull PlayerDataFile config;
   private boolean modified;

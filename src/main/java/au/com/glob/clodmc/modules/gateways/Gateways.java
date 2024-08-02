@@ -47,6 +47,7 @@ import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
+/** Player built point-to-point teleporters */
 public class Gateways extends SimpleCommand implements Module, Listener {
   private final @NotNull File configFile =
       new File(ClodMC.instance.getDataFolder(), "gateways.yml");

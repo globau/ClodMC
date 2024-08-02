@@ -11,6 +11,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.jetbrains.annotations.NotNull;
 
+/** Same as location, but also tracks if the player is flying */
 @SerializableAs("ClodMC.Location")
 public class PlayerLocation implements ConfigurationSerializable {
   private final @NotNull Location location;
