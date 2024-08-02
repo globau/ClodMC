@@ -52,3 +52,4 @@ same two colours in the same positions to establish a gateway.
 - `/seen` to show when a player last logged out
 - leaves decay quickly
 - `/admininv` to toggle between player and admin inventories
+- clicking on a waxed sign attached to a container opens the container's inventory
