@@ -7,6 +7,7 @@ import au.com.glob.clodmc.modules.interactions.Decorations;
 import au.com.glob.clodmc.modules.interactions.FastLeafDecay;
 import au.com.glob.clodmc.modules.interactions.NamedStorage;
 import au.com.glob.clodmc.modules.interactions.SignedContainers;
+import au.com.glob.clodmc.modules.interactions.WaxedItemFrames;
 import au.com.glob.clodmc.modules.inventory.AdminInvCommand;
 import au.com.glob.clodmc.modules.inventory.InventorySort;
 import au.com.glob.clodmc.modules.mobs.BetterDrops;
@@ -77,6 +78,7 @@ public class ModuleRegistry {
     this.register(new FastLeafDecay());
     this.register(new NamedStorage());
     this.register(new SignedContainers());
+    this.register(new WaxedItemFrames());
 
     // inventory
     this.register(new AdminInvCommand());
