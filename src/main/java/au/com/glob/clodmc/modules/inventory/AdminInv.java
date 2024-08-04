@@ -1,16 +1,13 @@
 package au.com.glob.clodmc.modules.inventory;
 
 import au.com.glob.clodmc.ClodMC;
-import au.com.glob.clodmc.modules.CommandError;
+import au.com.glob.clodmc.command.CommandBuilder;
 import au.com.glob.clodmc.modules.Module;
-import au.com.glob.clodmc.modules.SimpleCommand;
 import au.com.glob.clodmc.util.Chat;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import org.bukkit.Bukkit;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -20,12 +17,25 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 /** Swap between player and admin inventories */
-public class AdminInvCommand extends SimpleCommand implements Module, Listener {
+public class AdminInv implements Module, Listener {
   private final @NotNull Map<UUID, ItemStack[]> playerInventories = new HashMap<>();
   private final @NotNull Map<UUID, ItemStack[]> adminInventories = new HashMap<>();
 
-  public AdminInvCommand() {
-    super("admininv", "Toggle admin/player inventory");
+  public AdminInv() {
+    CommandBuilder.build("admininv")
+        .description("Toggle admin/player inventory")
+        .requiresOp()
+        .executor(
+            (@NotNull Player player) -> {
+              if (this.hasStoredInventory(player)) {
+                this.restoreInventory(player);
+                Chat.info(player, "Switched to Player inventory");
+              } else {
+                this.storeInventory(player);
+                Chat.info(player, "Switched to Admin inventory");
+              }
+            })
+        .register();
   }
 
   private void storeInventory(@NotNull Player player) {
@@ -52,24 +62,6 @@ public class AdminInvCommand extends SimpleCommand implements Module, Listener {
   private boolean hasStoredInventory(@NotNull Player player) {
     UUID uuid = player.getUniqueId();
     return this.playerInventories.containsKey(uuid);
-  }
-
-  @Override
-  protected void execute(@NotNull CommandSender sender, @NotNull List<String> args) {
-    if (!(sender instanceof Player player)) {
-      throw new CommandError("");
-    }
-    if (!player.isOp()) {
-      throw new CommandError("You do not have permissions to run this command");
-    }
-
-    if (this.hasStoredInventory(player)) {
-      this.restoreInventory(player);
-      Chat.info(player, "Switched to Player inventory");
-    } else {
-      this.storeInventory(player);
-      Chat.info(player, "Switched to Admin inventory");
-    }
   }
 
   @EventHandler

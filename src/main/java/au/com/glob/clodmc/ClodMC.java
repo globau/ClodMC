@@ -2,7 +2,6 @@ package au.com.glob.clodmc;
 
 import au.com.glob.clodmc.modules.Module;
 import au.com.glob.clodmc.modules.ModuleRegistry;
-import au.com.glob.clodmc.modules.SimpleCommand;
 import au.com.glob.clodmc.util.ConfigUtil;
 import au.com.glob.clodmc.util.Logger;
 import java.io.File;
@@ -18,8 +17,6 @@ public final class ClodMC extends JavaPlugin implements Listener {
   public static @NotNull ClodMC instance;
 
   private final @NotNull ModuleRegistry moduleRegistry = new ModuleRegistry();
-
-  // init
 
   public ClodMC() {
     super();
@@ -61,10 +58,5 @@ public final class ClodMC extends JavaPlugin implements Listener {
 
   public static @NotNull <T extends Module> T getModule(@NotNull Class<T> moduleClass) {
     return instance.moduleRegistry.get(moduleClass);
-  }
-
-  @Override
-  public void onDisable() {
-    SimpleCommand.unregisterAll();
   }
 }

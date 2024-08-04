@@ -1,4 +1,4 @@
-package au.com.glob.clodmc.modules;
+package au.com.glob.clodmc.command;
 
 import org.bukkit.command.CommandException;
 import org.jetbrains.annotations.NotNull;

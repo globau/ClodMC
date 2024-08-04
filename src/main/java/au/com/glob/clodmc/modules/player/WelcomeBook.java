@@ -1,9 +1,10 @@
 package au.com.glob.clodmc.modules.player;
 
 import au.com.glob.clodmc.ClodMC;
-import au.com.glob.clodmc.modules.CommandError;
+import au.com.glob.clodmc.command.CommandBuilder;
+import au.com.glob.clodmc.command.CommandUsageError;
+import au.com.glob.clodmc.command.EitherCommandSender;
 import au.com.glob.clodmc.modules.Module;
-import au.com.glob.clodmc.modules.SimpleCommand;
 import au.com.glob.clodmc.util.Chat;
 import java.util.List;
 import net.kyori.adventure.text.Component;
@@ -22,7 +23,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /** Give players the Welcome Book, with rules and customisations */
-public class WelcomeBook extends SimpleCommand implements Module, Listener {
+public class WelcomeBook implements Module, Listener {
   private static final @NotNull String TITLE = "Welcome to Clod-MC";
   private static final @NotNull String AUTHOR = "glob";
   private static final @NotNull List<String> PAGES =
@@ -100,7 +101,26 @@ public class WelcomeBook extends SimpleCommand implements Module, Listener {
               A named container will be visible when looking at it.""");
 
   public WelcomeBook() {
-    super("welcome", "/welcome <player>", "Give specified player the welcome book");
+    CommandBuilder.build("welcome")
+        .usage("/welcome <player>")
+        .description("Give specified player the welcome book")
+        .requiresOp()
+        .executor(
+            (@NotNull EitherCommandSender sender, @Nullable Player player) -> {
+              if (player == null) {
+                throw new CommandUsageError();
+              }
+              this.giveWelcomeBook(player, sender);
+            })
+        .completor(
+            (@NotNull CommandSender sender, @NotNull List<String> args) ->
+                Bukkit.getOnlinePlayers().stream()
+                    .map(Player::getName)
+                    .filter(
+                        (String name) ->
+                            name.toLowerCase().startsWith(args.getFirst().toLowerCase()))
+                    .toList())
+        .register();
   }
 
   @EventHandler
@@ -113,26 +133,6 @@ public class WelcomeBook extends SimpleCommand implements Module, Listener {
         }
       }
     }.runTaskLater(ClodMC.instance, 5);
-  }
-
-  @Override
-  protected void execute(@NotNull CommandSender sender, @NotNull List<String> args) {
-    if (sender instanceof Player player && !player.isOp()) {
-      throw new CommandError("You are not allowed to give players welcome books");
-    }
-
-    this.giveWelcomeBook(this.popPlayerArg(args), sender);
-  }
-
-  @Override
-  public @NotNull List<String> tabComplete(
-      @NotNull CommandSender sender, @NotNull String alias, String @NotNull [] args)
-      throws IllegalArgumentException {
-    String arg = args.length == 0 ? "" : args[0].toLowerCase();
-    return Bukkit.getOnlinePlayers().stream()
-        .map(Player::getName)
-        .filter((String name) -> name.toLowerCase().startsWith(arg))
-        .toList();
   }
 
   private void giveWelcomeBook(@NotNull Player recipient, @Nullable CommandSender sender) {

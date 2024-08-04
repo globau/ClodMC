@@ -1,17 +1,15 @@
 package au.com.glob.clodmc.modules.player;
 
 import au.com.glob.clodmc.ClodMC;
+import au.com.glob.clodmc.command.CommandBuilder;
 import au.com.glob.clodmc.modules.Module;
-import au.com.glob.clodmc.modules.SimpleCommand;
 import au.com.glob.clodmc.util.BlockPos;
 import au.com.glob.clodmc.util.Chat;
 import io.papermc.paper.event.player.AsyncChatEvent;
 import java.util.HashMap;
-import java.util.List;
 import java.util.UUID;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Bukkit;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -29,7 +27,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /** Automatic and manual afk; players are visibly afk in the tab-list */
-public class AFK extends SimpleCommand implements Listener, Module {
+public class AFK implements Listener, Module {
   @SuppressWarnings("NotNullFieldNotInitialized")
   public static @NotNull AFK instance;
 
@@ -38,8 +36,16 @@ public class AFK extends SimpleCommand implements Listener, Module {
   private final @NotNull HashMap<UUID, PlayerState> playerStates = new HashMap<>();
 
   public AFK() {
-    super("afk", "toggle afk status");
     instance = this;
+
+    CommandBuilder.build("afk")
+        .description("Toggle AFK status")
+        .executor(
+            (@NotNull Player player) -> {
+              PlayerState playerState = this.playerStates.get(player.getUniqueId());
+              playerState.toggleAway();
+            })
+        .register();
 
     // ensure afk team exists and is empty on startup
     Team afkTeam = this.getAfkTeam();
@@ -76,14 +82,6 @@ public class AFK extends SimpleCommand implements Listener, Module {
             },
             20,
             20);
-  }
-
-  @Override
-  protected void execute(@NotNull CommandSender sender, @NotNull List<String> args) {
-    // `/afk` command --> toggle
-    Player player = this.toPlayer(sender);
-    PlayerState playerState = this.playerStates.get(player.getUniqueId());
-    playerState.toggleAway();
   }
 
   // events

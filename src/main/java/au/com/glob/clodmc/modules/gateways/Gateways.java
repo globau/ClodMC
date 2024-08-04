@@ -1,8 +1,9 @@
 package au.com.glob.clodmc.modules.gateways;
 
 import au.com.glob.clodmc.ClodMC;
+import au.com.glob.clodmc.command.CommandBuilder;
+import au.com.glob.clodmc.command.EitherCommandSender;
 import au.com.glob.clodmc.modules.Module;
-import au.com.glob.clodmc.modules.SimpleCommand;
 import au.com.glob.clodmc.modules.bluemap.BlueMapUpdateEvent;
 import au.com.glob.clodmc.util.BlockPos;
 import au.com.glob.clodmc.util.Chat;
@@ -25,7 +26,6 @@ import org.bukkit.Effect;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Sound;
-import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.entity.FallingBlock;
@@ -48,33 +48,34 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 /** Player built point-to-point teleporters */
-public class Gateways extends SimpleCommand implements Module, Listener {
+public class Gateways implements Module, Listener {
   private final @NotNull File configFile =
       new File(ClodMC.instance.getDataFolder(), "gateways.yml");
   private final @NotNull Map<BlockPos, AnchorBlock> instances = new HashMap<>();
   private final @NotNull Map<Player, BlockPos> ignore = new HashMap<>();
 
   public Gateways() {
-    super("gateways", "List gateways in use");
-
     ConfigurationSerialization.registerClass(AnchorBlock.class);
     Bukkit.addRecipe(AnchorItem.getRecipe());
-  }
 
-  @Override
-  protected void execute(@NotNull CommandSender sender, @NotNull List<String> args) {
-    if (this.instances.isEmpty()) {
-      Chat.warning(sender, "No gateways");
-      return;
-    }
+    CommandBuilder.build("gateways")
+        .description("List gateway in use")
+        .executor(
+            (EitherCommandSender sender) -> {
+              if (this.instances.isEmpty()) {
+                Chat.warning(sender, "No gateways");
+                return;
+              }
 
-    String gateways =
-        this.instances.values().stream()
-            .map(AnchorBlock::getColourPair)
-            .distinct()
-            .sorted()
-            .collect(Collectors.joining(", "));
-    Chat.info(sender, "Existing gateways: " + gateways);
+              String gateways =
+                  this.instances.values().stream()
+                      .map(AnchorBlock::getColourPair)
+                      .distinct()
+                      .sorted()
+                      .collect(Collectors.joining(", "));
+              Chat.info(sender, "Existing gateways: " + gateways);
+            })
+        .register();
   }
 
   @Override

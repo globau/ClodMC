@@ -8,22 +8,22 @@ import au.com.glob.clodmc.modules.interactions.FastLeafDecay;
 import au.com.glob.clodmc.modules.interactions.NamedStorage;
 import au.com.glob.clodmc.modules.interactions.SignedContainers;
 import au.com.glob.clodmc.modules.interactions.WaxedItemFrames;
-import au.com.glob.clodmc.modules.inventory.AdminInvCommand;
+import au.com.glob.clodmc.modules.inventory.AdminInv;
 import au.com.glob.clodmc.modules.inventory.InventorySort;
 import au.com.glob.clodmc.modules.mobs.BetterDrops;
 import au.com.glob.clodmc.modules.mobs.PreventMobGriefing;
 import au.com.glob.clodmc.modules.mobs.PreventMobSpawn;
 import au.com.glob.clodmc.modules.player.AFK;
-import au.com.glob.clodmc.modules.player.BackCommand;
-import au.com.glob.clodmc.modules.player.GameModeCommand;
+import au.com.glob.clodmc.modules.player.Back;
+import au.com.glob.clodmc.modules.player.GameMode;
 import au.com.glob.clodmc.modules.player.Homes;
-import au.com.glob.clodmc.modules.player.InviteCommand;
+import au.com.glob.clodmc.modules.player.Invite;
 import au.com.glob.clodmc.modules.player.OfflineMessages;
 import au.com.glob.clodmc.modules.player.OpAlerts;
 import au.com.glob.clodmc.modules.player.PlayerTracker;
-import au.com.glob.clodmc.modules.player.SeenCommand;
+import au.com.glob.clodmc.modules.player.Seen;
 import au.com.glob.clodmc.modules.player.Sleep;
-import au.com.glob.clodmc.modules.player.SpawnCommand;
+import au.com.glob.clodmc.modules.player.Spawn;
 import au.com.glob.clodmc.modules.player.WelcomeBook;
 import au.com.glob.clodmc.modules.server.CircularWorldBorder;
 import au.com.glob.clodmc.modules.server.ClodServerLinks;
@@ -56,14 +56,6 @@ public class ModuleRegistry {
     if (module instanceof Listener listener) {
       Bukkit.getServer().getPluginManager().registerEvents(listener, ClodMC.instance);
     }
-
-    if (module instanceof SimpleCommand command) {
-      Bukkit.getServer().getCommandMap().register("clod-mc", command);
-    }
-
-    for (SimpleCommand command : module.getCommands()) {
-      Bukkit.getServer().getCommandMap().register("clod-mc", command);
-    }
   }
 
   public void registerAll() {
@@ -81,7 +73,7 @@ public class ModuleRegistry {
     this.register(new WaxedItemFrames());
 
     // inventory
-    this.register(new AdminInvCommand());
+    this.register(new AdminInv());
     this.register(new InventorySort());
 
     // mobs
@@ -91,15 +83,15 @@ public class ModuleRegistry {
 
     // player
     this.register(new AFK());
-    this.register(new BackCommand());
-    this.register(new GameModeCommand());
+    this.register(new Back());
+    this.register(new GameMode());
     this.register(new Homes());
-    this.register(new InviteCommand());
+    this.register(new Invite());
     this.register(new OfflineMessages());
     this.register(new PlayerTracker());
-    this.register(new SeenCommand());
+    this.register(new Seen());
     this.register(new Sleep());
-    this.register(new SpawnCommand());
+    this.register(new Spawn());
     this.register(new WelcomeBook());
 
     // server
