@@ -3,14 +3,12 @@ package au.com.glob.clodmc.util;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Set;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Tag;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
-import org.bukkit.block.data.BlockData;
 import org.bukkit.block.data.type.Slab;
 import org.bukkit.block.data.type.Snow;
 import org.jetbrains.annotations.NotNull;
@@ -35,41 +33,6 @@ public class TeleportUtil {
     SHIFT_VECTORS = pos.toArray(new Vector3D[0]);
   }
 
-  private static final @NotNull Set<Material> ALWAYS_SAFE =
-      Set.of(
-          Material.BLACK_CARPET,
-          Material.BLUE_CARPET,
-          Material.BROWN_CARPET,
-          Material.CYAN_CARPET,
-          Material.GRAY_CARPET,
-          Material.GREEN_CARPET,
-          Material.LIGHT_BLUE_CARPET,
-          Material.LIGHT_GRAY_CARPET,
-          Material.LIME_CARPET,
-          Material.MAGENTA_CARPET,
-          Material.MOSS_CARPET,
-          Material.ORANGE_CARPET,
-          Material.PINK_CARPET,
-          Material.PURPLE_CARPET,
-          Material.RED_CARPET,
-          Material.WHITE_CARPET,
-          Material.YELLOW_CARPET,
-          Material.DIRT_PATH,
-          Material.SCAFFOLDING);
-  private static final @NotNull Set<Material> ALWAYS_UNSAFE =
-      Set.of(
-          Material.CACTUS,
-          Material.CAMPFIRE,
-          Material.END_PORTAL,
-          Material.FIRE,
-          Material.LAVA,
-          Material.MAGMA_BLOCK,
-          Material.NETHER_PORTAL,
-          Material.SOUL_CAMPFIRE,
-          Material.SOUL_FIRE,
-          Material.SWEET_BERRY_BUSH,
-          Material.WITHER_ROSE);
-
   public static @NotNull Location getSafePos(@NotNull Location location) {
     World world = location.getWorld();
     int x = location.getBlockX();
@@ -80,12 +43,21 @@ public class TeleportUtil {
     final int worldLogicalY = world.getLogicalHeight();
     final int worldMaxY = y < worldLogicalY ? worldLogicalY : world.getMaxHeight();
 
-    // push up outside of unsafe blocks
-    while (isUnsafe(world.getBlockAt(x, y, z), true)
-        && !isUnsafe(world.getBlockAt(x, y + 1, z), true)) {
+    // push up outside of solid blocks
+    while (world.getBlockAt(x, y, z).isSolid()) {
       y++;
       if (y == worldMaxY) {
         y = location.getBlockY();
+        break;
+      }
+    }
+
+    // push up outside of unsafe blocks
+    while (isUnsafe(world.getBlockAt(x, y, z))) {
+      y++;
+      if (y == worldMaxY) {
+        y = location.getBlockY();
+        break;
       }
     }
 
@@ -100,7 +72,7 @@ public class TeleportUtil {
 
     // find a safe spot try within 3x3x3 area
     int i = 0;
-    while (isUnsafe(world.getBlockAt(x, y, z), true)) {
+    while (isUnsafe(world.getBlockAt(x, y, z))) {
       i++;
       if (i >= SHIFT_VECTORS.length) {
         x = location.getBlockX();
@@ -118,30 +90,74 @@ public class TeleportUtil {
     double doubleZ = z + 0.5;
 
     // handle standing on blocks that aren't 1.0 high
-    Block block = world.getBlockAt(x, y - 1, z);
-    BlockData blockData = block.getState().getBlockData();
-    Material material = block.getType();
-    if (blockData instanceof Slab slab && slab.getType() == Slab.Type.BOTTOM) {
-      doubleY -= 0.5;
-    } else if (blockData instanceof Snow snow) {
-      doubleY += snow.getLayers() * (1.0 / 8.0) - 1;
-    } else if (Tag.WOOL_CARPETS.isTagged(material)) {
-      doubleY += 0.0625 - 1;
-    } else if (Tag.FENCES.isTagged(material)
-        || Tag.FENCE_GATES.isTagged(material)
-        || Tag.WALLS.isTagged(material)) {
-      doubleY += 0.5;
+    Block block = world.getBlockAt(x, y, z);
+    if (block.isEmpty()) {
+      Block blockDown = world.getBlockAt(x, y - 1, z);
+      Material material = blockDown.getType();
+      if (blockDown.getBlockData() instanceof Slab slab && slab.getType() == Slab.Type.BOTTOM) {
+        doubleY -= 0.5;
+      } else if (Tag.FENCES.isTagged(material)
+          || Tag.FENCE_GATES.isTagged(material)
+          || Tag.WALLS.isTagged(material)) {
+        doubleY += 0.5;
+      } else if (material == Material.DIRT_PATH) {
+        doubleY -= 1.0 / 16.0;
+      }
+    } else {
+      Material material = block.getType();
+      if (Tag.WOOL_CARPETS.isTagged(material) || material == Material.MOSS_CARPET) {
+        doubleY += 1.0 / 16.0;
+      } else if (block.getBlockData() instanceof Snow snow) {
+        doubleY += (snow.getLayers() - 1) * (1.0 / 8.0);
+      }
     }
 
     return new Location(world, doubleX, doubleY, doubleZ, 0, 0);
   }
 
-  public static boolean isUnsafe(@NotNull Block block, boolean slabsAreUnsafe) {
-    return (!ALWAYS_SAFE.contains(block.getType())
-            || (slabsAreUnsafe && block.getState().getBlockData() instanceof Slab))
-        && (ALWAYS_UNSAFE.contains(block.getType())
-            || block.isSolid()
-            || ALWAYS_UNSAFE.contains(block.getRelative(BlockFace.DOWN).getType())
-            || block.getRelative(BlockFace.UP).isSolid());
+  public static boolean isUnsafe(@NotNull Block feetBlock) {
+    Material feetMaterial = feetBlock.getType();
+    Block surfaceBlock = feetBlock.getRelative(BlockFace.DOWN);
+    Material surfaceMaterial = surfaceBlock.getType();
+
+    // some materials are never safe to stand on
+    if (surfaceMaterial == Material.AIR
+        || surfaceMaterial == Material.CACTUS
+        || surfaceMaterial == Material.CAMPFIRE
+        || surfaceMaterial == Material.END_PORTAL
+        || surfaceMaterial == Material.FIRE
+        || surfaceMaterial == Material.LAVA
+        || surfaceMaterial == Material.MAGMA_BLOCK
+        || surfaceMaterial == Material.NETHER_PORTAL
+        || surfaceMaterial == Material.POWDER_SNOW
+        || surfaceMaterial == Material.SOUL_CAMPFIRE
+        || surfaceMaterial == Material.SOUL_FIRE
+        || surfaceMaterial == Material.SWEET_BERRY_BUSH
+        || surfaceMaterial == Material.WITHER_ROSE) {
+      return true;
+    }
+
+    // ouch
+    if (feetMaterial == Material.FIRE
+        || feetMaterial == Material.LAVA
+        || feetMaterial == Material.POWDER_SNOW) {
+      return true;
+    }
+
+    // the player stands inside blocks that aren't fully solid
+    boolean feetIsSolid;
+    if (Tag.WOOL_CARPETS.isTagged(feetMaterial)
+        || feetMaterial == Material.MOSS_CARPET
+        || Tag.SLABS.isTagged(feetMaterial)
+        || feetMaterial == Material.SNOW
+        || feetMaterial == Material.SCAFFOLDING
+        || feetMaterial == Material.DIRT_PATH) {
+      feetIsSolid = false;
+    } else {
+      feetIsSolid = feetBlock.isSolid();
+    }
+
+    // surface must be solid, blocks where feet and hard are mustn't be
+    return !surfaceBlock.isSolid() || feetIsSolid || feetBlock.getRelative(BlockFace.UP).isSolid();
   }
 }

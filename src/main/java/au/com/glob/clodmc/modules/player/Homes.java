@@ -81,7 +81,7 @@ public class Homes implements Listener, Module {
                     "You have reached the maximum number of homes (" + MAX_HOMES + ")");
               }
 
-              if (TeleportUtil.isUnsafe(player.getLocation().getBlock(), false)) {
+              if (TeleportUtil.isUnsafe(player.getLocation().getBlock())) {
                 throw new CommandError("Your current location is not safe");
               }
 
