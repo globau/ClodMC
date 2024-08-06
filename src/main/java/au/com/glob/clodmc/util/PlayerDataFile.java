@@ -2,6 +2,7 @@ package au.com.glob.clodmc.util;
 
 import au.com.glob.clodmc.ClodMC;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -40,6 +41,8 @@ public class PlayerDataFile extends YamlConfiguration {
     try {
       this.load(this.file);
       this.exists = true;
+    } catch (FileNotFoundException ignore) {
+      // ignore
     } catch (IOException e) {
       Logger.error("failed to load " + this.file + ": " + e);
     } catch (InvalidConfigurationException e) {
