@@ -56,7 +56,6 @@ public class WaxedItemFrames implements Module, Listener {
       Block attachedBlock =
           itemFrame.getLocation().getBlock().getRelative(itemFrame.getAttachedFace());
       if (attachedBlock.getState() instanceof Container container) {
-        event.setCancelled(true);
         event.getPlayer().openInventory(container.getInventory());
       }
     }
