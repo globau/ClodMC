@@ -11,6 +11,7 @@ import au.com.glob.clodmc.modules.interactions.WaxedItemFrames;
 import au.com.glob.clodmc.modules.inventory.AdminInv;
 import au.com.glob.clodmc.modules.inventory.InventorySort;
 import au.com.glob.clodmc.modules.mobs.BetterDrops;
+import au.com.glob.clodmc.modules.mobs.ExplodingCreepers;
 import au.com.glob.clodmc.modules.mobs.PreventMobGriefing;
 import au.com.glob.clodmc.modules.mobs.PreventMobSpawn;
 import au.com.glob.clodmc.modules.player.AFK;
@@ -78,6 +79,7 @@ public class ModuleRegistry {
 
     // mobs
     this.register(new BetterDrops());
+    this.register(new ExplodingCreepers());
     this.register(new PreventMobGriefing());
     this.register(new PreventMobSpawn());
 
