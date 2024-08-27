@@ -30,34 +30,15 @@ import au.com.glob.clodmc.modules.server.CircularWorldBorder;
 import au.com.glob.clodmc.modules.server.ClodServerLinks;
 import au.com.glob.clodmc.modules.server.RequiredPlugins;
 import au.com.glob.clodmc.util.Logger;
-import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 import org.bukkit.Bukkit;
 import org.bukkit.event.Listener;
 import org.jetbrains.annotations.NotNull;
 
-public class ModuleRegistry {
+public class ModuleRegistry implements Iterable<Module> {
   private final @NotNull Map<Class<? extends Module>, Module> modules = new HashMap<>();
-
-  private void register(@NotNull Module module) {
-    String dependsOn = module.dependsOn();
-    if (dependsOn != null && !Bukkit.getPluginManager().isPluginEnabled(dependsOn)) {
-      Logger.warning(
-          "Cannot load "
-              + module.getClass().getSimpleName()
-              + ": depends on plugin "
-              + dependsOn
-              + " which is not enabled");
-      return;
-    }
-
-    this.modules.put(module.getClass(), module);
-
-    if (module instanceof Listener listener) {
-      Bukkit.getServer().getPluginManager().registerEvents(listener, ClodMC.instance);
-    }
-  }
 
   public void registerAll() {
     // core - used by other modules
@@ -105,14 +86,34 @@ public class ModuleRegistry {
     this.register(new BlueMap());
   }
 
+  private void register(@NotNull Module module) {
+    String dependsOn = module.dependsOn();
+    if (dependsOn != null && !Bukkit.getPluginManager().isPluginEnabled(dependsOn)) {
+      Logger.warning(
+          "Cannot load "
+              + module.getClass().getSimpleName()
+              + ": depends on plugin "
+              + dependsOn
+              + " which is not enabled");
+      return;
+    }
+
+    this.modules.put(module.getClass(), module);
+
+    if (module instanceof Listener listener) {
+      Bukkit.getServer().getPluginManager().registerEvents(listener, ClodMC.instance);
+    }
+  }
+
+  @Override
+  public @NotNull Iterator<Module> iterator() {
+    return this.modules.values().iterator();
+  }
+
   @SuppressWarnings("unchecked")
   public @NotNull <T extends Module> T get(@NotNull Class<T> moduleClass) {
     Module module = this.modules.get(moduleClass);
     assert module != null;
     return (T) module;
-  }
-
-  public @NotNull Collection<Module> all() {
-    return this.modules.values();
   }
 }

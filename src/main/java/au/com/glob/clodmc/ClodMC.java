@@ -40,7 +40,7 @@ public final class ClodMC extends JavaPlugin implements Listener {
     try {
       ConfigUtil.sanityCheckConfigs();
 
-      for (Module module : this.moduleRegistry.all()) {
+      for (Module module : this.moduleRegistry) {
         module.loadConfig();
       }
     } catch (ConfigUtil.InvalidConfig e) {
