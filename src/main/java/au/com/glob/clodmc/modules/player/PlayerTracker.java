@@ -1,5 +1,6 @@
 package au.com.glob.clodmc.modules.player;
 
+import au.com.glob.clodmc.ClodMC;
 import au.com.glob.clodmc.modules.Module;
 import au.com.glob.clodmc.util.PlayerDataFile;
 import au.com.glob.clodmc.util.PlayerDataUpdater;
@@ -30,6 +31,17 @@ public class PlayerTracker implements Module, Listener {
           Math.round(event.getPlayer().getStatistic(Statistic.PLAY_ONE_MINUTE) / 20.0 / 60.0));
     }
 
-    PlayerDataFile.unload(event.getPlayer());
+    // unload player file after 10 seconds
+    ClodMC.instance
+        .getServer()
+        .getScheduler()
+        .scheduleSyncDelayedTask(
+            ClodMC.instance,
+            () -> {
+              if (!event.getPlayer().isOnline()) {
+                PlayerDataFile.unload(event.getPlayer());
+              }
+            },
+            10 * 20);
   }
 }
