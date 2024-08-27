@@ -40,6 +40,7 @@ public class OpAlerts implements Module, Listener {
               for (String alert : this.alerts) {
                 Chat.error(event.getPlayer(), "[ClodMC] " + alert);
               }
+              this.alerts.clear();
             },
             20);
   }
