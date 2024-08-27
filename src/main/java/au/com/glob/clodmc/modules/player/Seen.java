@@ -92,7 +92,7 @@ public class Seen implements Module, Listener {
     this.validNames.clear();
     for (UUID uuid : PlayerDataFile.knownUUIDs()) {
       PlayerDataFile config = PlayerDataFile.of(uuid);
-      if (config.getInt("player.playtime_min", 0) > 10) {
+      if (config.getPlaytimeMins() > 10) {
         this.validNames.put(config.getPlayerName(), uuid);
       }
     }

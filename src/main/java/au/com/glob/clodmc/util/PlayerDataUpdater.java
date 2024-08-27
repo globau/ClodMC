@@ -36,6 +36,22 @@ public class PlayerDataUpdater implements AutoCloseable {
     return this.config.fileExists();
   }
 
+  public void setPlayerName(@NotNull String name) {
+    this.set("player.name", name);
+  }
+
+  public void touchLastLogin() {
+    this.set("player.last_login", LocalDateTime.now());
+  }
+
+  public void touchLastLogout() {
+    this.set("player.last_logout", LocalDateTime.now());
+  }
+
+  public void setPlaytimeMins(long value) {
+    this.set("player.playtime_min", value);
+  }
+
   public void set(@NotNull String path, @NotNull Object value) {
     this.config.set(path, value);
     this.modified = true;
@@ -49,10 +65,6 @@ public class PlayerDataUpdater implements AutoCloseable {
   public void remove(@NotNull String path) {
     this.config.set(path, null);
     this.modified = true;
-  }
-
-  public boolean contains(@NotNull String path) {
-    return this.config.contains(path);
   }
 
   public @Nullable Object get(@NotNull String path) {

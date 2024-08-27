@@ -107,6 +107,10 @@ public class PlayerDataFile extends YamlConfiguration {
     return this.getDateTime("player.last_logout");
   }
 
+  public long getPlaytimeMins() {
+    return this.getLong("player.playtime_min", 0);
+  }
+
   public void setDateTime(@NotNull String path, @NotNull LocalDateTime dateTime) {
     this.set(path, dateTime.format(DATE_TIME_FORMATTER));
   }
