@@ -16,6 +16,7 @@ import org.jetbrains.annotations.NotNull;
 /** player teleport helpers */
 public class TeleportUtil {
   private static final int CHECK_RADIUS = 3;
+  private static final int MAX_RADIUS = 8;
   private static final Vector3D @NotNull [] SHIFT_VECTORS;
 
   private record Vector3D(int x, int y, int z) {}
@@ -46,19 +47,16 @@ public class TeleportUtil {
     // push up outside of solid blocks
     while (world.getBlockAt(x, y, z).isSolid()) {
       y++;
-      if (y == worldMaxY) {
-        y = location.getBlockY();
-        break;
-      }
     }
 
     // push up outside of unsafe blocks
     while (isUnsafe(world.getBlockAt(x, y, z))) {
       y++;
-      if (y == worldMaxY) {
-        y = location.getBlockY();
-        break;
-      }
+    }
+
+    // avoid pushing up too far
+    if (y - location.getBlockY() > MAX_RADIUS) {
+      y = location.getBlockY();
     }
 
     // mid-air isn't safe
@@ -157,7 +155,7 @@ public class TeleportUtil {
       feetIsSolid = feetBlock.isSolid();
     }
 
-    // surface must be solid, blocks where feet and hard are mustn't be
+    // surface must be solid, blocks where feet and head are mustn't be
     return !surfaceBlock.isSolid() || feetIsSolid || feetBlock.getRelative(BlockFace.UP).isSolid();
   }
 }
