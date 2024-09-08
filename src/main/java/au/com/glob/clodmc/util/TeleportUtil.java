@@ -51,6 +51,10 @@ public class TeleportUtil {
 
     // push up outside of unsafe blocks
     while (isUnsafe(world.getBlockAt(x, y, z))) {
+      if (y == worldMaxY) {
+        y = location.getBlockY();
+        break;
+      }
       y++;
     }
 
