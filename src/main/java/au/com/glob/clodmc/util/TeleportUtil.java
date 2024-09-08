@@ -11,6 +11,8 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.type.Slab;
 import org.bukkit.block.data.type.Snow;
+import org.bukkit.entity.Player;
+import org.bukkit.util.BoundingBox;
 import org.jetbrains.annotations.NotNull;
 
 /** player teleport helpers */
@@ -32,6 +34,31 @@ public class TeleportUtil {
     }
     pos.sort(Comparator.comparingInt((Vector3D a) -> a.x * a.x + a.y * a.y + a.z * a.z));
     SHIFT_VECTORS = pos.toArray(new Vector3D[0]);
+  }
+
+  public static @NotNull Location getStandingPos(@NotNull Player player) {
+    // player.getLocation() returns the centre of the player; if the player
+    // is standing on the edge of a block, their centre will be over a different
+    // block from what they are standing on.
+    World world = player.getWorld();
+    BoundingBox boundingBox = player.getBoundingBox();
+    for (int x = (int) Math.floor(boundingBox.getMinX());
+        x <= Math.floor(boundingBox.getMaxX());
+        x++) {
+      for (int z = (int) Math.floor(boundingBox.getMinZ());
+          z <= Math.floor(boundingBox.getMaxZ());
+          z++) {
+        Block block = world.getBlockAt(x, (int) Math.floor(player.getLocation().getY() - 0.01), z);
+        if (block.getType().isSolid()) {
+          Location location = player.getLocation();
+          location.setX((double) block.getX() + 0.5);
+          location.setZ((double) block.getZ() + 0.5);
+          return location;
+        }
+      }
+    }
+
+    return player.getLocation();
   }
 
   public static @NotNull Location getSafePos(@NotNull Location location) {

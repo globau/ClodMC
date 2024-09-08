@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.StringJoiner;
+import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
@@ -81,11 +82,13 @@ public class Homes implements Listener, Module {
                     "You have reached the maximum number of homes (" + MAX_HOMES + ")");
               }
 
-              if (TeleportUtil.isUnsafe(player.getLocation().getBlock())) {
+              Location location = TeleportUtil.getStandingPos(player);
+
+              if (TeleportUtil.isUnsafe(location.getBlock())) {
                 throw new CommandError("Your current location is not safe");
               }
 
-              homes.put(name, PlayerLocation.of(player));
+              homes.put(name, PlayerLocation.of(location));
               this.setHomes(player, homes);
 
               if (name.equals("home")) {
