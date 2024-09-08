@@ -12,11 +12,10 @@ import org.jetbrains.annotations.NotNull;
 /** String helpers */
 public class StringUtil {
   public static @NotNull String relativeTime(long seconds) {
-    long ss = Math.round(seconds);
-    long dd = TimeUnit.SECONDS.toDays(ss);
-    long hh = TimeUnit.SECONDS.toHours(ss) % 24;
-    long mm = TimeUnit.SECONDS.toMinutes(ss) % 60;
-    ss %= 60;
+    long dd = TimeUnit.SECONDS.toDays(seconds);
+    long hh = TimeUnit.SECONDS.toHours(seconds) % 24;
+    long mm = TimeUnit.SECONDS.toMinutes(seconds) % 60;
+    seconds %= 60;
 
     if (dd >= 7) {
       return plural(dd, "day");
@@ -25,9 +24,9 @@ public class StringUtil {
     } else if (hh > 0) {
       return plural(hh, "hour") + " " + plural(mm, "minute");
     } else if (mm > 0) {
-      return plural(mm, "minute") + " " + plural(ss, "second");
+      return plural(mm, "minute") + " " + plural(seconds, "second");
     } else {
-      return plural(ss, "second");
+      return plural(seconds, "second");
     }
   }
 
