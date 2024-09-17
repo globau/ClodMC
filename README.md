@@ -2,6 +2,8 @@
 
 A bespoke Paper plugin for the clod.glob.au Minecraft server.
 
+While Clod-MC is open-source, pull requests are not accepted.
+
 ### Homes
 
 - minimal implementation of custom homes
