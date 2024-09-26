@@ -2,6 +2,7 @@ package au.com.glob.clodmc.modules;
 
 import au.com.glob.clodmc.ClodMC;
 import au.com.glob.clodmc.modules.bluemap.BlueMap;
+import au.com.glob.clodmc.modules.crafting.SporeBlossom;
 import au.com.glob.clodmc.modules.gateways.Gateways;
 import au.com.glob.clodmc.modules.interactions.DecorativePressurePlates;
 import au.com.glob.clodmc.modules.interactions.FastLeafDecay;
@@ -43,6 +44,9 @@ public class ModuleRegistry implements Iterable<Module> {
   public void registerAll() {
     // core - used by other modules
     this.register(new OpAlerts());
+
+    // crafting
+    this.register(new SporeBlossom());
 
     // gateways
     this.register(new Gateways());

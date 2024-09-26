@@ -56,3 +56,4 @@ same two colours in the same positions to establish a gateway.
 - `/admininv` to toggle between player and admin inventories
 - waxing an item frame prevents item rotation or removal (interact while crouching to override)
 - clicking on a waxed sign or item frame attached to a container opens the container's inventory
+- spore blossoms are craftable with a big dripleaf and Allium (shapeless)
