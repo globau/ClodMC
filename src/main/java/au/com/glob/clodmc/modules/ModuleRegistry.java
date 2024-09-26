@@ -3,7 +3,7 @@ package au.com.glob.clodmc.modules;
 import au.com.glob.clodmc.ClodMC;
 import au.com.glob.clodmc.modules.bluemap.BlueMap;
 import au.com.glob.clodmc.modules.gateways.Gateways;
-import au.com.glob.clodmc.modules.interactions.Decorations;
+import au.com.glob.clodmc.modules.interactions.DecorativePressurePlates;
 import au.com.glob.clodmc.modules.interactions.FastLeafDecay;
 import au.com.glob.clodmc.modules.interactions.NamedStorage;
 import au.com.glob.clodmc.modules.interactions.SignedContainers;
@@ -48,7 +48,7 @@ public class ModuleRegistry implements Iterable<Module> {
     this.register(new Gateways());
 
     // interactions
-    this.register(new Decorations());
+    this.register(new DecorativePressurePlates());
     this.register(new FastLeafDecay());
     this.register(new NamedStorage());
     this.register(new SignedContainers());

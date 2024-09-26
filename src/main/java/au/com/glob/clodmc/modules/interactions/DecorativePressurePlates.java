@@ -11,7 +11,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.jetbrains.annotations.NotNull;
 
 /** Behavioural changes to allow some items to work better as purely decorative */
-public class Decorations implements Module, Listener {
+public class DecorativePressurePlates implements Module, Listener {
   @EventHandler
   public void onPlayerInteract(@NotNull PlayerInteractEvent event) {
     if (event.getAction() == Action.PHYSICAL) {
