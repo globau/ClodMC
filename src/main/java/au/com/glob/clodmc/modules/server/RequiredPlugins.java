@@ -20,7 +20,7 @@ public class RequiredPlugins implements Listener, Module {
   private boolean preventLogin = true;
 
   @EventHandler
-  public void onServerLoaded(@NotNull ServerLoadEvent event) {
+  public void onServerLoad(@NotNull ServerLoadEvent event) {
     StringJoiner missing = new StringJoiner(" ");
     for (String name : REQUIRED) {
       if (!Bukkit.getPluginManager().isPluginEnabled(name)) {

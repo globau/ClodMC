@@ -128,12 +128,7 @@ public class Gateways implements Module, Listener {
   }
 
   @EventHandler
-  public void onPlayerJoin(@NotNull PlayerJoinEvent event) {
-    event.getPlayer().discoverRecipe(AnchorItem.RECIPE_KEY);
-  }
-
-  @EventHandler
-  public void onPrepareItemCraftEvent(@NotNull PrepareItemCraftEvent event) {
+  public void onPrepareItemCraft(@NotNull PrepareItemCraftEvent event) {
     ItemStack item = event.getInventory().getResult();
     if (!AnchorItem.isAnchor(item)) {
       return;
@@ -158,7 +153,7 @@ public class Gateways implements Module, Listener {
   }
 
   @EventHandler
-  public void onCraftItemEvent(@NotNull CraftItemEvent event) {
+  public void onCraftItem(@NotNull CraftItemEvent event) {
     ItemStack item = event.getCurrentItem();
 
     if (AnchorItem.isAnchor(item)) {
@@ -321,7 +316,9 @@ public class Gateways implements Module, Listener {
   }
 
   @EventHandler
-  public void onPlayerJoinEvent(@NotNull PlayerJoinEvent event) {
+  public void onPlayerJoin(@NotNull PlayerJoinEvent event) {
+    event.getPlayer().discoverRecipe(AnchorItem.RECIPE_KEY);
+
     // if player spawns on an anchor block don't immediately teleport
     Player player = event.getPlayer();
     BlockPos standingOnPos = BlockPos.of(player.getLocation(), 0, -1, 0);
@@ -332,12 +329,12 @@ public class Gateways implements Module, Listener {
   }
 
   @EventHandler
-  public void onPlayerQuitEvent(@NotNull PlayerQuitEvent event) {
+  public void onPlayerQuit(@NotNull PlayerQuitEvent event) {
     this.ignore.remove(event.getPlayer());
   }
 
   @EventHandler(priority = EventPriority.LOWEST)
-  public void onPlayerInteractEvent(@NotNull PlayerInteractEvent event) {
+  public void onPlayerInteract(@NotNull PlayerInteractEvent event) {
     if (event.getAction() != Action.RIGHT_CLICK_BLOCK || event.getClickedBlock() == null) {
       return;
     }

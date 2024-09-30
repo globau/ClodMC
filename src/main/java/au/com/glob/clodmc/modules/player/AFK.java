@@ -101,7 +101,7 @@ public class AFK implements Listener, Module {
   }
 
   @EventHandler
-  public void onPlayerChat(@NotNull AsyncChatEvent event) {
+  public void onAsyncChat(@NotNull AsyncChatEvent event) {
     Bukkit.getScheduler()
         .runTask(
             ClodMC.instance,
@@ -114,14 +114,14 @@ public class AFK implements Listener, Module {
   }
 
   @EventHandler
-  public void onEntityDamage(@NotNull EntityDamageByEntityEvent event) {
+  public void onEntityDamageByEntity(@NotNull EntityDamageByEntityEvent event) {
     if (event.getDamager() instanceof Player player) {
       this.playerStates.get(player.getUniqueId()).onAction();
     }
   }
 
   @EventHandler
-  public void onPlayerCommand(@NotNull PlayerCommandPreprocessEvent event) {
+  public void onPlayerCommandPreprocess(@NotNull PlayerCommandPreprocessEvent event) {
     if (event.getMessage().equals("/afk") || event.getMessage().startsWith("/afk ")) {
       return;
     }
@@ -134,12 +134,12 @@ public class AFK implements Listener, Module {
   }
 
   @EventHandler
-  public void onPlayerBlockPlace(@NotNull BlockPlaceEvent event) {
+  public void onBlockPlace(@NotNull BlockPlaceEvent event) {
     this.playerStates.get(event.getPlayer().getUniqueId()).onAction();
   }
 
   @EventHandler
-  public void onPlayerBlockBreak(@NotNull BlockBreakEvent event) {
+  public void onBlockBreak(@NotNull BlockBreakEvent event) {
     this.playerStates.get(event.getPlayer().getUniqueId()).onAction();
   }
 

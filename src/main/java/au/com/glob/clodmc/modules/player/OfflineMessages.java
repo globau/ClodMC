@@ -83,7 +83,7 @@ public class OfflineMessages implements Module, Listener {
   }
 
   @EventHandler
-  public void onPlayerCommand(@NotNull PlayerCommandPreprocessEvent event) {
+  public void onPlayerCommandPreprocess(@NotNull PlayerCommandPreprocessEvent event) {
     Matcher matcher = this.msgPattern.matcher(event.getMessage());
     if (matcher.matches()
         && this.handleOfflineMsg(

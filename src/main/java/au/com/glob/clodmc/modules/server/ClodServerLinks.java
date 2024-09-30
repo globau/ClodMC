@@ -13,7 +13,7 @@ import org.jetbrains.annotations.NotNull;
 @SuppressWarnings("UnstableApiUsage")
 public class ClodServerLinks implements Module, Listener {
   @EventHandler
-  public void onPlayerLinksSendEvent(@NotNull PlayerLinksSendEvent event) {
+  public void onPlayerLinksSend(@NotNull PlayerLinksSendEvent event) {
     ServerLinks links = event.getLinks();
     links.addLink(
         MiniMessage.miniMessage().deserialize("<yellow>Real-time Map</yellow>"),

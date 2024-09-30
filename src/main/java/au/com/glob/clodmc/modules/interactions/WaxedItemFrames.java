@@ -23,7 +23,7 @@ public class WaxedItemFrames implements Module, Listener {
   private static final @NotNull NamespacedKey WAXED_KEY = new NamespacedKey("clod-mc", "waxed");
 
   @EventHandler
-  public void onPlayerInteract(@NotNull PlayerInteractEntityEvent event) {
+  public void onPlayerInteractEntity(@NotNull PlayerInteractEntityEvent event) {
     if (!(event.getRightClicked() instanceof ItemFrame itemFrame)) {
       return;
     }

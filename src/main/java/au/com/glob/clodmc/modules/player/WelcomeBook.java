@@ -124,7 +124,7 @@ public class WelcomeBook implements Module, Listener {
   }
 
   @EventHandler
-  public void onJoin(@NotNull PlayerJoinEvent event) {
+  public void onPlayerJoin(@NotNull PlayerJoinEvent event) {
     new BukkitRunnable() {
       @Override
       public void run() {

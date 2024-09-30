@@ -12,11 +12,12 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.inventory.meta.FireworkMeta;
+import org.jetbrains.annotations.NotNull;
 
 public class ExplodingCreepers implements Module, Listener {
 
   @EventHandler
-  private void onEntityExplode(EntityExplodeEvent event) {
+  public void onEntityExplode(@NotNull EntityExplodeEvent event) {
     Entity entity = event.getEntity();
     if (!(event instanceof Creeper)) {
       return;

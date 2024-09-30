@@ -50,7 +50,7 @@ public class BlueMap implements Module, Listener {
   }
 
   @EventHandler
-  public void onBlueMapUpdateRequired(@NotNull BlueMapUpdateEvent event) {
+  public void onBlueMapUpdate(@NotNull BlueMapUpdateEvent event) {
     for (BlueMapAddon addon : this.addons) {
       if (event.getSender().equals(addon.updater)) {
         try {

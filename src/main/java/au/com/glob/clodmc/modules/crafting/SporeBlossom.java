@@ -55,7 +55,7 @@ public class SporeBlossom implements Module, Listener {
   }
 
   @EventHandler(ignoreCancelled = true)
-  public void onPickupItem(@NotNull EntityPickupItemEvent event) {
+  public void onEntityPickupItem(@NotNull EntityPickupItemEvent event) {
     if (!(event.getEntity() instanceof Player player)) {
       return;
     }
