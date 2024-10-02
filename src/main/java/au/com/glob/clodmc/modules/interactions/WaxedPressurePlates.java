@@ -3,10 +3,15 @@ package au.com.glob.clodmc.modules.interactions;
 import au.com.glob.clodmc.ClodMC;
 import au.com.glob.clodmc.modules.Module;
 import org.bukkit.GameMode;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
+import org.bukkit.Particle;
+import org.bukkit.Sound;
 import org.bukkit.Tag;
+import org.bukkit.World;
 import org.bukkit.block.Block;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
@@ -45,29 +50,38 @@ public class WaxedPressurePlates implements Module, Listener {
 
     // right-clicked
     if (event.getAction() == Action.RIGHT_CLICK_BLOCK) {
+      Player player = event.getPlayer();
       // holding honeycomb
       EquipmentSlot hand = event.getHand();
       if (hand == null) {
         return;
       }
-      ItemStack itemInHand = event.getPlayer().getInventory().getItem(hand);
+      ItemStack itemInHand = player.getInventory().getItem(hand);
       if (itemInHand.getType() != Material.HONEYCOMB) {
         return;
       }
+
       // not already waxed
       PersistentDataContainer customBlockData = new CustomBlockData(block, ClodMC.instance);
       if (customBlockData.has(WAXED_KEY)) {
         return;
       }
+
       // set waxed attribute and consume honeycomb
       customBlockData.set(WAXED_KEY, PersistentDataType.BYTE, (byte) 1);
-      if (event.getPlayer().getGameMode() == GameMode.SURVIVAL) {
-        event
-            .getPlayer()
-            .getInventory()
-            .getItem(event.getHand())
-            .setAmount(itemInHand.getAmount() - 1);
+      if (player.getGameMode() == GameMode.SURVIVAL) {
+        player.getInventory().getItem(event.getHand()).setAmount(itemInHand.getAmount() - 1);
       }
+
+      // sound and particles
+      Location loc = block.getLocation();
+      player.playSound(loc, Sound.ITEM_HONEYCOMB_WAX_ON, 1.0f, 1.0f);
+
+      World world = player.getWorld();
+      for (int i = 0; i < 7; i++) {
+        world.spawnParticle(Particle.WAX_ON, loc.clone().add(Math.random(), 0.2, Math.random()), 1);
+      }
+
       event.setCancelled(true);
     }
   }
