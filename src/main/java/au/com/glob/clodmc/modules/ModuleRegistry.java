@@ -4,11 +4,11 @@ import au.com.glob.clodmc.ClodMC;
 import au.com.glob.clodmc.modules.bluemap.BlueMap;
 import au.com.glob.clodmc.modules.crafting.SporeBlossom;
 import au.com.glob.clodmc.modules.gateways.Gateways;
-import au.com.glob.clodmc.modules.interactions.DecorativePressurePlates;
 import au.com.glob.clodmc.modules.interactions.FastLeafDecay;
 import au.com.glob.clodmc.modules.interactions.NamedStorage;
 import au.com.glob.clodmc.modules.interactions.SignedContainers;
 import au.com.glob.clodmc.modules.interactions.WaxedItemFrames;
+import au.com.glob.clodmc.modules.interactions.WaxedPressurePlates;
 import au.com.glob.clodmc.modules.inventory.AdminInv;
 import au.com.glob.clodmc.modules.inventory.InventorySort;
 import au.com.glob.clodmc.modules.mobs.BetterDrops;
@@ -52,11 +52,11 @@ public class ModuleRegistry implements Iterable<Module> {
     this.register(new Gateways());
 
     // interactions
-    this.register(new DecorativePressurePlates());
     this.register(new FastLeafDecay());
     this.register(new NamedStorage());
     this.register(new SignedContainers());
     this.register(new WaxedItemFrames());
+    this.register(new WaxedPressurePlates());
 
     // inventory
     this.register(new AdminInv());

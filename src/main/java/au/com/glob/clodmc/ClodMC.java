@@ -11,6 +11,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.server.ServerLoadEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
+import vendored.com.jeff_media.customblockdata.CustomBlockData;
 
 public final class ClodMC extends JavaPlugin implements Listener {
   @SuppressWarnings("NotNullFieldNotInitialized")
@@ -34,6 +35,7 @@ public final class ClodMC extends JavaPlugin implements Listener {
   @Override
   public void onEnable() {
     Bukkit.getPluginManager().registerEvents(this, this);
+    CustomBlockData.registerListener(this);
     this.moduleRegistry.registerAll();
 
     // ensure all configs can be deserialised, halt server if not to avoid dataloss

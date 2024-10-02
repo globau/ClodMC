@@ -57,3 +57,4 @@ same two colours in the same positions to establish a gateway.
 - waxing an item frame prevents item rotation or removal (interact while crouching to override)
 - clicking on a waxed sign or item frame attached to a container opens the container's inventory
 - spore blossoms are craftable with a big dripleaf and Allium (shapeless)
+- waxing a pressure plate will prevent it from functioning (useful for decorations)
