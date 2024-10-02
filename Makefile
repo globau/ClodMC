@@ -17,4 +17,5 @@ build/format: $(java-files) $(config-files)
 	@touch $@
 
 test:
+	@./src/build/test-event-names.py
 	$(gradle) check
