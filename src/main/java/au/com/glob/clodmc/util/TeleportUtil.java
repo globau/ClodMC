@@ -3,6 +3,7 @@ package au.com.glob.clodmc.util;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Random;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Tag;
@@ -188,5 +189,21 @@ public class TeleportUtil {
 
     // surface must be solid, blocks where feet and head are mustn't be
     return !surfaceBlock.isSolid() || feetIsSolid || feetBlock.getRelative(BlockFace.UP).isSolid();
+  }
+
+  public static @NotNull Location getRandomLoc(@NotNull Location loc, int randomRadius) {
+    loc = loc.clone();
+    int attempts = 0;
+    while (attempts <= randomRadius) {
+      attempts++;
+      Random rand = new Random();
+      double angle = rand.nextDouble() * 2 * Math.PI;
+      double distance = rand.nextDouble() * randomRadius;
+      loc.add(Math.round(distance + Math.cos(angle)), 0, Math.round(distance + Math.sin(angle)));
+      if (!isUnsafe(loc.getBlock())) {
+        break;
+      }
+    }
+    return loc;
   }
 }
