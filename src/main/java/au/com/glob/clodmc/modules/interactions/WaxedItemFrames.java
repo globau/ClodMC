@@ -7,9 +7,7 @@ import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
-import org.bukkit.World;
 import org.bukkit.block.Block;
-import org.bukkit.block.BlockFace;
 import org.bukkit.block.Container;
 import org.bukkit.entity.ItemFrame;
 import org.bukkit.entity.Player;
@@ -20,7 +18,6 @@ import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
-import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -54,30 +51,44 @@ public class WaxedItemFrames implements Module, Listener {
         player.getInventory().getItem(event.getHand()).setAmount(itemInHand.getAmount() - 1);
       }
 
-      // sound and particles
+      // sound
       Location loc = itemFrame.getLocation();
       player.playSound(loc, Sound.ITEM_HONEYCOMB_WAX_ON, 1.0f, 1.0f);
 
-      World world = player.getWorld();
-      BlockFace facing = itemFrame.getFacing();
-      Vector right;
-      Vector up;
-      if (facing == BlockFace.UP || facing == BlockFace.DOWN) {
-        right = new Vector(1, 0, 0);
-        up = new Vector(0, 0, 1);
-      } else {
-        Vector direction = facing.getDirection();
-        right = new Vector(direction.getZ(), 0, -direction.getX());
-        up = new Vector(0, 1, 0);
+      // particles
+      double x = loc.getX();
+      double y = loc.getY();
+      double z = loc.getZ();
+      double randomX = 0.25;
+      double randomY = 0.25;
+      double randomZ = 0.25;
+      switch (itemFrame.getFacing()) {
+        case UP -> {
+          randomY = 0;
+          y += 0.1;
+        }
+        case DOWN -> {
+          randomY = 0;
+          y -= 0.1;
+        }
+        case NORTH -> {
+          randomZ = 0;
+          z -= 0.1;
+        }
+        case SOUTH -> {
+          randomZ = 0;
+          z += 0.1;
+        }
+        case EAST -> {
+          randomX = 0;
+          x += 0.1;
+        }
+        case WEST -> {
+          randomX = 0;
+          x -= 0.1;
+        }
       }
-      for (int i = 0; i < 7; i++) {
-        world.spawnParticle(
-            Particle.WAX_ON,
-            loc.clone()
-                .add(right.clone().multiply(Math.random() - 0.5))
-                .add(up.clone().multiply(Math.random() - 0.5)),
-            1);
-      }
+      player.getWorld().spawnParticle(Particle.WAX_ON, x, y, z, 7, randomX, randomY, randomZ);
 
       event.setCancelled(true);
       return;

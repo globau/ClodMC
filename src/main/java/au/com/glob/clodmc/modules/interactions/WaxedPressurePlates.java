@@ -9,7 +9,6 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.Tag;
-import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -76,11 +75,7 @@ public class WaxedPressurePlates implements Module, Listener {
       // sound and particles
       Location loc = block.getLocation();
       player.playSound(loc, Sound.ITEM_HONEYCOMB_WAX_ON, 1.0f, 1.0f);
-
-      World world = player.getWorld();
-      for (int i = 0; i < 7; i++) {
-        world.spawnParticle(Particle.WAX_ON, loc.clone().add(Math.random(), 0.2, Math.random()), 1);
-      }
+      player.getWorld().spawnParticle(Particle.WAX_ON, loc.add(0.5, 0.1, 0.5), 7, 0.25, 0, 0.25);
 
       event.setCancelled(true);
     }
