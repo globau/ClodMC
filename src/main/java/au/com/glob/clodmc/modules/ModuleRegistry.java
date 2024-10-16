@@ -29,6 +29,7 @@ import au.com.glob.clodmc.modules.player.Spawn;
 import au.com.glob.clodmc.modules.player.WelcomeBook;
 import au.com.glob.clodmc.modules.server.CircularWorldBorder;
 import au.com.glob.clodmc.modules.server.ClodServerLinks;
+import au.com.glob.clodmc.modules.server.MOTD;
 import au.com.glob.clodmc.modules.server.RequiredPlugins;
 import au.com.glob.clodmc.util.Logger;
 import java.util.HashMap;
@@ -84,6 +85,7 @@ public class ModuleRegistry implements Iterable<Module> {
     // server
     this.register(new CircularWorldBorder());
     this.register(new ClodServerLinks());
+    this.register(new MOTD());
     this.register(new RequiredPlugins());
 
     // bluemap
