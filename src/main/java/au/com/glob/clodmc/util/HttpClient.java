@@ -7,6 +7,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URI;
 import java.net.URL;
+import java.util.Map;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -19,10 +20,16 @@ public class HttpClient {
   private static final @NotNull Gson gson = new Gson();
 
   @NotNull public static JsonHttpResponse getJSON(@NotNull String urlString) {
-    return readJsonResponse(request(urlString));
+    return readJsonResponse(request(urlString, null));
   }
 
-  @NotNull private static HttpURLConnection request(@NotNull String urlString) {
+  @NotNull public static JsonHttpResponse getJSON(
+      @NotNull String urlString, @NotNull Map<String, String> headers) {
+    return readJsonResponse(request(urlString, headers));
+  }
+
+  @NotNull private static HttpURLConnection request(
+      @NotNull String urlString, @Nullable Map<String, String> headers) {
     HttpURLConnection connection;
 
     try {
@@ -38,6 +45,11 @@ public class HttpClient {
       connection.setRequestProperty("User-Agent", USER_AGENT);
       connection.setConnectTimeout(3000);
       connection.setReadTimeout(5000);
+      if (headers != null) {
+        for (Map.Entry<String, String> entry : headers.entrySet()) {
+          connection.setRequestProperty(entry.getKey(), entry.getValue());
+        }
+      }
     } catch (Exception exception) {
       throw new RuntimeException("Failed to create request", exception);
     }
