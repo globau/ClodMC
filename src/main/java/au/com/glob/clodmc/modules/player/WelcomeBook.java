@@ -37,7 +37,12 @@ public class WelcomeBook implements Module, Listener {
 
               Admin
 
-                clod@glob.au""",
+                clod@glob.au
+
+              Discord
+
+                <click:open_url:https://discord.gg/umyFGMZYjU><blue>discord.gg</blue></click>
+              """,
           """
               <b>Rules</b>
 
@@ -98,7 +103,9 @@ public class WelcomeBook implements Module, Listener {
 
               Shift+Right-clicking an container's inventory will sort it.
 
-              A named container will be visible when looking at it.""");
+              A container named in an anvil will display its name when looked at.
+
+              Use wax on an item frame to prevent changes.""");
 
   public WelcomeBook() {
     CommandBuilder.build("welcome")
