@@ -85,14 +85,17 @@ public class AnchorItem {
   }
 
   protected static void setMeta(
-      @NotNull ItemStack anchorItem, int networkId, @Nullable String name, boolean isDuplicate) {
+      @NotNull ItemStack anchorItem,
+      int networkId,
+      @Nullable String name,
+      @Nullable String suffix) {
     Colours.Network network = Colours.networkIdToColours(networkId);
     ItemMeta meta = anchorItem.getItemMeta();
     meta.displayName(Component.text(name == null ? DEFAULT_ANCHOR_NAME : name));
     List<TextComponent> lore =
         new ArrayList<>(List.of(network.top.getText(), network.bottom.getText()));
-    if (isDuplicate) {
-      lore.add(Component.text("(duplicate)"));
+    if (suffix != null) {
+      lore.add(Component.text("(" + suffix + ")"));
     }
     meta.lore(lore);
     PersistentDataContainer container = meta.getPersistentDataContainer();
@@ -102,15 +105,11 @@ public class AnchorItem {
     anchorItem.setItemMeta(meta);
   }
 
-  public static void setMeta(@NotNull ItemStack anchorItem, int networkId, boolean isDuplicate) {
-    setMeta(anchorItem, networkId, null, isDuplicate);
-  }
-
-  public static void setMeta(@NotNull ItemStack anchorItem, boolean isDuplicate) {
+  public static void clearExtraMeta(@NotNull ItemStack anchorItem) {
     ItemMeta meta = anchorItem.getItemMeta();
     Integer networkIdBoxed =
         meta.getPersistentDataContainer().get(NETWORK_KEY, PersistentDataType.INTEGER);
     assert networkIdBoxed != null;
-    setMeta(anchorItem, networkIdBoxed, null, isDuplicate);
+    setMeta(anchorItem, networkIdBoxed, null, null);
   }
 }

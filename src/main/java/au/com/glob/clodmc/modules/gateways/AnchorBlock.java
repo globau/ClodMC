@@ -36,6 +36,7 @@ public class AnchorBlock implements ConfigurationSerializable {
 
   protected @Nullable AnchorBlock connectedTo = null;
   protected @Nullable BukkitTask particleTask = null;
+  protected final boolean isRandom;
 
   public AnchorBlock(int networkId, @NotNull Location location, @Nullable String name) {
     this.networkId = networkId;
@@ -50,6 +51,7 @@ public class AnchorBlock implements ConfigurationSerializable {
     this.bottomColour = network.bottom;
 
     this.displayName = this.getColourPair() + (this.name == null ? "" : " (" + this.name + ")");
+    this.isRandom = networkId == Colours.RANDOM_NETWORK_ID;
   }
 
   @Override
@@ -134,35 +136,15 @@ public class AnchorBlock implements ConfigurationSerializable {
   }
 
   protected void updateVisuals() {
-    this.updateLights(this.connectedTo == null ? 0 : 12);
+    boolean isActive = this.isRandom || this.connectedTo != null;
+
+    this.updateLights(isActive ? 12 : 0);
 
     if (this.particleTask != null) {
       this.particleTask.cancel();
     }
 
-    if (this.connectedTo == null) {
-      this.particleTask =
-          Bukkit.getScheduler()
-              .runTaskTimer(
-                  ClodMC.instance,
-                  () -> {
-                    Collection<Player> players = this.getNearbyPlayers(8);
-                    new ParticleBuilder(Particle.DUST)
-                        .location(this.topLocation)
-                        .receivers(players)
-                        .data(new Particle.DustOptions(this.topColour.color, 1))
-                        .count(1)
-                        .spawn();
-                    new ParticleBuilder(Particle.DUST)
-                        .location(this.bottomLocation)
-                        .receivers(players)
-                        .data(new Particle.DustOptions(this.bottomColour.color, 1))
-                        .count(1)
-                        .spawn();
-                  },
-                  0,
-                  20);
-    } else {
+    if (isActive) {
       this.particleTask =
           Bukkit.getScheduler()
               .runTaskTimer(
@@ -180,6 +162,28 @@ public class AnchorBlock implements ConfigurationSerializable {
                         .data(new Particle.DustOptions(this.bottomColour.color, 2))
                         .receivers(players)
                         .count(5)
+                        .spawn();
+                  },
+                  0,
+                  20);
+    } else {
+      this.particleTask =
+          Bukkit.getScheduler()
+              .runTaskTimer(
+                  ClodMC.instance,
+                  () -> {
+                    Collection<Player> players = this.getNearbyPlayers(8);
+                    new ParticleBuilder(Particle.DUST)
+                        .location(this.topLocation)
+                        .receivers(players)
+                        .data(new Particle.DustOptions(this.topColour.color, 1))
+                        .count(1)
+                        .spawn();
+                    new ParticleBuilder(Particle.DUST)
+                        .location(this.bottomLocation)
+                        .receivers(players)
+                        .data(new Particle.DustOptions(this.bottomColour.color, 1))
+                        .count(1)
                         .spawn();
                   },
                   0,

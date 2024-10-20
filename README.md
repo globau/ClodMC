@@ -36,6 +36,9 @@ ERE
 The two wool blocks set the anchor block's unique colour. Place two blocks in the world with the
 same two colours in the same positions to establish a gateway.
 
+A black-black anchor will teleport new players to a random location away from
+spawn; this can only be crafted by a server operator.
+
 ### Mobs
 
 - mobs will not spawn in admin claims (eg. spawn)

@@ -2,6 +2,7 @@ package au.com.glob.clodmc.modules.gateways;
 
 import au.com.glob.clodmc.util.StringUtil;
 import java.util.List;
+import java.util.Objects;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import org.bukkit.Color;
@@ -105,4 +106,8 @@ public class Colours {
   protected static @NotNull Network networkIdToColours(int networkId) {
     return new Network(networkId);
   }
+
+  // a black-black gateway teleports the player to a random location
+  public static final int RANDOM_NETWORK_ID =
+      coloursToNetworkId(Objects.requireNonNull(of(15)), Objects.requireNonNull(of(15)));
 }

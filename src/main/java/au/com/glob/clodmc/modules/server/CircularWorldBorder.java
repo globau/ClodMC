@@ -30,6 +30,7 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /** Implement a circular world border */
 public class CircularWorldBorder implements Module, Listener {
@@ -172,7 +173,11 @@ public class CircularWorldBorder implements Module, Listener {
 
   // border
 
-  private boolean isOutsideBorder(@NotNull Location location) {
+  public @Nullable Border getBorder(@NotNull World world) {
+    return CircularWorldBorder.this.borders.get(world);
+  }
+
+  public boolean isOutsideBorder(@NotNull Location location) {
     Border border = CircularWorldBorder.this.borders.get(location.getWorld());
     return border != null && !border.isBounding(location.getX(), location.getZ());
   }

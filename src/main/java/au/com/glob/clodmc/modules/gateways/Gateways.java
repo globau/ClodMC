@@ -5,18 +5,25 @@ import au.com.glob.clodmc.command.CommandBuilder;
 import au.com.glob.clodmc.command.EitherCommandSender;
 import au.com.glob.clodmc.modules.Module;
 import au.com.glob.clodmc.modules.bluemap.BlueMapUpdateEvent;
+import au.com.glob.clodmc.modules.server.CircularWorldBorder;
 import au.com.glob.clodmc.util.BlockPos;
 import au.com.glob.clodmc.util.Chat;
 import au.com.glob.clodmc.util.ConfigUtil;
 import au.com.glob.clodmc.util.Logger;
+import au.com.glob.clodmc.util.PlayerDataFile;
+import au.com.glob.clodmc.util.PlayerDataUpdater;
+import au.com.glob.clodmc.util.StringUtil;
+import au.com.glob.clodmc.util.TeleportUtil;
 import java.io.File;
 import java.io.IOException;
 import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.stream.Collectors;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
@@ -26,6 +33,7 @@ import org.bukkit.Effect;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Sound;
+import org.bukkit.Statistic;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.entity.FallingBlock;
@@ -49,10 +57,15 @@ import org.jetbrains.annotations.NotNull;
 
 /** Player built point-to-point teleporters */
 public class Gateways implements Module, Listener {
+  private static final int MAX_RANDOM_TP_TIME = 60; // minutes
+  private static final int MIN_RANDOM_TP_DISTANCE = 1500;
+  private static final int RANDOM_TP_COOLDOWN = 60; // seconds
+
   private final @NotNull File configFile =
       new File(ClodMC.instance.getDataFolder(), "gateways.yml");
   private final @NotNull Map<BlockPos, AnchorBlock> instances = new HashMap<>();
   private final @NotNull Map<Player, BlockPos> ignore = new HashMap<>();
+  private final @NotNull Random random = new Random();
 
   public Gateways() {
     ConfigurationSerialization.registerClass(AnchorBlock.class);
@@ -134,7 +147,6 @@ public class Gateways implements Module, Listener {
       return;
     }
 
-    // add lore and metadata to crafted anchors
     ItemStack[] matrix = event.getInventory().getMatrix();
     Colours.Colour topColour = Colours.of(matrix[1]);
     Colours.Colour bottomColour = Colours.of(matrix[4]);
@@ -143,12 +155,28 @@ public class Gateways implements Module, Listener {
       return;
     }
     int networkId = Colours.coloursToNetworkId(topColour, bottomColour);
+
+    // add lore and metadata to crafted anchors
     boolean isDuplicate =
         this.instances.values().stream()
             .anyMatch((AnchorBlock anchorBlock) -> anchorBlock.networkId == networkId);
+    boolean isRandomDest = networkId == Colours.RANDOM_NETWORK_ID;
+    int amount = 2;
+    if (isRandomDest && event.getView().getPlayer() instanceof Player player) {
+      amount = player.isOp() ? 1 : 0;
+    }
 
-    AnchorItem.setMeta(item, networkId, isDuplicate);
-    item.setAmount(2);
+    String suffix;
+    if (isRandomDest) {
+      suffix = "random";
+    } else if (isDuplicate) {
+      suffix = "duplicate";
+    } else {
+      suffix = null;
+    }
+    AnchorItem.setMeta(item, networkId, null, suffix);
+    item.setAmount(amount);
+
     event.getInventory().setResult(item);
   }
 
@@ -157,8 +185,7 @@ public class Gateways implements Module, Listener {
     ItemStack item = event.getCurrentItem();
 
     if (AnchorItem.isAnchor(item)) {
-      // remove duplicate indicator
-      AnchorItem.setMeta(item, false);
+      AnchorItem.clearExtraMeta(item);
     }
   }
 
@@ -186,32 +213,39 @@ public class Gateways implements Module, Listener {
       return;
     }
 
-    // find connecting anchor block
     int networkId = AnchorItem.getNetworkId(item);
-    AnchorBlock otherAnchorBlock = null;
-    int matching = 0;
-    for (AnchorBlock a : this.instances.values()) {
-      if (a.networkId == networkId) {
-        otherAnchorBlock = a;
-        matching++;
-      }
-    }
-
-    if (matching > 1) {
-      event.setCancelled(true);
-      Chat.error(event.getPlayer(), "Anchors already connected");
-      return;
-    }
-
-    // connect anchor
     AnchorBlock anchorBlock =
         new AnchorBlock(networkId, event.getBlock().getLocation(), AnchorItem.getName(item));
-    anchorBlock.connectedTo = otherAnchorBlock;
-    anchorBlock.updateVisuals();
 
-    if (otherAnchorBlock != null) {
-      otherAnchorBlock.connectedTo = anchorBlock;
-      otherAnchorBlock.updateVisuals();
+    if (!anchorBlock.isRandom) {
+      // find connecting anchor block
+      AnchorBlock otherAnchorBlock = null;
+      int matching = 0;
+      for (AnchorBlock a : this.instances.values()) {
+        if (a.networkId == networkId) {
+          otherAnchorBlock = a;
+          matching++;
+        }
+      }
+
+      if (matching > 1) {
+        event.setCancelled(true);
+        Chat.error(event.getPlayer(), "Anchors already connected");
+        return;
+      }
+
+      // connect anchor
+      anchorBlock.connectedTo = otherAnchorBlock;
+      anchorBlock.updateVisuals();
+
+      if (otherAnchorBlock != null) {
+        otherAnchorBlock.connectedTo = anchorBlock;
+        otherAnchorBlock.updateVisuals();
+      }
+
+    } else {
+      // random destination, nothing to connect to
+      anchorBlock.updateVisuals();
     }
 
     // save
@@ -256,7 +290,7 @@ public class Gateways implements Module, Listener {
     event.setDropItems(false);
 
     ItemStack anchorItem = AnchorItem.create();
-    AnchorItem.setMeta(anchorItem, anchorBlock.networkId, anchorBlock.name, false);
+    AnchorItem.setMeta(anchorItem, anchorBlock.networkId, anchorBlock.name, null);
     anchorBlock.blockPos.getWorld().dropItem(anchorBlock.blockPos.asLocation(), anchorItem);
   }
 
@@ -281,12 +315,105 @@ public class Gateways implements Module, Listener {
       return;
     }
 
-    // if standing on a disconnected anchor, show the colour
-    if (anchorBlock.connectedTo == null) {
-      player.sendActionBar(
-          MiniMessage.miniMessage()
-              .deserialize("<yellow>" + anchorBlock.displayName + "</yellow> is not connected"));
-      return;
+    Location teleportPos;
+
+    if (anchorBlock.networkId == Colours.RANDOM_NETWORK_ID) {
+      teleportPos = playerLocation;
+
+      // only new players can use a random gateway
+      if (!player.isOp()) {
+        int ticks = player.getStatistic(Statistic.PLAY_ONE_MINUTE);
+        long minutesPlayed = Math.round(ticks / 20.0 / 60.0);
+        if (minutesPlayed > MAX_RANDOM_TP_TIME) {
+          Chat.error(player, "New Players Only");
+          return;
+        }
+      }
+
+      // cooldown
+      PlayerDataFile playerConfig = PlayerDataFile.of(player);
+      LocalDateTime now = LocalDateTime.now();
+      LocalDateTime lastRandomTeleport = playerConfig.getDateTime("tpr");
+      if (lastRandomTeleport != null) {
+        long secondsSinceRandomTeleport = Duration.between(lastRandomTeleport, now).getSeconds();
+        if (secondsSinceRandomTeleport < RANDOM_TP_COOLDOWN) {
+          this.ignore.put(player, anchorBlock.blockPos.up());
+          Chat.warning(
+              player,
+              "You must wait at another "
+                  + StringUtil.plural2(RANDOM_TP_COOLDOWN - secondsSinceRandomTeleport, "second")
+                  + " before teleporting again");
+          return;
+        }
+      }
+      try (PlayerDataUpdater config = PlayerDataUpdater.of(player)) {
+        config.set("tpr", now);
+      }
+
+      CircularWorldBorder circularWorldBorder = ClodMC.getModule(CircularWorldBorder.class);
+      CircularWorldBorder.Border border = circularWorldBorder.getBorder(player.getWorld());
+
+      // require a world with a border
+      if (border == null) {
+        this.ignore.put(player, anchorBlock.blockPos.up());
+        Chat.error(player, "Unable to randomly teleport in this world");
+        return;
+      }
+
+      int attemptsLeft = 25;
+      while (attemptsLeft > 0) {
+        attemptsLeft--;
+
+        // pick a random location
+        double r =
+            Math.sqrt(
+                this.random.nextDouble()
+                        * (border.r() * border.r()
+                            - MIN_RANDOM_TP_DISTANCE * MIN_RANDOM_TP_DISTANCE)
+                    + MIN_RANDOM_TP_DISTANCE * MIN_RANDOM_TP_DISTANCE);
+        double theta = this.random.nextDouble() * 2 * Math.PI;
+        double x = border.x() + r * Math.cos(theta);
+        double z = border.z() + r * Math.sin(theta);
+        Location randomPos = playerLocation.clone().set(x, 320, z);
+
+        // find a safe location
+        teleportPos = TeleportUtil.getSafePos(randomPos);
+        String biomeName = teleportPos.getBlock().getBiome().name().toLowerCase();
+        if (biomeName.equals("ocean")
+            || biomeName.endsWith("_ocean")
+            || biomeName.equals("river")
+            || biomeName.endsWith("_river")) {
+          continue;
+        }
+
+        // getSafePos can put a player into an unsafe location if there aren't any nearby
+        if (!TeleportUtil.isUnsafe(teleportPos.getBlock())) {
+          break;
+        }
+      }
+      if (attemptsLeft == 0) {
+        this.ignore.put(player, anchorBlock.blockPos.up());
+        Chat.error(player, "Failed to find a safe location");
+        return;
+      }
+
+      Chat.info(
+          player,
+          "Sending you "
+              + String.format("%,d", Math.round(playerLocation.distance(teleportPos)))
+              + " blocks away");
+
+    } else {
+      // if standing on a disconnected anchor, show the colour
+      if (anchorBlock.connectedTo == null) {
+        player.sendActionBar(
+            MiniMessage.miniMessage()
+                .deserialize("<yellow>" + anchorBlock.displayName + "</yellow> is not connected"));
+        return;
+      }
+
+      // teleport to connected anchor
+      teleportPos = anchorBlock.connectedTo.teleportLocation(player);
     }
 
     // show a message; normally this is only visible if the destination
@@ -298,15 +425,16 @@ public class Gateways implements Module, Listener {
             Title.Times.times(Duration.ZERO, Duration.ofSeconds(2), Duration.ofMillis(500))));
 
     // teleport
-    Location teleportPos = anchorBlock.connectedTo.teleportLocation(player);
+    this.ignore.put(player, anchorBlock.blockPos.up());
+    Location finalTeleportPos = teleportPos;
     player
         .teleportAsync(teleportPos, PlayerTeleportEvent.TeleportCause.PLUGIN)
         .whenComplete(
             (Boolean result, Throwable e) -> {
               player.clearTitle();
               if (result != null && result) {
-                this.ignore.put(player, BlockPos.of(teleportPos));
-                player.playSound(teleportPos, Sound.ENTITY_PLAYER_TELEPORT, 1, 1);
+                this.ignore.put(player, BlockPos.of(finalTeleportPos));
+                player.playSound(finalTeleportPos, Sound.ENTITY_PLAYER_TELEPORT, 1, 1);
                 player
                     .getLocation()
                     .getWorld()

@@ -23,7 +23,7 @@ public class BlockPos {
 
   @Override
   public @NotNull String toString() {
-    return "BlockPos{" + this.x + ", " + this.y + ", " + this.z + '}';
+    return "BlockPos{" + this.world.getName() + " " + this.x + ", " + this.y + ", " + this.z + '}';
   }
 
   @Override

@@ -34,6 +34,10 @@ public class StringUtil {
     return String.format("%d %s%s", value, unit, value == 1 ? "" : "s");
   }
 
+  public static @NotNull String plural2(long value, @NotNull String unit) {
+    return value == 1 ? unit : String.format("%d %ss", value, unit);
+  }
+
   public static @NotNull String joinComma(@NotNull List<String> items) {
     if (items.isEmpty()) {
       return "";
