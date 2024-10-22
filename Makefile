@@ -17,5 +17,5 @@ build/format: $(java-files) $(config-files)
 	@touch $@
 
 test:
-	@./src/build/test-event-names.py
+	@for N in src/test/test-*; do $$N; done
 	$(gradle) check
