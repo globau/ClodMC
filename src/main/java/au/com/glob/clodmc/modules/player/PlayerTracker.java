@@ -1,9 +1,9 @@
 package au.com.glob.clodmc.modules.player;
 
-import au.com.glob.clodmc.ClodMC;
 import au.com.glob.clodmc.modules.Module;
 import au.com.glob.clodmc.util.PlayerDataFile;
 import au.com.glob.clodmc.util.PlayerDataUpdater;
+import au.com.glob.clodmc.util.Schedule;
 import org.bukkit.Statistic;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -30,16 +30,12 @@ public class PlayerTracker implements Module, Listener {
     }
 
     // unload player file after 10 seconds
-    ClodMC.instance
-        .getServer()
-        .getScheduler()
-        .scheduleSyncDelayedTask(
-            ClodMC.instance,
-            () -> {
-              if (!event.getPlayer().isOnline()) {
-                PlayerDataFile.unload(event.getPlayer());
-              }
-            },
-            10 * 20);
+    Schedule.delayed(
+        10 * 20,
+        () -> {
+          if (!event.getPlayer().isOnline()) {
+            PlayerDataFile.unload(event.getPlayer());
+          }
+        });
   }
 }

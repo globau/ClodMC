@@ -2,9 +2,9 @@ package au.com.glob.clodmc.modules.server;
 
 // inspired by https://github.com/pop4959/ChunkyBorder/
 
-import au.com.glob.clodmc.ClodMC;
 import au.com.glob.clodmc.modules.Module;
 import au.com.glob.clodmc.util.Logger;
+import au.com.glob.clodmc.util.Schedule;
 import io.papermc.paper.entity.TeleportFlag;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -66,84 +66,77 @@ public class CircularWorldBorder implements Module, Listener {
   private record Config(@NotNull String world, @NotNull Border border) {}
 
   private void startBorderCheckTask() {
-    Bukkit.getServer()
-        .getScheduler()
-        .scheduleSyncRepeatingTask(
-            ClodMC.instance,
-            () -> {
-              for (Player player : Bukkit.getOnlinePlayers()) {
-                Border border = CircularWorldBorder.this.borders.get(player.getWorld());
-                if (border == null) {
-                  continue;
-                }
+    Schedule.onMainThreadPeriodically(
+        20,
+        20,
+        () -> {
+          for (Player player : Bukkit.getOnlinePlayers()) {
+            Border border = CircularWorldBorder.this.borders.get(player.getWorld());
+            if (border == null) {
+              continue;
+            }
 
-                Location playerLoc = player.getLocation();
+            Location playerLoc = player.getLocation();
 
-                // player within border, save location
-                if (border.isBounding(playerLoc.getX(), playerLoc.getZ())) {
-                  CircularWorldBorder.this.lastPlayerLoc.put(player.getUniqueId(), playerLoc);
-                  continue;
-                }
+            // player within border, save location
+            if (border.isBounding(playerLoc.getX(), playerLoc.getZ())) {
+              CircularWorldBorder.this.lastPlayerLoc.put(player.getUniqueId(), playerLoc);
+              continue;
+            }
 
-                // player outside border, teleport to last saved location
-                Location teleportLoc =
-                    CircularWorldBorder.this.lastPlayerLoc.get(player.getUniqueId());
-                teleportLoc =
-                    teleportLoc == null
-                        ? player.getWorld().getSpawnLocation().clone()
-                        : teleportLoc.clone();
-                teleportLoc.setPitch(player.getPitch());
-                teleportLoc.setYaw(player.getYaw());
+            // player outside border, teleport to last saved location
+            Location teleportLoc = CircularWorldBorder.this.lastPlayerLoc.get(player.getUniqueId());
+            teleportLoc =
+                teleportLoc == null
+                    ? player.getWorld().getSpawnLocation().clone()
+                    : teleportLoc.clone();
+            teleportLoc.setPitch(player.getPitch());
+            teleportLoc.setYaw(player.getYaw());
 
-                playerLoc.getWorld().playEffect(player.getLocation(), Effect.ENDER_SIGNAL, 0);
-                player.playSound(teleportLoc, Sound.ENTITY_PLAYER_TELEPORT, 1, 1);
-                player.teleport(
-                    teleportLoc,
-                    PlayerTeleportEvent.TeleportCause.PLUGIN,
-                    TeleportFlag.EntityState.RETAIN_VEHICLE,
-                    TeleportFlag.EntityState.RETAIN_PASSENGERS);
-              }
-            },
-            20,
-            20);
+            playerLoc.getWorld().playEffect(player.getLocation(), Effect.ENDER_SIGNAL, 0);
+            player.playSound(teleportLoc, Sound.ENTITY_PLAYER_TELEPORT, 1, 1);
+            player.teleport(
+                teleportLoc,
+                PlayerTeleportEvent.TeleportCause.PLUGIN,
+                TeleportFlag.EntityState.RETAIN_VEHICLE,
+                TeleportFlag.EntityState.RETAIN_PASSENGERS);
+          }
+        });
   }
 
   private void startVisualisationTask() {
     Particle.DustOptions visualizerOptions = new Particle.DustOptions(VISUALIZER_COLOUR, 1);
     AtomicLong tick = new AtomicLong();
-    Bukkit.getServer()
-        .getScheduler()
-        .scheduleSyncRepeatingTask(
-            ClodMC.instance,
-            () -> {
-              tick.incrementAndGet();
-              for (Player player : Bukkit.getServer().getOnlinePlayers()) {
-                World world = player.getWorld();
-                Border border = this.borders.get(world);
-                if (border == null) {
-                  return;
-                }
+    Schedule.onMainThreadPeriodically(
+        1,
+        1,
+        () -> {
+          tick.incrementAndGet();
+          for (Player player : Bukkit.getServer().getOnlinePlayers()) {
+            World world = player.getWorld();
+            Border border = this.borders.get(world);
+            if (border == null) {
+              return;
+            }
 
-                List<Vector> particleLocations =
-                    getParticlesAt(player, border, (tick.longValue() % 20) / 20d);
+            List<Vector> particleLocations =
+                getParticlesAt(player, border, (tick.longValue() % 20) / 20d);
 
-                for (Vector vec : particleLocations) {
-                  Location loc = new Location(world, vec.getX(), vec.getY(), vec.getZ());
-                  Block block = world.getBlockAt(loc);
-                  boolean fullyOccluded =
-                      block.getType().isOccluding()
-                          && block.getRelative(BlockFace.NORTH).getType().isOccluding()
-                          && block.getRelative(BlockFace.EAST).getType().isOccluding()
-                          && block.getRelative(BlockFace.SOUTH).getType().isOccluding()
-                          && block.getRelative(BlockFace.WEST).getType().isOccluding();
-                  if (!fullyOccluded) {
-                    player.spawnParticle(Particle.DUST, loc, 1, visualizerOptions);
-                  }
-                }
+            for (Vector vec : particleLocations) {
+              Location loc = new Location(world, vec.getX(), vec.getY(), vec.getZ());
+              Block block = world.getBlockAt(loc);
+              boolean fullyOccluded =
+                  block.getType().isOccluding()
+                      && block.getRelative(BlockFace.NORTH).getType().isOccluding()
+                      && block.getRelative(BlockFace.EAST).getType().isOccluding()
+                      && block.getRelative(BlockFace.SOUTH).getType().isOccluding()
+                      && block.getRelative(BlockFace.WEST).getType().isOccluding();
+              if (!fullyOccluded) {
+                player.spawnParticle(Particle.DUST, loc, 1, visualizerOptions);
               }
-            },
-            1L,
-            1L);
+            }
+          }
+        });
   }
 
   public @NotNull Map<World, Border> getBorders() {

@@ -11,6 +11,7 @@ import au.com.glob.clodmc.util.HttpClient;
 import au.com.glob.clodmc.util.Logger;
 import au.com.glob.clodmc.util.Mailer;
 import au.com.glob.clodmc.util.PlayerDataFile;
+import au.com.glob.clodmc.util.Schedule;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -29,7 +30,6 @@ import org.bukkit.Statistic;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -81,60 +81,66 @@ public class Invite implements Module {
                 throw new CommandError("Invalid player name");
               }
 
-              runAsync(
-                  sender,
+              Schedule.asynchronously(
                   () -> {
-                    GameType gameType = GameType.of(type);
-                    assert gameType != null;
+                    try {
+                      GameType gameType = GameType.of(type);
+                      assert gameType != null;
 
-                    // check mcprofile.io
-                    UUID uuid = this.lookupUUID(gameType, name);
-                    if (uuid == null) {
-                      throw new CommandError("Failed to find player with name: " + name);
-                    }
-
-                    // check whitelist by uuid
-                    if (this.isWhitelisted(uuid)) {
-                      throw new CommandError(name + " is already whitelisted");
-                    }
-
-                    // don't allow duplicate player names (because we run without a floodgate
-                    // prefix). checking playerdata as whitelist.json doesn't contain player names
-                    // for floodgate users.
-                    for (UUID existingUUID : PlayerDataFile.knownUUIDs()) {
-                      PlayerDataFile playerConfig = PlayerDataFile.of(existingUUID);
-                      if (playerConfig.getPlayerName().equalsIgnoreCase(name)) {
-                        throw new CommandError("A player named " + name + " already exists");
+                      // check mcprofile.io
+                      UUID uuid = this.lookupUUID(gameType, name);
+                      if (uuid == null) {
+                        throw new CommandError("Failed to find player with name: " + name);
                       }
+
+                      // check whitelist by uuid
+                      if (this.isWhitelisted(uuid)) {
+                        throw new CommandError(name + " is already whitelisted");
+                      }
+
+                      // don't allow duplicate player names (because we run without a floodgate
+                      // prefix). checking playerdata as whitelist.json doesn't contain player names
+                      // for floodgate users.
+                      for (UUID existingUUID : PlayerDataFile.knownUUIDs()) {
+                        PlayerDataFile playerConfig = PlayerDataFile.of(existingUUID);
+                        if (playerConfig.getPlayerName().equalsIgnoreCase(name)) {
+                          throw new CommandError("A player named " + name + " already exists");
+                        }
+                      }
+
+                      // add to appropriate whitelist
+                      Schedule.nextTick(
+                          () -> {
+                            try {
+                              String command =
+                                  (gameType == GameType.JAVA
+                                      ? "whitelist add " + name
+                                      : "fwhitelist add " + uuid);
+                              if (!Bukkit.dispatchCommand(Bukkit.getConsoleSender(), command)) {
+                                throw new CommandError("whitelist command failed");
+                              }
+
+                              // notify player
+                              if (sender.isPlayer()) {
+                                Chat.info(sender, name + " added to the whitelist");
+                              }
+
+                              // email admin
+                              Mailer.emailAdmin(
+                                  "clod-mc: "
+                                      + name
+                                      + " ("
+                                      + gameType
+                                      + ")"
+                                      + " added to the whitelist by "
+                                      + sender.getName());
+                            } catch (CommandError e) {
+                              Chat.error(sender, e.getMessage());
+                            }
+                          });
+                    } catch (CommandError e) {
+                      Chat.error(sender, e.getMessage());
                     }
-
-                    // add to appropriate whitelist
-                    runNextTick(
-                        sender,
-                        () -> {
-                          String command =
-                              (gameType == GameType.JAVA
-                                  ? "whitelist add " + name
-                                  : "fwhitelist add " + uuid);
-                          if (!Bukkit.dispatchCommand(Bukkit.getConsoleSender(), command)) {
-                            throw new CommandError("whitelist command failed");
-                          }
-
-                          // notify player
-                          if (sender.isPlayer()) {
-                            Chat.info(sender, name + " added to the whitelist");
-                          }
-
-                          // email admin
-                          Mailer.emailAdmin(
-                              "clod-mc: "
-                                  + name
-                                  + " ("
-                                  + gameType
-                                  + ")"
-                                  + " added to the whitelist by "
-                                  + sender.getName());
-                        });
                   });
             })
         .completor(
@@ -151,32 +157,6 @@ public class Invite implements Module {
               return List.of();
             })
         .register();
-  }
-
-  private static void runAsync(@NotNull EitherCommandSender sender, @NotNull Runnable task) {
-    Bukkit.getScheduler()
-        .runTaskAsynchronously(
-            ClodMC.instance,
-            () -> {
-              try {
-                task.run();
-              } catch (CommandError e) {
-                Chat.error(sender, e.getMessage());
-              }
-            });
-  }
-
-  private static void runNextTick(@NotNull EitherCommandSender sender, @NotNull Runnable task) {
-    new BukkitRunnable() {
-      @Override
-      public void run() {
-        try {
-          task.run();
-        } catch (CommandError e) {
-          Chat.error(sender, e.getMessage());
-        }
-      }
-    }.runTask(ClodMC.instance);
   }
 
   private static boolean isValidUUID(@Nullable String value) {

@@ -1,6 +1,5 @@
 package au.com.glob.clodmc.util;
 
-import au.com.glob.clodmc.ClodMC;
 import java.io.BufferedReader;
 import java.io.Closeable;
 import java.io.DataOutputStream;
@@ -10,7 +9,6 @@ import java.net.Socket;
 import java.text.DateFormat;
 import java.util.Date;
 import java.util.Locale;
-import org.bukkit.Bukkit;
 import org.jetbrains.annotations.NotNull;
 
 /** email helpers */
@@ -33,16 +31,14 @@ public class Mailer {
   }
 
   public static void emailAdmin(@NotNull String subject, @NotNull String body) {
-    Bukkit.getScheduler()
-        .runTaskAsynchronously(
-            ClodMC.instance,
-            () -> {
-              try {
-                send(ADMIN_ADDR, subject, body);
-              } catch (MailerError e) {
-                Logger.warning(e.getMessage());
-              }
-            });
+    Schedule.asynchronously(
+        () -> {
+          try {
+            send(ADMIN_ADDR, subject, body);
+          } catch (MailerError e) {
+            Logger.warning(e.getMessage());
+          }
+        });
   }
 
   public static void send(@NotNull String recipient, @NotNull String subject, @NotNull String body)

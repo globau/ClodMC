@@ -1,10 +1,10 @@
 package au.com.glob.clodmc.modules.player;
 
-import au.com.glob.clodmc.ClodMC;
 import au.com.glob.clodmc.command.CommandBuilder;
 import au.com.glob.clodmc.modules.Module;
 import au.com.glob.clodmc.util.BlockPos;
 import au.com.glob.clodmc.util.Chat;
+import au.com.glob.clodmc.util.Schedule;
 import io.papermc.paper.event.player.AsyncChatEvent;
 import java.util.HashMap;
 import java.util.UUID;
@@ -67,21 +67,19 @@ public class AFK implements Listener, Module {
   @Override
   public void loadConfig() {
     // check for away players every second
-    Bukkit.getScheduler()
-        .runTaskTimer(
-            ClodMC.instance,
-            () -> {
-              long now = System.currentTimeMillis() / 1000;
-              for (PlayerState playerState : this.playerStates.values()) {
-                if (playerState.player.isOnline() && !playerState.isAway) {
-                  if (now - playerState.lastInteractionTime >= IDLE_TIME) {
-                    playerState.setAway(true);
-                  }
-                }
+    Schedule.periodically(
+        20,
+        20,
+        () -> {
+          long now = System.currentTimeMillis() / 1000;
+          for (PlayerState playerState : this.playerStates.values()) {
+            if (playerState.player.isOnline() && !playerState.isAway) {
+              if (now - playerState.lastInteractionTime >= IDLE_TIME) {
+                playerState.setAway(true);
               }
-            },
-            20,
-            20);
+            }
+          }
+        });
   }
 
   // events
@@ -102,10 +100,7 @@ public class AFK implements Listener, Module {
 
   @EventHandler
   public void onAsyncChat(@NotNull AsyncChatEvent event) {
-    Bukkit.getScheduler()
-        .runTask(
-            ClodMC.instance,
-            () -> AFK.this.playerStates.get(event.getPlayer().getUniqueId()).onAction());
+    Schedule.nextTick(() -> AFK.this.playerStates.get(event.getPlayer().getUniqueId()).onAction());
   }
 
   @EventHandler

@@ -1,7 +1,7 @@
 package au.com.glob.clodmc.modules.gateways;
 
-import au.com.glob.clodmc.ClodMC;
 import au.com.glob.clodmc.util.BlockPos;
+import au.com.glob.clodmc.util.Schedule;
 import com.destroystokyo.paper.ParticleBuilder;
 import java.util.Collection;
 import java.util.HashMap;
@@ -146,48 +146,42 @@ public class AnchorBlock implements ConfigurationSerializable {
 
     if (isActive) {
       this.particleTask =
-          Bukkit.getScheduler()
-              .runTaskTimer(
-                  ClodMC.instance,
-                  () -> {
-                    Collection<Player> players = this.getNearbyPlayers(12);
-                    new ParticleBuilder(Particle.DUST)
-                        .location(this.topLocation)
-                        .data(new Particle.DustOptions(this.topColour.color, 2))
-                        .receivers(players)
-                        .count(5)
-                        .spawn();
-                    new ParticleBuilder(Particle.DUST)
-                        .location(this.bottomLocation)
-                        .data(new Particle.DustOptions(this.bottomColour.color, 2))
-                        .receivers(players)
-                        .count(5)
-                        .spawn();
-                  },
-                  0,
-                  20);
+          Schedule.periodically(
+              20,
+              () -> {
+                Collection<Player> players = this.getNearbyPlayers(12);
+                new ParticleBuilder(Particle.DUST)
+                    .location(this.topLocation)
+                    .data(new Particle.DustOptions(this.topColour.color, 2))
+                    .receivers(players)
+                    .count(5)
+                    .spawn();
+                new ParticleBuilder(Particle.DUST)
+                    .location(this.bottomLocation)
+                    .data(new Particle.DustOptions(this.bottomColour.color, 2))
+                    .receivers(players)
+                    .count(5)
+                    .spawn();
+              });
     } else {
       this.particleTask =
-          Bukkit.getScheduler()
-              .runTaskTimer(
-                  ClodMC.instance,
-                  () -> {
-                    Collection<Player> players = this.getNearbyPlayers(8);
-                    new ParticleBuilder(Particle.DUST)
-                        .location(this.topLocation)
-                        .receivers(players)
-                        .data(new Particle.DustOptions(this.topColour.color, 1))
-                        .count(1)
-                        .spawn();
-                    new ParticleBuilder(Particle.DUST)
-                        .location(this.bottomLocation)
-                        .receivers(players)
-                        .data(new Particle.DustOptions(this.bottomColour.color, 1))
-                        .count(1)
-                        .spawn();
-                  },
-                  0,
-                  20);
+          Schedule.periodically(
+              20,
+              () -> {
+                Collection<Player> players = this.getNearbyPlayers(8);
+                new ParticleBuilder(Particle.DUST)
+                    .location(this.topLocation)
+                    .receivers(players)
+                    .data(new Particle.DustOptions(this.topColour.color, 1))
+                    .count(1)
+                    .spawn();
+                new ParticleBuilder(Particle.DUST)
+                    .location(this.bottomLocation)
+                    .receivers(players)
+                    .data(new Particle.DustOptions(this.bottomColour.color, 1))
+                    .count(1)
+                    .spawn();
+              });
     }
   }
 

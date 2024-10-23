@@ -2,8 +2,8 @@ package au.com.glob.clodmc.modules.interactions;
 
 // from https://github.com/StarTux/FastLeafDecay
 
-import au.com.glob.clodmc.ClodMC;
 import au.com.glob.clodmc.modules.Module;
+import au.com.glob.clodmc.util.Schedule;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -66,9 +66,7 @@ public class FastLeafDecay implements Listener, Module {
       if (leaves.isPersistent() || this.scheduledBlocks.contains(block)) {
         continue;
       }
-      Bukkit.getServer()
-          .getScheduler()
-          .runTaskLater(ClodMC.instance, () -> this.decay(block), delay);
+      Schedule.delayed(delay, () -> this.decay(block));
       this.scheduledBlocks.add(block);
     }
   }

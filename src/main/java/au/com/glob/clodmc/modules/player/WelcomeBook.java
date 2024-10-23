@@ -1,11 +1,11 @@
 package au.com.glob.clodmc.modules.player;
 
-import au.com.glob.clodmc.ClodMC;
 import au.com.glob.clodmc.command.CommandBuilder;
 import au.com.glob.clodmc.command.CommandUsageError;
 import au.com.glob.clodmc.command.EitherCommandSender;
 import au.com.glob.clodmc.modules.Module;
 import au.com.glob.clodmc.util.Chat;
+import au.com.glob.clodmc.util.Schedule;
 import java.util.List;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
@@ -18,7 +18,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BookMeta;
-import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -132,14 +131,9 @@ public class WelcomeBook implements Module, Listener {
 
   @EventHandler
   public void onPlayerJoin(@NotNull PlayerJoinEvent event) {
-    new BukkitRunnable() {
-      @Override
-      public void run() {
-        if (!event.getPlayer().hasPlayedBefore()) {
-          WelcomeBook.this.giveWelcomeBook(event.getPlayer(), null);
-        }
-      }
-    }.runTaskLater(ClodMC.instance, 5);
+    if (!event.getPlayer().hasPlayedBefore()) {
+      Schedule.delayed(5, () -> WelcomeBook.this.giveWelcomeBook(event.getPlayer(), null));
+    }
   }
 
   private void giveWelcomeBook(@NotNull Player recipient, @Nullable CommandSender sender) {

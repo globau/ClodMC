@@ -1,10 +1,10 @@
 package au.com.glob.clodmc.modules.player;
 
-import au.com.glob.clodmc.ClodMC;
 import au.com.glob.clodmc.modules.Module;
 import au.com.glob.clodmc.util.Chat;
 import au.com.glob.clodmc.util.PlayerDataFile;
 import au.com.glob.clodmc.util.PlayerDataUpdater;
+import au.com.glob.clodmc.util.Schedule;
 import au.com.glob.clodmc.util.StringUtil;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -114,18 +114,16 @@ public class OfflineMessages implements Module, Listener {
       return;
     }
 
-    Bukkit.getScheduler()
-        .runTaskLater(
-            ClodMC.instance,
-            () -> {
-              for (Message message : messages) {
-                message.sendTo(player);
-              }
-              try (PlayerDataUpdater config = PlayerDataUpdater.of(player)) {
-                config.remove("messages");
-              }
-            },
-            20 * 3);
+    Schedule.delayed(
+        3 * 20,
+        () -> {
+          for (Message message : messages) {
+            message.sendTo(player);
+          }
+          try (PlayerDataUpdater config = PlayerDataUpdater.of(player)) {
+            config.remove("messages");
+          }
+        });
   }
 
   private record Sender(@NotNull CommandSender recipient, @NotNull String name) {

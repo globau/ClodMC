@@ -1,7 +1,7 @@
 package au.com.glob.clodmc.modules.crafting;
 
-import au.com.glob.clodmc.ClodMC;
 import au.com.glob.clodmc.modules.Module;
+import au.com.glob.clodmc.util.Schedule;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -30,28 +30,24 @@ public class SporeBlossom implements Module, Listener {
 
   @EventHandler
   public void onPlayerJoin(@NotNull PlayerJoinEvent event) {
-    Bukkit.getScheduler()
-        .runTaskAsynchronously(
-            ClodMC.instance,
-            () -> {
-              Player player = event.getPlayer();
-              if (player.hasDiscoveredRecipe(this.recipe.getKey())) {
-                return;
-              }
+    Schedule.asynchronously(
+        () -> {
+          Player player = event.getPlayer();
+          if (player.hasDiscoveredRecipe(this.recipe.getKey())) {
+            return;
+          }
 
-              for (ItemStack item : player.getInventory().getContents()) {
-                if (item == null || item.isEmpty()) {
-                  continue;
-                }
-                for (RecipeChoice choice : this.recipe.getChoiceList()) {
-                  if (choice.test(item)) {
-                    Bukkit.getScheduler()
-                        .callSyncMethod(
-                            ClodMC.instance, () -> player.discoverRecipe(this.recipe.getKey()));
-                  }
-                }
+          for (ItemStack item : player.getInventory().getContents()) {
+            if (item == null || item.isEmpty()) {
+              continue;
+            }
+            for (RecipeChoice choice : this.recipe.getChoiceList()) {
+              if (choice.test(item)) {
+                Schedule.onMainThread(() -> player.discoverRecipe(this.recipe.getKey()));
               }
-            });
+            }
+          }
+        });
   }
 
   @EventHandler(ignoreCancelled = true)
@@ -66,8 +62,7 @@ public class SporeBlossom implements Module, Listener {
     ItemStack item = event.getItem().getItemStack();
     for (RecipeChoice choice : this.recipe.getChoiceList()) {
       if (choice.test(item)) {
-        Bukkit.getScheduler()
-            .callSyncMethod(ClodMC.instance, () -> player.discoverRecipe(this.recipe.getKey()));
+        Schedule.onMainThread(() -> player.discoverRecipe(this.recipe.getKey()));
       }
     }
   }
