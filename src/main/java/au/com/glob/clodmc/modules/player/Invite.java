@@ -58,7 +58,7 @@ public class Invite implements Module {
 
     CommandBuilder.build("invite")
         .usage("/invite <java|bedrock> <player>")
-        .description("Teleport to previous location")
+        .description("Add a player to the whitelist")
         .executor(
             (@NotNull EitherCommandSender sender, @Nullable String type, @Nullable String name) -> {
               if (GameType.of(type) == null || name == null) {
