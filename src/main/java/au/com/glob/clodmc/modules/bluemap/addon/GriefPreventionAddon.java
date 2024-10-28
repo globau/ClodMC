@@ -1,7 +1,9 @@
 package au.com.glob.clodmc.modules.bluemap.addon;
 
 import au.com.glob.clodmc.ClodMC;
+import au.com.glob.clodmc.modules.Module;
 import au.com.glob.clodmc.modules.bluemap.BlueMapAddon;
+import au.com.glob.clodmc.modules.bluemap.BlueMapUpdateEvent;
 import com.flowpowered.math.vector.Vector2d;
 import de.bluecolored.bluemap.api.BlueMapAPI;
 import de.bluecolored.bluemap.api.BlueMapMap;
@@ -30,8 +32,8 @@ import org.jetbrains.annotations.NotNull;
 public class GriefPreventionAddon extends BlueMapAddon implements Listener {
   private final @NotNull Map<World, MarkerSet> markerSets = new HashMap<>(3);
 
-  public GriefPreventionAddon(@NotNull BlueMapAPI api) {
-    super(api, null);
+  public GriefPreventionAddon() {
+    super(GriefPreventionEvent.class);
 
     for (World world : Bukkit.getWorlds()) {
       this.markerSets.put(world, MarkerSet.builder().label("Claims").defaultHidden(true).build());
@@ -41,7 +43,7 @@ public class GriefPreventionAddon extends BlueMapAddon implements Listener {
   }
 
   @Override
-  protected void onUpdate() {
+  protected void onUpdate(@NotNull BlueMapAPI api) {
     for (MarkerSet markerSet : this.markerSets.values()) {
       markerSet.getMarkers().clear();
     }
@@ -81,8 +83,7 @@ public class GriefPreventionAddon extends BlueMapAddon implements Listener {
 
     for (Map.Entry<World, MarkerSet> entry : this.markerSets.entrySet()) {
       String mapId = "claim-" + entry.getKey().getName();
-      this.api
-          .getWorld(entry.getKey())
+      api.getWorld(entry.getKey())
           .ifPresent(
               (BlueMapWorld world) -> {
                 for (BlueMapMap map : world.getMaps()) {
@@ -98,26 +99,38 @@ public class GriefPreventionAddon extends BlueMapAddon implements Listener {
 
   @EventHandler(priority = EventPriority.MONITOR)
   public void onClaimCreated(@NotNull ClaimCreatedEvent event) {
-    this.onUpdate();
+    Bukkit.getServer()
+        .getPluginManager()
+        .callEvent(new BlueMapUpdateEvent(GriefPreventionEvent.class));
   }
 
   @EventHandler(priority = EventPriority.MONITOR)
   public void onClaimResize(@NotNull ClaimResizeEvent event) {
-    this.onUpdate();
+    Bukkit.getServer()
+        .getPluginManager()
+        .callEvent(new BlueMapUpdateEvent(GriefPreventionEvent.class));
   }
 
   @EventHandler(priority = EventPriority.MONITOR)
   public void onClaimChange(@NotNull ClaimChangeEvent event) {
-    this.onUpdate();
+    Bukkit.getServer()
+        .getPluginManager()
+        .callEvent(new BlueMapUpdateEvent(GriefPreventionEvent.class));
   }
 
   @EventHandler(priority = EventPriority.MONITOR)
   public void onClaimExtend(@NotNull ClaimExtendEvent event) {
-    this.onUpdate();
+    Bukkit.getServer()
+        .getPluginManager()
+        .callEvent(new BlueMapUpdateEvent(GriefPreventionEvent.class));
   }
 
   @EventHandler(priority = EventPriority.MONITOR)
   public void onClaimDelete(@NotNull ClaimDeletedEvent event) {
-    this.onUpdate();
+    Bukkit.getServer()
+        .getPluginManager()
+        .callEvent(new BlueMapUpdateEvent(GriefPreventionEvent.class));
   }
+
+  private static class GriefPreventionEvent implements Module {}
 }

@@ -31,10 +31,19 @@ public class GatewaysAddon extends BlueMapAddon {
   private final @NotNull Map<World, MarkerSet> markerSets = new HashMap<>(3);
   private final @NotNull Gateways module;
 
-  public GatewaysAddon(@NotNull BlueMapAPI api, @NotNull Gateways module) {
-    super(api, Gateways.class);
+  public GatewaysAddon(@NotNull Gateways module) {
+    super(Gateways.class);
     this.module = module;
 
+    // create markers
+    for (World world : Bukkit.getWorlds()) {
+      this.markerSets.put(
+          world, MarkerSet.builder().label("Gateways").defaultHidden(false).build());
+    }
+  }
+
+  @Override
+  protected void onEnable(@NotNull BlueMapAPI api) {
     // create svg
     Path gatewayFilePath = api.getWebApp().getWebRoot().resolve("assets").resolve(MARKER_FILENAME);
     try {
@@ -47,16 +56,10 @@ public class GatewaysAddon extends BlueMapAddon {
     } catch (IOException e) {
       Logger.error("failed to create " + gatewayFilePath + ": " + e);
     }
-
-    // create markers
-    for (World world : Bukkit.getWorlds()) {
-      this.markerSets.put(
-          world, MarkerSet.builder().label("Gateways").defaultHidden(false).build());
-    }
   }
 
   @Override
-  public void onUpdate() {
+  public void onUpdate(@NotNull BlueMapAPI api) {
     for (MarkerSet markerSet : this.markerSets.values()) {
       markerSet.getMarkers().clear();
     }
@@ -95,8 +98,7 @@ public class GatewaysAddon extends BlueMapAddon {
 
     for (Map.Entry<World, MarkerSet> entry : this.markerSets.entrySet()) {
       String mapId = "gw-" + entry.getKey().getName();
-      this.api
-          .getWorld(entry.getKey())
+      api.getWorld(entry.getKey())
           .ifPresent(
               (BlueMapWorld world) -> {
                 for (BlueMapMap map : world.getMaps()) {

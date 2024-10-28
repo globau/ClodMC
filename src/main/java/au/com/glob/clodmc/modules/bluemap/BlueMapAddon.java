@@ -6,13 +6,13 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public abstract class BlueMapAddon {
-  protected final @NotNull BlueMapAPI api;
   protected final @Nullable Class<? extends Module> updater;
 
-  protected BlueMapAddon(@NotNull BlueMapAPI api, @Nullable Class<? extends Module> updater) {
-    this.api = api;
+  protected BlueMapAddon(@Nullable Class<? extends Module> updater) {
     this.updater = updater;
   }
 
-  protected abstract void onUpdate();
+  protected void onEnable(@NotNull BlueMapAPI api) {}
+
+  protected abstract void onUpdate(@NotNull BlueMapAPI api);
 }

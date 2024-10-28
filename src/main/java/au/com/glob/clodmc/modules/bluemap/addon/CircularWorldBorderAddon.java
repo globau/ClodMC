@@ -17,13 +17,13 @@ import org.jetbrains.annotations.NotNull;
 public class CircularWorldBorderAddon extends BlueMapAddon {
   private final @NotNull CircularWorldBorder module;
 
-  public CircularWorldBorderAddon(@NotNull BlueMapAPI api, @NotNull CircularWorldBorder module) {
-    super(api, null);
+  public CircularWorldBorderAddon(@NotNull CircularWorldBorder module) {
+    super(null);
     this.module = module;
   }
 
   @Override
-  public void onUpdate() {
+  public void onUpdate(@NotNull BlueMapAPI api) {
     for (Map.Entry<World, CircularWorldBorder.Border> entry : this.module.getBorders().entrySet()) {
       World world = entry.getKey();
       CircularWorldBorder.Border border = entry.getValue();
@@ -41,8 +41,7 @@ public class CircularWorldBorderAddon extends BlueMapAddon {
 
       MarkerSet markerSet = MarkerSet.builder().label("World Border").build();
       markerSet.getMarkers().put("ClodMC", marker);
-      this.api
-          .getWorld(world.getName())
+      api.getWorld(world.getName())
           .map(BlueMapWorld::getMaps)
           .ifPresent(
               (Collection<BlueMapMap> maps) ->

@@ -12,12 +12,12 @@ import org.bukkit.World;
 import org.jetbrains.annotations.NotNull;
 
 public class SpawnAddon extends BlueMapAddon {
-  public SpawnAddon(@NotNull BlueMapAPI api) {
-    super(api, null);
+  public SpawnAddon() {
+    super(null);
   }
 
   @Override
-  public void onUpdate() {
+  public void onUpdate(@NotNull BlueMapAPI api) {
     for (World world : Bukkit.getWorlds()) {
       MarkerSet markerSet = MarkerSet.builder().label("Spawn").defaultHidden(false).build();
       markerSet.put(
@@ -30,8 +30,7 @@ public class SpawnAddon extends BlueMapAddon {
                       world.getSpawnLocation().getY(),
                       world.getSpawnLocation().getZ() + 0.5))
               .build());
-      this.api
-          .getWorld(world)
+      api.getWorld(world)
           .ifPresent(
               (BlueMapWorld blueMapWorld) -> {
                 for (BlueMapMap map : blueMapWorld.getMaps()) {
