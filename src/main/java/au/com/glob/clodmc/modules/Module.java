@@ -7,5 +7,7 @@ public interface Module {
     return null;
   }
 
+  default void initialise() {}
+
   default void loadConfig() {}
 }

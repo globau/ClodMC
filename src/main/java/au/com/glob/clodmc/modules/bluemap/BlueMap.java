@@ -24,18 +24,19 @@ public class BlueMap implements Module, Listener {
   private final @NotNull List<BlueMapAddon> addons = new ArrayList<>(4);
   private @Nullable BlueMapAPI api;
 
-  public BlueMap() {
+  @Override
+  public String dependsOn() {
+    return "BlueMap";
+  }
+
+  @Override
+  public void initialise() {
     this.addons.add(new CircularWorldBorderAddon(ClodMC.getModule(CircularWorldBorder.class)));
     this.addons.add(new GatewaysAddon(ClodMC.getModule(Gateways.class)));
     this.addons.add(new SpawnAddon());
     if (Bukkit.getPluginManager().isPluginEnabled("GriefPrevention")) {
       this.addons.add(new GriefPreventionAddon());
     }
-  }
-
-  @Override
-  public String dependsOn() {
-    return "BlueMap";
   }
 
   @Override

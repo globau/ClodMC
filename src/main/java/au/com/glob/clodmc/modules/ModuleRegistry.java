@@ -105,6 +105,7 @@ public class ModuleRegistry implements Iterable<Module> {
     }
 
     this.modules.put(module.getClass(), module);
+    module.initialise();
 
     if (module instanceof Listener listener) {
       Bukkit.getServer().getPluginManager().registerEvents(listener, ClodMC.instance);
