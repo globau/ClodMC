@@ -194,6 +194,26 @@ Stripped Oak Wood                        :STRIPPED_OAK_WOOD
 Oak Boat                                 :OAK_BOAT
 Oak Boat With Chest                      :OAK_CHEST_BOAT
 
+Pale Oak Door                            :PALE_OAK_DOOR
+Pale Oak Fence                           :PALE_OAK_FENCE
+Pale Oak Fence Gate                      :PALE_OAK_FENCE_GATE
+Pale Oak Leaves                          :PALE_OAK_LEAVES
+Pale Oak Log                             :PALE_OAK_LOG
+Stripped Pale Oak Log                    :STRIPPED_PALE_OAK_LOG
+Pale Oak Planks                          :PALE_OAK_PLANKS
+Pale Oak Sapling                         :PALE_OAK_SAPLING
+Pale Oak Sign                            :PALE_OAK_SIGN
+Pale Oak Sign                            :PALE_OAK_WALL_SIGN
+Pale Oak Hanging Sign                    :PALE_OAK_HANGING_SIGN
+Pale Oak Hanging Sign                    :PALE_OAK_WALL_HANGING_SIGN
+Pale Oak Slab                            :PALE_OAK_SLAB
+Pale Oak Stairs                          :PALE_OAK_STAIRS
+Pale Oak Trapdoor                        :PALE_OAK_TRAPDOOR
+Pale Oak Wood                            :PALE_OAK_WOOD
+Stripped Pale Oak Wood                   :STRIPPED_PALE_OAK_WOOD
+Pale Oak Boat                            :PALE_OAK_BOAT
+Pale Oak Boat With Chest                 :PALE_OAK_CHEST_BOAT
+
 Spruce Door                              :SPRUCE_DOOR
 Spruce Fence                             :SPRUCE_FENCE
 Spruce Fence Gate                        :SPRUCE_FENCE_GATE
@@ -477,6 +497,8 @@ Magma Block                              :MAGMA_BLOCK
 
 Moss Block                               :MOSS_BLOCK
 Moss Carpet                              :MOSS_CARPET
+Pale Moss Block                          :PALE_MOSS_BLOCK
+Pale Moss Carpet                         :PALE_MOSS_CARPET
 
 Mud                                      :MUD
 Mud Brick Slab                           :MUD_BRICK_SLAB
@@ -724,6 +746,7 @@ Cave Vines                               :CAVE_VINES
 Cave Vines Plant                         :CAVE_VINES_PLANT
 Weeping Vines                            :WEEPING_VINES
 Weeping Vines Plant                      :WEEPING_VINES_PLANT
+Pale Hanging Moss                        :PALE_HANGING_MOSS
 Hay Bale                                 :HAY_BLOCK
 Wheat                                    :WHEAT
 Wheat Seeds                              :WHEAT_SEEDS
@@ -892,6 +915,7 @@ Dark Oak Button                          :DARK_OAK_BUTTON
 Mangrove Button                          :MANGROVE_BUTTON
 Jungle Button                            :JUNGLE_BUTTON
 Oak Button                               :OAK_BUTTON
+Pale Oak Button                          :PALE_OAK_BUTTON
 Spruce Button                            :SPRUCE_BUTTON
 Stone Button                             :STONE_BUTTON
 Warped Button                            :WARPED_BUTTON
@@ -932,6 +956,7 @@ Heavy Weighted Pressure Plate            :HEAVY_WEIGHTED_PRESSURE_PLATE
 Mangrove Pressure Plate                  :MANGROVE_PRESSURE_PLATE
 Jungle Pressure Plate                    :JUNGLE_PRESSURE_PLATE
 Oak Pressure Plate                       :OAK_PRESSURE_PLATE
+Pale Oak Pressure Plate                  :PALE_OAK_PRESSURE_PLATE
 Spruce Pressure Plate                    :SPRUCE_PRESSURE_PLATE
 Stone Pressure Plate                     :STONE_PRESSURE_PLATE
 Warped Pressure Plate                    :WARPED_PRESSURE_PLATE
@@ -1165,6 +1190,23 @@ Barrel                                   :BARREL
 Beacon                                   :BEACON
 Blast Furnace                            :BLAST_FURNACE
 
+White Bundle                             :WHITE_BUNDLE
+Light Gray Bundle                        :LIGHT_GRAY_BUNDLE
+Gray Bundle                              :GRAY_BUNDLE
+Black Bundle                             :BLACK_BUNDLE
+Brown Bundle                             :BROWN_BUNDLE
+Red Bundle                               :RED_BUNDLE
+Orange Bundle                            :ORANGE_BUNDLE
+Yellow Bundle                            :YELLOW_BUNDLE
+Lime Bundle                              :LIME_BUNDLE
+Green Bundle                             :GREEN_BUNDLE
+Cyan Bundle                              :CYAN_BUNDLE
+Light Blue Bundle                        :LIGHT_BLUE_BUNDLE
+Blue Bundle                              :BLUE_BUNDLE
+Purple Bundle                            :PURPLE_BUNDLE
+Magenta Bundle                           :MAGENTA_BUNDLE
+Pink Bundle                              :PINK_BUNDLE
+
 White Bed                                :WHITE_BED
 Light Gray Bed                           :LIGHT_GRAY_BED
 Gray Bed                                 :GRAY_BED
@@ -1296,9 +1338,11 @@ Magenta Banner                           :MAGENTA_WALL_BANNER
 Pink Banner                              :PINK_BANNER
 Pink Banner                              :PINK_WALL_BANNER
 
+Bordure Indented Banner Pattern          :BORDURE_INDENTED_BANNER_PATTERN
 Creeper Banner Pattern                   :CREEPER_BANNER_PATTERN
-Flower Banner Pattern                    :FLOWER_BANNER_PATTERN
+Field Masoned Banner Pattern             :FIELD_MASONED_BANNER_PATTERN
 Flow Banner Pattern                      :FLOW_BANNER_PATTERN
+Flower Banner Pattern                    :FLOWER_BANNER_PATTERN
 Globe Banner Pattern                     :GLOBE_BANNER_PATTERN
 Guster Banner Pattern                    :GUSTER_BANNER_PATTERN
 Mojang Banner Pattern                    :MOJANG_BANNER_PATTERN
@@ -1405,6 +1449,7 @@ Purple Stained Glass Pane                :PURPLE_STAINED_GLASS_PANE
 Magenta Stained Glass Pane               :MAGENTA_STAINED_GLASS_PANE
 Pink Stained Glass Pane                  :PINK_STAINED_GLASS_PANE
 
+Creaking Heart                           :CREAKING_HEART
 Glow Item Frame                          :GLOW_ITEM_FRAME
 Heart Of The Sea                         :HEART_OF_THE_SEA
 Iron Bars                                :IRON_BARS
@@ -1440,6 +1485,7 @@ Potted Mangrove Propagule                :POTTED_MANGROVE_PROPAGULE
 Potted Oak Sapling                       :POTTED_OAK_SAPLING
 Potted Orange Tulip                      :POTTED_ORANGE_TULIP
 Potted Oxeye Daisy                       :POTTED_OXEYE_DAISY
+Potted Pale Oak Sapling                  :POTTED_PALE_OAK_SAPLING
 Potted Pink Tulip                        :POTTED_PINK_TULIP
 Potted Poppy                             :POTTED_POPPY
 Potted Red Mushroom                      :POTTED_RED_MUSHROOM
@@ -1574,6 +1620,7 @@ Cave Spider Spawn Egg                    :CAVE_SPIDER_SPAWN_EGG
 Chicken Spawn Egg                        :CHICKEN_SPAWN_EGG
 Cod Spawn Egg                            :COD_SPAWN_EGG
 Cow Spawn Egg                            :COW_SPAWN_EGG
+Creaking Spawn Egg                       :CREAKING_SPAWN_EGG
 Creeper Spawn Egg                        :CREEPER_SPAWN_EGG
 Dolphin Spawn Egg                        :DOLPHIN_SPAWN_EGG
 Donkey Spawn Egg                         :DONKEY_SPAWN_EGG

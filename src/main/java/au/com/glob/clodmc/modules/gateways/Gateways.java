@@ -378,11 +378,11 @@ public class Gateways implements Module, Listener {
 
         // find a safe location
         teleportPos = TeleportUtil.getSafePos(randomPos);
-        String biomeName = teleportPos.getBlock().getBiome().name().toLowerCase();
-        if (biomeName.equals("ocean")
-            || biomeName.endsWith("_ocean")
-            || biomeName.equals("river")
-            || biomeName.endsWith("_river")) {
+        String biomeKey = teleportPos.getBlock().getBiome().getKey().value();
+        if (biomeKey.equals("ocean")
+            || biomeKey.endsWith("_ocean")
+            || biomeKey.equals("river")
+            || biomeKey.endsWith("_river")) {
           continue;
         }
 
