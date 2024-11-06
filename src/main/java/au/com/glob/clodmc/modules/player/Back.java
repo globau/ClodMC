@@ -7,7 +7,6 @@ import au.com.glob.clodmc.util.Chat;
 import au.com.glob.clodmc.util.PlayerDataFile;
 import au.com.glob.clodmc.util.PlayerDataUpdater;
 import au.com.glob.clodmc.util.PlayerLocation;
-import au.com.glob.clodmc.util.TeleportUtil;
 import java.util.UUID;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -51,7 +50,7 @@ public class Back implements Module, Listener {
   public void onPlayerTeleport(@NotNull PlayerTeleportEvent event) {
     if (event.getCause() == PlayerTeleportEvent.TeleportCause.COMMAND) {
       try (PlayerDataUpdater config = PlayerDataUpdater.of(event.getPlayer())) {
-        config.set("back", PlayerLocation.of(TeleportUtil.getStandingPos(event.getPlayer())));
+        config.set("back", PlayerLocation.of(event.getPlayer()));
       }
     }
   }

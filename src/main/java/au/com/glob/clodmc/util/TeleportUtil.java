@@ -142,7 +142,16 @@ public class TeleportUtil {
       }
     }
 
-    return new Location(world, doubleX, doubleY, doubleZ, 0, 0);
+    // if, after all that, the player doesn't need to be moved to a safe location, return the
+    // original location unmodified to retain sub-block precision
+    Location safeLocation = new Location(world, doubleX, doubleY, doubleZ, 0, 0);
+    if (safeLocation.getBlockX() == location.getBlockX()
+        && safeLocation.getBlockY() == location.getBlockY()
+        && safeLocation.getBlockY() == location.getBlockY()) {
+      return location;
+    }
+
+    return safeLocation;
   }
 
   public static boolean isUnsafe(@NotNull Block feetBlock) {
