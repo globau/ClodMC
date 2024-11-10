@@ -17,5 +17,5 @@ build/format: $(java-files) $(config-files)
 	@touch $@
 
 test:
-	@for N in src/test/test-*; do $$N; done
+	@for N in src/test/test-*; do $$N || exit 1; done
 	$(gradle) check

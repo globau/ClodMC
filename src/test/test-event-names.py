@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
-import logging
 import re
+import sys
 from pathlib import Path
 
 exit_code = 0
@@ -15,23 +15,25 @@ for filepath in Path("src").rglob("*.java"):
         args = m[2]
 
         if not args.startswith("@NotNull "):
-            logging.error(f"{line}\n  event argument is not annotated as @NotNull")
+            print(f"{line}\n  event argument is not annotated as @NotNull")
             exit_code = 1
             continue
         args = args.removeprefix("@NotNull ")
 
         if not args.endswith(" event"):
-            logging.error(f"{line}\n  event argument is not named 'event'")
+            print(f"{line}\n  event argument is not named 'event'")
             exit_code = 1
             continue
         args = args.removesuffix(" event")
 
         if not args.endswith("Event"):
-            logging.error(f"{line}\n  event class is not named an Event")
+            print(f"{line}\n  event class is not named an Event")
             exit_code = 1
             continue
         args = args.removesuffix("Event")
 
         if method != f"on{args}":
-            logging.error(f"{line}\n  incorrect method name, expected: on{args}")
+            print(f"{line}\n  incorrect method name, expected: on{args}")
             exit_code = 1
+
+sys.exit(exit_code)

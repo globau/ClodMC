@@ -14,6 +14,7 @@ import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.inventory.meta.FireworkMeta;
 import org.jetbrains.annotations.NotNull;
 
+/** adds a slim chance that a creeper explodes into fireworks */
 public class ExplodingCreepers implements Module, Listener {
 
   @EventHandler

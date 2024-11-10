@@ -15,6 +15,7 @@ import org.bukkit.inventory.RecipeChoice;
 import org.bukkit.inventory.ShapelessRecipe;
 import org.jetbrains.annotations.NotNull;
 
+/** Adds a crafting recipe for Spore Blossums */
 public class SporeBlossom implements Module, Listener {
   private final @NotNull ShapelessRecipe recipe;
 
