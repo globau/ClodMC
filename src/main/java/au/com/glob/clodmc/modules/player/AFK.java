@@ -2,7 +2,6 @@ package au.com.glob.clodmc.modules.player;
 
 import au.com.glob.clodmc.command.CommandBuilder;
 import au.com.glob.clodmc.modules.Module;
-import au.com.glob.clodmc.util.BlockPos;
 import au.com.glob.clodmc.util.Chat;
 import au.com.glob.clodmc.util.Schedule;
 import io.papermc.paper.event.player.AsyncChatEvent;
@@ -24,7 +23,6 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /** Automatic and manual afk; players are visibly afk in the tab-list */
 public class AFK implements Listener, Module {
@@ -105,7 +103,9 @@ public class AFK implements Listener, Module {
 
   @EventHandler
   public void onPlayerMove(@NotNull PlayerMoveEvent event) {
-    this.playerStates.get(event.getPlayer().getUniqueId()).onMove();
+    if (event.hasChangedBlock()) {
+      this.playerStates.get(event.getPlayer().getUniqueId()).onAction();
+    }
   }
 
   @EventHandler
@@ -141,26 +141,12 @@ public class AFK implements Listener, Module {
   private static final class PlayerState {
     private final @NotNull Player player;
     private long lastInteractionTime;
-    private @Nullable BlockPos awayBlockPos;
     private boolean isAway;
 
     private PlayerState(@NotNull Player player) {
       this.player = player;
       this.lastInteractionTime = System.currentTimeMillis() / 1000;
       this.isAway = false;
-    }
-
-    public void onMove() {
-      if (this.isAway) {
-        // clear afk only when the player moves to a different block
-        // ie. looking around shouldn't clear afk status
-        BlockPos playerPos = BlockPos.of(this.player.getLocation());
-        assert this.awayBlockPos != null;
-        if (playerPos.equals(this.awayBlockPos)) {
-          return;
-        }
-      }
-      this.onAction();
     }
 
     public void onAction() {
@@ -180,7 +166,6 @@ public class AFK implements Listener, Module {
 
     public void setAway(boolean announce) {
       this.isAway = true;
-      this.awayBlockPos = BlockPos.of(this.player.getLocation());
       AFK.instance.getAfkTeam().addEntry(this.player.getName());
       if (announce) {
         this.announce();
@@ -189,7 +174,6 @@ public class AFK implements Listener, Module {
 
     public void setBack(boolean announce) {
       this.isAway = false;
-      this.awayBlockPos = null;
       AFK.instance.getAfkTeam().removeEntry(this.player.getName());
       if (announce) {
         this.announce();
