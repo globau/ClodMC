@@ -56,7 +56,7 @@ spotless {
         endWithNewline()
     }
     java {
-        googleJavaFormat('1.19.2').reflowLongStrings().skipJavadocFormatting()
+        googleJavaFormat('1.24.0').reflowLongStrings().skipJavadocFormatting()
         formatAnnotations()
     }
     yaml {

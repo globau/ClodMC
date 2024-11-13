@@ -28,83 +28,83 @@ public class WelcomeBook implements Module, Listener {
   private static final @NotNull List<String> PAGES =
       List.of(
           """
-              Welcome to <b>Clod-MC</b>
+          Welcome to <b>Clod-MC</b>
 
-              Map
+          Map
 
-                <click:open_url:https://clod.glob.au><blue>clod.glob.au</blue></click>
+            <click:open_url:https://clod.glob.au><blue>clod.glob.au</blue></click>
 
-              Admin
+          Admin
 
-                clod@glob.au
+            clod@glob.au
 
-              Discord
+          Discord
 
-                <click:open_url:https://discord.gg/umyFGMZYjU><blue>discord.gg</blue></click>
-              """,
+            <click:open_url:https://discord.gg/umyFGMZYjU><blue>discord.gg</blue></click>
+          """,
           """
-              <b>Rules</b>
+          <b>Rules</b>
 
-              Be respectful
+          Be respectful
 
-              No Griefing
-              No Stealing
+          No Griefing
+          No Stealing
 
-              Quality of life
-              client mods only""",
+          Quality of life
+          client mods only""",
           """
-              <b>AFK</b>
+          <b>AFK</b>
 
-              Players idle for 5 mins will be marked as AFK
+          Players idle for 5 mins will be marked as AFK
 
-              <dark_green>/afk</dark_green>
-               go afk now, or return from afk""",
+          <dark_green>/afk</dark_green>
+           go afk now, or return from afk""",
           """
-              <b>Homes</b>
+          <b>Homes</b>
 
-              <dark_green>/sethome [name]</dark_green>
-               set home loc
-              <dark_green>/home [name]</dark_green>
-               tp home
-              <dark_green>/delhome [name]</dark_green>
-               delete home
-              <dark_green>/homes</dark_green>
-              list homes
-              <dark_green>/back</dark_green>
-               tp to last loc
-              <dark_green>/spawn</dark_green>
-               tp to spawn""",
+          <dark_green>/sethome [name]</dark_green>
+           set home loc
+          <dark_green>/home [name]</dark_green>
+           tp home
+          <dark_green>/delhome [name]</dark_green>
+           delete home
+          <dark_green>/homes</dark_green>
+          list homes
+          <dark_green>/back</dark_green>
+           tp to last loc
+          <dark_green>/spawn</dark_green>
+           tp to spawn""",
           """
-              <b>Land Claims</b>
+          <b>Land Claims</b>
 
-              Claim land with a golden shovel.
+          Claim land with a golden shovel.
 
-              <click:open_url:https://bit.ly/mcgpuser><blue>bit.ly/mcgpuser</blue></click>""",
+          <click:open_url:https://bit.ly/mcgpuser><blue>bit.ly/mcgpuser</blue></click>""",
           """
-              <b>Invite Players</b>
+          <b>Invite Players</b>
 
-              If you've played on the server long enough you can invite other players.
+          If you've played on the server long enough you can invite other players.
 
-              <dark_green>/invite java {name}</dark_green>
-               invite java player
-              <dark_green>/invite bedrock {name}</dark_green>
-               invite bedrock player""",
+          <dark_green>/invite java {name}</dark_green>
+           invite java player
+          <dark_green>/invite bedrock {name}</dark_green>
+           invite bedrock player""",
           """
-              <b>Gateways</b>
+          <b>Gateways</b>
 
-              End-game player-built gateways
+          End-game player-built gateways
 
-              <click:open_url:https://s.glob.au/wWw><blue>s.glob.au/wWw</blue></click>
+          <click:open_url:https://s.glob.au/wWw><blue>s.glob.au/wWw</blue></click>
 
-              Name an anchor in an anvil to make it show up on the map.""",
+          Name an anchor in an anvil to make it show up on the map.""",
           """
-              <b>Other</b>
+          <b>Other</b>
 
-              Shift+Right-clicking an container's inventory will sort it.
+          Shift+Right-clicking an container's inventory will sort it.
 
-              A container named in an anvil will display its name when looked at.
+          A container named in an anvil will display its name when looked at.
 
-              Use wax on an item frame to prevent changes.""");
+          Use wax on an item frame to prevent changes.""");
 
   public WelcomeBook() {
     CommandBuilder.build("welcome")
