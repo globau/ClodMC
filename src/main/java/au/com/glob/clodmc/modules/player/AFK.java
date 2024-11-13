@@ -30,6 +30,7 @@ public class AFK implements Listener, Module {
   public static @NotNull AFK instance;
 
   private static final int IDLE_TIME = 300; // seconds
+  private static final int CHECK_INTERVAL = 5; // seconds
 
   private final @NotNull HashMap<UUID, PlayerState> playerStates = new HashMap<>();
 
@@ -66,8 +67,8 @@ public class AFK implements Listener, Module {
   public void loadConfig() {
     // check for away players every second
     Schedule.periodically(
-        20,
-        20,
+        CHECK_INTERVAL * 20,
+        CHECK_INTERVAL * 20,
         () -> {
           long now = System.currentTimeMillis() / 1000;
           for (PlayerState playerState : this.playerStates.values()) {
