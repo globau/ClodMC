@@ -316,9 +316,10 @@ public class CustomBlockData implements PersistentDataContainer {
    *
    * <p>For example, when you call this method in onEnable, CustomBlockData will now get
    * automatically removed from a block when a player breaks this block. It will additionally call
-   * custom events like {@link com.jeff_media.customblockdata.events.CustomBlockDataRemoveEvent}.
-   * Those events implement {@link org.bukkit.event.Cancellable}. If one of the CustomBlockData
-   * events is cancelled, it will not alter any CustomBlockData.
+   * custom events like {@link
+   * vendored.com.jeff_media.customblockdata.events.CustomBlockDataRemoveEvent}. Those events
+   * implement {@link org.bukkit.event.Cancellable}. If one of the CustomBlockData events is
+   * cancelled, it will not alter any CustomBlockData.
    *
    * @param plugin Your plugin's instance
    */
