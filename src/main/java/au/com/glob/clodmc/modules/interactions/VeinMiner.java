@@ -38,6 +38,7 @@ public class VeinMiner implements Module, Listener {
 
   private static final int DELAY = 1;
   private static final int MAX_CHAIN = 100;
+  private static final int COST = 2;
   private static final @NotNull List<BlockFace> FACES =
       List.of(
           BlockFace.NORTH,
@@ -130,7 +131,7 @@ public class VeinMiner implements Module, Listener {
     if (!processed.isEmpty()) {
       block.breakNaturally(tool, true, true);
       if (player.getGameMode().equals(GameMode.SURVIVAL)) {
-        tool.damage(1, player);
+        tool.damage(COST, player);
       }
     }
 
