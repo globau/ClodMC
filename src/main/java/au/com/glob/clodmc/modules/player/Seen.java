@@ -29,63 +29,65 @@ public class Seen implements Module, Listener {
   private final @NotNull Map<String, UUID> validNames = new HashMap<>();
 
   public Seen() {
-    CommandBuilder.build("seen")
-        .usage("/seen <player>")
-        .description("Show time since player's last login")
-        .executor(
-            (@NotNull EitherCommandSender sender, @Nullable String playerName) -> {
-              if (playerName == null) {
-                throw new CommandUsageError();
-              }
+    CommandBuilder.build(
+        "seen",
+        (CommandBuilder builder) -> {
+          builder.usage("/seen <player>").description("Show time since player's last login");
+          builder.executor(
+              (@NotNull EitherCommandSender sender, @Nullable String playerName) -> {
+                if (playerName == null) {
+                  throw new CommandUsageError();
+                }
 
-              if (sender.isPlayer() && playerName.equalsIgnoreCase(sender.asPlayer().getName())) {
-                Chat.info(sender, "You're online now");
-                return;
-              }
+                if (sender.isPlayer() && playerName.equalsIgnoreCase(sender.asPlayer().getName())) {
+                  Chat.info(sender, "You're online now");
+                  return;
+                }
 
-              Player player = Bukkit.getPlayerExact(playerName);
-              if (player != null) {
-                Chat.info(sender, playerName + " is online now");
-                return;
-              }
+                Player player = Bukkit.getPlayerExact(playerName);
+                if (player != null) {
+                  Chat.info(sender, playerName + " is online now");
+                  return;
+                }
 
-              PlayerDataFile config =
-                  this.validNames.entrySet().stream()
+                PlayerDataFile config =
+                    this.validNames.entrySet().stream()
+                        .filter(
+                            (Map.Entry<String, UUID> entry) ->
+                                entry.getKey().equalsIgnoreCase(playerName))
+                        .map((Map.Entry<String, UUID> entry) -> PlayerDataFile.of(entry.getValue()))
+                        .findFirst()
+                        .orElse(null);
+
+                if (config == null || !config.fileExists()) {
+                  Chat.error(sender, playerName + " doesn't play on this server");
+                  return;
+                }
+
+                LocalDateTime date = config.getLastLogout();
+                if (date == null) {
+                  date = config.getLastLogin();
+                }
+                if (date == null) {
+                  Chat.warning(sender, "Not sure when " + playerName + " last played");
+                  return;
+                }
+
+                String dateAgo =
+                    StringUtil.relativeTime(
+                        System.currentTimeMillis() / 1000L
+                            - date.toEpochSecond(ZoneOffset.of("+8")));
+                Chat.info(sender, playerName + " was last seen " + dateAgo + " ago");
+              });
+          builder.completor(
+              (@NotNull CommandSender sender, @NotNull List<String> args) ->
+                  this.validNames.keySet().stream()
+                      .sorted(String.CASE_INSENSITIVE_ORDER)
                       .filter(
-                          (Map.Entry<String, UUID> entry) ->
-                              entry.getKey().equalsIgnoreCase(playerName))
-                      .map((Map.Entry<String, UUID> entry) -> PlayerDataFile.of(entry.getValue()))
-                      .findFirst()
-                      .orElse(null);
-
-              if (config == null || !config.fileExists()) {
-                Chat.error(sender, playerName + " doesn't play on this server");
-                return;
-              }
-
-              LocalDateTime date = config.getLastLogout();
-              if (date == null) {
-                date = config.getLastLogin();
-              }
-              if (date == null) {
-                Chat.warning(sender, "Not sure when " + playerName + " last played");
-                return;
-              }
-
-              String dateAgo =
-                  StringUtil.relativeTime(
-                      System.currentTimeMillis() / 1000L - date.toEpochSecond(ZoneOffset.of("+8")));
-              Chat.info(sender, playerName + " was last seen " + dateAgo + " ago");
-            })
-        .completor(
-            (@NotNull CommandSender sender, @NotNull List<String> args) ->
-                this.validNames.keySet().stream()
-                    .sorted(String.CASE_INSENSITIVE_ORDER)
-                    .filter(
-                        (String name) ->
-                            name.toLowerCase().startsWith(args.getFirst().toLowerCase()))
-                    .toList())
-        .register();
+                          (String name) ->
+                              name.toLowerCase().startsWith(args.getFirst().toLowerCase()))
+                      .toList());
+        });
   }
 
   private void updateValidNames() {

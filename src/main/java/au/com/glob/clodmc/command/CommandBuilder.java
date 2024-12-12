@@ -5,6 +5,7 @@ import au.com.glob.clodmc.util.Chat;
 import au.com.glob.clodmc.util.Logger;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -21,8 +22,10 @@ public class CommandBuilder {
   private @Nullable Completor completor;
   private boolean requiresOp = false;
 
-  public static @NotNull CommandBuilder build(@NotNull String name) {
-    return new CommandBuilder().name(name);
+  public static void build(@NotNull String name, @NotNull Consumer<CommandBuilder> handler) {
+    CommandBuilder builder = new CommandBuilder().name(name);
+    handler.accept(builder);
+    builder.register();
   }
 
   public @NotNull CommandBuilder name(@NotNull String name) {
@@ -90,7 +93,7 @@ public class CommandBuilder {
     return this;
   }
 
-  public void register() {
+  private void register() {
     if (this.name == null || this.description == null || this.executor == null) {
       throw new RuntimeException("incomplete command");
     }

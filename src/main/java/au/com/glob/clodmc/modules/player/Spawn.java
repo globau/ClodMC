@@ -15,26 +15,28 @@ import org.jetbrains.annotations.NotNull;
 /** Teleport to spawn */
 public class Spawn implements Module {
   public Spawn() {
-    CommandBuilder.build("spawn")
-        .description("Teleport to spawn")
-        .executor(
-            (@NotNull Player player) -> {
-              World world = Bukkit.getWorld("world");
-              if (world == null) {
-                return;
-              }
+    CommandBuilder.build(
+        "spawn",
+        (CommandBuilder builder) -> {
+          builder.description("Teleport to spawn");
+          builder.executor(
+              (@NotNull Player player) -> {
+                World world = Bukkit.getWorld("world");
+                if (world == null) {
+                  return;
+                }
 
-              Chat.fyi(player, "Teleporting you to spawn");
+                Chat.fyi(player, "Teleporting you to spawn");
 
-              Integer spawnRadius = world.getGameRuleValue(GameRule.SPAWN_RADIUS);
-              Location loc =
-                  TeleportUtil.getRandomLoc(
-                      world.getSpawnLocation(), spawnRadius == null ? 8 : spawnRadius);
+                Integer spawnRadius = world.getGameRuleValue(GameRule.SPAWN_RADIUS);
+                Location loc =
+                    TeleportUtil.getRandomLoc(
+                        world.getSpawnLocation(), spawnRadius == null ? 8 : spawnRadius);
 
-              // teleport to the center of the block, just above the surface as per vanilla
-              PlayerLocation playerLoc = PlayerLocation.of(loc.add(0.5, 0.1, 0.5));
-              playerLoc.teleportPlayer(player);
-            })
-        .register();
+                // teleport to the center of the block, just above the surface as per vanilla
+                PlayerLocation playerLoc = PlayerLocation.of(loc.add(0.5, 0.1, 0.5));
+                playerLoc.teleportPlayer(player);
+              });
+        });
   }
 }

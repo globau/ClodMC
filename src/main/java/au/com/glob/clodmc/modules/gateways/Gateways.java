@@ -71,24 +71,26 @@ public class Gateways implements Module, Listener {
     ConfigurationSerialization.registerClass(AnchorBlock.class);
     Bukkit.addRecipe(AnchorItem.getRecipe());
 
-    CommandBuilder.build("gateways")
-        .description("List gateway in use")
-        .executor(
-            (EitherCommandSender sender) -> {
-              if (this.instances.isEmpty()) {
-                Chat.warning(sender, "No gateways");
-                return;
-              }
+    CommandBuilder.build(
+        "gateways",
+        (CommandBuilder builder) -> {
+          builder.description("List gateway in use");
+          builder.executor(
+              (@NotNull EitherCommandSender sender) -> {
+                if (this.instances.isEmpty()) {
+                  Chat.warning(sender, "No gateways");
+                  return;
+                }
 
-              String gateways =
-                  this.instances.values().stream()
-                      .map(AnchorBlock::getColourPair)
-                      .distinct()
-                      .sorted()
-                      .collect(Collectors.joining(", "));
-              Chat.info(sender, "Existing gateways: " + gateways);
-            })
-        .register();
+                String gateways =
+                    this.instances.values().stream()
+                        .map(AnchorBlock::getColourPair)
+                        .distinct()
+                        .sorted()
+                        .collect(Collectors.joining(", "));
+                Chat.info(sender, "Existing gateways: " + gateways);
+              });
+        });
   }
 
   @Override

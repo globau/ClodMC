@@ -17,20 +17,22 @@ import org.jetbrains.annotations.NotNull;
 /** /back command to return to where you last teleported from */
 public class Back implements Module, Listener {
   public Back() {
-    CommandBuilder.build("back")
-        .description("Teleport to previous location")
-        .executor(
-            (@NotNull Player player) -> {
-              PlayerDataFile config = PlayerDataFile.of(player);
-              PlayerLocation location = (PlayerLocation) config.get("back");
-              if (location == null) {
-                throw new CommandError("No previous location");
-              }
+    CommandBuilder.build(
+        "back",
+        (CommandBuilder builder) -> {
+          builder.description("Teleport to previous location");
+          builder.executor(
+              (@NotNull Player player) -> {
+                PlayerDataFile config = PlayerDataFile.of(player);
+                PlayerLocation location = (PlayerLocation) config.get("back");
+                if (location == null) {
+                  throw new CommandError("No previous location");
+                }
 
-              Chat.fyi(player, "Teleporting you back");
-              location.teleportPlayer(player);
-            })
-        .register();
+                Chat.fyi(player, "Teleporting you back");
+                location.teleportPlayer(player);
+              });
+        });
   }
 
   @Override

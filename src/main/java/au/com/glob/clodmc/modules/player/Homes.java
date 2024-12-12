@@ -25,107 +25,116 @@ public class Homes implements Listener, Module {
   protected static final int MAX_HOMES = 3;
 
   public Homes() {
-    CommandBuilder.build("home")
-        .usage("/home [name]")
-        .description("Teleport home")
-        .executor(
-            (@NotNull Player player, @Nullable String name) -> {
-              name = name == null ? "home" : name;
+    CommandBuilder.build(
+        "home",
+        (CommandBuilder builder) -> {
+          builder.usage("/home [name]").description("Teleport home");
+          builder.executor(
+              (@NotNull Player player, @Nullable String name) -> {
+                name = name == null ? "home" : name;
 
-              Map<String, PlayerLocation> homes = this.getHomes(player);
-              if (homes.isEmpty() || !homes.containsKey(name)) {
-                throw new CommandError(
-                    name.equals("home") ? "No home set" : "No such home '" + name + "'");
-              }
-
-              Chat.fyi(
-                  player,
-                  "Teleporting you " + (name.equals("home") ? "home" : "to '" + name + "'"));
-              PlayerLocation playerLoc = homes.get(name);
-              playerLoc.teleportPlayer(player);
-            })
-        .completor(
-            (@NotNull Player player, @NotNull List<String> args) ->
-                this.completeHomes(player, args))
-        .register();
-
-    CommandBuilder.build("homes")
-        .description("List homes")
-        .executor(
-            (@NotNull Player player) -> {
-              Map<String, PlayerLocation> homes = this.getHomes(player);
-
-              if (homes.isEmpty()) {
-                Chat.warning(player, "No homes");
-              } else {
-                StringJoiner joiner = new StringJoiner(", ");
-                for (String name : homes.keySet().stream().sorted().toList()) {
-                  joiner.add(name);
+                Map<String, PlayerLocation> homes = this.getHomes(player);
+                if (homes.isEmpty() || !homes.containsKey(name)) {
+                  throw new CommandError(
+                      name.equals("home") ? "No home set" : "No such home '" + name + "'");
                 }
-                Chat.info(player, "Homes: " + joiner);
-              }
-            })
-        .register();
 
-    CommandBuilder.build("sethome")
-        .usage("/sethome [name]")
-        .description("Sets a home to your current location")
-        .executor(
-            (@NotNull Player player, @Nullable String name) -> {
-              name = name == null ? "home" : name;
+                Chat.fyi(
+                    player,
+                    "Teleporting you " + (name.equals("home") ? "home" : "to '" + name + "'"));
+                PlayerLocation playerLoc = homes.get(name);
+                playerLoc.teleportPlayer(player);
+              });
+          builder.completor(
+              (@NotNull Player player, @NotNull List<String> args) ->
+                  this.completeHomes(player, args));
+        });
 
-              Map<String, PlayerLocation> homes = this.getHomes(player);
-              boolean existing = homes.containsKey(name);
+    CommandBuilder.build(
+        "homes",
+        (CommandBuilder builder) ->
+            builder
+                .description("List homes")
+                .executor(
+                    (@NotNull Player player) -> {
+                      Map<String, PlayerLocation> homes = this.getHomes(player);
 
-              if (!existing && homes.size() >= MAX_HOMES) {
-                throw new CommandError(
-                    "You have reached the maximum number of homes (" + MAX_HOMES + ")");
-              }
+                      if (homes.isEmpty()) {
+                        Chat.warning(player, "No homes");
+                      } else {
+                        StringJoiner joiner = new StringJoiner(", ");
+                        for (String name : homes.keySet().stream().sorted().toList()) {
+                          joiner.add(name);
+                        }
+                        Chat.info(player, "Homes: " + joiner);
+                      }
+                    }));
 
-              Location location = TeleportUtil.getStandingPos(player);
+    CommandBuilder.build(
+        "sethome",
+        (CommandBuilder builder) ->
+            builder
+                .usage("/sethome [name]")
+                .description("Sets a home to your current location")
+                .executor(
+                    (@NotNull Player player, @Nullable String name) -> {
+                      name = name == null ? "home" : name;
 
-              if (TeleportUtil.isUnsafe(location.getBlock())) {
-                throw new CommandError("Your current location is not safe");
-              }
+                      Map<String, PlayerLocation> homes = this.getHomes(player);
+                      boolean existing = homes.containsKey(name);
 
-              homes.put(name, PlayerLocation.of(location));
-              this.setHomes(player, homes);
+                      if (!existing && homes.size() >= MAX_HOMES) {
+                        throw new CommandError(
+                            "You have reached the maximum number of homes (" + MAX_HOMES + ")");
+                      }
 
-              if (name.equals("home")) {
-                Chat.info(
-                    player, "Home " + (existing ? "updated" : "set") + " to you current location");
-              } else {
-                Chat.info(player, "Home '" + name + "' " + (existing ? "updated" : "created"));
-              }
-            })
-        .register();
+                      Location location = TeleportUtil.getStandingPos(player);
 
-    CommandBuilder.build("delhome")
-        .usage("/delhome [name]")
-        .description("Delete home")
-        .executor(
-            (@NotNull Player player, @Nullable String name) -> {
-              name = name == null ? "home" : name;
+                      if (TeleportUtil.isUnsafe(location.getBlock())) {
+                        throw new CommandError("Your current location is not safe");
+                      }
 
-              Map<String, PlayerLocation> homes = this.getHomes(player);
-              if (homes.isEmpty() || !homes.containsKey(name)) {
-                throw new CommandError(
-                    name.equals("home") ? "No home set" : "No such home '" + name + "'");
-              }
+                      homes.put(name, PlayerLocation.of(location));
+                      this.setHomes(player, homes);
 
-              homes.remove(name);
-              this.setHomes(player, homes);
+                      if (name.equals("home")) {
+                        Chat.info(
+                            player,
+                            "Home " + (existing ? "updated" : "set") + " to you current location");
+                      } else {
+                        Chat.info(
+                            player, "Home '" + name + "' " + (existing ? "updated" : "created"));
+                      }
+                    }));
 
-              if (name.equals("home")) {
-                Chat.info(player, "Deleted home");
-              } else {
-                Chat.info(player, "Deleted home '" + name + "'");
-              }
-            })
-        .completor(
-            (@NotNull Player player, @NotNull List<String> args) ->
-                this.completeHomes(player, args))
-        .register();
+    CommandBuilder.build(
+        "delhome",
+        (builder) ->
+            builder
+                .usage("/delhome [name]")
+                .description("Delete home")
+                .executor(
+                    (@NotNull Player player, @Nullable String name) -> {
+                      name = name == null ? "home" : name;
+
+                      Map<String, PlayerLocation> homes = this.getHomes(player);
+                      if (homes.isEmpty() || !homes.containsKey(name)) {
+                        throw new CommandError(
+                            name.equals("home") ? "No home set" : "No such home '" + name + "'");
+                      }
+
+                      homes.remove(name);
+                      this.setHomes(player, homes);
+
+                      if (name.equals("home")) {
+                        Chat.info(player, "Deleted home");
+                      } else {
+                        Chat.info(player, "Deleted home '" + name + "'");
+                      }
+                    })
+                .completor(
+                    (@NotNull Player player, @NotNull List<String> args) ->
+                        this.completeHomes(player, args)));
   }
 
   private @NotNull List<String> completeHomes(@NotNull Player player, @NotNull List<String> args) {

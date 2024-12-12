@@ -37,14 +37,16 @@ public class AFK implements Listener, Module {
   public AFK() {
     instance = this;
 
-    CommandBuilder.build("afk")
-        .description("Toggle AFK status")
-        .executor(
-            (@NotNull Player player) -> {
-              PlayerState playerState = this.playerStates.get(player.getUniqueId());
-              playerState.toggleAway();
-            })
-        .register();
+    CommandBuilder.build(
+        "afk",
+        (CommandBuilder builder) -> {
+          builder.description("Toggle AFK status");
+          builder.executor(
+              (@NotNull Player player) -> {
+                PlayerState playerState = this.playerStates.get(player.getUniqueId());
+                playerState.toggleAway();
+              });
+        });
 
     // ensure afk team exists and is empty on startup
     Team afkTeam = this.getAfkTeam();
