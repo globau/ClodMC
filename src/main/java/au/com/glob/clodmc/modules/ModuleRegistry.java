@@ -7,6 +7,7 @@ import au.com.glob.clodmc.modules.gateways.Gateways;
 import au.com.glob.clodmc.modules.interactions.FastLeafDecay;
 import au.com.glob.clodmc.modules.interactions.NamedStorage;
 import au.com.glob.clodmc.modules.interactions.SignedContainers;
+import au.com.glob.clodmc.modules.interactions.VeinMiner;
 import au.com.glob.clodmc.modules.interactions.WaxedItemFrames;
 import au.com.glob.clodmc.modules.interactions.WaxedPressurePlates;
 import au.com.glob.clodmc.modules.inventory.AdminInv;
@@ -32,6 +33,8 @@ import au.com.glob.clodmc.modules.server.ClodServerLinks;
 import au.com.glob.clodmc.modules.server.MOTD;
 import au.com.glob.clodmc.modules.server.RequiredPlugins;
 import au.com.glob.clodmc.util.Logger;
+import io.papermc.paper.plugin.bootstrap.BootstrapContext;
+import io.papermc.paper.plugin.bootstrap.PluginBootstrap;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -39,8 +42,14 @@ import org.bukkit.Bukkit;
 import org.bukkit.event.Listener;
 import org.jetbrains.annotations.NotNull;
 
-public class ModuleRegistry implements Iterable<Module> {
+@SuppressWarnings({"UnstableApiUsage", "unused"})
+public class ModuleRegistry implements Iterable<Module>, PluginBootstrap {
   private final @NotNull Map<Class<? extends Module>, Module> modules = new HashMap<>();
+
+  @Override
+  public void bootstrap(@NotNull BootstrapContext context) {
+    VeinMiner.bootstrap(new BootstrapContextHelper(context));
+  }
 
   public void registerAll() {
     // core - used by other modules
@@ -56,6 +65,7 @@ public class ModuleRegistry implements Iterable<Module> {
     this.register(new FastLeafDecay());
     this.register(new NamedStorage());
     this.register(new SignedContainers());
+    this.register(new VeinMiner());
     this.register(new WaxedItemFrames());
     this.register(new WaxedPressurePlates());
 

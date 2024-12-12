@@ -104,7 +104,9 @@ public class WelcomeBook implements Module, Listener {
 
           A container named in an anvil will display its name when looked at.
 
-          Use wax on an item frame to prevent changes.""");
+          Use wax on an item frame to prevent changes.
+
+          Veinminer enchantment; apply to tool then shift+mine.""");
 
   public WelcomeBook() {
     CommandBuilder.build("welcome")

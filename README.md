@@ -61,3 +61,5 @@ spawn; this can only be crafted by a server operator.
 - clicking on a waxed sign or item frame attached to a container opens the container's inventory
 - spore blossoms are craftable with a big dripleaf and Allium (shapeless)
 - waxing a pressure plate will prevent it from functioning (useful for decorations)
+- "VeinMiner" enchantment; once applied to a tool shift+mine to break all connected blocks of the
+  same type
