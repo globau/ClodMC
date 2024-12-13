@@ -120,7 +120,7 @@ public class VeinMiner implements Module, Listener {
       int damage = damageable.hasDamage() ? damageable.getDamage() : 0;
       int maxDamage =
           damageable.hasMaxDamage() ? damageable.getMaxDamage() : tool.getType().getMaxDurability();
-      if (maxDamage - damage <= 1) {
+      if (maxDamage - damage <= COST) {
         return;
       }
     }
