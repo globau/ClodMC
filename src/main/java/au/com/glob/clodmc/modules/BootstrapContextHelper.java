@@ -14,7 +14,7 @@ import io.papermc.paper.tag.PostFlattenTagRegistrar;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Consumer;
-import net.kyori.adventure.text.minimessage.MiniMessage;
+import net.kyori.adventure.text.Component;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.EquipmentSlotGroup;
 import org.bukkit.inventory.ItemType;
@@ -112,7 +112,8 @@ public class BootstrapContextHelper {
                               (EnchantmentRegistryEntry.@NotNull Builder builder) -> {
                                 if (this.description != null) {
                                   builder.description(
-                                      MiniMessage.miniMessage().deserialize(this.description));
+                                      Component.translatable(
+                                          "enchantment." + this.key.value(), this.description));
                                 }
                                 if (this.supportedItems != null) {
                                   builder.supportedItems(event.getOrCreateTag(this.supportedItems));
