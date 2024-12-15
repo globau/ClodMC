@@ -18,6 +18,7 @@ import net.kyori.adventure.key.Key;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.Registry;
+import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.enchantments.Enchantment;
@@ -79,6 +80,7 @@ public class VeinMiner implements Module, Listener {
   @EventHandler
   public void onBlockBreak(@NotNull BlockBreakEvent event) {
     Player player = event.getPlayer();
+    Block block = event.getBlock();
 
     if (!player.isSneaking()) {
       return;
@@ -86,22 +88,28 @@ public class VeinMiner implements Module, Listener {
 
     // check tool
     ItemStack tool = player.getInventory().getItemInMainHand();
-    if (event.getBlock().getDrops(tool).isEmpty()
-        || !tool.containsEnchantment(this.veinmineEnchantment)) {
+    if (block.getDrops(tool).isEmpty() || !tool.containsEnchantment(this.veinmineEnchantment)) {
       return;
     }
 
     // check cooldown
     if (this.cooldownUUIDs.contains(player.getUniqueId())) {
+      player.playSound(block.getLocation(), Sound.UI_HUD_BUBBLE_POP, 1.0f, 1.0f);
       return;
     }
 
     // break touching blocks
-    this.breakBlocks(event.getBlock(), tool, new HashSet<>(MAX_CHAIN), player);
+    this.breakBlocks(block, tool, new HashSet<>(MAX_CHAIN), player);
 
-    // cooldown
-    this.cooldownUUIDs.add(player.getUniqueId());
-    Schedule.delayed(2 * 20, () -> this.cooldownUUIDs.remove(player.getUniqueId()));
+    // cooldown if it was likely a block was veinmined
+    for (BlockFace face : FACES) {
+      Block touchingBlock = block.getRelative(face);
+      if (touchingBlock.getType().equals(block.getType())) {
+        this.cooldownUUIDs.add(player.getUniqueId());
+        Schedule.delayed(20, () -> this.cooldownUUIDs.remove(player.getUniqueId()));
+        break;
+      }
+    }
   }
 
   private void breakBlocks(
@@ -141,9 +149,11 @@ public class VeinMiner implements Module, Listener {
     ArrayList<BlockFace> shuffledFaces = new ArrayList<>(FACES);
     Collections.shuffle(shuffledFaces);
     for (BlockFace face : shuffledFaces) {
-      Block touchingBlock = block.getRelative(face);
-      if (touchingBlock.getType().equals(marterial) && !processed.contains(touchingBlock)) {
-        Schedule.delayed(DELAY, () -> this.breakBlocks(touchingBlock, tool, processed, player));
+      if (processed.size() <= 6 || Math.random() < 0.75) {
+        Block touchingBlock = block.getRelative(face);
+        if (touchingBlock.getType().equals(marterial) && !processed.contains(touchingBlock)) {
+          Schedule.delayed(DELAY, () -> this.breakBlocks(touchingBlock, tool, processed, player));
+        }
       }
     }
   }
