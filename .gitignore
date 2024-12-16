@@ -3,5 +3,5 @@
 /.idea/
 /build/
 /gradlew.bat
-/local.gradle
+/local.gradle.kts
 __pycache__

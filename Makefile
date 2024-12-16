@@ -1,7 +1,7 @@
 .PHONY: format test
 
 java-files := $(shell find src -name '*.java')
-config-files := $(shell find src -name '*.yml') build.gradle settings.gradle Makefile
+config-files := $(shell find src -name '*.yml') *.gradle.kts Makefile
 version := $(shell src/build/version.py)
 gradle := ./gradlew $(shell ./src/build/gradle-args)
 
