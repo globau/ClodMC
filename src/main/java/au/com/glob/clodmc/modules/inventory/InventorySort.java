@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.StringJoiner;
+import org.bukkit.Material;
 import org.bukkit.MusicInstrument;
 import org.bukkit.Registry;
 import org.bukkit.enchantments.Enchantment;
@@ -97,7 +98,12 @@ public class InventorySort implements Listener, Module {
 
     for (String name : allMaterials) {
       if (!materialOrder.containsKey(name)) {
-        alerts.add("inventory_order.txt: missing: " + name);
+        Material material =
+            Registry.MATERIAL.stream()
+                .filter((Material m) -> m.name().equals(name))
+                .findFirst()
+                .orElseThrow();
+        alerts.add("inventory_order.txt: missing: " + StringUtil.translate(material) + " :" + name);
       }
     }
 
