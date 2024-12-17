@@ -14,7 +14,7 @@ repositories {
 }
 
 dependencies {
-    compileOnly("io.papermc.paper:paper-api:1.21.3-R0.1-SNAPSHOT")
+    compileOnly("io.papermc.paper:paper-api:1.21.4-R0.1-SNAPSHOT")
     compileOnly("com.github.GriefPrevention:GriefPrevention:16.18.4")
     compileOnly("de.bluecolored.bluemap:BlueMapAPI:2.7.2")
     compileOnly("org.jetbrains:annotations:15.0")

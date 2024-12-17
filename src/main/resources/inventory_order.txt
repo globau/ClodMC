@@ -214,6 +214,15 @@ Stripped Pale Oak Wood                   :STRIPPED_PALE_OAK_WOOD
 Pale Oak Boat                            :PALE_OAK_BOAT
 Pale Oak Boat With Chest                 :PALE_OAK_CHEST_BOAT
 
+Resin Clump                              :RESIN_CLUMP
+Block of Resin                           :RESIN_BLOCK
+Resin Brick                              :RESIN_BRICK
+Resin Bricks                             :RESIN_BRICKS
+Resin Brick Stairs                       :RESIN_BRICK_STAIRS
+Resin Brick Slab                         :RESIN_BRICK_SLAB
+Resin Brick Wall                         :RESIN_BRICK_WALL
+Chiseled Resin Bricks                    :CHISELED_RESIN_BRICKS
+
 Spruce Door                              :SPRUCE_DOOR
 Spruce Fence                             :SPRUCE_FENCE
 Spruce Fence Gate                        :SPRUCE_FENCE_GATE
@@ -670,6 +679,8 @@ Azure Bluet                              :AZURE_BLUET
 Blue Orchid                              :BLUE_ORCHID
 Cornflower                               :CORNFLOWER
 Dandelion                                :DANDELION
+Open Eyeblossom                          :OPEN_EYEBLOSSOM
+Closed Eyeblossom                        :CLOSED_EYEBLOSSOM
 Lilac                                    :LILAC
 Lily Of The Valley                       :LILY_OF_THE_VALLEY
 Orange Tulip                             :ORANGE_TULIP
@@ -1477,6 +1488,8 @@ Potted Crimson Roots                     :POTTED_CRIMSON_ROOTS
 Potted Dandelion                         :POTTED_DANDELION
 Potted Dark Oak Sapling                  :POTTED_DARK_OAK_SAPLING
 Potted Dead Bush                         :POTTED_DEAD_BUSH
+Potted Open Eyeblossom                   :POTTED_OPEN_EYEBLOSSOM
+Potted Closed Eyeblossom                 :POTTED_CLOSED_EYEBLOSSOM
 Potted Fern                              :POTTED_FERN
 Potted Flowering Azalea Bush             :POTTED_FLOWERING_AZALEA_BUSH
 Potted Jungle Sapling                    :POTTED_JUNGLE_SAPLING

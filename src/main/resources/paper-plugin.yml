@@ -2,7 +2,7 @@ name: ClodMC
 version: '${version}'
 main: au.com.glob.clodmc.ClodMC
 bootstrapper: au.com.glob.clodmc.modules.ModuleRegistry
-api-version: '1.23'
+api-version: '1.21.4'
 authors: [ glob ]
 dependencies:
   bootstrap:
