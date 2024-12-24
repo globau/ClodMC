@@ -18,7 +18,8 @@ import org.jetbrains.annotations.NotNull;
 public class PreventMobSpawn implements Listener, Module {
   private final @NotNull List<AdminClaim> adminClaims = new ArrayList<>(1);
 
-  public PreventMobSpawn() {
+  @Override
+  public void initialise() {
     for (Claim claim : GriefPrevention.instance.dataStore.getClaims()) {
       if (claim.isAdminClaim()) {
         this.adminClaims.add(new AdminClaim(claim));
