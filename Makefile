@@ -18,4 +18,4 @@ build/format: $(java-files) $(config-files)
 
 test:
 	@for N in src/test/test-*; do $$N || exit 1; done
-	$(gradle) check
+	$(gradle) check --rerun-tasks
