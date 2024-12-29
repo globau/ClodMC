@@ -30,28 +30,44 @@ public class PlayerLocation implements ConfigurationSerializable {
     return new PlayerLocation(location, false);
   }
 
-  public void teleportPlayer(@NotNull Player player) {
-    if (player.isInsideVehicle()) {
-      if (player.getVehicle() instanceof Horse) {
-        Chat.fyi(player, "Dismounting your horse");
-      } else if (player.getVehicle() instanceof Boat) {
-        Chat.fyi(player, "Dismounting your boat");
-      } else {
-        Chat.fyi(player, "Dismounting");
-      }
-    }
+  public void teleportPlayer(@NotNull Player player, @NotNull String reason) {
+    Location currentLoc = player.getLocation();
 
-    Location loc;
+    Location destinationLoc;
     if (player.getGameMode().equals(GameMode.CREATIVE)) {
       player.setFlying(this.isFlying);
-      loc = this.location;
+      destinationLoc = this.location;
     } else {
-      loc = TeleportUtil.getSafePos(this.location);
-      loc.setYaw(this.location.getYaw());
-      loc.setPitch(this.location.getPitch());
+      destinationLoc = TeleportUtil.getSafePos(this.location);
+      destinationLoc.setYaw(this.location.getYaw());
+      destinationLoc.setPitch(this.location.getPitch());
     }
+
+    if (BlockPos.of(currentLoc).equals(BlockPos.of(destinationLoc))) {
+      Chat.fyi(player, "Teleport not required");
+      return;
+    }
+
+    String prefix = "Teleporting you ";
+    if (player.isInsideVehicle()) {
+      if (player.getVehicle() instanceof Horse) {
+        prefix = "Dismounting your horse and teleporting you ";
+      } else if (player.getVehicle() instanceof Boat) {
+        prefix = "Dismounting your boat and teleporting you ";
+      } else {
+        prefix = "Dismounting and teleporting you ";
+      }
+    }
+    Chat.fyi(player, prefix + reason);
+
     player
-        .teleportAsync(loc, PlayerTeleportEvent.TeleportCause.COMMAND)
+        .teleportAsync(destinationLoc, PlayerTeleportEvent.TeleportCause.COMMAND)
+        .thenAccept(
+            (Boolean result) -> {
+              if (result) {
+                TeleportUtil.teleportEffect(currentLoc);
+              }
+            })
         .exceptionally(
             (Throwable ex) -> {
               Chat.error(player, "Teleport failed");

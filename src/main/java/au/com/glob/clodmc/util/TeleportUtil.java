@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Random;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.Particle;
 import org.bukkit.Tag;
 import org.bukkit.World;
 import org.bukkit.block.Block;
@@ -36,6 +37,11 @@ public class TeleportUtil {
     pos.sort(Comparator.comparingInt((Vector3D a) -> a.x * a.x + a.y * a.y + a.z * a.z));
     SHIFT_VECTORS = pos.toArray(new Vector3D[0]);
   }
+
+  private static final org.bukkit.@NotNull Color TELEPORT_COLUR_A =
+      org.bukkit.Color.fromRGB(0x00BFFF);
+  private static final org.bukkit.@NotNull Color TELEPORT_COLUR_B =
+      org.bukkit.Color.fromRGB(0xFFFFFF);
 
   public static @NotNull Location getStandingPos(@NotNull Player player) {
     // player.getLocation() returns the centre of the player; if the player
@@ -217,5 +223,35 @@ public class TeleportUtil {
       }
     }
     return loc;
+  }
+
+  public static void teleportEffect(@NotNull Location loc) {
+    World world = loc.getWorld();
+    if (world == null) {
+      return;
+    }
+    Location bottom = loc.clone();
+    Location top = loc.clone().add(0, 1, 0);
+
+    Particle.DustTransition dustTransition =
+        new Particle.DustTransition(TELEPORT_COLUR_A, TELEPORT_COLUR_B, 1.0F);
+    world.spawnParticle(
+        Particle.DUST_COLOR_TRANSITION,
+        bottom.add(0.5, 0.5, 0.5),
+        10,
+        0.5,
+        1.0,
+        0.5,
+        0.0,
+        dustTransition);
+    world.spawnParticle(
+        Particle.DUST_COLOR_TRANSITION,
+        top.add(0.5, 0.5, 0.5),
+        10,
+        0.5,
+        1.0,
+        0.5,
+        0.0,
+        dustTransition);
   }
 }

@@ -3,7 +3,6 @@ package au.com.glob.clodmc.modules.player;
 import au.com.glob.clodmc.command.CommandBuilder;
 import au.com.glob.clodmc.command.CommandError;
 import au.com.glob.clodmc.modules.Module;
-import au.com.glob.clodmc.util.Chat;
 import au.com.glob.clodmc.util.PlayerDataFile;
 import au.com.glob.clodmc.util.PlayerDataUpdater;
 import au.com.glob.clodmc.util.PlayerLocation;
@@ -29,8 +28,7 @@ public class Back implements Module, Listener {
                   throw new CommandError("No previous location");
                 }
 
-                Chat.fyi(player, "Teleporting you back");
-                location.teleportPlayer(player);
+                location.teleportPlayer(player, "back");
               });
         });
   }

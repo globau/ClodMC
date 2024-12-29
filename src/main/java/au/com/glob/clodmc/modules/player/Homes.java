@@ -39,11 +39,9 @@ public class Homes implements Listener, Module {
                       name.equals("home") ? "No home set" : "No such home '" + name + "'");
                 }
 
-                Chat.fyi(
-                    player,
-                    "Teleporting you " + (name.equals("home") ? "home" : "to '" + name + "'"));
                 PlayerLocation playerLoc = homes.get(name);
-                playerLoc.teleportPlayer(player);
+                playerLoc.teleportPlayer(
+                    player, name.equals("home") ? "home" : "to '" + name + "'");
               });
           builder.completor(
               (@NotNull Player player, @NotNull List<String> args) ->
