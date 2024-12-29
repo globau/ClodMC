@@ -3,9 +3,9 @@ package au.com.glob.clodmc.modules.server;
 import au.com.glob.clodmc.modules.Module;
 import au.com.glob.clodmc.modules.player.OpAlerts;
 import au.com.glob.clodmc.util.Logger;
+import au.com.glob.clodmc.util.StringUtil;
 import java.util.List;
 import java.util.StringJoiner;
-import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -43,6 +43,6 @@ public class RequiredPlugins implements Listener, Module {
     }
 
     event.setResult(PlayerLoginEvent.Result.KICK_OTHER);
-    event.kickMessage(MiniMessage.miniMessage().deserialize("A required plugin is not loaded"));
+    event.kickMessage(StringUtil.asComponent("A required plugin is not loaded"));
   }
 }

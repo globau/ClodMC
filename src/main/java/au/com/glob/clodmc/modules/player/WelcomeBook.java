@@ -6,9 +6,9 @@ import au.com.glob.clodmc.command.EitherCommandSender;
 import au.com.glob.clodmc.modules.Module;
 import au.com.glob.clodmc.util.Chat;
 import au.com.glob.clodmc.util.Schedule;
+import au.com.glob.clodmc.util.StringUtil;
 import java.util.List;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
@@ -147,7 +147,7 @@ public class WelcomeBook implements Module, Listener {
 
     BookMeta.BookMetaBuilder builder = bookMeta.toBuilder();
     for (String page : PAGES) {
-      builder.addPage(MiniMessage.miniMessage().deserialize(page));
+      builder.addPage(StringUtil.asComponent(page));
     }
     builder.title(Component.text(TITLE)).author(Component.text(AUTHOR));
 

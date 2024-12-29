@@ -103,7 +103,7 @@ public class InventorySort implements Listener, Module {
                 .filter((Material m) -> m.name().equals(name))
                 .findFirst()
                 .orElseThrow();
-        alerts.add("inventory_order.txt: missing: " + StringUtil.plainText(material) + " :" + name);
+        alerts.add("inventory_order.txt: missing: " + StringUtil.asText(material) + " :" + name);
       }
     }
 
@@ -212,7 +212,7 @@ public class InventorySort implements Listener, Module {
       this.materialIndex = Objects.requireNonNullElse(index, 0);
 
       // visible in-game name
-      this.name = StringUtil.plainText(itemStack);
+      this.name = StringUtil.asText(itemStack);
 
       ItemMeta meta = itemStack.getItemMeta();
       if (meta != null) {
@@ -222,14 +222,14 @@ public class InventorySort implements Listener, Module {
           // enchantment storage (eg. book)
           for (Map.Entry<Enchantment, Integer> entry :
               enchantmentStorageMeta.getStoredEnchants().entrySet()) {
-            extraJoiner.add(StringUtil.plainText(entry.getKey()));
+            extraJoiner.add(StringUtil.asText(entry.getKey()));
             extraJoiner.add(String.valueOf(entry.getValue()));
           }
         } else if (meta instanceof MusicInstrumentMeta musicInstrumentMeta) {
           // goat horns
           MusicInstrument instrument = musicInstrumentMeta.getInstrument();
           if (instrument != null) {
-            extraJoiner.add(StringUtil.plainText(instrument));
+            extraJoiner.add(StringUtil.asText(instrument));
           }
         }
 

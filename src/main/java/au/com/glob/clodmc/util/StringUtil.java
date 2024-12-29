@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import net.kyori.adventure.translation.GlobalTranslator;
 import net.kyori.adventure.translation.Translatable;
@@ -62,13 +63,17 @@ public class StringUtil {
     return titleCase.toString().trim();
   }
 
-  public static @NotNull String plainText(@NotNull Translatable component) {
-    return plainText(
+  public static @NotNull String asText(@NotNull Translatable component) {
+    return asText(
         GlobalTranslator.render(
             Component.translatable(component.translationKey()), Locale.ENGLISH));
   }
 
-  public static @NotNull String plainText(@NotNull Component component) {
+  public static @NotNull String asText(@NotNull Component component) {
     return PlainTextComponentSerializer.plainText().serialize(component);
+  }
+
+  public static @NotNull Component asComponent(@NotNull String value) {
+    return MiniMessage.miniMessage().deserialize(value);
   }
 }

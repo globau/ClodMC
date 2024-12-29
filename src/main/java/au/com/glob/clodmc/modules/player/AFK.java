@@ -4,10 +4,10 @@ import au.com.glob.clodmc.command.CommandBuilder;
 import au.com.glob.clodmc.modules.Module;
 import au.com.glob.clodmc.util.Chat;
 import au.com.glob.clodmc.util.Schedule;
+import au.com.glob.clodmc.util.StringUtil;
 import io.papermc.paper.event.player.AsyncChatEvent;
 import java.util.HashMap;
 import java.util.UUID;
-import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -60,7 +60,7 @@ public class AFK implements Listener, Module {
       team = scoreboard.registerNewTeam("AFK");
       team.setOption(Team.Option.NAME_TAG_VISIBILITY, Team.OptionStatus.ALWAYS);
       team.setOption(Team.Option.COLLISION_RULE, Team.OptionStatus.ALWAYS);
-      team.suffix(MiniMessage.miniMessage().deserialize(" <grey>(afk)</grey>"));
+      team.suffix(StringUtil.asComponent(" <grey>(afk)</grey>"));
     }
     return team;
   }
