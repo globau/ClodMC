@@ -5,6 +5,7 @@ import au.com.glob.clodmc.util.Chat;
 import au.com.glob.clodmc.util.Logger;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.function.Consumer;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -110,6 +111,9 @@ public class CommandBuilder {
               @NotNull String commandLabel,
               String @NotNull [] args) {
             CommandBuilder that = CommandBuilder.this;
+            if (that.executor == null) {
+              return false;
+            }
             try {
               switch (that.executor) {
                 case ExecutorP executorP -> executorP.accept(that.toPlayer(sender));
@@ -135,7 +139,7 @@ public class CommandBuilder {
             } catch (CommandUsageError e) {
               Chat.error(sender, "usage: " + this.usageMessage);
             } catch (CommandError e) {
-              Chat.error(sender, e.getMessage());
+              Chat.error(sender, Objects.requireNonNullElse(e.getMessage(), "Internal Error"));
             } catch (Throwable e) {
               String message =
                   e.getMessage() == null ? e.getClass().getSimpleName() : e.getMessage();

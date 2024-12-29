@@ -12,7 +12,7 @@ import org.jetbrains.annotations.NotNull;
 
 /** Collect startup alerts and send them to the first operator that logs in */
 public class OpAlerts implements Module, Listener {
-  @SuppressWarnings("NotNullFieldNotInitialized")
+  @SuppressWarnings({"NotNullFieldNotInitialized", "NullAway.Init"})
   private static @NotNull OpAlerts instance;
 
   private final @NotNull List<String> alerts = new ArrayList<>();

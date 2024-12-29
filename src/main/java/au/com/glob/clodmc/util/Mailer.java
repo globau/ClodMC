@@ -6,10 +6,10 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.Socket;
-import java.text.DateFormat;
-import java.util.Date;
-import java.util.Locale;
+import java.nio.charset.StandardCharsets;
+import java.time.format.DateTimeFormatter;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /** email helpers */
 public class Mailer {
@@ -21,7 +21,7 @@ public class Mailer {
   private Mailer() {}
 
   public static class MailerError extends Exception {
-    public MailerError(@NotNull String message) {
+    public MailerError(@Nullable String message) {
       super(message);
     }
   }
@@ -51,7 +51,7 @@ public class Mailer {
         smtp.sendAndWait("MAIL FROM: " + SENDER_ADDR, "250 ");
         smtp.sendAndWait("RCPT TO: " + recipient, "250 ");
         smtp.sendAndWait("DATA", "354 ");
-        smtp.sendLine("Date: " + smtp.currentDate());
+        smtp.sendLine("Date: " + TimeUtil.now().format(DateTimeFormatter.RFC_1123_DATE_TIME));
         smtp.sendLine("From: " + SENDER_NAME + " <" + SENDER_ADDR + ">");
         smtp.sendLine("To: " + recipient);
         smtp.sendLine("Subject: " + subject);
@@ -67,20 +67,18 @@ public class Mailer {
   }
 
   private static class SMTP implements Closeable {
-    private final @NotNull DateFormat df = DateFormat.getDateInstance(DateFormat.FULL, Locale.US);
     private final @NotNull Socket socket;
     private final @NotNull BufferedReader inStream;
     private final @NotNull DataOutputStream outStream;
 
+    @SuppressWarnings("AddressSelection")
     SMTP() throws IOException {
       this.socket = new Socket(HOSTNAME, 25);
       this.socket.setSoTimeout(5000);
-      this.inStream = new BufferedReader(new InputStreamReader(this.socket.getInputStream()));
+      this.inStream =
+          new BufferedReader(
+              new InputStreamReader(this.socket.getInputStream(), StandardCharsets.UTF_8));
       this.outStream = new DataOutputStream(this.socket.getOutputStream());
-    }
-
-    public @NotNull String currentDate() {
-      return this.df.format(new Date());
     }
 
     public void sendLine(@NotNull String line) throws IOException {

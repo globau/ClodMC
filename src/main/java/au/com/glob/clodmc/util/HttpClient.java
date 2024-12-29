@@ -7,6 +7,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URI;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.Map;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -78,7 +79,7 @@ public class HttpClient {
       stream = connection.getErrorStream();
     }
     if (stream != null) {
-      return new InputStreamReader(stream);
+      return new InputStreamReader(stream, StandardCharsets.UTF_8);
     }
     return null;
   }

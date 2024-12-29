@@ -9,6 +9,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -57,7 +58,8 @@ public class InventorySort implements Listener, Module {
     if (resourceStream == null) {
       throw new RuntimeException("failed to read");
     }
-    try (BufferedReader reader = new BufferedReader(new InputStreamReader(resourceStream))) {
+    try (BufferedReader reader =
+        new BufferedReader(new InputStreamReader(resourceStream, StandardCharsets.UTF_8))) {
       String line;
       int lineNo = 0;
       while ((line = reader.readLine()) != null) {
@@ -65,7 +67,7 @@ public class InventorySort implements Listener, Module {
         if (line.isBlank() || line.startsWith("#")) {
           continue;
         }
-        String[] parts = line.split(":");
+        String[] parts = line.split(":", -1);
         if (parts.length != 2) {
           alerts.add("inventory_order.txt: invalid line " + lineNo);
           continue;

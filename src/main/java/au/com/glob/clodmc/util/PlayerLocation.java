@@ -50,7 +50,13 @@ public class PlayerLocation implements ConfigurationSerializable {
       loc.setYaw(this.location.getYaw());
       loc.setPitch(this.location.getPitch());
     }
-    player.teleportAsync(loc, PlayerTeleportEvent.TeleportCause.COMMAND);
+    player
+        .teleportAsync(loc, PlayerTeleportEvent.TeleportCause.COMMAND)
+        .exceptionally(
+            (Throwable ex) -> {
+              Chat.error(player, "Teleport failed");
+              return null;
+            });
   }
 
   @Override

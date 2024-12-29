@@ -8,6 +8,7 @@ import au.com.glob.clodmc.modules.Module;
 import au.com.glob.clodmc.util.Chat;
 import au.com.glob.clodmc.util.StringUtil;
 import java.util.List;
+import java.util.Locale;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -77,7 +78,8 @@ public class GameMode implements Module {
                 // player name
                 return Bukkit.getOnlinePlayers().stream()
                     .map(Player::getName)
-                    .filter((String name) -> name.toLowerCase().startsWith(args.get(1)))
+                    .filter(
+                        (String name) -> name.toLowerCase(Locale.ENGLISH).startsWith(args.get(1)))
                     .toList();
               });
         });

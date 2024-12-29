@@ -14,7 +14,7 @@ import org.jetbrains.annotations.NotNull;
 import vendored.com.jeff_media.customblockdata.CustomBlockData;
 
 public final class ClodMC extends JavaPlugin implements Listener {
-  @SuppressWarnings("NotNullFieldNotInitialized")
+  @SuppressWarnings({"NotNullFieldNotInitialized", "NullAway.Init"})
   public static @NotNull ClodMC instance;
 
   private final @NotNull ModuleRegistry moduleRegistry = new ModuleRegistry();

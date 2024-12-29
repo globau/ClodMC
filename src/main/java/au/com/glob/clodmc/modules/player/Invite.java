@@ -23,7 +23,9 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
 import java.util.UUID;
 import org.bukkit.Bukkit;
 import org.bukkit.Statistic;
@@ -82,7 +84,7 @@ public class Invite implements Module {
 
                 // don't allow adding by uuid; this ensure we don't have player name conflicts
                 // as we're running floodgate without a prefix
-                if (isValidUUID(name.toLowerCase())) {
+                if (isValidUUID(name.toLowerCase(Locale.ENGLISH))) {
                   throw new CommandError("Invalid player name");
                 }
 
@@ -90,10 +92,9 @@ public class Invite implements Module {
                     () -> {
                       try {
                         GameType gameType = GameType.of(type);
-                        assert gameType != null;
 
                         // check mcprofile.io
-                        UUID uuid = this.lookupUUID(gameType, name);
+                        UUID uuid = this.lookupUUID(Objects.requireNonNull(gameType), name);
                         if (uuid == null) {
                           throw new CommandError("Failed to find player with name: " + name);
                         }
@@ -142,11 +143,17 @@ public class Invite implements Module {
                                         + " added to the whitelist by "
                                         + sender.getName());
                               } catch (CommandError e) {
-                                Chat.error(sender, e.getMessage());
+                                Chat.error(
+                                    sender,
+                                    Objects.requireNonNullElse(
+                                        e.getMessage(), "Failed to whitelist player"));
                               }
                             });
                       } catch (CommandError e) {
-                        Chat.error(sender, e.getMessage());
+                        Chat.error(
+                            sender,
+                            Objects.requireNonNullElse(
+                                e.getMessage(), "Failed to whitelist player"));
                       }
                     });
               });

@@ -17,6 +17,7 @@ public class BlueMapUpdateEvent extends Event {
     return this.sender;
   }
 
+  @Override
   public @NotNull HandlerList getHandlers() {
     return handlers;
   }

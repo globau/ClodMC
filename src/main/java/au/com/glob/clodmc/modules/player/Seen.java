@@ -11,6 +11,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.UUID;
 import org.bukkit.Bukkit;
@@ -85,7 +86,8 @@ public class Seen implements Module, Listener {
                       .sorted(String.CASE_INSENSITIVE_ORDER)
                       .filter(
                           (String name) ->
-                              name.toLowerCase().startsWith(args.getFirst().toLowerCase()))
+                              name.toLowerCase(Locale.ENGLISH)
+                                  .startsWith(args.getFirst().toLowerCase(Locale.ENGLISH)))
                       .toList());
         });
   }

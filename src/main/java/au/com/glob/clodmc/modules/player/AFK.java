@@ -26,7 +26,7 @@ import org.jetbrains.annotations.NotNull;
 
 /** Automatic and manual afk; players are visibly afk in the tab-list */
 public class AFK implements Listener, Module {
-  @SuppressWarnings("NotNullFieldNotInitialized")
+  @SuppressWarnings({"NotNullFieldNotInitialized", "NullAway.Init"})
   public static @NotNull AFK instance;
 
   private static final int IDLE_TIME = 300; // seconds
@@ -44,7 +44,9 @@ public class AFK implements Listener, Module {
           builder.executor(
               (@NotNull Player player) -> {
                 PlayerState playerState = this.playerStates.get(player.getUniqueId());
-                playerState.toggleAway();
+                if (playerState != null) {
+                  playerState.toggleAway();
+                }
               });
         });
 
@@ -85,6 +87,13 @@ public class AFK implements Listener, Module {
 
   // events
 
+  private void onAction(@NotNull Player player) {
+    PlayerState playerState = this.playerStates.get(player.getUniqueId());
+    if (playerState != null) {
+      playerState.onAction();
+    }
+  }
+
   @EventHandler
   public void onPlayerJoin(@NotNull PlayerJoinEvent event) {
     PlayerState playerState = new PlayerState(event.getPlayer());
@@ -94,27 +103,25 @@ public class AFK implements Listener, Module {
 
   @EventHandler
   public void onPlayerQuit(@NotNull PlayerQuitEvent event) {
-    PlayerState playerState = this.playerStates.get(event.getPlayer().getUniqueId());
-    playerState.setBack(false);
-    this.playerStates.remove(event.getPlayer().getUniqueId());
+    this.onAction(event.getPlayer());
   }
 
   @EventHandler
   public void onAsyncChat(@NotNull AsyncChatEvent event) {
-    Schedule.nextTick(() -> AFK.this.playerStates.get(event.getPlayer().getUniqueId()).onAction());
+    Schedule.nextTick(() -> AFK.this.onAction(event.getPlayer()));
   }
 
   @EventHandler
   public void onPlayerMove(@NotNull PlayerMoveEvent event) {
     if (event.hasChangedBlock()) {
-      this.playerStates.get(event.getPlayer().getUniqueId()).onAction();
+      this.onAction(event.getPlayer());
     }
   }
 
   @EventHandler
   public void onEntityDamageByEntity(@NotNull EntityDamageByEntityEvent event) {
     if (event.getDamager() instanceof Player player) {
-      this.playerStates.get(player.getUniqueId()).onAction();
+      this.onAction(player);
     }
   }
 
@@ -123,22 +130,22 @@ public class AFK implements Listener, Module {
     if (event.getMessage().equals("/afk") || event.getMessage().startsWith("/afk ")) {
       return;
     }
-    this.playerStates.get(event.getPlayer().getUniqueId()).onAction();
+    this.onAction(event.getPlayer());
   }
 
   @EventHandler
   public void onPlayerInteract(@NotNull PlayerInteractEvent event) {
-    this.playerStates.get(event.getPlayer().getUniqueId()).onAction();
+    this.onAction(event.getPlayer());
   }
 
   @EventHandler
   public void onBlockPlace(@NotNull BlockPlaceEvent event) {
-    this.playerStates.get(event.getPlayer().getUniqueId()).onAction();
+    this.onAction(event.getPlayer());
   }
 
   @EventHandler
   public void onBlockBreak(@NotNull BlockBreakEvent event) {
-    this.playerStates.get(event.getPlayer().getUniqueId()).onAction();
+    this.onAction(event.getPlayer());
   }
 
   private static final class PlayerState {

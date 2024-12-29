@@ -26,6 +26,7 @@ import org.jetbrains.annotations.NotNull;
 public class WaxedItemFrames implements Module, Listener {
   private static final @NotNull NamespacedKey WAXED_KEY = new NamespacedKey("clod-mc", "waxed");
 
+  @SuppressWarnings("MissingCasesInEnumSwitch")
   @EventHandler
   public void onPlayerInteractEntity(@NotNull PlayerInteractEntityEvent event) {
     if (!(event.getRightClicked() instanceof ItemFrame itemFrame)) {

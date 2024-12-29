@@ -20,6 +20,7 @@ import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
@@ -50,8 +51,7 @@ public class GatewaysAddon extends BlueMapAddon {
       Files.createDirectories(gatewayFilePath.getParent());
       try (OutputStream out = Files.newOutputStream(gatewayFilePath)) {
         InputStream svgStream = ClodMC.instance.getResource(MARKER_FILENAME);
-        assert svgStream != null;
-        svgStream.transferTo(out);
+        Objects.requireNonNull(svgStream).transferTo(out);
       }
     } catch (IOException e) {
       Logger.error("failed to create " + gatewayFilePath + ": " + e);
@@ -75,8 +75,7 @@ public class GatewaysAddon extends BlueMapAddon {
       id = id + (seenColours.contains(id) ? "b" : "a");
       seenColours.add(id);
 
-      this.markerSets
-          .get(anchorBlock.getBlockPos().getWorld())
+      Objects.requireNonNull(this.markerSets.get(anchorBlock.getBlockPos().getWorld()))
           .getMarkers()
           .put(
               id,

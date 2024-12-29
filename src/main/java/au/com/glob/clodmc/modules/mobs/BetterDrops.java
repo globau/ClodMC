@@ -10,6 +10,7 @@ import org.jetbrains.annotations.NotNull;
 
 /** Improve the drop rates of selected entities */
 public class BetterDrops implements Listener, Module {
+  @SuppressWarnings("MissingCasesInEnumSwitch")
   @EventHandler
   public void onEntityDeath(@NotNull EntityDeathEvent event) {
     // adjust drops for mobs killed by players

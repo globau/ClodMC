@@ -8,6 +8,7 @@ import au.com.glob.clodmc.util.Chat;
 import au.com.glob.clodmc.util.Schedule;
 import au.com.glob.clodmc.util.StringUtil;
 import java.util.List;
+import java.util.Locale;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -129,7 +130,8 @@ public class WelcomeBook implements Module, Listener {
                       .map(Player::getName)
                       .filter(
                           (String name) ->
-                              name.toLowerCase().startsWith(args.getFirst().toLowerCase()))
+                              name.toLowerCase(Locale.ENGLISH)
+                                  .startsWith(args.getFirst().toLowerCase(Locale.ENGLISH)))
                       .toList());
         });
   }

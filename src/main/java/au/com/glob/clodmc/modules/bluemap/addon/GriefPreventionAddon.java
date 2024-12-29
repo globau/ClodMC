@@ -14,6 +14,7 @@ import de.bluecolored.bluemap.api.math.Color;
 import de.bluecolored.bluemap.api.math.Shape;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import me.ryanhamshire.GriefPrevention.Claim;
 import me.ryanhamshire.GriefPrevention.GriefPrevention;
 import me.ryanhamshire.GriefPrevention.events.ClaimChangeEvent;
@@ -64,8 +65,7 @@ public class GriefPreventionAddon extends BlueMapAddon implements Listener {
               new Vector2d(greaterCorner.getX(), greaterCorner.getZ()),
               new Vector2d(lesserCorner.getX(), greaterCorner.getZ()));
 
-      this.markerSets
-          .get(world)
+      Objects.requireNonNull(this.markerSets.get(world))
           .getMarkers()
           .put(
               "claim-" + claim.getID(),

@@ -12,6 +12,7 @@ import io.papermc.paper.registry.event.RegistryFreezeEvent;
 import io.papermc.paper.registry.tag.TagKey;
 import io.papermc.paper.tag.PostFlattenTagRegistrar;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import java.util.function.Consumer;
 import net.kyori.adventure.text.Component;
@@ -146,7 +147,7 @@ public class BootstrapContextHelper {
             (ReloadableRegistrarEvent<@NotNull PostFlattenTagRegistrar<Enchantment>> event) -> {
               PostFlattenTagRegistrar<Enchantment> registrar = event.registrar();
               Set<@NotNull TypedKey<Enchantment>> keySet = Set.of(this.key);
-              for (TagKey<Enchantment> tag : this.tags) {
+              for (TagKey<Enchantment> tag : Objects.requireNonNull(this.tags)) {
                 registrar.addToTag(tag, keySet);
               }
             });

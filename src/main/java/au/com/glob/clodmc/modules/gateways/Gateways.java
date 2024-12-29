@@ -14,6 +14,7 @@ import au.com.glob.clodmc.util.PlayerDataFile;
 import au.com.glob.clodmc.util.PlayerDataUpdater;
 import au.com.glob.clodmc.util.StringUtil;
 import au.com.glob.clodmc.util.TeleportUtil;
+import au.com.glob.clodmc.util.TimeUtil;
 import java.io.File;
 import java.io.IOException;
 import java.time.Duration;
@@ -116,8 +117,10 @@ public class Gateways implements Module, Listener {
         this.instances.put(anchorBlock.blockPos, anchorBlock);
         if (connections.containsKey(anchorBlock.networkId)) {
           AnchorBlock otherAnchorBlock = this.instances.get(connections.get(anchorBlock.networkId));
-          anchorBlock.connectedTo = otherAnchorBlock;
-          otherAnchorBlock.connectedTo = anchorBlock;
+          if (otherAnchorBlock != null) {
+            anchorBlock.connectedTo = otherAnchorBlock;
+            otherAnchorBlock.connectedTo = anchorBlock;
+          }
         } else {
           connections.put(anchorBlock.networkId, anchorBlock.blockPos);
         }
@@ -334,10 +337,10 @@ public class Gateways implements Module, Listener {
 
       // cooldown
       PlayerDataFile playerConfig = PlayerDataFile.of(player);
-      LocalDateTime now = LocalDateTime.now();
+      LocalDateTime now = TimeUtil.now();
       LocalDateTime lastRandomTeleport = playerConfig.getDateTime("tpr");
       if (lastRandomTeleport != null) {
-        long secondsSinceRandomTeleport = Duration.between(lastRandomTeleport, now).getSeconds();
+        long secondsSinceRandomTeleport = Duration.between(lastRandomTeleport, now).toSeconds();
         if (secondsSinceRandomTeleport < RANDOM_TP_COOLDOWN) {
           this.ignore.put(player, anchorBlock.blockPos.up());
           Chat.warning(
@@ -442,6 +445,11 @@ public class Gateways implements Module, Listener {
                     .getWorld()
                     .playEffect(player.getLocation(), Effect.ENDER_SIGNAL, 0);
               }
+            })
+        .exceptionally(
+            (Throwable ex) -> {
+              Chat.error(player, "Teleport failed");
+              return null;
             });
   }
 

@@ -38,6 +38,7 @@ import io.papermc.paper.plugin.bootstrap.PluginBootstrap;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Objects;
 import org.bukkit.Bukkit;
 import org.bukkit.event.Listener;
 import org.jetbrains.annotations.NotNull;
@@ -130,7 +131,6 @@ public class ModuleRegistry implements Iterable<Module>, PluginBootstrap {
   @SuppressWarnings("unchecked")
   public @NotNull <T extends Module> T get(@NotNull Class<T> moduleClass) {
     Module module = this.modules.get(moduleClass);
-    assert module != null;
-    return (T) module;
+    return Objects.requireNonNull((T) module);
   }
 }

@@ -4,6 +4,7 @@ import au.com.glob.clodmc.util.StringUtil;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import org.bukkit.Material;
@@ -79,8 +80,7 @@ public class AnchorItem {
 
   protected static @Nullable String getName(@NotNull ItemStack item) {
     Component displayName = item.getItemMeta().displayName();
-    assert displayName != null;
-    String plainTextName = StringUtil.asText(displayName);
+    String plainTextName = StringUtil.asText(Objects.requireNonNull(displayName));
     return plainTextName.equals(DEFAULT_ANCHOR_NAME) ? null : plainTextName;
   }
 
@@ -109,7 +109,6 @@ public class AnchorItem {
     ItemMeta meta = anchorItem.getItemMeta();
     Integer networkIdBoxed =
         meta.getPersistentDataContainer().get(NETWORK_KEY, PersistentDataType.INTEGER);
-    assert networkIdBoxed != null;
-    setMeta(anchorItem, networkIdBoxed, null, null);
+    setMeta(anchorItem, Objects.requireNonNull(networkIdBoxed), null, null);
   }
 }

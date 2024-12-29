@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.bukkit.Bukkit;
@@ -171,8 +172,8 @@ public class OfflineMessages implements Module, Listener {
     public static @NotNull Message deserialize(@NotNull Map<String, Object> args) {
       return new Message(
           NumberConversions.toLong(args.get("timestamp")),
-          (String) args.get("sender"),
-          (String) args.get("message"));
+          Objects.requireNonNull((String) args.get("sender")),
+          Objects.requireNonNull((String) args.get("message")));
     }
   }
 }

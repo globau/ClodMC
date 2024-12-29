@@ -110,7 +110,7 @@ public class AnchorBlock implements ConfigurationSerializable {
     // get top and bottom blocks for the player's location
     // snapped to 90 degrees of rotation
     Location bottomLoc = this.blockPos.asLocation().add(0, 1, 0);
-    bottomLoc.setYaw(Math.round(player.getLocation().getYaw() / 90.0) * 90);
+    bottomLoc.setYaw((float) Math.round(player.getLocation().getYaw() / 90.0) * 90);
     bottomLoc.setPitch(player.getLocation().getPitch());
     Location topLoc = bottomLoc.clone().add(0, 1, 0);
 

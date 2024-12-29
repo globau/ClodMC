@@ -27,6 +27,7 @@ public class BlockPos {
   }
 
   @Override
+  @SuppressWarnings("EqualsGetClass")
   public boolean equals(@Nullable Object other) {
     if (this == other) {
       return true;

@@ -208,7 +208,10 @@ public class TeleportUtil {
       Random rand = new Random();
       double angle = rand.nextDouble() * 2 * Math.PI;
       double distance = rand.nextDouble() * randomRadius;
-      loc.add(Math.round(distance + Math.cos(angle)), 0, Math.round(distance + Math.sin(angle)));
+      loc.add(
+          (double) Math.round(distance + Math.cos(angle)),
+          0,
+          (double) Math.round(distance + Math.sin(angle)));
       if (!isUnsafe(loc.getBlock())) {
         break;
       }

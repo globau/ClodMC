@@ -1,9 +1,12 @@
+import net.ltgt.gradle.errorprone.CheckSeverity
+import net.ltgt.gradle.errorprone.errorprone
 import java.io.BufferedReader
 
 plugins {
     id("java-library")
     id("com.diffplug.spotless") version "6.25.0"
     id("checkstyle")
+    id("net.ltgt.errorprone") version "4.1.0"
 }
 
 repositories {
@@ -18,6 +21,9 @@ dependencies {
     compileOnly("com.github.GriefPrevention:GriefPrevention:16.18.4")
     compileOnly("de.bluecolored.bluemap:BlueMapAPI:2.7.2")
     compileOnly("org.jetbrains:annotations:15.0")
+    errorprone("com.uber.nullaway:nullaway:0.12.2")
+    api("org.jetbrains:annotations:15.0")
+    errorprone("com.google.errorprone:error_prone_core:2.36.0")
 }
 
 group = "au.com.glob"
@@ -39,6 +45,10 @@ java {
 tasks.withType<JavaCompile>().configureEach {
     options.encoding = "UTF-8"
     options.compilerArgs.add("-Xlint:deprecation")
+
+    options.errorprone.excludedPaths.set(".*/vendored/.*")
+    options.errorprone.check("NullAway", CheckSeverity.ERROR)
+    options.errorprone.option("NullAway:AnnotatedPackages", "au.com.glob.clodmc")
 }
 
 checkstyle {

@@ -54,10 +54,10 @@ public class StringUtil {
 
   public static @NotNull String toTitleCase(@NotNull String value) {
     StringBuilder titleCase = new StringBuilder();
-    for (String word : value.split("\\s+")) {
+    for (String word : value.split("\\s+", -1)) {
       titleCase
           .append(Character.toUpperCase(word.charAt(0)))
-          .append(word.substring(1).toLowerCase())
+          .append(word.substring(1).toLowerCase(Locale.ENGLISH))
           .append(" ");
     }
     return titleCase.toString().trim();
