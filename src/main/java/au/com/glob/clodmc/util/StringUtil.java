@@ -62,13 +62,13 @@ public class StringUtil {
     return titleCase.toString().trim();
   }
 
-  public static @NotNull String translate(@NotNull Translatable component) {
-    return translate(
+  public static @NotNull String plainText(@NotNull Translatable component) {
+    return plainText(
         GlobalTranslator.render(
             Component.translatable(component.translationKey()), Locale.ENGLISH));
   }
 
-  public static @NotNull String translate(@NotNull Component component) {
+  public static @NotNull String plainText(@NotNull Component component) {
     return PlainTextComponentSerializer.plainText().serialize(component);
   }
 }

@@ -80,7 +80,7 @@ public class AnchorItem {
   protected static @Nullable String getName(@NotNull ItemStack item) {
     Component displayName = item.getItemMeta().displayName();
     assert displayName != null;
-    String plainTextName = StringUtil.translate(displayName);
+    String plainTextName = StringUtil.plainText(displayName);
     return plainTextName.equals(DEFAULT_ANCHOR_NAME) ? null : plainTextName;
   }
 

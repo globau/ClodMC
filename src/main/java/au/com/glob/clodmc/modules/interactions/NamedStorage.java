@@ -28,7 +28,7 @@ public class NamedStorage implements Module, Listener {
       Component name = container.customName();
       if (name != null) {
         player.sendActionBar(
-            MiniMessage.miniMessage().deserialize("<yellow>" + StringUtil.translate(name)));
+            MiniMessage.miniMessage().deserialize("<yellow>" + StringUtil.plainText(name)));
       }
     }
   }
