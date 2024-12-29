@@ -1,0 +1,23 @@
+name: test
+on: push
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+
+      - name: jdk
+        uses: actions/setup-java@v4
+        with:
+          distribution: microsoft
+          java-version: 21
+
+      - name: verify gradle wrapper
+        uses: gradle/wrapper-validation-action@v2
+
+      - name: setup gradlew
+        run: ./gradlew --version
+
+      - name: test
+        run: make test
