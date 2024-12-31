@@ -94,7 +94,7 @@ public class VeinMiner implements Module, Listener {
 
     // check cooldown
     if (this.cooldownUUIDs.contains(player.getUniqueId())) {
-      player.playSound(block.getLocation(), Sound.UI_HUD_BUBBLE_POP, 1.0f, 1.0f);
+      player.playSound(player.getLocation(), Sound.UI_HUD_BUBBLE_POP, 1.0f, 1.0f);
       return;
     }
 
