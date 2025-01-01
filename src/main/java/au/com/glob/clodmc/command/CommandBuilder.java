@@ -166,6 +166,9 @@ public class CommandBuilder {
             };
           }
         };
+    if (this.requiresOp) {
+      command.setPermission("op");
+    }
 
     ClodMC.instance.getServer().getCommandMap().register("clod-mc", command);
   }

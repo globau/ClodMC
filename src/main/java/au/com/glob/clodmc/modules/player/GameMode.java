@@ -25,7 +25,8 @@ public class GameMode implements Module {
         (CommandBuilder builder) -> {
           builder
               .usage("/gamemode <survival|creative|spectator> [player]")
-              .description("Change player's Game Mode");
+              .description("Change player's Game Mode")
+              .requiresOp();
           builder.executor(
               (@NotNull EitherCommandSender sender,
                   @Nullable String mode,
