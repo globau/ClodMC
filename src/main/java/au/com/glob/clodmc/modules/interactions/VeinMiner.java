@@ -6,6 +6,8 @@ import au.com.glob.clodmc.util.Schedule;
 import io.papermc.paper.registry.RegistryAccess;
 import io.papermc.paper.registry.RegistryKey;
 import io.papermc.paper.registry.TypedKey;
+import io.papermc.paper.registry.data.EnchantmentRegistryEntry;
+import io.papermc.paper.registry.event.RegistryFreezeEvent;
 import io.papermc.paper.registry.keys.tags.EnchantmentTagKeys;
 import io.papermc.paper.registry.keys.tags.ItemTypeTagKeys;
 import java.util.ArrayList;
@@ -15,9 +17,9 @@ import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 import net.kyori.adventure.key.Key;
+import net.kyori.adventure.text.Component;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
-import org.bukkit.Registry;
 import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -55,26 +57,29 @@ public class VeinMiner implements Module, Listener {
   public static void bootstrap(@NotNull BootstrapContextHelper context) {
     context.enchantment(
         VEINMINE_KEY,
-        (BootstrapContextHelper.EnchantmentBuilder builder) ->
+        List.of(
+            EnchantmentTagKeys.TRADEABLE,
+            EnchantmentTagKeys.NON_TREASURE,
+            EnchantmentTagKeys.NON_TREASURE),
+        (RegistryFreezeEvent<Enchantment, EnchantmentRegistryEntry.@NotNull Builder> event,
+            EnchantmentRegistryEntry.Builder builder) ->
             builder
-                .description("Veinmine")
-                .supportedItems(ItemTypeTagKeys.ENCHANTABLE_MINING)
+                .description(
+                    Component.translatable("enchantment." + VEINMINE_KEY.value(), "Veinmine"))
+                .supportedItems(event.getOrCreateTag(ItemTypeTagKeys.ENCHANTABLE_MINING))
                 .weight(1)
                 .maxLevel(1)
-                .cost(15, 65)
+                .minimumCost(EnchantmentRegistryEntry.EnchantmentCost.of(15, 0))
+                .maximumCost(EnchantmentRegistryEntry.EnchantmentCost.of(65, 0))
                 .anvilCost(1)
-                .activeSlot(EquipmentSlotGroup.MAINHAND)
-                .tags(
-                    List.of(
-                        EnchantmentTagKeys.TRADEABLE,
-                        EnchantmentTagKeys.NON_TREASURE,
-                        EnchantmentTagKeys.NON_TREASURE)));
+                .activeSlots(EquipmentSlotGroup.MAINHAND));
   }
 
   public VeinMiner() {
-    Registry<Enchantment> enchantmentRegistry =
-        RegistryAccess.registryAccess().getRegistry(RegistryKey.ENCHANTMENT);
-    this.veinmineEnchantment = enchantmentRegistry.getOrThrow(VEINMINE_KEY);
+    this.veinmineEnchantment =
+        RegistryAccess.registryAccess()
+            .getRegistry(RegistryKey.ENCHANTMENT)
+            .getOrThrow(VEINMINE_KEY);
   }
 
   @EventHandler
