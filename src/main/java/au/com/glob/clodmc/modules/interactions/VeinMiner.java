@@ -16,6 +16,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
+import me.ryanhamshire.GriefPrevention.Claim;
+import me.ryanhamshire.GriefPrevention.ClaimPermission;
+import me.ryanhamshire.GriefPrevention.GriefPrevention;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
 import org.bukkit.GameMode;
@@ -26,12 +29,14 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.inventory.EquipmentSlotGroup;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /** Mine connected blocks with one action */
 @SuppressWarnings("UnstableApiUsage")
@@ -82,7 +87,12 @@ public class VeinMiner implements Module, Listener {
             .getOrThrow(VEINMINE_KEY);
   }
 
-  @EventHandler
+  @Override
+  public String dependsOn() {
+    return "GriefPrevention";
+  }
+
+  @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
   public void onBlockBreak(@NotNull BlockBreakEvent event) {
     Player player = event.getPlayer();
     Block block = event.getBlock();
@@ -104,7 +114,12 @@ public class VeinMiner implements Module, Listener {
     }
 
     // break touching blocks
-    this.breakBlocks(block, tool, new HashSet<>(MAX_CHAIN), player);
+    this.breakBlocks(
+        block,
+        tool,
+        new HashSet<>(MAX_CHAIN),
+        player,
+        GriefPrevention.instance.dataStore.getClaimAt(block.getLocation(), true, false, null));
 
     // cooldown if it was likely a block was veinmined
     for (BlockFace face : FACES) {
@@ -121,7 +136,8 @@ public class VeinMiner implements Module, Listener {
       @NotNull Block block,
       @NotNull ItemStack tool,
       @NotNull Set<Block> processed,
-      @NotNull Player player) {
+      @NotNull Player player,
+      @Nullable Claim initialClaim) {
     // don't break too many blocks
     if (processed.size() > MAX_CHAIN) {
       return;
@@ -142,9 +158,14 @@ public class VeinMiner implements Module, Listener {
 
     // break this block, except for the initial block as that's handled by the BlockBreak event
     if (!processed.isEmpty()) {
-      block.breakNaturally(tool, true, true);
-      if (player.getGameMode().equals(GameMode.SURVIVAL)) {
-        tool.damage(COST, player);
+      Claim claim =
+          GriefPrevention.instance.dataStore.getClaimAt(
+              block.getLocation(), true, false, initialClaim);
+      if (claim.hasExplicitPermission(player, ClaimPermission.Build)) {
+        block.breakNaturally(tool, true, true);
+        if (player.getGameMode().equals(GameMode.SURVIVAL)) {
+          tool.damage(COST, player);
+        }
       }
     }
 
@@ -157,7 +178,8 @@ public class VeinMiner implements Module, Listener {
       if (processed.size() <= 6 || Math.random() < 0.75) {
         Block touchingBlock = block.getRelative(face);
         if (touchingBlock.getType().equals(marterial) && !processed.contains(touchingBlock)) {
-          Schedule.delayed(DELAY, () -> this.breakBlocks(touchingBlock, tool, processed, player));
+          Schedule.delayed(
+              DELAY, () -> this.breakBlocks(touchingBlock, tool, processed, player, initialClaim));
         }
       }
     }
