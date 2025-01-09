@@ -21,12 +21,10 @@ import org.jetbrains.annotations.Nullable;
 
 @SuppressWarnings("UnstableApiUsage")
 public class BootstrapContextHelper {
-  private final @NotNull BootstrapContext context;
   private final @NotNull LifecycleEventManager<@NotNull BootstrapContext> manager;
 
   public BootstrapContextHelper(@NotNull BootstrapContext context) {
-    this.context = context;
-    this.manager = this.context.getLifecycleManager();
+    this.manager = context.getLifecycleManager();
   }
 
   public void enchantment(
@@ -46,9 +44,8 @@ public class BootstrapContextHelper {
                         .registry()
                         .register(
                             key,
-                            (EnchantmentRegistryEntry.@NotNull Builder builder) -> {
-                              handler.accept(event, builder);
-                            })));
+                            (EnchantmentRegistryEntry.@NotNull Builder builder) ->
+                                handler.accept(event, builder))));
     if (tags != null) {
       this.manager.registerEventHandler(
           LifecycleEvents.TAGS.postFlatten(RegistryKey.ENCHANTMENT),
