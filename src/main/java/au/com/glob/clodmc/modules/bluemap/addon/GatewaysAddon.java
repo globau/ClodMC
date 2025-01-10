@@ -2,8 +2,7 @@ package au.com.glob.clodmc.modules.bluemap.addon;
 
 import au.com.glob.clodmc.ClodMC;
 import au.com.glob.clodmc.modules.bluemap.BlueMapAddon;
-import au.com.glob.clodmc.modules.gateways.AnchorBlock;
-import au.com.glob.clodmc.modules.gateways.Gateways;
+import au.com.glob.clodmc.modules.interactions.Gateways;
 import au.com.glob.clodmc.util.Logger;
 import com.flowpowered.math.vector.Vector2i;
 import com.flowpowered.math.vector.Vector3d;
@@ -65,13 +64,17 @@ public class GatewaysAddon extends BlueMapAddon {
     }
 
     Set<String> seenColours = new HashSet<>();
-    for (AnchorBlock anchorBlock : this.module.getAnchorBlocks()) {
+    for (Gateways.AnchorBlock anchorBlock : this.module.getAnchorBlocks()) {
       if (anchorBlock.getName() == null) {
         continue;
       }
 
       String id =
-          "gw-" + anchorBlock.getTopColour().name + "-" + anchorBlock.getBottomColour().name + "-";
+          "gw-"
+              + anchorBlock.getTopColour().getName()
+              + "-"
+              + anchorBlock.getBottomColour().getName()
+              + "-";
       id = id + (seenColours.contains(id) ? "b" : "a");
       seenColours.add(id);
 

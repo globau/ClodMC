@@ -3,8 +3,8 @@ package au.com.glob.clodmc.modules;
 import au.com.glob.clodmc.ClodMC;
 import au.com.glob.clodmc.modules.bluemap.BlueMap;
 import au.com.glob.clodmc.modules.crafting.SporeBlossom;
-import au.com.glob.clodmc.modules.gateways.Gateways;
 import au.com.glob.clodmc.modules.interactions.FastLeafDecay;
+import au.com.glob.clodmc.modules.interactions.Gateways;
 import au.com.glob.clodmc.modules.interactions.NamedStorage;
 import au.com.glob.clodmc.modules.interactions.SignedContainers;
 import au.com.glob.clodmc.modules.interactions.VeinMiner;
@@ -59,11 +59,9 @@ public class ModuleRegistry implements Iterable<Module>, PluginBootstrap {
     // crafting
     this.register(new SporeBlossom());
 
-    // gateways
-    this.register(new Gateways());
-
     // interactions
     this.register(new FastLeafDecay());
+    this.register(new Gateways());
     this.register(new NamedStorage());
     this.register(new SignedContainers());
     this.register(new VeinMiner());

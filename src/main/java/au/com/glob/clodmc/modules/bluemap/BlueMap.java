@@ -6,7 +6,7 @@ import au.com.glob.clodmc.modules.bluemap.addon.CircularWorldBorderAddon;
 import au.com.glob.clodmc.modules.bluemap.addon.GatewaysAddon;
 import au.com.glob.clodmc.modules.bluemap.addon.GriefPreventionAddon;
 import au.com.glob.clodmc.modules.bluemap.addon.SpawnAddon;
-import au.com.glob.clodmc.modules.gateways.Gateways;
+import au.com.glob.clodmc.modules.interactions.Gateways;
 import au.com.glob.clodmc.modules.server.CircularWorldBorder;
 import au.com.glob.clodmc.util.Logger;
 import au.com.glob.clodmc.util.Schedule;
