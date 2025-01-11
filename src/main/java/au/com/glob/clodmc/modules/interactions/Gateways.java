@@ -5,7 +5,6 @@ import au.com.glob.clodmc.command.CommandBuilder;
 import au.com.glob.clodmc.command.EitherCommandSender;
 import au.com.glob.clodmc.modules.Module;
 import au.com.glob.clodmc.modules.bluemap.BlueMapUpdateEvent;
-import au.com.glob.clodmc.modules.server.CircularWorldBorder;
 import au.com.glob.clodmc.util.BlockPos;
 import au.com.glob.clodmc.util.Chat;
 import au.com.glob.clodmc.util.ConfigUtil;
@@ -44,6 +43,7 @@ import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.Statistic;
 import org.bukkit.World;
+import org.bukkit.WorldBorder;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.type.Light;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -396,31 +396,31 @@ public class Gateways implements Module, Listener {
         config.set("tpr", now);
       }
 
-      CircularWorldBorder circularWorldBorder = ClodMC.getModule(CircularWorldBorder.class);
-      CircularWorldBorder.Border border = circularWorldBorder.getBorder(player.getWorld());
-
-      // require a world with a border
-      if (border == null) {
+      World world = Bukkit.getWorld("world");
+      if (world == null) {
         this.ignore.put(player, anchorBlock.blockPos.up());
-        Chat.error(player, "Unable to randomly teleport in this world");
         return;
       }
+      WorldBorder border = world.getWorldBorder();
 
       int attemptsLeft = 25;
       while (attemptsLeft > 0) {
         attemptsLeft--;
 
         // pick a random location
-        double r =
-            Math.sqrt(
-                this.random.nextDouble()
-                        * (border.r() * border.r()
-                            - MIN_RANDOM_TP_DISTANCE * MIN_RANDOM_TP_DISTANCE)
-                    + MIN_RANDOM_TP_DISTANCE * MIN_RANDOM_TP_DISTANCE);
-        double theta = this.random.nextDouble() * 2 * Math.PI;
-        double x = border.x() + r * Math.cos(theta);
-        double z = border.z() + r * Math.sin(theta);
-        Location randomPos = playerLocation.clone().set(x, 320, z);
+        double radius = border.getSize() / 2.0;
+        Location center = border.getCenter();
+        Location randomPos;
+        do {
+          double distance =
+              MIN_RANDOM_TP_DISTANCE
+                  + (this.random.nextDouble() * (radius - MIN_RANDOM_TP_DISTANCE));
+          double angle = 2 * Math.PI * this.random.nextDouble();
+          double x = center.getX() + distance * Math.cos(angle);
+          double z = center.getZ() + distance * Math.sin(angle);
+          double y = world.getHighestBlockYAt(new Location(world, x, 0, z));
+          randomPos = new Location(world, x, y, z);
+        } while (!border.isInside(randomPos));
 
         // find a safe location
         teleportPos = TeleportUtil.getSafePos(randomPos);

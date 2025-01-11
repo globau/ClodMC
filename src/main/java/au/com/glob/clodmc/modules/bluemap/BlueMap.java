@@ -2,12 +2,11 @@ package au.com.glob.clodmc.modules.bluemap;
 
 import au.com.glob.clodmc.ClodMC;
 import au.com.glob.clodmc.modules.Module;
-import au.com.glob.clodmc.modules.bluemap.addon.CircularWorldBorderAddon;
 import au.com.glob.clodmc.modules.bluemap.addon.GatewaysAddon;
 import au.com.glob.clodmc.modules.bluemap.addon.GriefPreventionAddon;
 import au.com.glob.clodmc.modules.bluemap.addon.SpawnAddon;
+import au.com.glob.clodmc.modules.bluemap.addon.WorldBorderAddon;
 import au.com.glob.clodmc.modules.interactions.Gateways;
-import au.com.glob.clodmc.modules.server.CircularWorldBorder;
 import au.com.glob.clodmc.util.Logger;
 import au.com.glob.clodmc.util.Schedule;
 import de.bluecolored.bluemap.api.BlueMapAPI;
@@ -31,9 +30,9 @@ public class BlueMap implements Module, Listener {
 
   @Override
   public void initialise() {
-    this.addons.add(new CircularWorldBorderAddon(ClodMC.getModule(CircularWorldBorder.class)));
     this.addons.add(new GatewaysAddon(ClodMC.getModule(Gateways.class)));
     this.addons.add(new SpawnAddon());
+    this.addons.add(new WorldBorderAddon());
     if (Bukkit.getPluginManager().isPluginEnabled("GriefPrevention")) {
       this.addons.add(new GriefPreventionAddon());
     }
