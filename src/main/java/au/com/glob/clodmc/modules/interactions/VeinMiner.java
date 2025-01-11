@@ -161,7 +161,7 @@ public class VeinMiner implements Module, Listener {
       Claim claim =
           GriefPrevention.instance.dataStore.getClaimAt(
               block.getLocation(), true, false, initialClaim);
-      if (claim.hasExplicitPermission(player, ClaimPermission.Build)) {
+      if (claim == null || claim.hasExplicitPermission(player, ClaimPermission.Build)) {
         block.breakNaturally(tool, true, true);
         if (player.getGameMode().equals(GameMode.SURVIVAL)) {
           tool.damage(COST, player);
