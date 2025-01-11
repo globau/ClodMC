@@ -16,6 +16,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
+import java.util.function.Supplier;
 import me.ryanhamshire.GriefPrevention.Claim;
 import me.ryanhamshire.GriefPrevention.ClaimPermission;
 import me.ryanhamshire.GriefPrevention.GriefPrevention;
@@ -109,7 +110,7 @@ public class VeinMiner implements Module, Listener {
 
     // check cooldown
     if (this.cooldownUUIDs.contains(player.getUniqueId())) {
-      player.playSound(player.getLocation(), Sound.UI_HUD_BUBBLE_POP, 1.0f, 1.0f);
+      player.playSound(player, Sound.BLOCK_NOTE_BLOCK_IRON_XYLOPHONE, 1.0f, 0.5f);
       return;
     }
 
@@ -138,6 +139,11 @@ public class VeinMiner implements Module, Listener {
       @NotNull Set<Block> processed,
       @NotNull Player player,
       @Nullable Claim initialClaim) {
+    Material material = block.getType();
+    if (material == Material.AIR) {
+      return;
+    }
+
     // don't break too many blocks
     if (processed.size() > MAX_CHAIN) {
       return;
@@ -154,14 +160,17 @@ public class VeinMiner implements Module, Listener {
       }
     }
 
-    Material marterial = block.getType();
-
     // break this block, except for the initial block as that's handled by the BlockBreak event
     if (!processed.isEmpty()) {
       Claim claim =
           GriefPrevention.instance.dataStore.getClaimAt(
               block.getLocation(), true, false, initialClaim);
-      if (claim == null || claim.hasExplicitPermission(player, ClaimPermission.Build)) {
+      boolean canBreak = true;
+      if (claim != null) {
+        Supplier<String> denalMessage = claim.checkPermission(player, ClaimPermission.Build, null);
+        canBreak = denalMessage == null || denalMessage.get() == null;
+      }
+      if (canBreak) {
         block.breakNaturally(tool, true, true);
         if (player.getGameMode().equals(GameMode.SURVIVAL)) {
           tool.damage(COST, player);
@@ -174,12 +183,25 @@ public class VeinMiner implements Module, Listener {
     // break touching blocks in random order
     ArrayList<BlockFace> shuffledFaces = new ArrayList<>(FACES);
     Collections.shuffle(shuffledFaces);
+    boolean foundBlock = false;
+    Set<Block> skipped = new HashSet<>(6);
     for (BlockFace face : shuffledFaces) {
-      if (processed.size() <= 6 || Math.random() < 0.75) {
-        Block touchingBlock = block.getRelative(face);
-        if (touchingBlock.getType().equals(marterial) && !processed.contains(touchingBlock)) {
+      Block touchingBlock = block.getRelative(face);
+      if (touchingBlock.getType().equals(material) && !processed.contains(touchingBlock)) {
+        if (processed.size() <= 6 || Math.random() < 0.75) {
+          foundBlock = true;
           Schedule.delayed(
               DELAY, () -> this.breakBlocks(touchingBlock, tool, processed, player, initialClaim));
+        } else {
+          skipped.add(touchingBlock);
+        }
+      }
+    }
+    if (!foundBlock) {
+      for (Block skippedBlock : skipped) {
+        if (!processed.contains(skippedBlock)) {
+          Schedule.delayed(
+              DELAY, () -> this.breakBlocks(skippedBlock, tool, processed, player, initialClaim));
         }
       }
     }
