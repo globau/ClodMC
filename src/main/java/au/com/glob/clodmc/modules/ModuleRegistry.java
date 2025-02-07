@@ -29,6 +29,7 @@ import au.com.glob.clodmc.modules.player.Sleep;
 import au.com.glob.clodmc.modules.player.Spawn;
 import au.com.glob.clodmc.modules.player.WelcomeBook;
 import au.com.glob.clodmc.modules.server.ClodServerLinks;
+import au.com.glob.clodmc.modules.server.HeatMap;
 import au.com.glob.clodmc.modules.server.MOTD;
 import au.com.glob.clodmc.modules.server.RequiredPlugins;
 import au.com.glob.clodmc.util.Logger;
@@ -92,6 +93,7 @@ public class ModuleRegistry implements Iterable<Module>, PluginBootstrap {
 
     // server
     this.register(new ClodServerLinks());
+    this.register(new HeatMap());
     this.register(new MOTD());
     this.register(new RequiredPlugins());
 
