@@ -1,4 +1,3 @@
-import net.ltgt.gradle.errorprone.CheckSeverity
 import net.ltgt.gradle.errorprone.errorprone
 import java.io.BufferedReader
 
@@ -21,9 +20,8 @@ dependencies {
     compileOnly("com.github.GriefPrevention:GriefPrevention:16.18.4")
     compileOnly("de.bluecolored.bluemap:BlueMapAPI:2.7.2")
     compileOnly("org.jetbrains:annotations:15.0")
-    errorprone("com.uber.nullaway:nullaway:0.12.2")
-    api("org.jetbrains:annotations:15.0")
     errorprone("com.google.errorprone:error_prone_core:2.36.0")
+    api("org.jetbrains:annotations:15.0")
 }
 
 group = "au.com.glob"
@@ -47,8 +45,6 @@ tasks.withType<JavaCompile>().configureEach {
     options.compilerArgs.add("-Xlint:deprecation")
 
     options.errorprone.excludedPaths.set(".*/vendored/.*")
-    options.errorprone.check("NullAway", CheckSeverity.ERROR)
-    options.errorprone.option("NullAway:AnnotatedPackages", "au.com.glob.clodmc")
 }
 
 checkstyle {
