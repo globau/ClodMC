@@ -4,7 +4,7 @@ import au.com.glob.clodmc.ClodMC;
 import au.com.glob.clodmc.command.CommandBuilder;
 import au.com.glob.clodmc.command.EitherCommandSender;
 import au.com.glob.clodmc.modules.Module;
-import au.com.glob.clodmc.modules.bluemap.BlueMapUpdateEvent;
+import au.com.glob.clodmc.modules.bluemap.BlueMap;
 import au.com.glob.clodmc.util.BlockPos;
 import au.com.glob.clodmc.util.Chat;
 import au.com.glob.clodmc.util.ConfigUtil;
@@ -16,17 +16,30 @@ import au.com.glob.clodmc.util.StringUtil;
 import au.com.glob.clodmc.util.TeleportUtil;
 import au.com.glob.clodmc.util.TimeUtil;
 import com.destroystokyo.paper.ParticleBuilder;
+import com.flowpowered.math.vector.Vector2i;
+import com.flowpowered.math.vector.Vector3d;
+import de.bluecolored.bluemap.api.BlueMapAPI;
+import de.bluecolored.bluemap.api.BlueMapMap;
+import de.bluecolored.bluemap.api.BlueMapWorld;
+import de.bluecolored.bluemap.api.markers.MarkerSet;
+import de.bluecolored.bluemap.api.markers.POIMarker;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Random;
+import java.util.Set;
 import java.util.stream.Collectors;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
@@ -79,6 +92,11 @@ import org.jetbrains.annotations.Nullable;
 
 /** Player built point-to-point teleports */
 public class Gateways implements Module, Listener {
+  @SuppressWarnings({"NotNullFieldNotInitialized", "NullAway.Init"})
+  private static @NotNull Gateways instance;
+
+  private static @Nullable BlueMapGateways blueMapGateways;
+
   private static final int MAX_RANDOM_TP_TIME = 60; // minutes
   private static final int MIN_RANDOM_TP_DISTANCE = 1500;
   private static final int RANDOM_TP_COOLDOWN = 60; // seconds
@@ -114,6 +132,8 @@ public class Gateways implements Module, Listener {
           Objects.requireNonNull(Colour.of(15)), Objects.requireNonNull(Colour.of(15)));
 
   public Gateways() {
+    instance = this;
+
     ConfigurationSerialization.registerClass(AnchorBlock.class);
     Bukkit.addRecipe(AnchorItem.getRecipe());
 
@@ -182,8 +202,9 @@ public class Gateways implements Module, Listener {
     config.set("anchors", new ArrayList<>(this.instances.values()));
     try {
       config.save(this.configFile);
-
-      Bukkit.getServer().getPluginManager().callEvent(new BlueMapUpdateEvent(Gateways.class));
+      if (blueMapGateways != null) {
+        blueMapGateways.update();
+      }
     } catch (IOException e) {
       Logger.error(this.configFile + ": save failed: " + e);
     }
@@ -956,6 +977,98 @@ public class Gateways implements Module, Listener {
       }
       this.top = topColour;
       this.bottom = bottomColour;
+    }
+  }
+
+  public static class BlueMapGateways extends BlueMap.Addon {
+    private static final @NotNull String MARKER_FILENAME = "gateway.svg";
+
+    private final @NotNull Map<World, MarkerSet> markerSets = new HashMap<>(3);
+
+    public BlueMapGateways(@NotNull BlueMapAPI api) {
+      super(api);
+      blueMapGateways = this;
+
+      // create svg
+      Path gatewayFilePath =
+          api.getWebApp().getWebRoot().resolve("assets").resolve(MARKER_FILENAME);
+      try {
+        Files.createDirectories(gatewayFilePath.getParent());
+        try (OutputStream out = Files.newOutputStream(gatewayFilePath)) {
+          InputStream svgStream = ClodMC.instance.getResource(MARKER_FILENAME);
+          Objects.requireNonNull(svgStream).transferTo(out);
+        }
+      } catch (IOException e) {
+        Logger.error("failed to create " + gatewayFilePath + ": " + e);
+      }
+
+      // create markers
+      for (World world : Bukkit.getWorlds()) {
+        this.markerSets.put(
+            world, MarkerSet.builder().label("Gateways").defaultHidden(false).build());
+      }
+    }
+
+    @Override
+    public void update() {
+      if (this.api == null) {
+        return;
+      }
+
+      for (MarkerSet markerSet : this.markerSets.values()) {
+        markerSet.getMarkers().clear();
+      }
+
+      Set<String> seenColours = new HashSet<>();
+      for (Gateways.AnchorBlock anchorBlock : Gateways.instance.getAnchorBlocks()) {
+        if (anchorBlock.getName() == null) {
+          continue;
+        }
+
+        String id =
+            "gw-"
+                + anchorBlock.getTopColour().getName()
+                + "-"
+                + anchorBlock.getBottomColour().getName()
+                + "-";
+        id = id + (seenColours.contains(id) ? "b" : "a");
+        seenColours.add(id);
+
+        Objects.requireNonNull(this.markerSets.get(anchorBlock.getBlockPos().getWorld()))
+            .getMarkers()
+            .put(
+                id,
+                POIMarker.builder()
+                    .label(
+                        anchorBlock.getName()
+                            + "\n"
+                            + anchorBlock.getBlockPos().getX()
+                            + ", "
+                            + anchorBlock.getBlockPos().getZ())
+                    .position(
+                        Vector3d.from(
+                            anchorBlock.getBlockPos().getX() + 0.5,
+                            anchorBlock.getBlockPos().getY() + 0.5,
+                            anchorBlock.getBlockPos().getZ() + 0.5))
+                    .icon("assets/" + MARKER_FILENAME, new Vector2i(25, 45))
+                    .build());
+      }
+
+      for (Map.Entry<World, MarkerSet> entry : this.markerSets.entrySet()) {
+        String mapId = "gw-" + entry.getKey().getName();
+        this.api
+            .getWorld(entry.getKey())
+            .ifPresent(
+                (BlueMapWorld world) -> {
+                  for (BlueMapMap map : world.getMaps()) {
+                    if (entry.getValue().getMarkers().isEmpty()) {
+                      map.getMarkerSets().remove(mapId);
+                    } else {
+                      map.getMarkerSets().put(mapId, entry.getValue());
+                    }
+                  }
+                });
+      }
     }
   }
 }

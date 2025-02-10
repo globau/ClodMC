@@ -11,6 +11,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.server.ServerLoadEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import vendored.com.jeff_media.customblockdata.CustomBlockData;
 
 public final class ClodMC extends JavaPlugin implements Listener {
@@ -58,7 +59,7 @@ public final class ClodMC extends JavaPlugin implements Listener {
     Logger.info("clod-mc started");
   }
 
-  public static @NotNull <T extends Module> T getModule(@NotNull Class<T> moduleClass) {
+  public static @Nullable <T extends Module> T getModule(@NotNull Class<T> moduleClass) {
     return instance.moduleRegistry.get(moduleClass);
   }
 }

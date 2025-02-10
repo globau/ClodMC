@@ -1,6 +1,5 @@
-package au.com.glob.clodmc.modules.bluemap.addon;
+package au.com.glob.clodmc.modules.bluemap;
 
-import au.com.glob.clodmc.modules.bluemap.BlueMapAddon;
 import de.bluecolored.bluemap.api.BlueMapAPI;
 import de.bluecolored.bluemap.api.BlueMapMap;
 import de.bluecolored.bluemap.api.BlueMapWorld;
@@ -15,13 +14,20 @@ import org.bukkit.World;
 import org.bukkit.WorldBorder;
 import org.jetbrains.annotations.NotNull;
 
-public class WorldBorderAddon extends BlueMapAddon {
-  public WorldBorderAddon() {
-    super(null);
+public class BlueMapWorldBorder extends BlueMap.Addon {
+  private static final @NotNull Color LINE_COLOUR = new Color("#a52a2aff");
+  private static final @NotNull Color FILL_COLOUR = new Color("#00000000");
+
+  protected BlueMapWorldBorder(@NotNull BlueMapAPI api) {
+    super(api);
   }
 
   @Override
-  public void onUpdate(@NotNull BlueMapAPI api) {
+  public void update() {
+    if (this.api == null) {
+      return;
+    }
+
     for (World world : Bukkit.getWorlds()) {
       WorldBorder border = world.getWorldBorder();
       Location centre = border.getCenter();
@@ -36,15 +42,16 @@ public class WorldBorderAddon extends BlueMapAddon {
           ShapeMarker.builder()
               .label("World Border")
               .shape(shape, world.getSeaLevel())
-              .lineColor(new Color(0xA52A2A, 0xFF))
-              .fillColor(new Color(0))
+              .lineColor(LINE_COLOUR)
+              .fillColor(FILL_COLOUR)
               .lineWidth(3)
               .depthTestEnabled(false)
               .build();
 
       MarkerSet markerSet = MarkerSet.builder().label("World Border").build();
       markerSet.getMarkers().put("ClodMC", marker);
-      api.getWorld(world.getName())
+      this.api
+          .getWorld(world.getName())
           .map(BlueMapWorld::getMaps)
           .ifPresent(
               (Collection<BlueMapMap> maps) ->
