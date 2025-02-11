@@ -6,7 +6,6 @@ import au.com.glob.clodmc.modules.Module;
 import au.com.glob.clodmc.util.Chat;
 import au.com.glob.clodmc.util.PlayerDataFile;
 import au.com.glob.clodmc.util.PlayerDataUpdater;
-import au.com.glob.clodmc.util.PlayerLocation;
 import au.com.glob.clodmc.util.TeleportUtil;
 import java.util.HashMap;
 import java.util.List;
@@ -33,15 +32,15 @@ public class Homes implements Listener, Module {
               (@NotNull Player player, @Nullable String name) -> {
                 name = name == null ? "home" : name;
 
-                Map<String, PlayerLocation> homes = this.getHomes(player);
+                Map<String, Location> homes = this.getHomes(player);
                 if (homes.isEmpty() || !homes.containsKey(name)) {
                   throw new CommandError(
                       name.equals("home") ? "No home set" : "No such home '" + name + "'");
                 }
 
-                PlayerLocation playerLoc = homes.get(name);
-                playerLoc.teleportPlayer(
-                    player, name.equals("home") ? "home" : "to '" + name + "'");
+                Location location = homes.get(name);
+                TeleportUtil.teleport(
+                    player, location, name.equals("home") ? "home" : "to '" + name + "'");
               });
           builder.completor(
               (@NotNull Player player, @NotNull List<String> args) ->
@@ -55,7 +54,7 @@ public class Homes implements Listener, Module {
                 .description("List homes")
                 .executor(
                     (@NotNull Player player) -> {
-                      Map<String, PlayerLocation> homes = this.getHomes(player);
+                      Map<String, Location> homes = this.getHomes(player);
 
                       if (homes.isEmpty()) {
                         Chat.warning(player, "No homes");
@@ -78,7 +77,7 @@ public class Homes implements Listener, Module {
                     (@NotNull Player player, @Nullable String name) -> {
                       name = name == null ? "home" : name;
 
-                      Map<String, PlayerLocation> homes = this.getHomes(player);
+                      Map<String, Location> homes = this.getHomes(player);
                       boolean existing = homes.containsKey(name);
 
                       if (!existing && homes.size() >= MAX_HOMES) {
@@ -92,7 +91,7 @@ public class Homes implements Listener, Module {
                         throw new CommandError("Your current location is not safe");
                       }
 
-                      homes.put(name, PlayerLocation.of(location));
+                      homes.put(name, location);
                       this.setHomes(player, homes);
 
                       if (name.equals("home")) {
@@ -115,7 +114,7 @@ public class Homes implements Listener, Module {
                     (@NotNull Player player, @Nullable String name) -> {
                       name = name == null ? "home" : name;
 
-                      Map<String, PlayerLocation> homes = this.getHomes(player);
+                      Map<String, Location> homes = this.getHomes(player);
                       if (homes.isEmpty() || !homes.containsKey(name)) {
                         throw new CommandError(
                             name.equals("home") ? "No home set" : "No such home '" + name + "'");
@@ -140,30 +139,29 @@ public class Homes implements Listener, Module {
       return List.of();
     }
 
-    Map<String, PlayerLocation> homes = this.getHomes(player);
+    Map<String, Location> homes = this.getHomes(player);
     return homes.keySet().stream()
         .filter((String name) -> name.startsWith(args.getFirst()))
         .sorted(String::compareToIgnoreCase)
         .toList();
   }
 
-  private @NotNull Map<String, PlayerLocation> getHomes(@NotNull Player player) {
+  private @NotNull Map<String, Location> getHomes(@NotNull Player player) {
     PlayerDataFile config = PlayerDataFile.of(player);
 
     ConfigurationSection section = config.getConfigurationSection("homes");
     if (section == null) {
       return new HashMap<>(0);
     }
-    Map<String, PlayerLocation> result = new HashMap<>();
+    Map<String, Location> result = new HashMap<>();
     for (String name : section.getKeys(false)) {
-      PlayerLocation playerLocation =
-          config.getSerializable("homes." + name, PlayerLocation.class, null);
+      Location playerLocation = config.getSerializable("homes." + name, Location.class, null);
       result.put(name, Objects.requireNonNull(playerLocation));
     }
     return result;
   }
 
-  private void setHomes(@NotNull Player player, @NotNull Map<String, PlayerLocation> homes) {
+  private void setHomes(@NotNull Player player, @NotNull Map<String, Location> homes) {
     try (PlayerDataUpdater config = PlayerDataUpdater.of(player)) {
       ConfigurationSection section = config.getConfigurationSection("homes");
       if (section != null) {

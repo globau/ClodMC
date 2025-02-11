@@ -2,7 +2,6 @@ package au.com.glob.clodmc.modules.player;
 
 import au.com.glob.clodmc.command.CommandBuilder;
 import au.com.glob.clodmc.modules.Module;
-import au.com.glob.clodmc.util.PlayerLocation;
 import au.com.glob.clodmc.util.TeleportUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.GameRule;
@@ -26,13 +25,13 @@ public class Spawn implements Module {
                 }
 
                 Integer spawnRadius = world.getGameRuleValue(GameRule.SPAWN_RADIUS);
-                Location loc =
+                Location location =
                     TeleportUtil.getRandomLoc(
                         world.getSpawnLocation(), spawnRadius == null ? 8 : spawnRadius);
 
                 // teleport to the center of the block, just above the surface as per vanilla
-                PlayerLocation playerLoc = PlayerLocation.of(loc.add(0.5, 0.1, 0.5));
-                playerLoc.teleportPlayer(player, "to spawn");
+                location.add(0.5, 0.1, 0.5);
+                TeleportUtil.teleport(player, location, "to spawn");
               });
         });
   }

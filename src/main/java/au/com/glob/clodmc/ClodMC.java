@@ -41,6 +41,7 @@ public final class ClodMC extends JavaPlugin implements Listener {
 
     // ensure all configs can be deserialised, halt server if not to avoid dataloss
     try {
+      ConfigUtil.migrateConfigs();
       ConfigUtil.sanityCheckConfigs();
 
       for (Module module : this.moduleRegistry) {

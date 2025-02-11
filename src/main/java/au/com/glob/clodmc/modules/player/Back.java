@@ -5,8 +5,9 @@ import au.com.glob.clodmc.command.CommandError;
 import au.com.glob.clodmc.modules.Module;
 import au.com.glob.clodmc.util.PlayerDataFile;
 import au.com.glob.clodmc.util.PlayerDataUpdater;
-import au.com.glob.clodmc.util.PlayerLocation;
+import au.com.glob.clodmc.util.TeleportUtil;
 import java.util.UUID;
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -23,12 +24,11 @@ public class Back implements Module, Listener {
           builder.executor(
               (@NotNull Player player) -> {
                 PlayerDataFile config = PlayerDataFile.of(player);
-                PlayerLocation location = (PlayerLocation) config.get("back");
+                Location location = (Location) config.get("back");
                 if (location == null) {
                   throw new CommandError("No previous location");
                 }
-
-                location.teleportPlayer(player, "back");
+                TeleportUtil.teleport(player, location, "back");
               });
         });
   }
@@ -37,7 +37,7 @@ public class Back implements Module, Listener {
   public void loadConfig() {
     for (UUID uuid : PlayerDataFile.knownUUIDs()) {
       try (PlayerDataUpdater config = PlayerDataUpdater.of(uuid)) {
-        PlayerLocation location = (PlayerLocation) config.get("homes_internal.back");
+        Location location = (Location) config.get("homes_internal.back");
         if (location != null) {
           config.set("back", location);
           config.remove("homes_internal");
@@ -50,7 +50,7 @@ public class Back implements Module, Listener {
   public void onPlayerTeleport(@NotNull PlayerTeleportEvent event) {
     if (event.getCause() == PlayerTeleportEvent.TeleportCause.COMMAND) {
       try (PlayerDataUpdater config = PlayerDataUpdater.of(event.getPlayer())) {
-        config.set("back", PlayerLocation.of(event.getPlayer()));
+        config.set("back", event.getPlayer().getLocation());
       }
     }
   }

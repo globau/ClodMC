@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Random;
+import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Particle;
@@ -13,7 +14,10 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.type.Slab;
 import org.bukkit.block.data.type.Snow;
+import org.bukkit.entity.Boat;
+import org.bukkit.entity.Horse;
 import org.bukkit.entity.Player;
+import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.util.BoundingBox;
 import org.jetbrains.annotations.NotNull;
 
@@ -42,6 +46,51 @@ public class TeleportUtil {
       org.bukkit.Color.fromRGB(0x00BFFF);
   private static final org.bukkit.@NotNull Color TELEPORT_COLUR_B =
       org.bukkit.Color.fromRGB(0xFFFFFF);
+
+  public static void teleport(
+      @NotNull Player player, @NotNull Location location, @NotNull String reason) {
+    Location currentLoc = player.getLocation();
+
+    Location destinationLoc;
+    if (player.getGameMode().equals(GameMode.CREATIVE)) {
+      destinationLoc = location;
+    } else {
+      destinationLoc = TeleportUtil.getSafePos(location);
+      destinationLoc.setYaw(location.getYaw());
+      destinationLoc.setPitch(location.getPitch());
+    }
+
+    if (BlockPos.of(currentLoc).equals(BlockPos.of(destinationLoc))) {
+      Chat.fyi(player, "Teleport not required");
+      return;
+    }
+
+    String prefix = "Teleporting you ";
+    if (player.isInsideVehicle()) {
+      if (player.getVehicle() instanceof Horse) {
+        prefix = "Dismounting your horse and teleporting you ";
+      } else if (player.getVehicle() instanceof Boat) {
+        prefix = "Dismounting your boat and teleporting you ";
+      } else {
+        prefix = "Dismounting and teleporting you ";
+      }
+    }
+    Chat.fyi(player, prefix + reason);
+
+    player
+        .teleportAsync(destinationLoc, PlayerTeleportEvent.TeleportCause.COMMAND)
+        .thenAccept(
+            (Boolean result) -> {
+              if (result) {
+                TeleportUtil.teleportEffect(currentLoc);
+              }
+            })
+        .exceptionally(
+            (Throwable ex) -> {
+              Chat.error(player, "Teleport failed");
+              return null;
+            });
+  }
 
   public static @NotNull Location getStandingPos(@NotNull Player player) {
     // player.getLocation() returns the centre of the player; if the player
