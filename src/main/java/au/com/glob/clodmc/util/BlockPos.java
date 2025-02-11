@@ -27,15 +27,13 @@ public class BlockPos {
   }
 
   @Override
-  @SuppressWarnings("EqualsGetClass")
-  public boolean equals(@Nullable Object other) {
+  public final boolean equals(@Nullable Object other) {
     if (this == other) {
       return true;
     }
-    if (other == null || this.getClass() != other.getClass()) {
+    if (!(other instanceof BlockPos otherPos)) {
       return false;
     }
-    BlockPos otherPos = (BlockPos) other;
     return this.x == otherPos.x
         && this.y == otherPos.y
         && this.z == otherPos.z
@@ -49,14 +47,6 @@ public class BlockPos {
 
   public static BlockPos of(@NotNull Location loc) {
     return new BlockPos(loc.getWorld(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ());
-  }
-
-  public static BlockPos of(@NotNull Location loc, int deltaX, int deltaY, int deltaZ) {
-    return new BlockPos(
-        loc.getWorld(),
-        loc.getBlockX() + deltaX,
-        loc.getBlockY() + deltaY,
-        loc.getBlockZ() + deltaZ);
   }
 
   public @NotNull Location asLocation() {

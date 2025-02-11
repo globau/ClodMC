@@ -376,7 +376,7 @@ public class Gateways implements Module, Listener {
     }
 
     // check for anchorblock
-    BlockPos standingOnPos = BlockPos.of(playerLocation, 0, -1, 0);
+    BlockPos standingOnPos = BlockPos.of(playerLocation).down();
     AnchorBlock anchorBlock = this.instances.get(standingOnPos);
     if (anchorBlock == null) {
       return;
@@ -522,7 +522,7 @@ public class Gateways implements Module, Listener {
 
     // if player spawns on an anchor block don't immediately teleport
     Player player = event.getPlayer();
-    BlockPos standingOnPos = BlockPos.of(player.getLocation(), 0, -1, 0);
+    BlockPos standingOnPos = BlockPos.of(player.getLocation()).down();
     AnchorBlock anchorBlock = this.instances.get(standingOnPos);
     if (anchorBlock != null && anchorBlock.isConnected()) {
       this.ignore.put(player, BlockPos.of(player.getLocation()));
