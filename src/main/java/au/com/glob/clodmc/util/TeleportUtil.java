@@ -60,7 +60,9 @@ public class TeleportUtil {
       destinationLoc.setPitch(location.getPitch());
     }
 
-    if (BlockPos.of(currentLoc).equals(BlockPos.of(destinationLoc))) {
+    if (currentLoc.getBlockX() == destinationLoc.getBlockX()
+        && currentLoc.getBlockY() == destinationLoc.getBlockY()
+        && currentLoc.getBlockZ() == destinationLoc.getBlockZ()) {
       Chat.fyi(player, "Teleport not required");
       return;
     }

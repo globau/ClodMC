@@ -5,7 +5,6 @@ import au.com.glob.clodmc.command.CommandBuilder;
 import au.com.glob.clodmc.command.EitherCommandSender;
 import au.com.glob.clodmc.modules.Module;
 import au.com.glob.clodmc.modules.bluemap.BlueMap;
-import au.com.glob.clodmc.util.BlockPos;
 import au.com.glob.clodmc.util.Chat;
 import au.com.glob.clodmc.util.ConfigUtil;
 import au.com.glob.clodmc.util.Logger;
@@ -1069,6 +1068,90 @@ public class Gateways implements Module, Listener {
                   }
                 });
       }
+    }
+  }
+
+  public static class BlockPos {
+    // same as Location, but for the block
+    // can be replaced by io.papermc.paper.math.BlockPosition once that's no longer experimental
+    final @NotNull World world;
+    final int x;
+    final int y;
+    final int z;
+
+    private BlockPos(@NotNull World world, int x, int y, int z) {
+      this.world = world;
+      this.x = x;
+      this.y = y;
+      this.z = z;
+    }
+
+    @Override
+    public @NotNull String toString() {
+      return "BlockPos{"
+          + this.world.getName()
+          + " "
+          + this.x
+          + ", "
+          + this.y
+          + ", "
+          + this.z
+          + '}';
+    }
+
+    @Override
+    public final boolean equals(@Nullable Object other) {
+      if (this == other) {
+        return true;
+      }
+      if (!(other instanceof BlockPos otherPos)) {
+        return false;
+      }
+      return this.x == otherPos.x
+          && this.y == otherPos.y
+          && this.z == otherPos.z
+          && this.world.equals(otherPos.world);
+    }
+
+    @Override
+    public int hashCode() {
+      return Objects.hash(this.world, this.x, this.y, this.z);
+    }
+
+    public static BlockPos of(@NotNull Location loc) {
+      return new BlockPos(loc.getWorld(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ());
+    }
+
+    public @NotNull Location asLocation() {
+      return new Location(this.world, this.x + 0.5, this.y, this.z + 0.5);
+    }
+
+    public @NotNull World getWorld() {
+      return this.world;
+    }
+
+    public int getX() {
+      return this.x;
+    }
+
+    public int getY() {
+      return this.y;
+    }
+
+    public int getZ() {
+      return this.z;
+    }
+
+    public @NotNull Gateways.BlockPos down() {
+      return new BlockPos(this.world, this.x, this.y - 1, this.z);
+    }
+
+    public @NotNull Gateways.BlockPos up() {
+      return new BlockPos(this.world, this.x, this.y + 1, this.z);
+    }
+
+    public @NotNull Block getBlock() {
+      return this.world.getBlockAt(this.x, this.y, this.z);
     }
   }
 }
