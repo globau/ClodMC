@@ -30,7 +30,7 @@ import org.jetbrains.annotations.NotNull;
 public class BlueMapGriefPrevention extends BlueMap.Addon implements Listener {
   private static final @NotNull Color ADMIN_LINE = new Color("#fd6600ff");
   private static final @NotNull Color ADMIN_FILL = new Color("#fd660096");
-  private static final @NotNull Color PLAYER_LINE = new Color("#0060fff");
+  private static final @NotNull Color PLAYER_LINE = new Color("#0060ffff");
   private static final @NotNull Color PLAYER_FILL = new Color("#0087ff96");
 
   private final @NotNull Map<World, MarkerSet> markerSets = new HashMap<>(3);
