@@ -398,7 +398,7 @@ public class Gateways implements Module, Listener {
 
       // cooldown
       PlayerDataFile playerConfig = PlayerDataFile.of(player);
-      LocalDateTime now = TimeUtil.now();
+      LocalDateTime now = TimeUtil.localNow();
       LocalDateTime lastRandomTeleport = playerConfig.getDateTime("tpr");
       if (lastRandomTeleport != null) {
         long secondsSinceRandomTeleport = Duration.between(lastRandomTeleport, now).toSeconds();

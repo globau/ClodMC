@@ -51,7 +51,7 @@ public class Mailer {
         smtp.sendAndWait("MAIL FROM: " + SENDER_ADDR, "250 ");
         smtp.sendAndWait("RCPT TO: " + recipient, "250 ");
         smtp.sendAndWait("DATA", "354 ");
-        smtp.sendLine("Date: " + TimeUtil.now().format(DateTimeFormatter.RFC_1123_DATE_TIME));
+        smtp.sendLine("Date: " + TimeUtil.utcNow().format(DateTimeFormatter.RFC_1123_DATE_TIME));
         smtp.sendLine("From: " + SENDER_NAME + " <" + SENDER_ADDR + ">");
         smtp.sendLine("To: " + recipient);
         smtp.sendLine("Subject: " + subject);

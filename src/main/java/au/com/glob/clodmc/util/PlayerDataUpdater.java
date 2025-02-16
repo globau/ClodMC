@@ -41,11 +41,11 @@ public class PlayerDataUpdater implements AutoCloseable {
   }
 
   public void touchLastLogin() {
-    this.set("player.last_login", TimeUtil.now());
+    this.set("player.last_login", TimeUtil.localNow());
   }
 
   public void touchLastLogout() {
-    this.set("player.last_logout", TimeUtil.now());
+    this.set("player.last_logout", TimeUtil.localNow());
   }
 
   public void setPlaytimeMins(long value) {
