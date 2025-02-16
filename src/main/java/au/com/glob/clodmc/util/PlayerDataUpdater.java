@@ -40,6 +40,10 @@ public class PlayerDataUpdater implements AutoCloseable {
     this.set("player.name", name);
   }
 
+  public void setInvitedBy(@NotNull String name) {
+    this.set("player.invited_by", name);
+  }
+
   public void touchLastLogin() {
     this.set("player.last_login", TimeUtil.localNow());
   }

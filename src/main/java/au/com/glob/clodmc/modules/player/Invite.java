@@ -11,6 +11,7 @@ import au.com.glob.clodmc.util.HttpClient;
 import au.com.glob.clodmc.util.Logger;
 import au.com.glob.clodmc.util.Mailer;
 import au.com.glob.clodmc.util.PlayerDataFile;
+import au.com.glob.clodmc.util.PlayerDataUpdater;
 import au.com.glob.clodmc.util.Schedule;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -131,6 +132,12 @@ public class Invite implements Module {
                                 // notify player
                                 if (sender.isPlayer()) {
                                   Chat.info(sender, name + " added to the whitelist");
+                                }
+
+                                // record who invited the new player
+                                try (PlayerDataUpdater playerConfig = PlayerDataUpdater.of(uuid)) {
+                                  playerConfig.setPlayerName(name);
+                                  playerConfig.setInvitedBy(sender.getName());
                                 }
 
                                 // email admin

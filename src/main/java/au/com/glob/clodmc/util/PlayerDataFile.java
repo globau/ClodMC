@@ -65,7 +65,7 @@ public class PlayerDataFile extends YamlConfiguration {
     }
   }
 
-  @NotNull public static PlayerDataFile of(@NotNull String filename) {
+  public @NotNull static PlayerDataFile of(@NotNull String filename) {
     if (!instances.containsKey(filename)) {
       instances.put(filename, new PlayerDataFile(filename));
     }
