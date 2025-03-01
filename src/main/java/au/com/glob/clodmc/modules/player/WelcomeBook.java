@@ -52,14 +52,16 @@ public class WelcomeBook implements Module, Listener {
           No Stealing
 
           Quality of life
-          client mods only""",
+          client mods only
+          """,
           """
           <b>AFK</b>
 
           Players idle for 5 mins will be marked as AFK
 
           <dark_green>/afk</dark_green>
-           go afk now, or return from afk""",
+           go afk now, or return from afk
+          """,
           """
           <b>Homes</b>
 
@@ -74,13 +76,15 @@ public class WelcomeBook implements Module, Listener {
           <dark_green>/back</dark_green>
            tp to last loc
           <dark_green>/spawn</dark_green>
-           tp to spawn""",
+           tp to spawn
+          """,
           """
           <b>Land Claims</b>
 
           Claim land with a golden shovel.
 
-          <click:open_url:https://bit.ly/mcgpuser><blue>bit.ly/mcgpuser</blue></click>""",
+          <click:open_url:https://bit.ly/mcgpuser><blue>bit.ly/mcgpuser</blue></click>
+          """,
           """
           <b>Invite Players</b>
 
@@ -89,7 +93,8 @@ public class WelcomeBook implements Module, Listener {
           <dark_green>/invite java {name}</dark_green>
            invite java player
           <dark_green>/invite bedrock {name}</dark_green>
-           invite bedrock player""",
+           invite bedrock player
+          """,
           """
           <b>Gateways</b>
 
@@ -97,7 +102,8 @@ public class WelcomeBook implements Module, Listener {
 
           <click:open_url:https://s.glob.au/wWw><blue>s.glob.au/wWw</blue></click>
 
-          Name an anchor in an anvil to make it show up on the map.""",
+          Name an anchor in an anvil to make it show up on the map.
+          """,
           """
           <b>Other</b>
 
@@ -107,7 +113,8 @@ public class WelcomeBook implements Module, Listener {
 
           Use wax on an item frame to prevent changes.
 
-          Veinminer enchantment; apply to tool then shift+mine.""");
+          Veinminer enchantment; apply to tool then shift+mine.
+          """);
 
   public WelcomeBook() {
     CommandBuilder.build(

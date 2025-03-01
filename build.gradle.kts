@@ -3,7 +3,7 @@ import java.io.BufferedReader
 
 plugins {
     id("java-library")
-    id("com.diffplug.spotless") version "6.25.0"
+    id("com.diffplug.spotless") version "7.0.2"
     id("checkstyle")
     id("net.ltgt.errorprone") version "4.1.0"
 }
@@ -25,7 +25,9 @@ dependencies {
 }
 
 group = "au.com.glob"
+
 description = "ClodMC"
+
 version =
     ProcessBuilder("./src/build/version.py")
         .start()
@@ -34,11 +36,7 @@ version =
         .use(BufferedReader::readText)
         .trim()
 
-java {
-    toolchain {
-        languageVersion.set(JavaLanguageVersion.of(21))
-    }
-}
+java { toolchain { languageVersion.set(JavaLanguageVersion.of(21)) } }
 
 tasks.withType<JavaCompile>().configureEach {
     options.encoding = "UTF-8"
@@ -53,7 +51,9 @@ checkstyle {
 }
 
 configurations.checkstyle {
-    resolutionStrategy.capabilitiesResolution.withCapability("com.google.collections:google-collections") {
+    resolutionStrategy.capabilitiesResolution.withCapability(
+        "com.google.collections:google-collections",
+    ) {
         select("com.google.guava:guava:23.0")
     }
 }
@@ -72,7 +72,7 @@ spotless {
         endWithNewline()
     }
     java {
-        googleJavaFormat("1.24.0").reflowLongStrings().skipJavadocFormatting()
+        googleJavaFormat("1.25.2").reflowLongStrings().skipJavadocFormatting()
         formatAnnotations()
     }
     kotlin {
@@ -91,9 +91,7 @@ tasks.processResources {
     val props = mapOf("version" to version)
     inputs.properties(props)
     filteringCharset = "UTF-8"
-    filesMatching("paper-plugin.yml") {
-        expand(props)
-    }
+    filesMatching("paper-plugin.yml") { expand(props) }
 }
 
 if (file("local.gradle.kts").exists()) {

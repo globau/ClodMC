@@ -1,5 +1,1 @@
-pluginManagement {
-    repositories {
-        gradlePluginPortal()
-    }
-}
+pluginManagement { repositories { gradlePluginPortal() } }
