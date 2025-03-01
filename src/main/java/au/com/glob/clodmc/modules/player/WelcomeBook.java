@@ -7,11 +7,13 @@ import au.com.glob.clodmc.modules.Module;
 import au.com.glob.clodmc.util.Chat;
 import au.com.glob.clodmc.util.Schedule;
 import au.com.glob.clodmc.util.StringUtil;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -57,10 +59,13 @@ public class WelcomeBook implements Module, Listener {
           """
           <b>AFK</b>
 
-          Players idle for 5 mins will be marked as AFK
+          Players idle for 5
+          mins will be marked as
+          AFK
 
           <dark_green>/afk</dark_green>
-           go afk now, or return from afk
+           go afk now, or return
+           from afk
           """,
           """
           <b>Homes</b>
@@ -81,14 +86,18 @@ public class WelcomeBook implements Module, Listener {
           """
           <b>Land Claims</b>
 
-          Claim land with a golden shovel.
+          Claim land with a
+          golden shovel.
 
           <click:open_url:https://bit.ly/mcgpuser><blue>bit.ly/mcgpuser</blue></click>
           """,
           """
           <b>Invite Players</b>
 
-          If you've played on the server long enough you can invite other players.
+          If you've played on
+          the server long
+          enough you can invite
+          other players.
 
           <dark_green>/invite java {name}</dark_green>
            invite java player
@@ -98,22 +107,44 @@ public class WelcomeBook implements Module, Listener {
           """
           <b>Gateways</b>
 
-          End-game player-built gateways
+          End-game player-built
+          gateways
 
           <click:open_url:https://s.glob.au/wWw><blue>s.glob.au/wWw</blue></click>
 
-          Name an anchor in an anvil to make it show up on the map.
+          Name an anchor in an
+          anvil to make it show
+          up on the map.
           """,
           """
           <b>Other</b>
 
-          Shift+Right-clicking an container's inventory will sort it.
+          Shift+Right-clicking a
+          container's inventory
+          will sort it.
 
-          A container named in an anvil will display its name when looked at.
+          A container named in
+          an anvil will display its
+          name when looked at.
 
-          Use wax on an item frame to prevent changes.
+          Use wax on an item
+          frame to prevent
+          changes.
+          """,
+          """
+          Right-clicking waxed
+          signs attached to
+          containers will open
+          the container.
 
-          Veinminer enchantment; apply to tool then shift+mine.
+          Wax a pressure plate
+          to disable it.
+
+          Veinminer enchantment:
+          apply to tool then
+          shift+mine to mine
+          identical connected
+          blocks.
           """);
 
   public WelcomeBook() {
@@ -162,7 +193,13 @@ public class WelcomeBook implements Module, Listener {
 
     bookItem.setItemMeta(builder.build());
 
-    recipient.getInventory().addItem(bookItem);
+    HashMap<Integer, ItemStack> overflow = recipient.getInventory().addItem(bookItem);
+    if (!overflow.isEmpty()) {
+      recipient.dropItem(bookItem);
+    }
+
+    recipient.playSound(recipient, Sound.ITEM_BOOK_PAGE_TURN, 1.0f, 1.0f);
+
     if (sender != null) {
       Chat.fyi(sender, "Gave welcome book to " + recipient.getName());
     }
