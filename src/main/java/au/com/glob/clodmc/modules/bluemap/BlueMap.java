@@ -2,6 +2,7 @@ package au.com.glob.clodmc.modules.bluemap;
 
 import au.com.glob.clodmc.modules.Module;
 import au.com.glob.clodmc.modules.interactions.Gateways;
+import au.com.glob.clodmc.modules.server.HeatMap;
 import au.com.glob.clodmc.util.Logger;
 import au.com.glob.clodmc.util.Schedule;
 import de.bluecolored.bluemap.api.BlueMapAPI;
@@ -37,6 +38,7 @@ public class BlueMap implements Module, Listener {
           this.register(BlueMapSpawn.class, api);
           this.register(BlueMapWorldBorder.class, api);
           this.register(Gateways.BlueMapGateways.class, api);
+          this.register(HeatMap.BlueMapHeatMap.class, api);
           if (Bukkit.getPluginManager().isPluginEnabled("GriefPrevention")) {
             this.register(BlueMapGriefPrevention.class, api);
           }
