@@ -32,6 +32,7 @@ import au.com.glob.clodmc.modules.server.ClodServerLinks;
 import au.com.glob.clodmc.modules.server.HeatMap;
 import au.com.glob.clodmc.modules.server.MOTD;
 import au.com.glob.clodmc.modules.server.RequiredPlugins;
+import au.com.glob.clodmc.modules.server.ServerStatus;
 import au.com.glob.clodmc.util.Logger;
 import io.papermc.paper.plugin.bootstrap.BootstrapContext;
 import io.papermc.paper.plugin.bootstrap.PluginBootstrap;
@@ -96,6 +97,7 @@ public class ModuleRegistry implements Iterable<Module>, PluginBootstrap {
     this.register(new HeatMap());
     this.register(new MOTD());
     this.register(new RequiredPlugins());
+    this.register(new ServerStatus());
 
     // bluemap
     this.register(new BlueMap());
