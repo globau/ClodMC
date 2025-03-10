@@ -78,6 +78,14 @@ public class HeatMap implements Module, Listener {
       }
     }
 
+    void close() {
+      try {
+        this.conn.close();
+      } catch (SQLException e) {
+        Logger.error("heatmap.sqlite#close: " + e.getMessage());
+      }
+    }
+
     record HeatmapRow(@NotNull String world, int x, int z, int count) {}
 
     void incChunk(@NotNull Chunk chunk) {
@@ -87,7 +95,7 @@ public class HeatMap implements Module, Listener {
         this.insertStatement.setInt(3, chunk.getZ());
         this.insertStatement.execute();
       } catch (SQLException e) {
-        Logger.error("heatmap.sqlite: " + e.getMessage());
+        Logger.error("heatmap.sqlite#incChunk: " + e.getMessage());
       }
     }
 
@@ -99,7 +107,7 @@ public class HeatMap implements Module, Listener {
         ResultSet r = s.executeQuery();
         return r.getInt(1);
       } catch (SQLException e) {
-        Logger.error("heatmap.sqlite: " + e.getMessage());
+        Logger.error("heatmap.sqlite#getMaxCount: " + e.getMessage());
         return 0;
       }
     }
@@ -114,7 +122,7 @@ public class HeatMap implements Module, Listener {
         ResultSet r = s.executeQuery();
         return r.getInt(1);
       } catch (SQLException e) {
-        Logger.error("heatmap.sqlite: " + e.getMessage());
+        Logger.error("heatmap.sqlite#getMarkerCount: " + e.getMessage());
         return 0;
       }
     }
@@ -151,13 +159,13 @@ public class HeatMap implements Module, Listener {
               }
               return row;
             } catch (SQLException e) {
-              Logger.error("heatmap.sqlite: " + e.getMessage());
+              Logger.error("heatmap.sqlite#rowIterator.1: " + e.getMessage());
               throw new NoSuchElementException();
             }
           }
         };
       } catch (SQLException e) {
-        Logger.error("heatmap.sqlite: " + e.getMessage());
+        Logger.error("heatmap.sqlite#rowIterator.2: " + e.getMessage());
         return null;
       }
     }
@@ -200,70 +208,73 @@ public class HeatMap implements Module, Listener {
       this.generated = true;
 
       DB db = new DB();
-
-      for (World world : Bukkit.getWorlds()) {
-        double maxCount = db.getMaxCount(world);
-        if (maxCount == 0) {
-          continue;
-        }
-
-        int minCount = 0;
-        int rowCount;
-        while (true) {
-          rowCount = db.getMarkerCount(world, minCount);
-          if (rowCount <= MAX_MARKERS_PER_WORLD) {
-            break;
+      try {
+        for (World world : Bukkit.getWorlds()) {
+          double maxCount = db.getMaxCount(world);
+          if (maxCount == 0) {
+            continue;
           }
-          minCount++;
+
+          int minCount = 0;
+          int rowCount;
+          while (true) {
+            rowCount = db.getMarkerCount(world, minCount);
+            if (rowCount <= MAX_MARKERS_PER_WORLD) {
+              break;
+            }
+            minCount++;
+          }
+
+          MarkerSet markerSet = MarkerSet.builder().label("HeatMap").defaultHidden(true).build();
+
+          Iterator<DB.HeatmapRow> iter = db.rowIterator(world, minCount);
+          if (iter == null) {
+            continue;
+          }
+          int id = 0;
+          while (iter.hasNext()) {
+            DB.HeatmapRow row = iter.next();
+            int blockX = row.x * 16;
+            int blockZ = row.z * 16;
+            id++;
+
+            double index =
+                Math.floor((COLOURS.length - 1) * Math.log(row.count + 1) / Math.log(maxCount + 1));
+            Color colour = COLOURS[(int) index];
+
+            // shape
+            Shape shape =
+                new Shape(
+                    new Vector2d(blockX, blockZ),
+                    new Vector2d(blockX + 16, blockZ),
+                    new Vector2d(blockX + 16, blockZ + 16),
+                    new Vector2d(blockX, blockZ + 16));
+
+            // marker
+            ExtrudeMarker marker =
+                ExtrudeMarker.builder()
+                    .shape(shape, world.getMinHeight() + 1, world.getMaxHeight() - 1)
+                    .label(String.valueOf(row.count))
+                    .lineColor(colour)
+                    .fillColor(colour)
+                    .build();
+            markerSet.put("hm" + id, marker);
+          }
+
+          Logger.info("bluemap.heatmap added " + rowCount + " markers to " + world.getName());
+
+          // add to map(s)
+          this.api
+              .getWorld(world)
+              .ifPresent(
+                  (BlueMapWorld blueMapWorld) -> {
+                    for (BlueMapMap map : blueMapWorld.getMaps()) {
+                      map.getMarkerSets().put("hm-" + map.getName(), markerSet);
+                    }
+                  });
         }
-
-        MarkerSet markerSet = MarkerSet.builder().label("HeatMap").defaultHidden(true).build();
-
-        Iterator<DB.HeatmapRow> iter = db.rowIterator(world, minCount);
-        if (iter == null) {
-          continue;
-        }
-        int id = 0;
-        while (iter.hasNext()) {
-          DB.HeatmapRow row = iter.next();
-          int blockX = row.x * 16;
-          int blockZ = row.z * 16;
-          id++;
-
-          double index =
-              Math.floor((COLOURS.length - 1) * Math.log(row.count + 1) / Math.log(maxCount + 1));
-          Color colour = COLOURS[(int) index];
-
-          // shape
-          Shape shape =
-              new Shape(
-                  new Vector2d(blockX, blockZ),
-                  new Vector2d(blockX + 16, blockZ),
-                  new Vector2d(blockX + 16, blockZ + 16),
-                  new Vector2d(blockX, blockZ + 16));
-
-          // marker
-          ExtrudeMarker marker =
-              ExtrudeMarker.builder()
-                  .shape(shape, world.getMinHeight() + 1, world.getMaxHeight() - 1)
-                  .label(String.valueOf(row.count))
-                  .lineColor(colour)
-                  .fillColor(colour)
-                  .build();
-          markerSet.put("hm" + id, marker);
-        }
-
-        Logger.info("bluemap.heatmap added " + rowCount + " markers to " + world.getName());
-
-        // add to map(s)
-        this.api
-            .getWorld(world)
-            .ifPresent(
-                (BlueMapWorld blueMapWorld) -> {
-                  for (BlueMapMap map : blueMapWorld.getMaps()) {
-                    map.getMarkerSets().put("hm-" + map.getName(), markerSet);
-                  }
-                });
+      } finally {
+        db.close();
       }
     }
   }
