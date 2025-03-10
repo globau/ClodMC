@@ -164,15 +164,18 @@ public class HeatMap implements Module, Listener {
       new Color("#fde725")
     };
 
+    private boolean generated = false;
+
     public BlueMapHeatMap(@NotNull BlueMapAPI api) {
       super(api);
     }
 
     @Override
     public void update() {
-      if (this.api == null) {
+      if (this.api == null || this.generated) {
         return;
       }
+      this.generated = true;
 
       DB db = new DB();
 
@@ -195,7 +198,9 @@ public class HeatMap implements Module, Listener {
           int blockZ = row.z * 16;
           id++;
 
-          Color colour = COLOURS[(int) Math.floor((COLOURS.length - 1) * row.count / maxCount)];
+          double index =
+              Math.floor((COLOURS.length - 1) * Math.log(row.count + 1) / Math.log(maxCount + 1));
+          Color colour = COLOURS[(int) index];
 
           // shape
           Shape shape =
@@ -208,8 +213,7 @@ public class HeatMap implements Module, Listener {
           // marker
           ExtrudeMarker marker =
               ExtrudeMarker.builder()
-                  //                  .position(blockX, 0.0, blockZ)
-                  .shape(shape, world.getMinHeight(), world.getMaxHeight())
+                  .shape(shape, world.getMinHeight() + 1, world.getMaxHeight() - 1)
                   .label(String.valueOf(row.count))
                   .lineColor(colour)
                   .fillColor(colour)
