@@ -91,9 +91,11 @@ public class HeatMap implements Module, Listener {
       }
     }
 
-    int getMaxCount() {
+    int getMaxCount(@NotNull World world) {
       try {
-        PreparedStatement s = this.conn.prepareStatement("SELECT MAX(`count`) FROM heatmap");
+        PreparedStatement s =
+            this.conn.prepareStatement("SELECT MAX(`count`) FROM heatmap WHERE world = ?");
+        s.setString(1, world.getName());
         ResultSet r = s.executeQuery();
         return r.getInt(1);
       } catch (SQLException e) {
@@ -102,12 +104,29 @@ public class HeatMap implements Module, Listener {
       }
     }
 
-    Iterator<HeatmapRow> rowIterator(@NotNull String world) {
+    int getMarkerCount(@NotNull World world, int minCount) {
       try {
-        PreparedStatement stmt =
-            this.conn.prepareStatement("SELECT x, z, count FROM heatmap WHERE world = ?");
-        stmt.setString(1, world);
-        ResultSet rs = stmt.executeQuery();
+        PreparedStatement s =
+            this.conn.prepareStatement(
+                "SELECT COUNT(*) FROM heatmap WHERE world = ? AND count >= ?");
+        s.setString(1, world.getName());
+        s.setInt(2, minCount);
+        ResultSet r = s.executeQuery();
+        return r.getInt(1);
+      } catch (SQLException e) {
+        Logger.error("heatmap.sqlite: " + e.getMessage());
+        return 0;
+      }
+    }
+
+    Iterator<HeatmapRow> rowIterator(@NotNull World world, int minCount) {
+      try {
+        PreparedStatement s =
+            this.conn.prepareStatement(
+                "SELECT x, z, count FROM heatmap WHERE world = ? AND count >= ?");
+        s.setString(1, world.getName());
+        s.setInt(2, minCount);
+        ResultSet rs = s.executeQuery();
         return new Iterator<>() {
           private boolean hasNext = rs.next();
 
@@ -123,11 +142,12 @@ public class HeatMap implements Module, Listener {
             }
             try {
               HeatmapRow row =
-                  new HeatmapRow(world, rs.getInt("x"), rs.getInt("z"), rs.getInt("count"));
+                  new HeatmapRow(
+                      world.getName(), rs.getInt("x"), rs.getInt("z"), rs.getInt("count"));
               this.hasNext = rs.next();
               if (!this.hasNext) {
                 rs.close();
-                stmt.close();
+                s.close();
               }
               return row;
             } catch (SQLException e) {
@@ -164,6 +184,8 @@ public class HeatMap implements Module, Listener {
       new Color("#fde725")
     };
 
+    private static final int MAX_MARKERS_PER_WORLD = 750;
+
     private boolean generated = false;
 
     public BlueMapHeatMap(@NotNull BlueMapAPI api) {
@@ -179,15 +201,25 @@ public class HeatMap implements Module, Listener {
 
       DB db = new DB();
 
-      double maxCount = db.getMaxCount();
-      if (maxCount == 0) {
-        return;
-      }
-
       for (World world : Bukkit.getWorlds()) {
+        double maxCount = db.getMaxCount(world);
+        if (maxCount == 0) {
+          continue;
+        }
+
+        int minCount = 0;
+        int rowCount;
+        while (true) {
+          rowCount = db.getMarkerCount(world, minCount);
+          if (rowCount <= MAX_MARKERS_PER_WORLD) {
+            break;
+          }
+          minCount++;
+        }
+
         MarkerSet markerSet = MarkerSet.builder().label("HeatMap").defaultHidden(true).build();
 
-        Iterator<DB.HeatmapRow> iter = db.rowIterator(world.getName());
+        Iterator<DB.HeatmapRow> iter = db.rowIterator(world, minCount);
         if (iter == null) {
           continue;
         }
@@ -220,6 +252,8 @@ public class HeatMap implements Module, Listener {
                   .build();
           markerSet.put("hm" + id, marker);
         }
+
+        Logger.info("bluemap.heatmap added " + rowCount + " markers to " + world.getName());
 
         // add to map(s)
         this.api
