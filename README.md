@@ -63,3 +63,4 @@ spawn; this can only be crafted by a server operator.
 - waxing a pressure plate will prevent it from functioning (useful for decorations)
 - "VeinMiner" enchantment; once applied to a tool shift+mine to break all connected blocks of the
   same type
+- picking an item (middle click) will also pull from inside held shulker boxes

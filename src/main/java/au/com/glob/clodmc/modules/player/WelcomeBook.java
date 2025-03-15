@@ -145,6 +145,12 @@ public class WelcomeBook implements Module, Listener {
           shift+mine to mine
           identical connected
           blocks.
+          """,
+          """
+          Picking an item (middle
+          click) will also pull
+          from inside held
+          shulker boxes.
           """);
 
   public WelcomeBook() {
