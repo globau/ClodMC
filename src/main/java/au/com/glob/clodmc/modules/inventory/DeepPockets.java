@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.Tag;
@@ -30,12 +31,13 @@ public class DeepPockets implements Module, Listener {
 
   @EventHandler
   public void onPlayerPickItem(@NotNull PlayerPickItemEvent event) {
-    // nothing to do if the item is readily available
-    if (event.getSourceSlot() != -1) {
+    Player player = event.getPlayer();
+
+    // nothing to do if the item is readily available, or the player isn't in survival mode
+    if (event.getSourceSlot() != -1 || !player.getGameMode().equals(GameMode.SURVIVAL)) {
       return;
     }
 
-    Player player = event.getPlayer();
     PlayerInventory playerInventory = player.getInventory();
 
     // find block player is targeting
