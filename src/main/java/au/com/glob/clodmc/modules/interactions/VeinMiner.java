@@ -123,12 +123,15 @@ public class VeinMiner implements Module, Listener {
         GriefPrevention.instance.dataStore.getClaimAt(block.getLocation(), true, false, null));
 
     // cooldown if it was likely a block was veinmined
-    for (BlockFace face : FACES) {
-      Block touchingBlock = block.getRelative(face);
-      if (touchingBlock.getType().equals(block.getType())) {
-        this.cooldownUUIDs.add(player.getUniqueId());
-        Schedule.delayed(20, () -> this.cooldownUUIDs.remove(player.getUniqueId()));
-        break;
+    // creative players aren't rate limited
+    if (player.getGameMode().equals(GameMode.SURVIVAL)) {
+      for (BlockFace face : FACES) {
+        Block touchingBlock = block.getRelative(face);
+        if (touchingBlock.getType().equals(block.getType())) {
+          this.cooldownUUIDs.add(player.getUniqueId());
+          Schedule.delayed(20, () -> this.cooldownUUIDs.remove(player.getUniqueId()));
+          break;
+        }
       }
     }
   }
