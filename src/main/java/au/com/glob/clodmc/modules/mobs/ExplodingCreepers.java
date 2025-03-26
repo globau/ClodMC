@@ -20,7 +20,7 @@ public class ExplodingCreepers implements Module, Listener {
   @EventHandler
   public void onEntityExplode(@NotNull EntityExplodeEvent event) {
     Entity entity = event.getEntity();
-    if (!(event instanceof Creeper)) {
+    if (!(entity instanceof Creeper)) {
       return;
     }
 
@@ -44,9 +44,11 @@ public class ExplodingCreepers implements Module, Listener {
         builder.withFade(this.getRandomColour(random));
       }
       meta.addEffect(builder.build());
-      firework.setFireworkMeta(meta);
-      firework.detonate();
     }
+    firework.setFireworkMeta(meta);
+    firework.detonate();
+
+    event.setCancelled(true);
   }
 
   private Color getRandomColour(Random random) {
