@@ -703,16 +703,24 @@ Wither Rose                              :WITHER_ROSE
 
 Frogspawn                                :FROGSPAWN
 Ghast Tear                               :GHAST_TEAR
-Glow Berries                             :GLOW_BERRIES
 Glow Ink Sac                             :GLOW_INK_SAC
-Glow Lichen                              :GLOW_LICHEN
 Goat Horn                                :GOAT_HORN
-Short Grass                              :SHORT_GRASS
-Tall Grass                               :TALL_GRASS
-Grass Block                              :GRASS_BLOCK
 Gunpowder                                :GUNPOWDER
-Hanging Roots                            :HANGING_ROOTS
 Ink Sac                                  :INK_SAC
+
+Bush                                     :BUSH
+Cactus Flower                            :CACTUS_FLOWER
+Firefly Bush                             :FIREFLY_BUSH
+Glow Berries                             :GLOW_BERRIES
+Glow Lichen                              :GLOW_LICHEN
+Grass Block                              :GRASS_BLOCK
+Hanging Roots                            :HANGING_ROOTS
+Leaf Litter                              :LEAF_LITTER
+Short Grass                              :SHORT_GRASS
+Short Dry Grass                          :SHORT_DRY_GRASS
+Tall Grass                               :TALL_GRASS
+Tall Dry Grass                           :TALL_DRY_GRASS
+Wildflowers                              :WILDFLOWERS
 
 Kelp                                     :KELP
 Kelp Plant                               :KELP_PLANT
@@ -1027,6 +1035,8 @@ Cocoa Beans                              :COCOA
 Cocoa Beans                              :COCOA_BEANS
 Cookie                                   :COOKIE
 Egg                                      :EGG
+Blue Egg                                 :BLUE_EGG
+Brown Egg                                :BROWN_EGG
 Sniffer Egg                              :SNIFFER_EGG
 Golden Carrot                            :GOLDEN_CARROT
 
@@ -1703,6 +1713,8 @@ Zombified Piglin Spawn Egg               :ZOMBIFIED_PIGLIN_SPAWN_EGG
 
 Structure Block                          :STRUCTURE_BLOCK
 Structure Void                           :STRUCTURE_VOID
+Test Block                               :TEST_BLOCK
+Test Instance Block                      :TEST_INSTANCE_BLOCK
 Trial Spawner                            :TRIAL_SPAWNER
 Vault                                    :VAULT
 Air                                      :AIR
