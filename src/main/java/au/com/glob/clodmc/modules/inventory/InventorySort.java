@@ -48,6 +48,7 @@ public class InventorySort implements Listener, Module {
   @Override
   public void loadConfig() {
     List<String> alerts = new ArrayList<>(0);
+    List<String> warnings = new ArrayList<>(0);
     List<String> allMaterials = Registry.MATERIAL.stream().map(Enum::name).toList();
 
     // read inventory_order.txt. format follows.  english name is ignored
@@ -82,9 +83,9 @@ public class InventorySort implements Listener, Module {
     // build material --> SortItem mapping
     int index = 0;
     for (String material : orderedMaterials) {
-      // must exist
+      // must exist; these are only warnings as invalid items are ignored
       if (!allMaterials.contains(material)) {
-        alerts.add("inventory_order.txt: invalid: " + material);
+        warnings.add("inventory_order.txt: invalid: " + material);
         continue;
       }
 
@@ -112,6 +113,9 @@ public class InventorySort implements Listener, Module {
     for (String alert : alerts) {
       Logger.error(alert);
       OpAlerts.addAlert(alert);
+    }
+    for (String warning : warnings) {
+      Logger.warning(warning);
     }
   }
 
