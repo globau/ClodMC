@@ -64,12 +64,14 @@ public class BlueMapGriefPrevention extends BlueMap.Addon implements Listener {
       Location lesserCorner = claim.getLesserBoundaryCorner();
       Location greaterCorner = claim.getGreaterBoundaryCorner();
 
+      // positions are in the north-west corner of the block
+      // need to extend the south-east corner to cover the whole claim area
       Shape shape =
           new Shape(
               new Vector2d(lesserCorner.getX(), lesserCorner.getZ()),
-              new Vector2d(greaterCorner.getX(), lesserCorner.getZ()),
-              new Vector2d(greaterCorner.getX(), greaterCorner.getZ()),
-              new Vector2d(lesserCorner.getX(), greaterCorner.getZ()));
+              new Vector2d(greaterCorner.getX() + 1, lesserCorner.getZ()),
+              new Vector2d(greaterCorner.getX() + 1, greaterCorner.getZ() + 1),
+              new Vector2d(lesserCorner.getX(), greaterCorner.getZ() + 1));
 
       Objects.requireNonNull(this.markerSets.get(world))
           .getMarkers()
