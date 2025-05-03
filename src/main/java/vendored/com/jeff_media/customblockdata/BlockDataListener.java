@@ -42,7 +42,7 @@ import org.bukkit.plugin.Plugin;
 import vendored.com.jeff_media.customblockdata.events.CustomBlockDataMoveEvent;
 import vendored.com.jeff_media.customblockdata.events.CustomBlockDataRemoveEvent;
 
-@SuppressWarnings({"NullabilityAnnotations", "unused"})
+@SuppressWarnings({"all"})
 final class BlockDataListener implements Listener {
   private final Plugin plugin;
   private final Predicate<Block> customDataPredicate;

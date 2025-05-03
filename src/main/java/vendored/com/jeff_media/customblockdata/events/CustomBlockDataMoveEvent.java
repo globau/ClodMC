@@ -36,7 +36,7 @@ import vendored.com.jeff_media.customblockdata.CustomBlockData;
  * destination block with protected CustomBlockData. You have to cancel this event yourself to
  * prevent this.
  */
-@SuppressWarnings({"unused"})
+@SuppressWarnings({"all"})
 public class CustomBlockDataMoveEvent extends CustomBlockDataEvent {
   private final @NotNull Block blockTo;
 

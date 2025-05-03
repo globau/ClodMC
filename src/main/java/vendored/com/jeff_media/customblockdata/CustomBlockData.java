@@ -56,7 +56,7 @@ import org.jetbrains.annotations.Nullable;
  * EntityExplodeEvent, etc. For more information about this please see {@link
  * #registerListener(Plugin)}.
  */
-@SuppressWarnings({"NullabilityAnnotations", "unused", "NullableProblems"})
+@SuppressWarnings({"all"})
 public class CustomBlockData implements PersistentDataContainer {
   /** The default package name that must be changed */
   private static final char[] DEFAULT_PACKAGE =

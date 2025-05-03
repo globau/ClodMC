@@ -31,7 +31,7 @@ import java.util.Stack;
 import java.util.TreeMap;
 
 /** A {@link Shape} with possibly some holes. */
-@SuppressWarnings({"All"})
+@SuppressWarnings({"all"})
 public class Cheese {
   private static final Vector2d CHUNK_CELL_SIZE = Vector2d.from(16, 16);
 

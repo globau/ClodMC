@@ -44,7 +44,7 @@ import vendored.com.jeff_media.customblockdata.CustomBlockData;
  *
  * <p>If this event is cancelled, CustomBlockData will not be removed, changed or moved.
  */
-@SuppressWarnings({"NullabilityAnnotations", "unused"})
+@SuppressWarnings({"all"})
 public class CustomBlockDataEvent extends Event implements Cancellable {
   private static final HandlerList HANDLERS = new HandlerList();
 

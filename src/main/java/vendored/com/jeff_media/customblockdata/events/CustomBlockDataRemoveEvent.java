@@ -31,7 +31,7 @@ import org.jetbrains.annotations.NotNull;
  * Called when a block's CustomBlockData is about to be removed because the block was broken,
  * replaced, or has changed in other ways.
  */
-@SuppressWarnings({"unused"})
+@SuppressWarnings({"all"})
 public class CustomBlockDataRemoveEvent extends CustomBlockDataEvent {
   public CustomBlockDataRemoveEvent(
       @NotNull Plugin plugin, @NotNull Block block, @NotNull Event bukkitEvent) {
