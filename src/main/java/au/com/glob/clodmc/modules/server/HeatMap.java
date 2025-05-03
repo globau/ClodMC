@@ -5,23 +5,24 @@ import au.com.glob.clodmc.modules.Module;
 import au.com.glob.clodmc.modules.bluemap.BlueMap;
 import au.com.glob.clodmc.util.Logger;
 import au.com.glob.clodmc.util.Schedule;
-import com.flowpowered.math.vector.Vector2d;
+import com.flowpowered.math.vector.Vector2i;
 import de.bluecolored.bluemap.api.BlueMapAPI;
 import de.bluecolored.bluemap.api.BlueMapMap;
 import de.bluecolored.bluemap.api.BlueMapWorld;
 import de.bluecolored.bluemap.api.markers.ExtrudeMarker;
 import de.bluecolored.bluemap.api.markers.MarkerSet;
 import de.bluecolored.bluemap.api.math.Color;
-import de.bluecolored.bluemap.api.math.Shape;
 import java.io.File;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.NoSuchElementException;
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
@@ -29,6 +30,7 @@ import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.jetbrains.annotations.NotNull;
+import vendored.com.technicjelle.BMUtils.Cheese;
 
 /** Track minutes a chunk is occupied by at least one player */
 public class HeatMap implements Module, Listener {
@@ -205,16 +207,22 @@ public class HeatMap implements Module, Listener {
       if (this.api == null || this.generated) {
         return;
       }
-      this.generated = true;
+      Schedule.asynchronously(
+          () -> {
+            this.buildMarkers();
+            this.generated = true;
+          });
+    }
+
+    private void buildMarkers() {
+      assert this.api != null;
 
       DB db = new DB();
       try {
         for (World world : Bukkit.getWorlds()) {
-          double maxCount = db.getMaxCount(world);
-          if (maxCount == 0) {
-            continue;
-          }
+          int markerCount = 0;
 
+          // determine min and max heatmap values
           int minCount = 0;
           int rowCount;
           while (true) {
@@ -225,43 +233,56 @@ public class HeatMap implements Module, Listener {
             minCount++;
           }
 
-          MarkerSet markerSet = MarkerSet.builder().label("HeatMap").defaultHidden(true).build();
+          double maxCount = db.getMaxCount(world);
+          if (maxCount == 0) {
+            continue;
+          }
 
+          // read chunks, grouped by colour
           Iterator<DB.HeatmapRow> iter = db.rowIterator(world, minCount);
           if (iter == null) {
             continue;
           }
-          int id = 0;
-          while (iter.hasNext()) {
-            DB.HeatmapRow row = iter.next();
-            int blockX = row.x * 16;
-            int blockZ = row.z * 16;
-            id++;
 
-            double index =
-                Math.floor((COLOURS.length - 1) * Math.log(row.count + 1) / Math.log(maxCount + 1));
-            Color colour = COLOURS[(int) index];
-
-            // shape
-            Shape shape =
-                new Shape(
-                    new Vector2d(blockX, blockZ),
-                    new Vector2d(blockX + 16, blockZ),
-                    new Vector2d(blockX + 16, blockZ + 16),
-                    new Vector2d(blockX, blockZ + 16));
-
-            // marker
-            ExtrudeMarker marker =
-                ExtrudeMarker.builder()
-                    .shape(shape, world.getMinHeight() + 1, world.getMaxHeight() - 1)
-                    .label(String.valueOf(row.count))
-                    .lineColor(colour)
-                    .fillColor(colour)
-                    .build();
-            markerSet.put("hm" + id, marker);
+          List<List<Vector2i>> chunkLists = new ArrayList<>(COLOURS.length);
+          for (int i = 0; i < COLOURS.length; i++) {
+            chunkLists.add(new ArrayList<>());
           }
 
-          Logger.info("bluemap.heatmap added " + rowCount + " markers to " + world.getName());
+          while (iter.hasNext()) {
+            DB.HeatmapRow row = iter.next();
+            int index =
+                (int)
+                    Math.floor(
+                        (COLOURS.length - 1) * Math.log(row.count + 1) / Math.log(maxCount + 1));
+            chunkLists.get(index).add(new Vector2i(row.x, row.z));
+          }
+
+          MarkerSet markerSet = MarkerSet.builder().label("HeatMap").defaultHidden(true).build();
+
+          // create platter and marker for each colour
+          int id = 0;
+          for (int i = 0; i < COLOURS.length; i++) {
+            Color colour = COLOURS[i];
+
+            Collection<Cheese> platter =
+                Cheese.createPlatterFromChunks(chunkLists.get(i).toArray(new Vector2i[0]));
+
+            // markers
+            for (Cheese cheese : platter) {
+              markerCount++;
+              ExtrudeMarker marker =
+                  ExtrudeMarker.builder()
+                      .shape(cheese.getShape(), world.getMinHeight() + 1, world.getMaxHeight() - 1)
+                      .label(String.valueOf(chunkLists.get(i).size()))
+                      .lineColor(colour)
+                      .fillColor(colour)
+                      .build();
+              markerSet.put("hm" + id++, marker);
+            }
+          }
+
+          Logger.info("bluemap.heatmap added " + markerCount + " markers to " + world.getName());
 
           // add to map(s)
           this.api
