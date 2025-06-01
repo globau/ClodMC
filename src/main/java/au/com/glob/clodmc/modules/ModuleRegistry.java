@@ -19,6 +19,7 @@ import au.com.glob.clodmc.modules.mobs.PreventMobGriefing;
 import au.com.glob.clodmc.modules.mobs.PreventMobSpawn;
 import au.com.glob.clodmc.modules.player.AFK;
 import au.com.glob.clodmc.modules.player.Back;
+import au.com.glob.clodmc.modules.player.DeathLog;
 import au.com.glob.clodmc.modules.player.GameMode;
 import au.com.glob.clodmc.modules.player.Homes;
 import au.com.glob.clodmc.modules.player.Invite;
@@ -84,6 +85,7 @@ public class ModuleRegistry implements Iterable<Module>, PluginBootstrap {
     // player
     this.register(new AFK());
     this.register(new Back());
+    this.register(new DeathLog());
     this.register(new GameMode());
     this.register(new Homes());
     this.register(new Invite());

@@ -9,6 +9,7 @@ import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import net.kyori.adventure.translation.GlobalTranslator;
 import net.kyori.adventure.translation.Translatable;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /** String helpers */
 public class StringUtil {
@@ -71,6 +72,10 @@ public class StringUtil {
 
   public static @NotNull String asText(@NotNull Component component) {
     return PlainTextComponentSerializer.plainText().serialize(component);
+  }
+
+  public static @NotNull String asText(@Nullable Component component, @NotNull String fallback) {
+    return component == null ? fallback : asText(component);
   }
 
   public static @NotNull Component asComponent(@NotNull String value) {
