@@ -19,6 +19,6 @@ public class DeathLog implements Module, Listener {
         loc.getWorld().getName().equals("world") ? "overworld" : loc.getWorld().getName();
     String coords =
         Math.floor(loc.getX()) + "," + Math.floor(loc.getY()) + "," + Math.floor(loc.getZ());
-    Logger.info(died + " at " + world + "[" + coords + "] ");
+    Logger.info(died + " at " + world + "[" + coords + "]");
   }
 }
