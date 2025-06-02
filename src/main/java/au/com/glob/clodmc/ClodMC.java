@@ -4,10 +4,12 @@ import au.com.glob.clodmc.modules.Module;
 import au.com.glob.clodmc.modules.ModuleRegistry;
 import au.com.glob.clodmc.util.ConfigUtil;
 import au.com.glob.clodmc.util.Logger;
+import au.com.glob.clodmc.util.Players;
 import java.io.File;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.server.ServerLoadEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
@@ -56,7 +58,13 @@ public final class ClodMC extends JavaPlugin implements Listener {
 
   @EventHandler
   public void onServerLoad(@NotNull ServerLoadEvent event) {
+    Players.updateWhitelisted();
     Logger.info("clod-mc started");
+  }
+
+  @EventHandler
+  public void onPlayerJoin(@NotNull PlayerJoinEvent event) {
+    Players.updateWhitelisted();
   }
 
   public static @Nullable <T extends Module> T getModule(@NotNull Class<T> moduleClass) {

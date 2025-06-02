@@ -1,10 +1,6 @@
 package au.com.glob.clodmc.datafile;
 
-import au.com.glob.clodmc.ClodMC;
-import java.io.File;
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import org.bukkit.entity.Player;
@@ -26,17 +22,6 @@ public class PlayerDataFiles {
 
   public static @NotNull PlayerDataFile of(@NotNull UUID uuid) {
     return of("players/" + uuid + ".yml");
-  }
-
-  public static @NotNull List<UUID> knownUUIDs() {
-    File playersPath = ClodMC.instance.getDataFolder().toPath().resolve("players").toFile();
-    File[] ymlFiles = playersPath.listFiles((File file) -> file.getName().endsWith(".yml"));
-    return ymlFiles == null
-        ? List.of()
-        : Arrays.stream(ymlFiles)
-            .map((File file) -> file.getName().substring(0, file.getName().indexOf(".")))
-            .map(UUID::fromString)
-            .toList();
   }
 
   public static void unload(@NotNull Player player) {

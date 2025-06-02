@@ -7,29 +7,22 @@ import au.com.glob.clodmc.datafile.PlayerDataFile;
 import au.com.glob.clodmc.datafile.PlayerDataFiles;
 import au.com.glob.clodmc.modules.Module;
 import au.com.glob.clodmc.util.Chat;
+import au.com.glob.clodmc.util.Players;
 import au.com.glob.clodmc.util.StringUtil;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 import java.util.UUID;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
-import org.bukkit.event.server.ServerLoadEvent;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /** /seen command; show how long it's been since the server last saw the player */
 public class Seen implements Module, Listener {
-  private final @NotNull Map<String, UUID> validNames = new HashMap<>();
-
   public Seen() {
     CommandBuilder.build(
         "seen",
@@ -52,24 +45,16 @@ public class Seen implements Module, Listener {
                   return;
                 }
 
-                PlayerDataFile config =
-                    this.validNames.entrySet().stream()
-                        .filter(
-                            (Map.Entry<String, UUID> entry) ->
-                                entry.getKey().equalsIgnoreCase(playerName))
-                        .map(
-                            (Map.Entry<String, UUID> entry) -> PlayerDataFiles.of(entry.getValue()))
-                        .findFirst()
-                        .orElse(null);
-
-                if (config == null || config.isNewFile()) {
+                UUID playerUUID = Players.getWhitelistedUUID(playerName);
+                if (playerUUID == null) {
                   Chat.error(sender, playerName + " doesn't play on this server");
                   return;
                 }
+                PlayerDataFile dataFile = PlayerDataFiles.of(playerUUID);
 
-                LocalDateTime date = config.getLastLogout();
+                LocalDateTime date = dataFile.getLastLogout();
                 if (date == null) {
-                  date = config.getLastLogin();
+                  date = dataFile.getLastLogin();
                 }
                 if (date == null) {
                   Chat.warning(sender, "Not sure when " + playerName + " last played");
@@ -84,7 +69,7 @@ public class Seen implements Module, Listener {
               });
           builder.completor(
               (@NotNull CommandSender sender, @NotNull List<String> args) ->
-                  this.validNames.keySet().stream()
+                  Players.getWhitelisted().keySet().stream()
                       .sorted(String.CASE_INSENSITIVE_ORDER)
                       .filter(
                           (String name) ->
@@ -92,30 +77,5 @@ public class Seen implements Module, Listener {
                                   .startsWith(args.getFirst().toLowerCase(Locale.ENGLISH)))
                       .toList());
         });
-  }
-
-  private void updateValidNames() {
-    this.validNames.clear();
-    for (UUID uuid : PlayerDataFiles.knownUUIDs()) {
-      PlayerDataFile config = PlayerDataFiles.of(uuid);
-      if (config.getPlaytimeMins() > 10) {
-        this.validNames.put(config.getPlayerName(), uuid);
-      }
-    }
-  }
-
-  @EventHandler
-  public void onServerLoad(@NotNull ServerLoadEvent event) {
-    this.updateValidNames();
-  }
-
-  @EventHandler
-  public void onPlayerJoin(@NotNull PlayerJoinEvent event) {
-    this.updateValidNames();
-  }
-
-  @EventHandler
-  public void onPlayerQuit(@NotNull PlayerQuitEvent event) {
-    this.updateValidNames();
   }
 }

@@ -12,6 +12,7 @@ import au.com.glob.clodmc.util.Chat;
 import au.com.glob.clodmc.util.HttpClient;
 import au.com.glob.clodmc.util.Logger;
 import au.com.glob.clodmc.util.Mailer;
+import au.com.glob.clodmc.util.Players;
 import au.com.glob.clodmc.util.Schedule;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -106,15 +107,9 @@ public class Invite implements Module {
                         }
 
                         // don't allow duplicate player names (because we run without a
-                        // floodgate
-                        // prefix). checking playerdata as whitelist.json doesn't contain
-                        // player names
-                        // for floodgate users.
-                        for (UUID existingUUID : PlayerDataFiles.knownUUIDs()) {
-                          PlayerDataFile playerConfig = PlayerDataFiles.of(existingUUID);
-                          if (playerConfig.getPlayerName().equalsIgnoreCase(name)) {
-                            throw new CommandError("A player named " + name + " already exists");
-                          }
+                        // floodgate prefix).
+                        if (Players.isWhitelisted(name)) {
+                          throw new CommandError("A player named " + name + " already exists");
                         }
 
                         // add to appropriate whitelist
