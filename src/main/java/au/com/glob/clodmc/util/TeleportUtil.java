@@ -189,12 +189,11 @@ public class TeleportUtil {
         doubleY += 0.5;
       } else if (material == Material.DIRT_PATH) {
         doubleY -= 1.0 / 16.0;
+      } else if (Tag.WOOL_CARPETS.isTagged(material) || material == Material.MOSS_CARPET) {
+        doubleY -= 15.0 / 16.0;
       }
     } else {
-      Material material = block.getType();
-      if (Tag.WOOL_CARPETS.isTagged(material) || material == Material.MOSS_CARPET) {
-        doubleY += 1.0 / 16.0;
-      } else if (block.getBlockData() instanceof Snow snow) {
+      if (block.getBlockData() instanceof Snow snow) {
         doubleY += (snow.getLayers() - 1) * (1.0 / 8.0);
       }
     }
@@ -220,6 +219,7 @@ public class TeleportUtil {
     if (surfaceMaterial == Material.AIR
         || surfaceMaterial == Material.CACTUS
         || surfaceMaterial == Material.CAMPFIRE
+        || surfaceMaterial == Material.CAVE_AIR
         || surfaceMaterial == Material.END_PORTAL
         || surfaceMaterial == Material.FIRE
         || surfaceMaterial == Material.LAVA
@@ -229,6 +229,7 @@ public class TeleportUtil {
         || surfaceMaterial == Material.SOUL_CAMPFIRE
         || surfaceMaterial == Material.SOUL_FIRE
         || surfaceMaterial == Material.SWEET_BERRY_BUSH
+        || surfaceMaterial == Material.VOID_AIR
         || surfaceMaterial == Material.WITHER_ROSE) {
       return true;
     }
@@ -240,21 +241,19 @@ public class TeleportUtil {
       return true;
     }
 
-    // the player stands inside blocks that aren't fully solid
-    boolean feetIsSolid;
-    if (Tag.WOOL_CARPETS.isTagged(feetMaterial)
-        || feetMaterial == Material.MOSS_CARPET
-        || Tag.SLABS.isTagged(feetMaterial)
-        || feetMaterial == Material.SNOW
-        || feetMaterial == Material.SCAFFOLDING
-        || feetMaterial == Material.DIRT_PATH) {
-      feetIsSolid = false;
-    } else {
-      feetIsSolid = feetBlock.isSolid();
+    // surface must be solid, blocks where feet and head are mustn't be
+    return !canStandOn(surfaceBlock)
+        || feetBlock.isSolid()
+        || feetBlock.getRelative(BlockFace.UP).isSolid();
+  }
+
+  private static boolean canStandOn(@NotNull Block block) {
+    Material material = block.getType();
+    if (Tag.WOOL_CARPETS.isTagged(material) || material == Material.SCAFFOLDING) {
+      return true;
     }
 
-    // surface must be solid, blocks where feet and head are mustn't be
-    return !surfaceBlock.isSolid() || feetIsSolid || feetBlock.getRelative(BlockFace.UP).isSolid();
+    return block.isSolid();
   }
 
   public static @NotNull Location getRandomLoc(@NotNull Location loc, int randomRadius) {
