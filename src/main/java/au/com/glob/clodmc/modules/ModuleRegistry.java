@@ -12,6 +12,7 @@ import au.com.glob.clodmc.modules.interactions.WaxedItemFrames;
 import au.com.glob.clodmc.modules.interactions.WaxedPressurePlates;
 import au.com.glob.clodmc.modules.inventory.AdminInv;
 import au.com.glob.clodmc.modules.inventory.DeepPockets;
+import au.com.glob.clodmc.modules.inventory.InventoryRestore;
 import au.com.glob.clodmc.modules.inventory.InventorySort;
 import au.com.glob.clodmc.modules.mobs.BetterDrops;
 import au.com.glob.clodmc.modules.mobs.ExplodingCreepers;
@@ -74,6 +75,7 @@ public class ModuleRegistry implements Iterable<Module>, PluginBootstrap {
     // inventory
     this.register(new AdminInv());
     this.register(new DeepPockets());
+    this.register(new InventoryRestore());
     this.register(new InventorySort());
 
     // mobs

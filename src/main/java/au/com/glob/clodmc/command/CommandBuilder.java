@@ -74,6 +74,11 @@ public class CommandBuilder {
     return this;
   }
 
+  public @NotNull CommandBuilder executor(@NotNull ExecutorEPS executor) {
+    this.executor = executor;
+    return this;
+  }
+
   public @NotNull CommandBuilder executor(@NotNull ExecutorESP executor) {
     this.executor = executor;
     return this;
@@ -120,6 +125,11 @@ public class CommandBuilder {
                 case ExecutorE executorE -> executorE.accept(new EitherCommandSender(sender));
                 case ExecutorEP executorEP ->
                     executorEP.accept(new EitherCommandSender(sender), that.toPlayer(args, 0));
+                case ExecutorEPS executorEPS ->
+                    executorEPS.accept(
+                        new EitherCommandSender(sender),
+                        that.toPlayer(args, 0),
+                        that.toString(args, 1));
                 case ExecutorES executorES ->
                     executorES.accept(new EitherCommandSender(sender), that.toString(args, 0));
                 case ExecutorPS executorPS ->
