@@ -3,9 +3,10 @@ package au.com.glob.clodmc.modules.player;
 import au.com.glob.clodmc.command.CommandBuilder;
 import au.com.glob.clodmc.command.CommandUsageError;
 import au.com.glob.clodmc.command.EitherCommandSender;
+import au.com.glob.clodmc.datafile.PlayerDataFile;
+import au.com.glob.clodmc.datafile.PlayerDataFiles;
 import au.com.glob.clodmc.modules.Module;
 import au.com.glob.clodmc.util.Chat;
-import au.com.glob.clodmc.util.PlayerDataFile;
 import au.com.glob.clodmc.util.StringUtil;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
@@ -56,11 +57,12 @@ public class Seen implements Module, Listener {
                         .filter(
                             (Map.Entry<String, UUID> entry) ->
                                 entry.getKey().equalsIgnoreCase(playerName))
-                        .map((Map.Entry<String, UUID> entry) -> PlayerDataFile.of(entry.getValue()))
+                        .map(
+                            (Map.Entry<String, UUID> entry) -> PlayerDataFiles.of(entry.getValue()))
                         .findFirst()
                         .orElse(null);
 
-                if (config == null || !config.fileExists()) {
+                if (config == null || config.isNewFile()) {
                   Chat.error(sender, playerName + " doesn't play on this server");
                   return;
                 }
@@ -94,8 +96,8 @@ public class Seen implements Module, Listener {
 
   private void updateValidNames() {
     this.validNames.clear();
-    for (UUID uuid : PlayerDataFile.knownUUIDs()) {
-      PlayerDataFile config = PlayerDataFile.of(uuid);
+    for (UUID uuid : PlayerDataFiles.knownUUIDs()) {
+      PlayerDataFile config = PlayerDataFiles.of(uuid);
       if (config.getPlaytimeMins() > 10) {
         this.validNames.put(config.getPlayerName(), uuid);
       }

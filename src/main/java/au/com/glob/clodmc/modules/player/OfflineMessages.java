@@ -1,9 +1,9 @@
 package au.com.glob.clodmc.modules.player;
 
+import au.com.glob.clodmc.datafile.PlayerDataFile;
+import au.com.glob.clodmc.datafile.PlayerDataFiles;
 import au.com.glob.clodmc.modules.Module;
 import au.com.glob.clodmc.util.Chat;
-import au.com.glob.clodmc.util.PlayerDataFile;
-import au.com.glob.clodmc.util.PlayerDataUpdater;
 import au.com.glob.clodmc.util.Schedule;
 import au.com.glob.clodmc.util.StringUtil;
 import java.util.ArrayList;
@@ -48,27 +48,27 @@ public class OfflineMessages implements Module, Listener {
     // offline player check might make a web request to fetch uuid
     OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(recipient);
 
-    try (PlayerDataUpdater config = PlayerDataUpdater.of(offlinePlayer.getUniqueId())) {
-      if (!config.fileExists()) {
-        return false;
-      }
-
-      List<Message> messages = this.loadMessages(config.getList("messages"));
-      if (messages.size() >= 10) {
-        sender.error(recipient + "'s mailbox is full");
-        return false;
-      }
-      messages.add(new Message(System.currentTimeMillis() / 1000L, sender.name, message));
-
-      config.set("messages", messages);
+    PlayerDataFile dataFile = PlayerDataFiles.of(offlinePlayer.getUniqueId());
+    if (dataFile.isNewFile()) {
+      return false;
     }
+
+    List<Message> messages = this.loadMessages(dataFile.getList("messages"));
+    if (messages.size() >= 10) {
+      sender.error(recipient + "'s mailbox is full");
+      return false;
+    }
+    messages.add(new Message(System.currentTimeMillis() / 1000L, sender.name, message));
+
+    dataFile.set("messages", messages);
+    dataFile.save();
 
     sender.fyi(recipient + " will receive your message next time they log in");
     return true;
   }
 
   private List<Message> loadMessages(@NotNull Player player) {
-    return this.loadMessages(PlayerDataFile.of(player).getList("messages"));
+    return this.loadMessages(PlayerDataFiles.of(player).getList("messages"));
   }
 
   private List<Message> loadMessages(@Nullable List<?> configValue) {
@@ -121,9 +121,9 @@ public class OfflineMessages implements Module, Listener {
           for (Message message : messages) {
             message.sendTo(player);
           }
-          try (PlayerDataUpdater config = PlayerDataUpdater.of(player)) {
-            config.remove("messages");
-          }
+          PlayerDataFile dataFile = PlayerDataFiles.of(player);
+          dataFile.remove("messages");
+          dataFile.save();
         });
   }
 

@@ -2,10 +2,10 @@ package au.com.glob.clodmc.modules.player;
 
 import au.com.glob.clodmc.command.CommandBuilder;
 import au.com.glob.clodmc.command.CommandError;
+import au.com.glob.clodmc.datafile.PlayerDataFile;
+import au.com.glob.clodmc.datafile.PlayerDataFiles;
 import au.com.glob.clodmc.modules.Module;
 import au.com.glob.clodmc.util.Chat;
-import au.com.glob.clodmc.util.PlayerDataFile;
-import au.com.glob.clodmc.util.PlayerDataUpdater;
 import au.com.glob.clodmc.util.TeleportUtil;
 import java.util.HashMap;
 import java.util.List;
@@ -147,33 +147,33 @@ public class Homes implements Listener, Module {
   }
 
   private @NotNull Map<String, Location> getHomes(@NotNull Player player) {
-    PlayerDataFile config = PlayerDataFile.of(player);
+    PlayerDataFile dataFile = PlayerDataFiles.of(player);
 
-    ConfigurationSection section = config.getConfigurationSection("homes");
+    ConfigurationSection section = dataFile.getConfigurationSection("homes");
     if (section == null) {
       return new HashMap<>(0);
     }
     Map<String, Location> result = new HashMap<>();
     for (String name : section.getKeys(false)) {
-      Location playerLocation = config.getSerializable("homes." + name, Location.class, null);
+      Location playerLocation = dataFile.getSerializable("homes." + name, Location.class, null);
       result.put(name, Objects.requireNonNull(playerLocation));
     }
     return result;
   }
 
   private void setHomes(@NotNull Player player, @NotNull Map<String, Location> homes) {
-    try (PlayerDataUpdater config = PlayerDataUpdater.of(player)) {
-      ConfigurationSection section = config.getConfigurationSection("homes");
-      if (section != null) {
-        for (String name : section.getKeys(false)) {
-          if (!homes.containsKey(name)) {
-            section.set(name, null);
-          }
+    PlayerDataFile dataFile = PlayerDataFiles.of(player);
+    ConfigurationSection section = dataFile.getConfigurationSection("homes");
+    if (section != null) {
+      for (String name : section.getKeys(false)) {
+        if (!homes.containsKey(name)) {
+          section.set(name, null);
         }
       }
-      for (String name : homes.keySet()) {
-        config.set("homes." + name, homes.get(name));
-      }
     }
+    for (String name : homes.keySet()) {
+      dataFile.set("homes." + name, homes.get(name));
+    }
+    dataFile.save();
   }
 }

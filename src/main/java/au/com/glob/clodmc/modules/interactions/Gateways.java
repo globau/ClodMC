@@ -3,13 +3,13 @@ package au.com.glob.clodmc.modules.interactions;
 import au.com.glob.clodmc.ClodMC;
 import au.com.glob.clodmc.command.CommandBuilder;
 import au.com.glob.clodmc.command.EitherCommandSender;
+import au.com.glob.clodmc.datafile.PlayerDataFile;
+import au.com.glob.clodmc.datafile.PlayerDataFiles;
 import au.com.glob.clodmc.modules.Module;
 import au.com.glob.clodmc.modules.bluemap.BlueMap;
 import au.com.glob.clodmc.util.Chat;
 import au.com.glob.clodmc.util.ConfigUtil;
 import au.com.glob.clodmc.util.Logger;
-import au.com.glob.clodmc.util.PlayerDataFile;
-import au.com.glob.clodmc.util.PlayerDataUpdater;
 import au.com.glob.clodmc.util.Schedule;
 import au.com.glob.clodmc.util.StringUtil;
 import au.com.glob.clodmc.util.TeleportUtil;
@@ -397,9 +397,9 @@ public class Gateways implements Module, Listener {
       }
 
       // cooldown
-      PlayerDataFile playerConfig = PlayerDataFile.of(player);
+      PlayerDataFile dataFile = PlayerDataFiles.of(player);
       LocalDateTime now = TimeUtil.localNow();
-      LocalDateTime lastRandomTeleport = playerConfig.getDateTime("tpr");
+      LocalDateTime lastRandomTeleport = dataFile.getDateTime("tpr");
       if (lastRandomTeleport != null) {
         long secondsSinceRandomTeleport = Duration.between(lastRandomTeleport, now).toSeconds();
         if (secondsSinceRandomTeleport < RANDOM_TP_COOLDOWN) {
@@ -412,9 +412,8 @@ public class Gateways implements Module, Listener {
           return;
         }
       }
-      try (PlayerDataUpdater config = PlayerDataUpdater.of(player)) {
-        config.set("tpr", now);
-      }
+      dataFile.set("tpr", now);
+      dataFile.save();
 
       World world = Bukkit.getWorld("world");
       if (world == null) {

@@ -5,13 +5,13 @@ import au.com.glob.clodmc.command.CommandBuilder;
 import au.com.glob.clodmc.command.CommandError;
 import au.com.glob.clodmc.command.CommandUsageError;
 import au.com.glob.clodmc.command.EitherCommandSender;
+import au.com.glob.clodmc.datafile.PlayerDataFile;
+import au.com.glob.clodmc.datafile.PlayerDataFiles;
 import au.com.glob.clodmc.modules.Module;
 import au.com.glob.clodmc.util.Chat;
 import au.com.glob.clodmc.util.HttpClient;
 import au.com.glob.clodmc.util.Logger;
 import au.com.glob.clodmc.util.Mailer;
-import au.com.glob.clodmc.util.PlayerDataFile;
-import au.com.glob.clodmc.util.PlayerDataUpdater;
 import au.com.glob.clodmc.util.Schedule;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -110,8 +110,8 @@ public class Invite implements Module {
                         // prefix). checking playerdata as whitelist.json doesn't contain
                         // player names
                         // for floodgate users.
-                        for (UUID existingUUID : PlayerDataFile.knownUUIDs()) {
-                          PlayerDataFile playerConfig = PlayerDataFile.of(existingUUID);
+                        for (UUID existingUUID : PlayerDataFiles.knownUUIDs()) {
+                          PlayerDataFile playerConfig = PlayerDataFiles.of(existingUUID);
                           if (playerConfig.getPlayerName().equalsIgnoreCase(name)) {
                             throw new CommandError("A player named " + name + " already exists");
                           }
@@ -135,10 +135,10 @@ public class Invite implements Module {
                                 }
 
                                 // record who invited the new player
-                                try (PlayerDataUpdater playerConfig = PlayerDataUpdater.of(uuid)) {
-                                  playerConfig.setPlayerName(name);
-                                  playerConfig.setInvitedBy(sender.getName());
-                                }
+                                PlayerDataFile dataFile = PlayerDataFiles.of(uuid);
+                                dataFile.setPlayerName(name);
+                                dataFile.setInvitedBy(sender.getName());
+                                dataFile.save();
 
                                 // email admin
                                 Mailer.emailAdmin(
