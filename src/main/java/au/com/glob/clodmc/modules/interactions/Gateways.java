@@ -41,6 +41,8 @@ import java.util.Objects;
 import java.util.Random;
 import java.util.Set;
 import java.util.stream.Collectors;
+import me.ryanhamshire.GriefPrevention.Claim;
+import me.ryanhamshire.GriefPrevention.GriefPrevention;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.title.Title;
@@ -453,6 +455,12 @@ public class Gateways implements Module, Listener {
           double y = world.getHighestBlockYAt(new Location(world, x, 0, z));
           randomPos = new Location(world, x, y, z);
         } while (!border.isInside(randomPos));
+
+        // avoid claims
+        Claim claim = GriefPrevention.instance.dataStore.getClaimAt(randomPos, true, null);
+        if (claim != null) {
+          continue;
+        }
 
         // find a safe location
         teleportPos = TeleportUtil.getSafePos(randomPos);
