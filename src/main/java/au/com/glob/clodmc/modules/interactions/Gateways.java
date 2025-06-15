@@ -425,7 +425,7 @@ public class Gateways implements Module, Listener {
           return;
         }
       }
-      dataFile.set("tpr", now);
+      dataFile.setDateTime("tpr", now);
       dataFile.save();
 
       World world = Bukkit.getWorld("world");
