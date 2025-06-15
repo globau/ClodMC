@@ -14,6 +14,9 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class Players {
+  // Attribute.BLOCK_INTERACTION_RANGE + 1
+  public static final int INTERACTION_RANGE = 5;
+
   private static volatile @NotNull Map<String, UUID> whitelisted = new HashMap<>();
 
   public static @NotNull Map<String, UUID> getWhitelisted() {

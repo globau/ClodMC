@@ -10,6 +10,7 @@ import au.com.glob.clodmc.modules.bluemap.BlueMap;
 import au.com.glob.clodmc.util.Chat;
 import au.com.glob.clodmc.util.ConfigUtil;
 import au.com.glob.clodmc.util.Logger;
+import au.com.glob.clodmc.util.Players;
 import au.com.glob.clodmc.util.Schedule;
 import au.com.glob.clodmc.util.StringUtil;
 import au.com.glob.clodmc.util.TeleportUtil;
@@ -42,7 +43,6 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
-import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.title.Title;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
@@ -367,6 +367,15 @@ public class Gateways implements Module, Listener {
       return;
     }
 
+    // show colours of looked-at anchorblocks
+    Block targetBlock = player.getTargetBlockExact(Players.INTERACTION_RANGE);
+    if (targetBlock != null) {
+      AnchorBlock anchorBlock = this.instances.get(BlockPos.of(targetBlock.getLocation()));
+      if (anchorBlock != null) {
+        player.sendActionBar(StringUtil.asComponent(anchorBlock.getInformation()));
+      }
+    }
+
     Location playerLocation = player.getLocation();
     BlockPos playerPos = BlockPos.of(playerLocation);
 
@@ -473,14 +482,6 @@ public class Gateways implements Module, Listener {
               + " blocks away");
 
     } else {
-      // if standing on a disconnected anchor, show the colour
-      if (!anchorBlock.isConnected()) {
-        player.sendActionBar(
-            MiniMessage.miniMessage()
-                .deserialize("<yellow>" + anchorBlock.displayName + "</yellow> is not connected"));
-        return;
-      }
-
       // teleport to connected anchor
       teleportPos =
           Objects.requireNonNull(anchorBlock.connectedAnchorBlock()).teleportLocation(player);
@@ -614,6 +615,19 @@ public class Gateways implements Module, Listener {
 
     public @Nullable String getName() {
       return this.name;
+    }
+
+    public @NotNull String getInformation() {
+      String prefix = "<yellow>" + this.displayName + "</yellow> - ";
+      if (this.isConnected()) {
+        return prefix
+            + this.connectedTo.blockPos.getString(
+                !this.blockPos.world.equals(this.connectedTo.blockPos.world));
+      }
+      if (this.networkId == RANDOM_NETWORK_ID) {
+        return prefix + "Random Location";
+      }
+      return prefix + "Disconnected";
     }
 
     public @NotNull Colour getTopColour() {
@@ -1022,7 +1036,7 @@ public class Gateways implements Module, Listener {
       }
 
       Set<String> seenColours = new HashSet<>();
-      for (Gateways.AnchorBlock anchorBlock : Gateways.instance.getAnchorBlocks()) {
+      for (AnchorBlock anchorBlock : Gateways.instance.getAnchorBlocks()) {
         if (anchorBlock.getName() == null) {
           continue;
         }
@@ -1100,6 +1114,20 @@ public class Gateways implements Module, Listener {
           + ", "
           + this.z
           + '}';
+    }
+
+    public @NotNull String getString(boolean includeWorld) {
+      String prefix = "";
+      if (includeWorld) {
+        prefix =
+            switch (this.world.getEnvironment()) {
+              case NORMAL -> "Overworld ";
+              case NETHER -> "Nether ";
+              case THE_END -> "The End ";
+              default -> "";
+            };
+      }
+      return prefix + this.x + ", " + this.y + ", " + this.z;
     }
 
     @Override

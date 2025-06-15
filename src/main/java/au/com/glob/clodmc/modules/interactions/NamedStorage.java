@@ -1,6 +1,7 @@
 package au.com.glob.clodmc.modules.interactions;
 
 import au.com.glob.clodmc.modules.Module;
+import au.com.glob.clodmc.util.Players;
 import au.com.glob.clodmc.util.StringUtil;
 import net.kyori.adventure.text.Component;
 import org.bukkit.block.Block;
@@ -17,7 +18,7 @@ public class NamedStorage implements Module, Listener {
   @EventHandler
   public void onPlayerMove(@NotNull PlayerMoveEvent event) {
     Player player = event.getPlayer();
-    Block block = player.getTargetBlockExact(4);
+    Block block = player.getTargetBlockExact(Players.INTERACTION_RANGE);
     if (block == null) {
       return;
     }

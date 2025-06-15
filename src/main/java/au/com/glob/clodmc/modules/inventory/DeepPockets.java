@@ -1,6 +1,7 @@
 package au.com.glob.clodmc.modules.inventory;
 
 import au.com.glob.clodmc.modules.Module;
+import au.com.glob.clodmc.util.Players;
 import io.papermc.paper.event.player.PlayerPickItemEvent;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -13,7 +14,6 @@ import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.Tag;
-import org.bukkit.attribute.Attribute;
 import org.bukkit.block.Block;
 import org.bukkit.block.ShulkerBox;
 import org.bukkit.entity.Player;
@@ -41,11 +41,7 @@ public class DeepPockets implements Module, Listener {
     PlayerInventory playerInventory = player.getInventory();
 
     // find block player is targeting
-    int interactionRange =
-        (int)
-            Objects.requireNonNull(player.getAttribute(Attribute.BLOCK_INTERACTION_RANGE))
-                .getValue();
-    Block target = player.getTargetBlockExact(interactionRange + 1);
+    Block target = player.getTargetBlockExact(Players.INTERACTION_RANGE);
     if (target == null) {
       return;
     }
