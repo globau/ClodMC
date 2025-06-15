@@ -430,6 +430,14 @@ public class Gateways implements Module, Listener {
       dataFile.setDateTime("tpr", now);
       dataFile.save();
 
+      // show a message; normally this is only visible if the destination
+      // chunk is slow to load
+      player.showTitle(
+          Title.title(
+              Component.text(""),
+              Component.text("Teleporting"),
+              Title.Times.times(Duration.ZERO, Duration.ofSeconds(2), Duration.ofMillis(500))));
+
       World world = Bukkit.getWorld("world");
       if (world == null) {
         this.ignore.put(player, anchorBlock.blockPos.up());
@@ -494,14 +502,6 @@ public class Gateways implements Module, Listener {
       teleportPos =
           Objects.requireNonNull(anchorBlock.connectedAnchorBlock()).teleportLocation(player);
     }
-
-    // show a message; normally this is only visible if the destination
-    // chunk is slow to load
-    player.showTitle(
-        Title.title(
-            Component.text(""),
-            Component.text("Teleporting"),
-            Title.Times.times(Duration.ZERO, Duration.ofSeconds(2), Duration.ofMillis(500))));
 
     // teleport
     this.ignore.put(player, anchorBlock.blockPos.up());
