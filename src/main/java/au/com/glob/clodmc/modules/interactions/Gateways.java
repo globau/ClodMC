@@ -507,7 +507,7 @@ public class Gateways implements Module, Listener {
     this.ignore.put(player, anchorBlock.blockPos.up());
     Location finalTeleportPos = teleportPos;
     player
-        .teleportAsync(teleportPos, PlayerTeleportEvent.TeleportCause.PLUGIN)
+        .teleportAsync(teleportPos, PlayerTeleportEvent.TeleportCause.COMMAND)
         .whenComplete(
             (Boolean result, Throwable e) -> {
               player.clearTitle();
