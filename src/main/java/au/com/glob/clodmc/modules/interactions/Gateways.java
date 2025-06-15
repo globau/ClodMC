@@ -363,6 +363,10 @@ public class Gateways implements Module, Listener {
   @EventHandler
   public void onPlayerMove(@NotNull PlayerMoveEvent event) {
     Player player = event.getPlayer();
+    if (player.getGameMode().equals(GameMode.SPECTATOR)) {
+      return;
+    }
+
     Location playerLocation = player.getLocation();
     BlockPos playerPos = BlockPos.of(playerLocation);
 
