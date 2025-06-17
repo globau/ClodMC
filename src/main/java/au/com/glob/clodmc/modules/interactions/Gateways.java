@@ -397,6 +397,7 @@ public class Gateways implements Module, Listener {
     }
 
     Location teleportPos;
+    PlayerTeleportEvent.TeleportCause cause;
 
     if (anchorBlock.networkId == RANDOM_NETWORK_ID) {
       teleportPos = playerLocation;
@@ -491,6 +492,9 @@ public class Gateways implements Module, Listener {
         return;
       }
 
+      // set the cause as COMMAND to allow /back
+      cause = PlayerTeleportEvent.TeleportCause.COMMAND;
+
       Chat.info(
           player,
           "Sending you "
@@ -501,13 +505,16 @@ public class Gateways implements Module, Listener {
       // teleport to connected anchor
       teleportPos =
           Objects.requireNonNull(anchorBlock.connectedAnchorBlock()).teleportLocation(player);
+
+      // set cause to PLUGIN so this teleport is ignored by /back
+      cause = PlayerTeleportEvent.TeleportCause.PLUGIN;
     }
 
     // teleport
     this.ignore.put(player, anchorBlock.blockPos.up());
     Location finalTeleportPos = teleportPos;
     player
-        .teleportAsync(teleportPos, PlayerTeleportEvent.TeleportCause.COMMAND)
+        .teleportAsync(teleportPos, cause)
         .whenComplete(
             (Boolean result, Throwable e) -> {
               player.clearTitle();
