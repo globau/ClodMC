@@ -1,16 +1,25 @@
 package au.com.glob.clodmc.modules.player;
 
+import au.com.glob.clodmc.ClodMC;
 import au.com.glob.clodmc.command.CommandBuilder;
 import au.com.glob.clodmc.command.CommandUsageError;
 import au.com.glob.clodmc.command.EitherCommandSender;
 import au.com.glob.clodmc.modules.Module;
 import au.com.glob.clodmc.util.Chat;
+import au.com.glob.clodmc.util.Logger;
 import au.com.glob.clodmc.util.Schedule;
 import au.com.glob.clodmc.util.StringUtil;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonParser;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.serializer.json.JSONComponentSerializer;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -178,6 +187,24 @@ public class WelcomeBook implements Module, Listener {
                                   .startsWith(args.getFirst().toLowerCase(Locale.ENGLISH)))
                       .toList());
         });
+
+    // save the welcome book for other consumers
+    List<String> pagesAsJson =
+        PAGES.stream()
+            .map(StringUtil::asComponent)
+            .map((Component component) -> JSONComponentSerializer.json().serialize(component))
+            .toList();
+    String json = "[" + String.join(",", pagesAsJson) + "]";
+
+    Gson gson = new GsonBuilder().setPrettyPrinting().create();
+    String prettyJson = gson.toJson(JsonParser.parseString(json));
+
+    try {
+      File jsonFile = new File(ClodMC.instance.getDataFolder(), "welcome-book.json");
+      Files.writeString(jsonFile.toPath(), prettyJson);
+    } catch (IOException e) {
+      Logger.error("failed to write welcome-book.json: " + e);
+    }
   }
 
   @EventHandler
