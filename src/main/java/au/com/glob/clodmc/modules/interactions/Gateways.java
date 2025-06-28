@@ -677,12 +677,19 @@ public class Gateways implements Module, Listener {
       return this.connectedTo;
     }
 
-    private Block facingBlock(@NotNull Location location) {
+    private Location facingLocation(@NotNull Location location) {
       double yawRadians = Math.toRadians(location.getYaw());
       double facingX = location.getX() - Math.sin(yawRadians);
       double facingZ = location.getZ() + Math.cos(yawRadians);
-      Location facingLoc = new Location(location.getWorld(), facingX, location.getY(), facingZ);
-      return facingLoc.getBlock();
+      return new Location(location.getWorld(), facingX, location.getY(), facingZ);
+    }
+
+    private Block facingBlock(@NotNull Location location) {
+      return this.facingLocation(location).getBlock();
+    }
+
+    private boolean isFacingAnchor(@NotNull Location location) {
+      return Gateways.instance.instances.containsKey(BlockPos.of(this.facingLocation(location)));
     }
 
     private boolean isFacingAir(@NotNull Location location) {
@@ -696,19 +703,36 @@ public class Gateways implements Module, Listener {
     private @NotNull Location teleportLocation(@NotNull Player player) {
       // rotate player to avoid facing a wall
 
-      // get top and bottom blocks for the player's location
+      // get standing-on block, bottom, and top blocks for the player's location
       // snapped to 90 degrees of rotation
-      Location bottomLoc = this.blockPos.asLocation().add(0, 1, 0);
-      bottomLoc.setYaw((float) Math.round(player.getLocation().getYaw() / 90.0) * 90);
-      bottomLoc.setPitch(player.getLocation().getPitch());
+      Location blockLoc = this.blockPos.asLocation();
+      blockLoc.setYaw((float) Math.round(player.getLocation().getYaw() / 90.0) * 90);
+      blockLoc.setPitch(player.getLocation().getPitch());
+      Location bottomLoc = blockLoc.clone().add(0, 1, 0);
       Location topLoc = bottomLoc.clone().add(0, 1, 0);
 
-      // check for air
+      // check for air; treat air blocks above other anchors as solid
       int attempts = 1;
-      while (attempts <= 4 && !(this.isFacingAir(bottomLoc) && this.isFacingAir(topLoc))) {
-        bottomLoc.setYaw(((bottomLoc.getYaw() + 90) + 180) % 360 - 180);
-        topLoc.setYaw(bottomLoc.getYaw());
+      while (attempts <= 4
+          && !(this.isFacingAir(bottomLoc)
+              && this.isFacingAir(topLoc)
+              && !this.isFacingAnchor(blockLoc))) {
+        blockLoc.setYaw(((blockLoc.getYaw() + 90) + 180) % 360 - 180);
+        bottomLoc.setYaw(blockLoc.getYaw());
+        topLoc.setYaw(blockLoc.getYaw());
         attempts++;
+      }
+
+      // didn't find air, try again without the anchor check
+      if (!(this.isFacingAir(bottomLoc)
+          && this.isFacingAir(topLoc)
+          && !this.isFacingAnchor(blockLoc))) {
+        attempts = 1;
+        while (attempts <= 4 && !(this.isFacingAir(bottomLoc) && this.isFacingAir(topLoc))) {
+          bottomLoc.setYaw(((bottomLoc.getYaw() + 90) + 180) % 360 - 180);
+          topLoc.setYaw(bottomLoc.getYaw());
+          attempts++;
+        }
       }
 
       // didn't find air, settle for non-solid
