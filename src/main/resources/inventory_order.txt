@@ -651,6 +651,7 @@ Dead Tube Coral Fan                      :DEAD_TUBE_CORAL_FAN
 Dead Tube Coral Fan                      :DEAD_TUBE_CORAL_WALL_FAN
 
 Dead Bush                                :DEAD_BUSH
+Dried Ghast                              :DRIED_GHAST
 Small Dripleaf                           :SMALL_DRIPLEAF
 Big Dripleaf                             :BIG_DRIPLEAF
 Big Dripleaf                             :BIG_DRIPLEAF_STEM
@@ -1200,98 +1201,10 @@ Splash Potion                            :SPLASH_POTION
 Lingering Potion                         :LINGERING_POTION
 
 #
-# utility
+# storage
 #
 
-Anvil                                    :ANVIL
-Damaged Anvil                            :DAMAGED_ANVIL
-Chipped Anvil                            :CHIPPED_ANVIL
-Armor Stand                              :ARMOR_STAND
 Barrel                                   :BARREL
-Beacon                                   :BEACON
-Blast Furnace                            :BLAST_FURNACE
-
-White Bundle                             :WHITE_BUNDLE
-Light Gray Bundle                        :LIGHT_GRAY_BUNDLE
-Gray Bundle                              :GRAY_BUNDLE
-Black Bundle                             :BLACK_BUNDLE
-Brown Bundle                             :BROWN_BUNDLE
-Red Bundle                               :RED_BUNDLE
-Orange Bundle                            :ORANGE_BUNDLE
-Yellow Bundle                            :YELLOW_BUNDLE
-Lime Bundle                              :LIME_BUNDLE
-Green Bundle                             :GREEN_BUNDLE
-Cyan Bundle                              :CYAN_BUNDLE
-Light Blue Bundle                        :LIGHT_BLUE_BUNDLE
-Blue Bundle                              :BLUE_BUNDLE
-Purple Bundle                            :PURPLE_BUNDLE
-Magenta Bundle                           :MAGENTA_BUNDLE
-Pink Bundle                              :PINK_BUNDLE
-
-White Bed                                :WHITE_BED
-Light Gray Bed                           :LIGHT_GRAY_BED
-Gray Bed                                 :GRAY_BED
-Black Bed                                :BLACK_BED
-Brown Bed                                :BROWN_BED
-Red Bed                                  :RED_BED
-Orange Bed                               :ORANGE_BED
-Yellow Bed                               :YELLOW_BED
-Lime Bed                                 :LIME_BED
-Green Bed                                :GREEN_BED
-Cyan Bed                                 :CYAN_BED
-Light Blue Bed                           :LIGHT_BLUE_BED
-Blue Bed                                 :BLUE_BED
-Purple Bed                               :PURPLE_BED
-Magenta Bed                              :MAGENTA_BED
-Pink Bed                                 :PINK_BED
-
-Brewing Stand                            :BREWING_STAND
-Brush                                    :BRUSH
-Bucket                                   :BUCKET
-Water Bucket                             :WATER_BUCKET
-Lava Bucket                              :LAVA_BUCKET
-Milk Bucket                              :MILK_BUCKET
-Powder Snow Bucket                       :POWDER_SNOW_BUCKET
-Bundle                                   :BUNDLE
-Campfire                                 :CAMPFIRE
-Carrot On A Stick                        :CARROT_ON_A_STICK
-Cartography Table                        :CARTOGRAPHY_TABLE
-Cauldron                                 :CAULDRON
-Water Cauldron                           :WATER_CAULDRON
-Lava Cauldron                            :LAVA_CAULDRON
-Powder Snow Cauldron                     :POWDER_SNOW_CAULDRON
-Chest                                    :CHEST
-Clock                                    :CLOCK
-Compass                                  :COMPASS
-Recovery Compass                         :RECOVERY_COMPASS
-Composter                                :COMPOSTER
-Conduit                                  :CONDUIT
-Crafter                                  :CRAFTER
-Crafting Table                           :CRAFTING_TABLE
-Enchanting Table                         :ENCHANTING_TABLE
-End Crystal                              :END_CRYSTAL
-Ender Chest                              :ENDER_CHEST
-Firework Rocket                          :FIREWORK_ROCKET
-Firework Star                            :FIREWORK_STAR
-Fishing Rod                              :FISHING_ROD
-Fletching Table                          :FLETCHING_TABLE
-Flint And Steel                          :FLINT_AND_STEEL
-Furnace                                  :FURNACE
-Grindstone                               :GRINDSTONE
-Jukebox                                  :JUKEBOX
-Ladder                                   :LADDER
-Lead                                     :LEAD
-Lodestone                                :LODESTONE
-Loom                                     :LOOM
-Map                                      :MAP
-Empty Map                                :FILLED_MAP
-Name Tag                                 :NAME_TAG
-Note Block                               :NOTE_BLOCK
-Paper                                    :PAPER
-Respawn Anchor                           :RESPAWN_ANCHOR
-Saddle                                   :SADDLE
-Scaffolding                              :SCAFFOLDING
-Shears                                   :SHEARS
 
 Shulker Box                              :SHULKER_BOX
 White Shulker Box                        :WHITE_SHULKER_BOX
@@ -1311,6 +1224,117 @@ Purple Shulker Box                       :PURPLE_SHULKER_BOX
 Magenta Shulker Box                      :MAGENTA_SHULKER_BOX
 Pink Shulker Box                         :PINK_SHULKER_BOX
 
+Bundle                                   :BUNDLE
+White Bundle                             :WHITE_BUNDLE
+Light Gray Bundle                        :LIGHT_GRAY_BUNDLE
+Gray Bundle                              :GRAY_BUNDLE
+Black Bundle                             :BLACK_BUNDLE
+Brown Bundle                             :BROWN_BUNDLE
+Red Bundle                               :RED_BUNDLE
+Orange Bundle                            :ORANGE_BUNDLE
+Yellow Bundle                            :YELLOW_BUNDLE
+Lime Bundle                              :LIME_BUNDLE
+Green Bundle                             :GREEN_BUNDLE
+Cyan Bundle                              :CYAN_BUNDLE
+Light Blue Bundle                        :LIGHT_BLUE_BUNDLE
+Blue Bundle                              :BLUE_BUNDLE
+Purple Bundle                            :PURPLE_BUNDLE
+Magenta Bundle                           :MAGENTA_BUNDLE
+Pink Bundle                              :PINK_BUNDLE
+
+Chest                                    :CHEST
+
+#
+# utility
+#
+
+Anvil                                    :ANVIL
+Damaged Anvil                            :DAMAGED_ANVIL
+Chipped Anvil                            :CHIPPED_ANVIL
+Armor Stand                              :ARMOR_STAND
+Beacon                                   :BEACON
+
+White Bed                                :WHITE_BED
+Light Gray Bed                           :LIGHT_GRAY_BED
+Gray Bed                                 :GRAY_BED
+Black Bed                                :BLACK_BED
+Brown Bed                                :BROWN_BED
+Red Bed                                  :RED_BED
+Orange Bed                               :ORANGE_BED
+Yellow Bed                               :YELLOW_BED
+Lime Bed                                 :LIME_BED
+Green Bed                                :GREEN_BED
+Cyan Bed                                 :CYAN_BED
+Light Blue Bed                           :LIGHT_BLUE_BED
+Blue Bed                                 :BLUE_BED
+Purple Bed                               :PURPLE_BED
+Magenta Bed                              :MAGENTA_BED
+Pink Bed                                 :PINK_BED
+
+Blast Furnace                            :BLAST_FURNACE
+Brewing Stand                            :BREWING_STAND
+Brush                                    :BRUSH
+Bucket                                   :BUCKET
+Water Bucket                             :WATER_BUCKET
+Lava Bucket                              :LAVA_BUCKET
+Milk Bucket                              :MILK_BUCKET
+Powder Snow Bucket                       :POWDER_SNOW_BUCKET
+Campfire                                 :CAMPFIRE
+Carrot On A Stick                        :CARROT_ON_A_STICK
+Cartography Table                        :CARTOGRAPHY_TABLE
+Cauldron                                 :CAULDRON
+Water Cauldron                           :WATER_CAULDRON
+Lava Cauldron                            :LAVA_CAULDRON
+Powder Snow Cauldron                     :POWDER_SNOW_CAULDRON
+Clock                                    :CLOCK
+Compass                                  :COMPASS
+Recovery Compass                         :RECOVERY_COMPASS
+Composter                                :COMPOSTER
+Conduit                                  :CONDUIT
+Crafter                                  :CRAFTER
+Crafting Table                           :CRAFTING_TABLE
+Enchanting Table                         :ENCHANTING_TABLE
+End Crystal                              :END_CRYSTAL
+Ender Chest                              :ENDER_CHEST
+Firework Rocket                          :FIREWORK_ROCKET
+Firework Star                            :FIREWORK_STAR
+Fishing Rod                              :FISHING_ROD
+Fletching Table                          :FLETCHING_TABLE
+Flint And Steel                          :FLINT_AND_STEEL
+Furnace                                  :FURNACE
+Grindstone                               :GRINDSTONE
+Jukebox                                  :JUKEBOX
+
+White Harness                            :WHITE_HARNESS
+Light Gray Harness                       :LIGHT_GRAY_HARNESS
+Gray Harness                             :GRAY_HARNESS
+Black Harness                            :BLACK_HARNESS
+Brown Harness                            :BROWN_HARNESS
+Red Harness                              :RED_HARNESS
+Orange Harness                           :ORANGE_HARNESS
+Yellow Harness                           :YELLOW_HARNESS
+Lime Harness                             :LIME_HARNESS
+Green Harness                            :GREEN_HARNESS
+Cyan Harness                             :CYAN_HARNESS
+Light Blue Harness                       :LIGHT_BLUE_HARNESS
+Blue Harness                             :BLUE_HARNESS
+Purple Harness                           :PURPLE_HARNESS
+Magenta Harness                          :MAGENTA_HARNESS
+Pink Harness                             :PINK_HARNESS
+
+Ladder                                   :LADDER
+Lead                                     :LEAD
+Lodestone                                :LODESTONE
+Loom                                     :LOOM
+Map                                      :MAP
+Empty Map                                :FILLED_MAP
+Name Tag                                 :NAME_TAG
+Note Block                               :NOTE_BLOCK
+Paper                                    :PAPER
+Respawn Anchor                           :RESPAWN_ANCHOR
+Saddle                                   :SADDLE
+Scaffolding                              :SCAFFOLDING
+Shears                                   :SHEARS
 Smithing Table                           :SMITHING_TABLE
 Smoker                                   :SMOKER
 Sponge                                   :SPONGE
@@ -1623,6 +1647,7 @@ Music Disc Precipice                     :MUSIC_DISC_PRECIPICE
 Music Disc Relic                         :MUSIC_DISC_RELIC
 Music Disc Stal                          :MUSIC_DISC_STAL
 Music Disc Strad                         :MUSIC_DISC_STRAD
+Music Disc Tears                         :MUSIC_DISC_TEARS
 Music Disc Wait                          :MUSIC_DISC_WAIT
 Music Disc Ward                          :MUSIC_DISC_WARD
 Disc Fragment 5                          :DISC_FRAGMENT_5
@@ -1659,6 +1684,7 @@ Ghast Spawn Egg                          :GHAST_SPAWN_EGG
 Glow Squid Spawn Egg                     :GLOW_SQUID_SPAWN_EGG
 Goat Spawn Egg                           :GOAT_SPAWN_EGG
 Guardian Spawn Egg                       :GUARDIAN_SPAWN_EGG
+Happy Ghast Spawn Egg                    :HAPPY_GHAST_SPAWN_EGG
 Hoglin Spawn Egg                         :HOGLIN_SPAWN_EGG
 Horse Spawn Egg                          :HORSE_SPAWN_EGG
 Husk Spawn Egg                           :HUSK_SPAWN_EGG
