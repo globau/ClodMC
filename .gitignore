@@ -1,7 +1,9 @@
+__pycache__
 .ruff_cache
+/.claude/
 /.gradle/
 /.idea/
 /build/
+/CLAUDE.md
 /gradlew.bat
 /local.gradle.kts
-__pycache__
