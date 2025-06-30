@@ -7,8 +7,8 @@ import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents;
 import io.papermc.paper.registry.RegistryKey;
 import io.papermc.paper.registry.TypedKey;
 import io.papermc.paper.registry.data.EnchantmentRegistryEntry;
+import io.papermc.paper.registry.event.RegistryComposeEvent;
 import io.papermc.paper.registry.event.RegistryEvents;
-import io.papermc.paper.registry.event.RegistryFreezeEvent;
 import io.papermc.paper.registry.tag.TagKey;
 import io.papermc.paper.tag.PostFlattenTagRegistrar;
 import java.util.List;
@@ -31,14 +31,14 @@ public class BootstrapContextHelper {
       @NotNull TypedKey<Enchantment> key,
       @Nullable List<TagKey<Enchantment>> tags,
       @NotNull BiConsumer<
-                  RegistryFreezeEvent<Enchantment, EnchantmentRegistryEntry.@NotNull Builder>,
-                  EnchantmentRegistryEntry.Builder>
+                  RegistryComposeEvent<Enchantment, EnchantmentRegistryEntry.@NotNull Builder>,
+                  EnchantmentRegistryEntry.@NotNull Builder>
               handler) {
     this.manager.registerEventHandler(
         RegistryEvents.ENCHANTMENT
-            .freeze()
+            .compose()
             .newHandler(
-                (RegistryFreezeEvent<Enchantment, EnchantmentRegistryEntry.@NotNull Builder>
+                (RegistryComposeEvent<Enchantment, EnchantmentRegistryEntry.@NotNull Builder>
                         event) ->
                     event
                         .registry()

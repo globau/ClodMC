@@ -7,7 +7,7 @@ import io.papermc.paper.registry.RegistryAccess;
 import io.papermc.paper.registry.RegistryKey;
 import io.papermc.paper.registry.TypedKey;
 import io.papermc.paper.registry.data.EnchantmentRegistryEntry;
-import io.papermc.paper.registry.event.RegistryFreezeEvent;
+import io.papermc.paper.registry.event.RegistryComposeEvent;
 import io.papermc.paper.registry.keys.tags.EnchantmentTagKeys;
 import io.papermc.paper.registry.keys.tags.ItemTypeTagKeys;
 import java.util.ArrayList;
@@ -67,8 +67,8 @@ public class VeinMiner implements Module, Listener {
             EnchantmentTagKeys.TRADEABLE,
             EnchantmentTagKeys.NON_TREASURE,
             EnchantmentTagKeys.NON_TREASURE),
-        (RegistryFreezeEvent<Enchantment, EnchantmentRegistryEntry.@NotNull Builder> event,
-            EnchantmentRegistryEntry.Builder builder) ->
+        (RegistryComposeEvent<Enchantment, EnchantmentRegistryEntry.@NotNull Builder> event,
+            @NotNull EnchantmentRegistryEntry.@NotNull Builder builder) ->
             builder
                 .description(
                     Component.translatable("enchantment." + VEINMINE_KEY.value(), "Veinmine"))
