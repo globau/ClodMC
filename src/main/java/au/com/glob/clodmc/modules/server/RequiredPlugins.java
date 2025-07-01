@@ -4,12 +4,15 @@ import au.com.glob.clodmc.modules.Module;
 import au.com.glob.clodmc.modules.player.OpAlerts;
 import au.com.glob.clodmc.util.Logger;
 import au.com.glob.clodmc.util.StringUtil;
+import io.papermc.paper.connection.PlayerConfigurationConnection;
+import io.papermc.paper.event.connection.PlayerConnectionValidateLoginEvent;
 import java.util.List;
 import java.util.StringJoiner;
+import java.util.UUID;
 import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.server.ServerLoadEvent;
 import org.jetbrains.annotations.NotNull;
 
@@ -36,13 +39,21 @@ public class RequiredPlugins implements Listener, Module {
     }
   }
 
+  @SuppressWarnings("UnstableApiUsage")
   @EventHandler
-  public void onPlayerLogin(@NotNull PlayerLoginEvent event) {
-    if (!this.preventLogin || event.getPlayer().isOp()) {
+  public void onPlayerConnectionValidateLogin(@NotNull PlayerConnectionValidateLoginEvent event) {
+    if (!this.preventLogin) {
       return;
     }
 
-    event.setResult(PlayerLoginEvent.Result.KICK_OTHER);
-    event.kickMessage(StringUtil.asComponent("A required plugin is not loaded"));
+    if (event.getConnection() instanceof PlayerConfigurationConnection connection) {
+      UUID uuid = connection.getProfile().getId();
+      if (uuid != null) {
+        OfflinePlayer player = Bukkit.getServer().getOfflinePlayer(uuid);
+        if (!player.isOp()) {
+          event.kickMessage(StringUtil.asComponent("A required plugin is not loaded"));
+        }
+      }
+    }
   }
 }

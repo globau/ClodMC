@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerLoginEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.jetbrains.annotations.NotNull;
 
 /** Collect startup alerts and send them to the first operator that logs in */
@@ -26,7 +26,7 @@ public class OpAlerts implements Module, Listener {
   }
 
   @EventHandler
-  public void onPlayerLogin(@NotNull PlayerLoginEvent event) {
+  public void onPlayerJoin(@NotNull PlayerJoinEvent event) {
     if (this.alerts.isEmpty() || !event.getPlayer().isOp()) {
       return;
     }

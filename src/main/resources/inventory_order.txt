@@ -1639,6 +1639,7 @@ Music Disc Chirp                         :MUSIC_DISC_CHIRP
 Music Disc Creator                       :MUSIC_DISC_CREATOR
 Music Disc Creator Music Box             :MUSIC_DISC_CREATOR_MUSIC_BOX
 Music Disc Far                           :MUSIC_DISC_FAR
+Music Disc Lava Chicken                  :MUSIC_DISC_LAVA_CHICKEN
 Music Disc Mall                          :MUSIC_DISC_MALL
 Music Disc Mellohi                       :MUSIC_DISC_MELLOHI
 Music Disc Otherside                     :MUSIC_DISC_OTHERSIDE
