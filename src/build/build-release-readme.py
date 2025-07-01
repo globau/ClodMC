@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 import re
 import subprocess
+import sys
 from pathlib import Path
 
 
@@ -25,7 +26,7 @@ def main() -> None:
         check=True,
     ).stdout
     for commit_line in [ln.strip() for ln in commit_log.splitlines()]:
-        m = re.search(r"^\[([^\]]*)\] (\S+) (.+)$", commit_line)
+        m = re.search(r"^\[([^]]*)] (\S+) (.+)$", commit_line)
         assert m
         meta, sha, desc = m[1].strip(), m[2], m[3]
         if sha == "8895c45":
@@ -48,4 +49,9 @@ def main() -> None:
         print(f"- {sha} {desc}")
 
 
-main()
+try:
+    main()
+except KeyboardInterrupt:
+    sys.exit(3)
+except Exception as e:
+    sys.exit(str(e))

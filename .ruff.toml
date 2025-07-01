@@ -1,0 +1,54 @@
+[lint]
+select = [
+    "A", # flake8-builtins
+    "ANN", # flake8-annotations
+    "ARG", # flake8-unused-arguments
+    "B", # flake8-bugbear
+    "BLE", # flake8-blind-except
+    "C4", # flake8-comprehensions
+    "DTZ", # flake8-datetimez
+    "E", # pycodestyle-error
+    "ERA", # eradicate
+    "EXE", # flake8-executable
+    "F", # Pyflakes
+    "FIX", # flake8-fixme
+    "FURB", # refurb
+    "G", # flake8-logging-format
+    "I", # isort
+    "ISC", # flake8-implicit-str-concat
+    "N", # pep8-naming
+    "PERF", # perflint
+    "PIE", # flake8-pie
+    "PL", # Pylint
+    "PTH", # flake8-use-pathlib
+    "PYI", # flake8-pyi
+    "RET", # flake8-return
+    "RUF", # Ruff-specific rules
+    "TCH", # flake8-type-checking
+    "SIM", # flake8-simplify
+    "SLF", # flake8-self
+    "UP", # pyupgrade
+    "W", # pycodestyle-warning
+    "YTT", # flake8-2020
+]
+
+ignore = [
+    "A003", # builtin-attribute-shadowing
+    "ANN401", # any-type
+    "B009", # get-attr-with-constant
+    "B904", # raise-without-from-inside-except
+    "BLE001", # blind-except
+    "E501", # line-too-long
+    "ERA001", # commented-out-code
+    "G004", # logging-f-string
+    "ISC001", # single-line-implicit-string-concatenation (formatter will fix)
+    "PERF203", # try-except-in-loop
+    "PERF401", # manual-list-comprehension
+    "PLC0415", # import-outside-top-level
+    "PLR", # pylint-refactor
+    "PLW2901", # redefined-loop-name
+    "RUF005", # collection-literal-concatenation
+    "RUF012", # mutable-class-default
+    "SIM105", # use-contextlib-suppress
+    "W191", # tab-indentation (formatter will fix)
+]

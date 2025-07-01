@@ -24,5 +24,4 @@ try:
 except KeyboardInterrupt:
     sys.exit(3)
 except Exception as e:
-    print(e, file=sys.stderr)
-    sys.exit(1)
+    sys.exit(str(e))

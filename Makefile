@@ -1,7 +1,7 @@
 java-files := $(shell find src -name '*.java')
 config-files := $(shell find src -name '*.yml') *.gradle.kts Makefile
 version := $(shell src/build/version.py)
-gradle := ./gradlew $(shell ./src/build/gradle-args)
+gradle := ./gradlew $(shell ./src/build/gradle-args.py)
 
 build: build/libs/ClodMC-$(version).jar
 build/libs/ClodMC-$(version).jar: $(java-files) $(config-files)
@@ -12,6 +12,8 @@ build/libs/ClodMC-$(version).jar: $(java-files) $(config-files)
 format: build/format
 build/format: $(java-files) $(config-files)
 	@mkdir -p build
+	uvx ruff check --config .ruff.toml --fix-only --unsafe-fixes --exit-zero --show-fixes
+	uvx ruff format --config .ruff.toml
 	$(gradle) :spotlessApply
 	@touch $@
 
