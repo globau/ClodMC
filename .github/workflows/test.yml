@@ -11,7 +11,7 @@ jobs:
         run: |
           sudo apt update
           sudo apt install --yes curl
-          curl -LsSf https://astral.sh/uv/install.sh | XDG_BIN_HOME=/usr/local/bin sudo sh
+          curl -LsSf https://astral.sh/uv/install.sh | XDG_BIN_HOME=/usr/local/bin sudo --preserve-env sh
           sudo uvx ruff version
 
       - name: jdk
