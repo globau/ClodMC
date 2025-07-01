@@ -37,7 +37,7 @@ import org.bukkit.inventory.PlayerInventory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-/** Automatic inventory backup, allowing OPs to /restore */
+/** Automatic inventory backup, allowing OPs to /restore_inv */
 public class InventoryRestore implements Module, Listener {
   private static final @NotNull DateTimeFormatter SHORT_DATETIME_FORMAT =
       DateTimeFormatter.ofPattern("yyyyMMdd-HHmmss");
