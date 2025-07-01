@@ -30,7 +30,9 @@ import java.util.Set;
 import java.util.Stack;
 import java.util.TreeMap;
 
-/** A {@link Shape} with possibly some holes. */
+/**
+ * A {@link Shape} with possibly some holes.
+ */
 @SuppressWarnings({"all"})
 public class Cheese {
   private static final Vector2d CHUNK_CELL_SIZE = Vector2d.from(16, 16);
@@ -96,15 +98,11 @@ public class Cheese {
   }
 
   /**
-   * Creates a single BlueMap {@link Shape} with potentially some holes, from a collection of
-   * chunks.<br>
+   * Creates a single BlueMap {@link Shape} with potentially some holes, from a collection of chunks.<br>
    * Designed to be fed directly into a BlueMap {@link ShapeMarker} or {@link ExtrudeMarker}.<br>
    *
-   * <h4>WARNING:</h4>
-   *
-   * <b>This method assumes that all chunks are connected!</b><br>
-   * If you're not absolutely 100% sure that your chunks will always be connected, use {@link
-   * #createPlatterFromChunks(Vector2i...)} instead.<br>
+   * <h4>WARNING:</h4><b>This method assumes that all chunks are connected!</b><br>
+   * If you're not absolutely 100% sure that your chunks will always be connected, use {@link #createPlatterFromChunks(Vector2i...)} instead.<br>
    * If multiple disconnected areas are found, only the first one will be returned.
    *
    * @param chunks The chunks to create the cheese from.
@@ -115,12 +113,11 @@ public class Cheese {
   }
 
   /**
-   * Creates BlueMap {@link Shape}s with potentially some holes, from a collection of custom-sized
-   * cells.<br>
+   * Creates BlueMap {@link Shape}s with potentially some holes, from a collection of custom-sized cells.<br>
    * Designed to be looped over and fed into a BlueMap {@link ShapeMarker} or {@link ExtrudeMarker}
    *
    * @param cellSize The size of a single cell.
-   * @param cells The cells to create the cheese from.
+   * @param cells    The cells to create the cheese from.
    * @return A collection of {@link Cheese} objects, each representing a single connected area.
    */
   public static Collection<Cheese> createPlatterFromCells(Vector2d cellSize, Vector2i... cells) {
@@ -158,19 +155,15 @@ public class Cheese {
   }
 
   /**
-   * Creates a single BlueMap {@link Shape} with potentially some holes, from a collection of
-   * custom-sized cells.<br>
+   * Creates a single BlueMap {@link Shape} with potentially some holes, from a collection of custom-sized cells.<br>
    * Designed to be fed directly into a BlueMap {@link ShapeMarker} or {@link ExtrudeMarker}.<br>
    *
-   * <h4>WARNING:</h4>
-   *
-   * <b>This method assumes that all cells are connected!</b><br>
-   * If you're not absolutely 100% sure that your cells will always be connected, use {@link
-   * #createPlatterFromCells(Vector2d, Vector2i...)} instead.<br>
+   * <h4>WARNING:</h4><b>This method assumes that all cells are connected!</b><br>
+   * If you're not absolutely 100% sure that your cells will always be connected, use {@link #createPlatterFromCells(Vector2d, Vector2i...)} instead.<br>
    * If multiple disconnected areas are found, only the first one will be returned.
    *
    * @param cellSize The size of a single cell.
-   * @param cells The cells to create the cheese from.
+   * @param cells    The cells to create the cheese from.
    * @return A single {@link Cheese} object representing a single connected area.
    */
   public static Cheese createSingleFromCells(Vector2d cellSize, Vector2i... cells) {
@@ -205,7 +198,9 @@ public class Cheese {
     return new Cheese(outline, holes);
   }
 
-  /** Create edges around each cell, in clockwise direction */
+  /**
+   * Create edges around each cell, in clockwise direction
+   */
   private static Set<Edge> createEdgesFromCells(Vector2i... cells) {
     Set<Edge> edges = new HashSet<>(cells.length * 4);
 
@@ -221,7 +216,9 @@ public class Cheese {
     return edges;
   }
 
-  /** Trace a line by following the first edge until we reach the starting point again */
+  /**
+   * Trace a line by following the first edge until we reach the starting point again
+   */
   private static List<Vector2i> trace(
       TreeMap<Vector2i, EnumMap<Direction, Edge>> borders, boolean clockwiseFirst) {
     List<Vector2i> line = new LinkedList<>();
@@ -265,7 +262,9 @@ public class Cheese {
     return line;
   }
 
-  /** line-optimization: if the last three points are on a straight line, remove the middle one */
+  /**
+   * line-optimization: if the last three points are on a straight line, remove the middle one
+   */
   private static void optimizeEnd(List<Vector2i> line) {
     int s = line.size();
     if (s >= 3) {
@@ -280,7 +279,9 @@ public class Cheese {
     }
   }
 
-  /** Translates the cell-positions to world-positions by applying the cellSize */
+  /**
+   * Translates the cell-positions to world-positions by applying the cellSize
+   */
   private static Shape createShape(List<Vector2i> cellPositions, Vector2d cellSize) {
     return new Shape(
         cellPositions.stream()

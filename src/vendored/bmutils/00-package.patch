@@ -1,0 +1,13 @@
+diff --git a/src/main/java/vendored/com/technicjelle/BMUtils/Cheese.java b/src/main/java/vendored/com/technicjelle/BMUtils/Cheese.java
+index 9904a2d..25ed4cc 100644
+--- a/src/main/java/vendored/com/technicjelle/BMUtils/Cheese.java
++++ b/src/main/java/vendored/com/technicjelle/BMUtils/Cheese.java
+@@ -10,7 +10,7 @@
+  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+  */
+ 
+-package com.technicjelle.BMUtils;
++package vendored.com.technicjelle.BMUtils;
+ 
+ import com.flowpowered.math.vector.Vector2d;
+ import com.flowpowered.math.vector.Vector2i;
