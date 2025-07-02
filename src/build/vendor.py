@@ -22,49 +22,60 @@ def main() -> None:
 
     config: dict[str, Any] = dict(vendored_config.items(name))
     config["files"] = config["files"].strip().splitlines()
+    config["exclude"] = set(config.get("exclude", "").strip().splitlines())
 
     src_path = Path(f".git/vendored/{name}")
     dst_path = Path(f"src/main/java/vendored/{config['path']}")
 
     # clone repo
-    shutil.rmtree(src_path.parent, ignore_errors=True)
-    src_path.parent.mkdir(parents=True)
-    subprocess.run(
-        ["git", "clone", "--depth", "1", config["repo"], name],
-        cwd=src_path.parent,
-        check=True,
-    )
+    src_path.parent.mkdir(parents=True, exist_ok=True)
+    if not src_path.exists():
+        subprocess.run(
+            ["git", "clone", "--depth", "1", config["repo"], name],
+            cwd=src_path.parent,
+            check=True,
+        )
+    else:
+        subprocess.run(
+            ["git", "pull"],
+            cwd=src_path,
+            check=True,
+        )
 
     # build list of files
-    src_filepaths = []
+    copy_filepaths = []
     for src_filename in config["files"]:
-        src_filepath = src_path / src_filename.rstrip("/")
         if src_filename.endswith("/"):
-            # directory
-            src_filepaths.extend(
-                fp for fp in src_filepath.rglob("*") if not fp.is_dir()
-            )
+            path = src_path / src_filename.rstrip("/")
+            for src_filepath in [fp for fp in path.rglob("*") if not fp.is_dir()]:
+                if src_filepath.name not in config["exclude"]:
+                    copy_filepaths.append(
+                        (src_filepath, dst_path / src_filepath.relative_to(path))
+                    )
         else:
-            src_filepaths.append(src_filepath)
+            src_filepath = src_path / src_filename
+            if src_filepath.name not in config["exclude"]:
+                copy_filepaths.append((src_filepath, dst_path / src_filepath.name))
 
     # copy files
     expected_filepaths = set()
-    for src_filepath in sorted(src_filepaths):
-        dst_filepath = dst_path / src_filepath.name
+    for src_filepath, dst_filepath in sorted(copy_filepaths):
         dst_filepath.parent.mkdir(parents=True, exist_ok=True)
         print(f"{src_filepath.relative_to(src_path)} -> {dst_filepath}")
         shutil.copy(src_filepath, dst_filepath)
         expected_filepaths.add(dst_filepath.relative_to(dst_path))
 
     # delete extra
-    actual_filepaths = {fp.relative_to(dst_path) for fp in dst_path.rglob("*")}
+    actual_filepaths = {
+        fp.relative_to(dst_path) for fp in dst_path.rglob("*") if not fp.is_dir()
+    }
     for rel_filename in actual_filepaths - expected_filepaths:
         filepath = dst_path / rel_filename
         print(f"deleting {filepath}")
         filepath.unlink()
 
-    # format
-    subprocess.run(["make", "format"], check=False)
+    # format before to make it easier to write/apply patches
+    subprocess.run(["./gradlew", ":spotlessApply"], check=True)
 
     # apply patches
     for filepath in sorted(
@@ -73,6 +84,9 @@ def main() -> None:
     ):
         print(f"patching {filepath}")
         subprocess.run(["git", "apply", filepath], check=True)
+
+    # format after to clean up after patches (eg. import ordering)
+    subprocess.run(["./gradlew", ":spotlessApply"], check=True)
 
     # update commit in .ini
     p = subprocess.run(
@@ -86,6 +100,9 @@ def main() -> None:
     vendored_config.set(name, "commit", sha)
     with vendored_filepath.open("w") as f:
         vendored_config.write(f)
+
+    # make sure things work
+    subprocess.run(["make", "clean", "test", "build"], check=True)
 
     print(f"\n{name} updated to {sha}")
 

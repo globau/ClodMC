@@ -31,13 +31,13 @@ import vendored.com.jeff_media.customblockdata.CustomBlockData;
 /**
  * Called when a block with CustomBlockData is moved by a piston to a new location.
  *
- * <p>Blocks with protected CustomBlockData (see {@link CustomBlockData#isProtected()} will not
- * trigger this event, however it is possible that unprotected CustomBlockData will be moved to a
- * destination block with protected CustomBlockData. You have to cancel this event yourself to
- * prevent this.
+ * Blocks with protected CustomBlockData (see {@link CustomBlockData#isProtected()} will not trigger this event, however
+ * it is possible that unprotected CustomBlockData will be moved to a destination block with protected CustomBlockData. You have
+ * to cancel this event yourself to prevent this.
  */
 @SuppressWarnings({"all"})
 public class CustomBlockDataMoveEvent extends CustomBlockDataEvent {
+
   private final @NotNull Block blockTo;
 
   public CustomBlockDataMoveEvent(

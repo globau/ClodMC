@@ -44,6 +44,7 @@ import vendored.com.jeff_media.customblockdata.events.CustomBlockDataRemoveEvent
 
 @SuppressWarnings({"all"})
 final class BlockDataListener implements Listener {
+
   private final Plugin plugin;
   private final Predicate<Block> customDataPredicate;
 

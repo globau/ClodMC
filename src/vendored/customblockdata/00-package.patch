@@ -1,0 +1,85 @@
+diff --git a/src/main/java/vendored/com/jeff_media/customblockdata/BlockDataListener.java b/src/main/java/vendored/com/jeff_media/customblockdata/BlockDataListener.java
+index 1b65fb7..7ab73af 100644
+--- a/src/main/java/vendored/com/jeff_media/customblockdata/BlockDataListener.java
++++ b/src/main/java/vendored/com/jeff_media/customblockdata/BlockDataListener.java
+@@ -20,10 +20,10 @@
+  * Donations: https://paypal.me/mfnalex
+  */
+ 
+-package com.jeff_media.customblockdata;
++package vendored.com.jeff_media.customblockdata;
+ 
+-import com.jeff_media.customblockdata.events.CustomBlockDataMoveEvent;
+-import com.jeff_media.customblockdata.events.CustomBlockDataRemoveEvent;
++import vendored.com.jeff_media.customblockdata.events.CustomBlockDataMoveEvent;
++import vendored.com.jeff_media.customblockdata.events.CustomBlockDataRemoveEvent;
+ import java.util.*;
+ import java.util.function.Predicate;
+ import org.bukkit.Bukkit;
+diff --git a/src/main/java/vendored/com/jeff_media/customblockdata/CustomBlockData.java b/src/main/java/vendored/com/jeff_media/customblockdata/CustomBlockData.java
+index 0a6e3ef..9ac2837 100644
+--- a/src/main/java/vendored/com/jeff_media/customblockdata/CustomBlockData.java
++++ b/src/main/java/vendored/com/jeff_media/customblockdata/CustomBlockData.java
+@@ -20,7 +20,7 @@
+  * Donations: https://paypal.me/mfnalex
+  */
+ 
+-package com.jeff_media.customblockdata;
++package vendored.com.jeff_media.customblockdata;
+ 
+ import java.io.IOException;
+ import java.lang.annotation.ElementType;
+@@ -345,7 +345,7 @@ public class CustomBlockData implements PersistentDataContainer {
+    * will <b>not</b> be registered by this (but pull requests are welcome, of course)
+    * <p>
+    * For example, when you call this method in onEnable, CustomBlockData will now get automatically removed from a block
+-   * when a player breaks this block. It will additionally call custom events like {@link com.jeff_media.customblockdata.events.CustomBlockDataRemoveEvent}.
++   * when a player breaks this block. It will additionally call custom events like {@link vendored.com.jeff_media.customblockdata.events.CustomBlockDataRemoveEvent}.
+    * Those events implement {@link org.bukkit.event.Cancellable}. If one of the CustomBlockData events is cancelled,
+    * it will not alter any CustomBlockData.
+    *
+diff --git a/src/main/java/vendored/com/jeff_media/customblockdata/events/CustomBlockDataEvent.java b/src/main/java/vendored/com/jeff_media/customblockdata/events/CustomBlockDataEvent.java
+index e302add..01192c2 100644
+--- a/src/main/java/vendored/com/jeff_media/customblockdata/events/CustomBlockDataEvent.java
++++ b/src/main/java/vendored/com/jeff_media/customblockdata/events/CustomBlockDataEvent.java
+@@ -20,9 +20,9 @@
+  * Donations: https://paypal.me/mfnalex
+  */
+ 
+-package com.jeff_media.customblockdata.events;
++package vendored.com.jeff_media.customblockdata.events;
+ 
+-import com.jeff_media.customblockdata.CustomBlockData;
++import vendored.com.jeff_media.customblockdata.CustomBlockData;
+ import java.util.Arrays;
+ import java.util.List;
+ import org.bukkit.block.Block;
+diff --git a/src/main/java/vendored/com/jeff_media/customblockdata/events/CustomBlockDataMoveEvent.java b/src/main/java/vendored/com/jeff_media/customblockdata/events/CustomBlockDataMoveEvent.java
+index 38ddda6..ac292f8 100644
+--- a/src/main/java/vendored/com/jeff_media/customblockdata/events/CustomBlockDataMoveEvent.java
++++ b/src/main/java/vendored/com/jeff_media/customblockdata/events/CustomBlockDataMoveEvent.java
+@@ -20,9 +20,9 @@
+  * Donations: https://paypal.me/mfnalex
+  */
+ 
+-package com.jeff_media.customblockdata.events;
++package vendored.com.jeff_media.customblockdata.events;
+ 
+-import com.jeff_media.customblockdata.CustomBlockData;
++import vendored.com.jeff_media.customblockdata.CustomBlockData;
+ import org.bukkit.block.Block;
+ import org.bukkit.event.Event;
+ import org.bukkit.plugin.Plugin;
+diff --git a/src/main/java/vendored/com/jeff_media/customblockdata/events/CustomBlockDataRemoveEvent.java b/src/main/java/vendored/com/jeff_media/customblockdata/events/CustomBlockDataRemoveEvent.java
+index d125f68..92ac4ed 100644
+--- a/src/main/java/vendored/com/jeff_media/customblockdata/events/CustomBlockDataRemoveEvent.java
++++ b/src/main/java/vendored/com/jeff_media/customblockdata/events/CustomBlockDataRemoveEvent.java
+@@ -20,7 +20,7 @@
+  * Donations: https://paypal.me/mfnalex
+  */
+ 
+-package com.jeff_media.customblockdata.events;
++package vendored.com.jeff_media.customblockdata.events;
+ 
+ import org.bukkit.block.Block;
+ import org.bukkit.event.Event;

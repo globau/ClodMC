@@ -1,0 +1,60 @@
+diff --git a/src/main/java/vendored/com/jeff_media/customblockdata/BlockDataListener.java b/src/main/java/vendored/com/jeff_media/customblockdata/BlockDataListener.java
+index 7ab73af..8888620 100644
+--- a/src/main/java/vendored/com/jeff_media/customblockdata/BlockDataListener.java
++++ b/src/main/java/vendored/com/jeff_media/customblockdata/BlockDataListener.java
+@@ -42,6 +42,7 @@ import org.bukkit.event.entity.EntityExplodeEvent;
+ import org.bukkit.event.world.StructureGrowEvent;
+ import org.bukkit.plugin.Plugin;
+ 
++@SuppressWarnings({"all"})
+ final class BlockDataListener implements Listener {
+ 
+   private final Plugin plugin;
+diff --git a/src/main/java/vendored/com/jeff_media/customblockdata/CustomBlockData.java b/src/main/java/vendored/com/jeff_media/customblockdata/CustomBlockData.java
+index 9ac2837..299192e 100644
+--- a/src/main/java/vendored/com/jeff_media/customblockdata/CustomBlockData.java
++++ b/src/main/java/vendored/com/jeff_media/customblockdata/CustomBlockData.java
+@@ -53,6 +53,7 @@ import org.jetbrains.annotations.Nullable;
+  * so that CustomBlockData will always be updated on certain Bukkit Events like BlockBreakEvent, EntityExplodeEvent, etc.
+  * For more information about this please see {@link #registerListener(Plugin)}.
+  */
++@SuppressWarnings({"all"})
+ public class CustomBlockData implements PersistentDataContainer {
+ 
+   /**
+diff --git a/src/main/java/vendored/com/jeff_media/customblockdata/events/CustomBlockDataEvent.java b/src/main/java/vendored/com/jeff_media/customblockdata/events/CustomBlockDataEvent.java
+index 01192c2..e89e66f 100644
+--- a/src/main/java/vendored/com/jeff_media/customblockdata/events/CustomBlockDataEvent.java
++++ b/src/main/java/vendored/com/jeff_media/customblockdata/events/CustomBlockDataEvent.java
+@@ -44,6 +44,7 @@ import org.jetbrains.annotations.NotNull;
+  *
+  * If this event is cancelled, CustomBlockData will not be removed, changed or moved.
+  */
++@SuppressWarnings({"all"})
+ public class CustomBlockDataEvent extends Event implements Cancellable {
+ 
+   private static final HandlerList HANDLERS = new HandlerList();
+diff --git a/src/main/java/vendored/com/jeff_media/customblockdata/events/CustomBlockDataMoveEvent.java b/src/main/java/vendored/com/jeff_media/customblockdata/events/CustomBlockDataMoveEvent.java
+index ac292f8..7625188 100644
+--- a/src/main/java/vendored/com/jeff_media/customblockdata/events/CustomBlockDataMoveEvent.java
++++ b/src/main/java/vendored/com/jeff_media/customblockdata/events/CustomBlockDataMoveEvent.java
+@@ -35,6 +35,7 @@ import org.jetbrains.annotations.NotNull;
+  * it is possible that unprotected CustomBlockData will be moved to a destination block with protected CustomBlockData. You have
+  * to cancel this event yourself to prevent this.
+  */
++@SuppressWarnings({"all"})
+ public class CustomBlockDataMoveEvent extends CustomBlockDataEvent {
+ 
+   private final @NotNull Block blockTo;
+diff --git a/src/main/java/vendored/com/jeff_media/customblockdata/events/CustomBlockDataRemoveEvent.java b/src/main/java/vendored/com/jeff_media/customblockdata/events/CustomBlockDataRemoveEvent.java
+index 92ac4ed..1e3042c 100644
+--- a/src/main/java/vendored/com/jeff_media/customblockdata/events/CustomBlockDataRemoveEvent.java
++++ b/src/main/java/vendored/com/jeff_media/customblockdata/events/CustomBlockDataRemoveEvent.java
+@@ -31,6 +31,7 @@ import org.jetbrains.annotations.Nullable;
+ /**
+  * Called when a block's CustomBlockData is about to be removed because the block was broken, replaced, or has changed in other ways.
+  */
++@SuppressWarnings({"all"})
+ public class CustomBlockDataRemoveEvent extends CustomBlockDataEvent {
+ 
+   public CustomBlockDataRemoveEvent(

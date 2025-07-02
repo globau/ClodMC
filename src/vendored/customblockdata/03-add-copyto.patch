@@ -1,0 +1,16 @@
+diff --git a/src/main/java/vendored/com/jeff_media/customblockdata/CustomBlockData.java b/src/main/java/vendored/com/jeff_media/customblockdata/CustomBlockData.java
+index 299192e..67abdb6 100644
+--- a/src/main/java/vendored/com/jeff_media/customblockdata/CustomBlockData.java
++++ b/src/main/java/vendored/com/jeff_media/customblockdata/CustomBlockData.java
+@@ -491,6 +491,11 @@ public class CustomBlockData implements PersistentDataContainer {
+             });
+   }
+ 
++  @Override
++  public void copyTo(PersistentDataContainer other, boolean replace) {
++    throw new RuntimeException("CustomBlockData::copyTo not implemented");
++  }
++
+   @Override
+   public <T, Z> void set(
+       final @NotNull NamespacedKey namespacedKey,
