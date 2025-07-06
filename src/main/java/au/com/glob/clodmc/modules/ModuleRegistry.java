@@ -1,6 +1,7 @@
 package au.com.glob.clodmc.modules;
 
 import au.com.glob.clodmc.ClodMC;
+import au.com.glob.clodmc.command.CommandBuilder;
 import au.com.glob.clodmc.modules.bluemap.BlueMap;
 import au.com.glob.clodmc.modules.crafting.SporeBlossom;
 import au.com.glob.clodmc.modules.interactions.FastLeafDecay;
@@ -107,6 +108,9 @@ public class ModuleRegistry implements Iterable<Module>, PluginBootstrap {
 
     // bluemap
     this.register(new BlueMap());
+
+    // register commands built by modules
+    CommandBuilder.registerBuilders();
   }
 
   private void register(@NotNull Module module) {

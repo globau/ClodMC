@@ -60,119 +60,112 @@ public class Invite implements Module {
       return;
     }
 
-    CommandBuilder.build(
-        "invite",
-        (CommandBuilder builder) -> {
-          builder
-              .usage("/invite <java|bedrock> <player>")
-              .description("Add a player to the whitelist");
-          builder.executor(
-              (@NotNull EitherCommandSender sender,
-                  @Nullable String type,
-                  @Nullable String name) -> {
-                if (GameType.of(type) == null || name == null) {
-                  throw new CommandUsageError();
+    CommandBuilder.build("invite")
+        .usage("/invite <java|bedrock> <player>")
+        .description("Add a player to the whitelist")
+        .executor(
+            (@NotNull EitherCommandSender sender, @Nullable String type, @Nullable String name) -> {
+              if (GameType.of(type) == null || name == null) {
+                throw new CommandUsageError();
+              }
+
+              // check playtime
+              if (sender.isPlayer() && !sender.isOp()) {
+                int ticks = sender.asPlayer().getStatistic(Statistic.PLAY_ONE_MINUTE);
+                long minutesPlayed = Math.round(ticks / 20.0 / 60.0);
+                if (minutesPlayed < MIN_PLAY_TIME) {
+                  throw new CommandError(
+                      "You have not played on Clod long enough to invite others");
                 }
+              }
 
-                // check playtime
-                if (sender.isPlayer() && !sender.isOp()) {
-                  int ticks = sender.asPlayer().getStatistic(Statistic.PLAY_ONE_MINUTE);
-                  long minutesPlayed = Math.round(ticks / 20.0 / 60.0);
-                  if (minutesPlayed < MIN_PLAY_TIME) {
-                    throw new CommandError(
-                        "You have not played on Clod long enough to invite others");
-                  }
-                }
+              // don't allow adding by uuid; this ensure we don't have player name conflicts
+              // as we're running floodgate without a prefix
+              if (isValidUUID(name.toLowerCase(Locale.ENGLISH))) {
+                throw new CommandError("Invalid player name");
+              }
 
-                // don't allow adding by uuid; this ensure we don't have player name conflicts
-                // as we're running floodgate without a prefix
-                if (isValidUUID(name.toLowerCase(Locale.ENGLISH))) {
-                  throw new CommandError("Invalid player name");
-                }
+              Schedule.asynchronously(
+                  () -> {
+                    try {
+                      GameType gameType = GameType.of(type);
 
-                Schedule.asynchronously(
-                    () -> {
-                      try {
-                        GameType gameType = GameType.of(type);
-
-                        // check mcprofile.io
-                        UUID uuid = this.lookupUUID(Objects.requireNonNull(gameType), name);
-                        if (uuid == null) {
-                          throw new CommandError("Failed to find player with name: " + name);
-                        }
-
-                        // check whitelist by uuid
-                        if (this.isWhitelisted(uuid)) {
-                          throw new CommandError(name + " is already whitelisted");
-                        }
-
-                        // don't allow duplicate player names (because we run without a
-                        // floodgate prefix).
-                        if (Players.isWhitelisted(name)) {
-                          throw new CommandError("A player named " + name + " already exists");
-                        }
-
-                        // add to appropriate whitelist
-                        Schedule.nextTick(
-                            () -> {
-                              try {
-                                String command =
-                                    (gameType == GameType.JAVA
-                                        ? "whitelist add " + name
-                                        : "fwhitelist add " + uuid);
-                                if (!Bukkit.dispatchCommand(Bukkit.getConsoleSender(), command)) {
-                                  throw new CommandError("whitelist command failed");
-                                }
-
-                                // notify player
-                                if (sender.isPlayer()) {
-                                  Chat.info(sender, name + " added to the whitelist");
-                                }
-
-                                // record who invited the new player
-                                PlayerDataFile dataFile = PlayerDataFiles.of(uuid);
-                                dataFile.setPlayerName(name);
-                                dataFile.setInvitedBy(sender.getName());
-                                dataFile.save();
-
-                                // email admin
-                                Mailer.emailAdmin(
-                                    "clod-mc: "
-                                        + name
-                                        + " ("
-                                        + gameType
-                                        + ")"
-                                        + " added to the whitelist by "
-                                        + sender.getName());
-                              } catch (CommandError e) {
-                                Chat.error(
-                                    sender,
-                                    Objects.requireNonNullElse(
-                                        e.getMessage(), "Failed to whitelist player"));
-                              }
-                            });
-                      } catch (CommandError e) {
-                        Chat.error(
-                            sender,
-                            Objects.requireNonNullElse(
-                                e.getMessage(), "Failed to whitelist player"));
+                      // check mcprofile.io
+                      UUID uuid = this.lookupUUID(Objects.requireNonNull(gameType), name);
+                      if (uuid == null) {
+                        throw new CommandError("Failed to find player with name: " + name);
                       }
-                    });
-              });
-          builder.completor(
-              (@NotNull CommandSender sender, @NotNull List<String> args) -> {
-                List<String> types = List.of("java", "bedrock");
-                if (args.isEmpty()) {
-                  return types;
-                }
-                if (args.size() == 1) {
-                  return types.stream()
-                      .filter((String value) -> value.startsWith(args.getFirst()))
-                      .toList();
-                }
-                return List.of();
-              });
-        });
+
+                      // check whitelist by uuid
+                      if (this.isWhitelisted(uuid)) {
+                        throw new CommandError(name + " is already whitelisted");
+                      }
+
+                      // don't allow duplicate player names (because we run without a
+                      // floodgate prefix).
+                      if (Players.isWhitelisted(name)) {
+                        throw new CommandError("A player named " + name + " already exists");
+                      }
+
+                      // add to appropriate whitelist
+                      Schedule.nextTick(
+                          () -> {
+                            try {
+                              String command =
+                                  (gameType == GameType.JAVA
+                                      ? "whitelist add " + name
+                                      : "fwhitelist add " + uuid);
+                              if (!Bukkit.dispatchCommand(Bukkit.getConsoleSender(), command)) {
+                                throw new CommandError("whitelist command failed");
+                              }
+
+                              // notify player
+                              if (sender.isPlayer()) {
+                                Chat.info(sender, name + " added to the whitelist");
+                              }
+
+                              // record who invited the new player
+                              PlayerDataFile dataFile = PlayerDataFiles.of(uuid);
+                              dataFile.setPlayerName(name);
+                              dataFile.setInvitedBy(sender.getName());
+                              dataFile.save();
+
+                              // email admin
+                              Mailer.emailAdmin(
+                                  "clod-mc: "
+                                      + name
+                                      + " ("
+                                      + gameType
+                                      + ")"
+                                      + " added to the whitelist by "
+                                      + sender.getName());
+                            } catch (CommandError e) {
+                              Chat.error(
+                                  sender,
+                                  Objects.requireNonNullElse(
+                                      e.getMessage(), "Failed to whitelist player"));
+                            }
+                          });
+                    } catch (CommandError e) {
+                      Chat.error(
+                          sender,
+                          Objects.requireNonNullElse(e.getMessage(), "Failed to whitelist player"));
+                    }
+                  });
+            })
+        .completor(
+            (@NotNull CommandSender sender, @NotNull List<String> args) -> {
+              List<String> types = List.of("java", "bedrock");
+              if (args.isEmpty()) {
+                return types;
+              }
+              if (args.size() == 1) {
+                return types.stream()
+                    .filter((String value) -> value.startsWith(args.getFirst()))
+                    .toList();
+              }
+              return List.of();
+            });
   }
 
   private static boolean isValidUUID(@Nullable String value) {

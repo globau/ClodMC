@@ -55,83 +55,80 @@ public class InventoryRestore implements Module, Listener {
   public InventoryRestore() {
     this.backupPath = ClodMC.instance.getDataFolder().toPath().resolve("players").toFile();
 
-    CommandBuilder.build(
-        "restore_inv",
-        (CommandBuilder builder) -> {
-          builder.usage("/restore_inv <player> [backup]");
-          builder.description("Restore player's inventory from automatic backups");
-          builder.requiresOp();
-          builder.executor(
-              (@NotNull EitherCommandSender sender,
-                  @Nullable String playerName,
-                  @Nullable String backup) -> {
-                if (playerName == null) {
-                  if (!sender.isPlayer()) {
-                    throw new CommandUsageError();
-                  }
-                  this.restorePlayerInventory(sender, sender.asPlayer(), backup);
-                  return;
+    CommandBuilder.build("restore_inv")
+        .usage("/restore_inv <player> [backup]")
+        .description("Restore player's inventory from automatic backups")
+        .requiresOp()
+        .executor(
+            (@NotNull EitherCommandSender sender,
+                @Nullable String playerName,
+                @Nullable String backup) -> {
+              if (playerName == null) {
+                if (!sender.isPlayer()) {
+                  throw new CommandUsageError();
                 }
+                this.restorePlayerInventory(sender, sender.asPlayer(), backup);
+                return;
+              }
 
-                UUID uuid = Players.getWhitelistedUUID(playerName);
-                if (uuid == null) {
-                  throw new CommandError("Unknown player: " + playerName);
-                }
-                Player player = Bukkit.getPlayer(uuid);
-                if (player != null) {
-                  // player is online
-                  this.restorePlayerInventory(sender, player, backup);
-                  return;
-                }
+              UUID uuid = Players.getWhitelistedUUID(playerName);
+              if (uuid == null) {
+                throw new CommandError("Unknown player: " + playerName);
+              }
+              Player player = Bukkit.getPlayer(uuid);
+              if (player != null) {
+                // player is online
+                this.restorePlayerInventory(sender, player, backup);
+                return;
+              }
 
-                // player is offline - set up to restore the next time they log in
-                File backupFile = this.getBackupFile(uuid, backup);
-                if (backupFile == null) {
-                  Chat.error(sender, "Failed to find backup file");
-                  return;
-                }
+              // player is offline - set up to restore the next time they log in
+              File backupFile = this.getBackupFile(uuid, backup);
+              if (backupFile == null) {
+                Chat.error(sender, "Failed to find backup file");
+                return;
+              }
 
-                PlayerDataFile dataFile = PlayerDataFiles.of(uuid);
-                dataFile.set("restore_inv", this.getBackupName(backupFile));
-                dataFile.save();
+              PlayerDataFile dataFile = PlayerDataFiles.of(uuid);
+              dataFile.set("restore_inv", this.getBackupName(backupFile));
+              dataFile.save();
 
-                try {
-                  LocalDateTime date =
-                      LocalDateTime.parse(this.getBackupName(backupFile), SHORT_DATETIME_FORMAT);
-                  Chat.info(
-                      sender,
-                      "Inventory for "
-                          + dataFile.getPlayerName()
-                          + " will be restored from "
-                          + date.format(LONG_DATETIME_FORMAT)
-                          + " next time they log in");
-                } catch (DateTimeParseException e) {
-                  Chat.info(
-                      sender,
-                      "Inventory for "
-                          + dataFile.getPlayerName()
-                          + " will be restored next time they log in");
-                }
-              });
-          builder.completor(
-              (@NotNull CommandSender sender, @NotNull List<String> args) -> {
-                if (args.size() == 1) {
-                  // player name
-                  return Players.getWhitelisted().keySet().stream()
-                      .filter(
-                          (String name) ->
-                              name.toLowerCase(Locale.ENGLISH)
-                                  .startsWith(args.getFirst().toLowerCase(Locale.ENGLISH)))
-                      .toList();
-                }
-                if (args.size() == 2) {
-                  // backup name
-                  UUID uuid = Players.getWhitelistedUUID(args.getFirst());
-                  return uuid == null ? List.of() : this.getBackupNames(uuid);
-                }
-                return List.of();
-              });
-        });
+              try {
+                LocalDateTime date =
+                    LocalDateTime.parse(this.getBackupName(backupFile), SHORT_DATETIME_FORMAT);
+                Chat.info(
+                    sender,
+                    "Inventory for "
+                        + dataFile.getPlayerName()
+                        + " will be restored from "
+                        + date.format(LONG_DATETIME_FORMAT)
+                        + " next time they log in");
+              } catch (DateTimeParseException e) {
+                Chat.info(
+                    sender,
+                    "Inventory for "
+                        + dataFile.getPlayerName()
+                        + " will be restored next time they log in");
+              }
+            })
+        .completor(
+            (@NotNull CommandSender sender, @NotNull List<String> args) -> {
+              if (args.size() == 1) {
+                // player name
+                return Players.getWhitelisted().keySet().stream()
+                    .filter(
+                        (String name) ->
+                            name.toLowerCase(Locale.ENGLISH)
+                                .startsWith(args.getFirst().toLowerCase(Locale.ENGLISH)))
+                    .toList();
+              }
+              if (args.size() == 2) {
+                // backup name
+                UUID uuid = Players.getWhitelistedUUID(args.getFirst());
+                return uuid == null ? List.of() : this.getBackupNames(uuid);
+              }
+              return List.of();
+            });
   }
 
   @EventHandler

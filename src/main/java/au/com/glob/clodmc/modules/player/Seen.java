@@ -24,58 +24,55 @@ import org.jetbrains.annotations.Nullable;
 /** /seen command; show how long it's been since the server last saw the player */
 public class Seen implements Module, Listener {
   public Seen() {
-    CommandBuilder.build(
-        "seen",
-        (CommandBuilder builder) -> {
-          builder.usage("/seen <player>").description("Show time since player's last login");
-          builder.executor(
-              (@NotNull EitherCommandSender sender, @Nullable String playerName) -> {
-                if (playerName == null) {
-                  throw new CommandUsageError();
-                }
+    CommandBuilder.build("seen")
+        .usage("/seen <player>")
+        .description("Show time since player's last login")
+        .executor(
+            (@NotNull EitherCommandSender sender, @Nullable String playerName) -> {
+              if (playerName == null) {
+                throw new CommandUsageError();
+              }
 
-                if (sender.isPlayer() && playerName.equalsIgnoreCase(sender.asPlayer().getName())) {
-                  Chat.info(sender, "You're online now");
-                  return;
-                }
+              if (sender.isPlayer() && playerName.equalsIgnoreCase(sender.asPlayer().getName())) {
+                Chat.info(sender, "You're online now");
+                return;
+              }
 
-                Player player = Bukkit.getPlayerExact(playerName);
-                if (player != null) {
-                  Chat.info(sender, playerName + " is online now");
-                  return;
-                }
+              Player player = Bukkit.getPlayerExact(playerName);
+              if (player != null) {
+                Chat.info(sender, playerName + " is online now");
+                return;
+              }
 
-                UUID playerUUID = Players.getWhitelistedUUID(playerName);
-                if (playerUUID == null) {
-                  Chat.error(sender, playerName + " doesn't play on this server");
-                  return;
-                }
-                PlayerDataFile dataFile = PlayerDataFiles.of(playerUUID);
+              UUID playerUUID = Players.getWhitelistedUUID(playerName);
+              if (playerUUID == null) {
+                Chat.error(sender, playerName + " doesn't play on this server");
+                return;
+              }
+              PlayerDataFile dataFile = PlayerDataFiles.of(playerUUID);
 
-                LocalDateTime date = dataFile.getLastLogout();
-                if (date == null) {
-                  date = dataFile.getLastLogin();
-                }
-                if (date == null) {
-                  Chat.warning(sender, "Not sure when " + playerName + " last played");
-                  return;
-                }
+              LocalDateTime date = dataFile.getLastLogout();
+              if (date == null) {
+                date = dataFile.getLastLogin();
+              }
+              if (date == null) {
+                Chat.warning(sender, "Not sure when " + playerName + " last played");
+                return;
+              }
 
-                String dateAgo =
-                    StringUtil.relativeTime(
-                        System.currentTimeMillis() / 1000L
-                            - date.toEpochSecond(ZoneOffset.of("+8")));
-                Chat.info(sender, playerName + " was last seen " + dateAgo + " ago");
-              });
-          builder.completor(
-              (@NotNull CommandSender sender, @NotNull List<String> args) ->
-                  Players.getWhitelisted().keySet().stream()
-                      .sorted(String.CASE_INSENSITIVE_ORDER)
-                      .filter(
-                          (String name) ->
-                              name.toLowerCase(Locale.ENGLISH)
-                                  .startsWith(args.getFirst().toLowerCase(Locale.ENGLISH)))
-                      .toList());
-        });
+              String dateAgo =
+                  StringUtil.relativeTime(
+                      System.currentTimeMillis() / 1000L - date.toEpochSecond(ZoneOffset.of("+8")));
+              Chat.info(sender, playerName + " was last seen " + dateAgo + " ago");
+            })
+        .completor(
+            (@NotNull CommandSender sender, @NotNull List<String> args) ->
+                Players.getWhitelisted().keySet().stream()
+                    .sorted(String.CASE_INSENSITIVE_ORDER)
+                    .filter(
+                        (String name) ->
+                            name.toLowerCase(Locale.ENGLISH)
+                                .startsWith(args.getFirst().toLowerCase(Locale.ENGLISH)))
+                    .toList());
   }
 }

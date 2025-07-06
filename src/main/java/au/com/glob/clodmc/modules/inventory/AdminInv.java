@@ -22,21 +22,19 @@ public class AdminInv implements Module, Listener {
   private final @NotNull Map<UUID, ItemStack[]> adminInventories = new HashMap<>();
 
   public AdminInv() {
-    CommandBuilder.build(
-        "admininv",
-        (CommandBuilder builder) -> {
-          builder.description("Toggle admin/player inventory").requiresOp();
-          builder.executor(
-              (@NotNull Player player) -> {
-                if (this.hasStoredInventory(player)) {
-                  this.restoreInventory(player);
-                  Chat.info(player, "Switched to Player inventory");
-                } else {
-                  this.storeInventory(player);
-                  Chat.info(player, "Switched to Admin inventory");
-                }
-              });
-        });
+    CommandBuilder.build("admininv")
+        .description("Toggle admin/player inventory")
+        .requiresOp()
+        .executor(
+            (@NotNull Player player) -> {
+              if (this.hasStoredInventory(player)) {
+                this.restoreInventory(player);
+                Chat.info(player, "Switched to Player inventory");
+              } else {
+                this.storeInventory(player);
+                Chat.info(player, "Switched to Admin inventory");
+              }
+            });
   }
 
   private void storeInventory(@NotNull Player player) {

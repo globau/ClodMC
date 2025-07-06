@@ -163,30 +163,26 @@ public class WelcomeBook implements Module, Listener {
           """);
 
   public WelcomeBook() {
-    CommandBuilder.build(
-        "welcome",
-        (CommandBuilder builder) -> {
-          builder
-              .usage("/welcome <player>")
-              .description("Give specified player the welcome book")
-              .requiresOp();
-          builder.executor(
-              (@NotNull EitherCommandSender sender, @Nullable Player player) -> {
-                if (player == null) {
-                  throw new CommandUsageError();
-                }
-                this.giveWelcomeBook(player, sender);
-              });
-          builder.completor(
-              (@NotNull CommandSender sender, @NotNull List<String> args) ->
-                  Bukkit.getOnlinePlayers().stream()
-                      .map(Player::getName)
-                      .filter(
-                          (String name) ->
-                              name.toLowerCase(Locale.ENGLISH)
-                                  .startsWith(args.getFirst().toLowerCase(Locale.ENGLISH)))
-                      .toList());
-        });
+    CommandBuilder.build("welcome")
+        .usage("/welcome <player>")
+        .description("Give specified player the welcome book")
+        .requiresOp()
+        .executor(
+            (@NotNull EitherCommandSender sender, @Nullable Player player) -> {
+              if (player == null) {
+                throw new CommandUsageError();
+              }
+              this.giveWelcomeBook(player, sender);
+            })
+        .completor(
+            (@NotNull CommandSender sender, @NotNull List<String> args) ->
+                Bukkit.getOnlinePlayers().stream()
+                    .map(Player::getName)
+                    .filter(
+                        (String name) ->
+                            name.toLowerCase(Locale.ENGLISH)
+                                .startsWith(args.getFirst().toLowerCase(Locale.ENGLISH)))
+                    .toList());
 
     // save the welcome book for other consumers
     List<String> pagesAsJson =

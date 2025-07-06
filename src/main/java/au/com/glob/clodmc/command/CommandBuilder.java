@@ -6,7 +6,6 @@ import au.com.glob.clodmc.util.Logger;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.function.Consumer;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -16,22 +15,30 @@ import org.jetbrains.annotations.Nullable;
 
 @SuppressWarnings({"UnusedReturnValue", "SameParameterValue"})
 public class CommandBuilder {
-  private @Nullable String name;
+  private final @NotNull String name;
   private @Nullable String usage;
   private @Nullable String description;
   private @Nullable Executor executor;
   private @Nullable Completor completor;
   private boolean requiresOp = false;
 
-  public static void build(@NotNull String name, @NotNull Consumer<CommandBuilder> handler) {
-    CommandBuilder builder = new CommandBuilder().name(name);
-    handler.accept(builder);
-    builder.register();
+  private static final @NotNull List<CommandBuilder> builders = new ArrayList<>();
+
+  private CommandBuilder(@NotNull String name) {
+    this.name = name;
   }
 
-  public @NotNull CommandBuilder name(@NotNull String name) {
-    this.name = name;
-    return this;
+  public static CommandBuilder build(@NotNull String name) {
+    CommandBuilder builder = new CommandBuilder(name);
+    builders.add(builder);
+    return builder;
+  }
+
+  public static void registerBuilders() {
+    for (CommandBuilder builder : builders) {
+      builder.register();
+    }
+    builders.clear();
   }
 
   public @NotNull CommandBuilder usage(@NotNull String usage) {
@@ -100,8 +107,8 @@ public class CommandBuilder {
   }
 
   private void register() {
-    if (this.name == null || this.description == null || this.executor == null) {
-      throw new RuntimeException("incomplete command");
+    if (this.description == null || this.executor == null) {
+      throw new RuntimeException("incomplete command: " + this.name);
     }
 
     if (this.usage == null) {
