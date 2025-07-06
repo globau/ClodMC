@@ -8,6 +8,7 @@ import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Particle;
+import org.bukkit.Sound;
 import org.bukkit.Tag;
 import org.bukkit.World;
 import org.bukkit.block.Block;
@@ -25,6 +26,7 @@ import org.jetbrains.annotations.NotNull;
 public class TeleportUtil {
   private static final int CHECK_RADIUS = 3;
   private static final int MAX_RADIUS = 8;
+  private static final int POP_RADIUS = 16;
   private static final Vector3D @NotNull [] SHIFT_VECTORS;
 
   private record Vector3D(int x, int y, int z) {}
@@ -49,7 +51,7 @@ public class TeleportUtil {
 
   public static void teleport(
       @NotNull Player player, @NotNull Location location, @NotNull String reason) {
-    Location currentLoc = player.getLocation();
+    Location fromLoc = player.getLocation();
 
     Location destinationLoc;
     if (player.getGameMode().equals(GameMode.CREATIVE)) {
@@ -60,9 +62,9 @@ public class TeleportUtil {
       destinationLoc.setPitch(location.getPitch());
     }
 
-    if (currentLoc.getBlockX() == destinationLoc.getBlockX()
-        && currentLoc.getBlockY() == destinationLoc.getBlockY()
-        && currentLoc.getBlockZ() == destinationLoc.getBlockZ()) {
+    if (fromLoc.getBlockX() == destinationLoc.getBlockX()
+        && fromLoc.getBlockY() == destinationLoc.getBlockY()
+        && fromLoc.getBlockZ() == destinationLoc.getBlockZ()) {
       Chat.fyi(player, "Teleport not required");
       return;
     }
@@ -84,7 +86,9 @@ public class TeleportUtil {
         .thenAccept(
             (Boolean result) -> {
               if (result) {
-                TeleportUtil.teleportEffect(currentLoc);
+                TeleportUtil.playTeleportSound(fromLoc, player);
+                TeleportUtil.playTeleportSound(destinationLoc, player);
+                TeleportUtil.showTeleportParticles(fromLoc);
               }
             })
         .exceptionally(
@@ -275,7 +279,19 @@ public class TeleportUtil {
     return loc;
   }
 
-  public static void teleportEffect(@NotNull Location loc) {
+  private static void playTeleportSound(@NotNull Location loc, @NotNull Player excludedPlayer) {
+    for (Player player : loc.getNearbyPlayers(POP_RADIUS)) {
+      if (!player.equals(excludedPlayer)) {
+        player.playSound(
+            loc,
+            Sound.UI_HUD_BUBBLE_POP,
+            (float) ((1 - player.getLocation().distance(loc) / POP_RADIUS) * 0.75),
+            1);
+      }
+    }
+  }
+
+  private static void showTeleportParticles(@NotNull Location loc) {
     World world = loc.getWorld();
     if (world == null) {
       return;
