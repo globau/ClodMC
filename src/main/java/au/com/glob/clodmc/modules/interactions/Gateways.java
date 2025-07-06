@@ -500,9 +500,14 @@ public class Gateways implements Module, Listener {
 
     } else {
       // teleport to connected anchor
-      teleportPos =
-          Objects.requireNonNull(anchorBlock.connectedAnchorBlock()).teleportLocation(player);
 
+      AnchorBlock connectedTo = anchorBlock.connectedAnchorBlock();
+      if (connectedTo == null) {
+        player.sendActionBar(StringUtil.asComponent(anchorBlock.getInformation()));
+        return;
+      }
+
+      teleportPos = connectedTo.teleportLocation(player);
       // set cause to PLUGIN so this teleport is ignored by /back
       cause = PlayerTeleportEvent.TeleportCause.PLUGIN;
     }
@@ -591,7 +596,7 @@ public class Gateways implements Module, Listener {
     private final @NotNull Colour topColour;
     private final @NotNull Colour bottomColour;
 
-    private @Nullable Gateways.AnchorBlock connectedTo = null;
+    private @Nullable AnchorBlock connectedTo = null;
     private @Nullable BukkitTask particleTask = null;
     final boolean isRandom;
 
@@ -658,7 +663,7 @@ public class Gateways implements Module, Listener {
       return this.topColour.getDisplayName() + " :: " + this.bottomColour.getDisplayName();
     }
 
-    private void connectTo(@NotNull Gateways.AnchorBlock otherBlock) {
+    private void connectTo(@NotNull AnchorBlock otherBlock) {
       this.connectedTo = otherBlock;
       otherBlock.connectedTo = this;
     }
@@ -674,7 +679,7 @@ public class Gateways implements Module, Listener {
       return this.connectedTo != null;
     }
 
-    private @Nullable Gateways.AnchorBlock connectedAnchorBlock() {
+    private @Nullable AnchorBlock connectedAnchorBlock() {
       return this.connectedTo;
     }
 
@@ -872,7 +877,7 @@ public class Gateways implements Module, Listener {
     }
 
     @SuppressWarnings("unused")
-    public static @NotNull Gateways.AnchorBlock deserialize(@NotNull Map<String, Object> args) {
+    public static @NotNull AnchorBlock deserialize(@NotNull Map<String, Object> args) {
       World world = Bukkit.getWorld((String) args.get("world"));
       if (world == null) {
         throw new IllegalArgumentException("unknown world");
