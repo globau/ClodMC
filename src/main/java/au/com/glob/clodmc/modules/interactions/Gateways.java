@@ -577,6 +577,10 @@ public class Gateways implements Module, Listener {
 
   @SerializableAs("ClodMC.AnchorBlock")
   public static class AnchorBlock implements ConfigurationSerializable {
+    private static final double EFFECT_RADIUS = 0.375;
+    private static final double EFFECT_SPEED = 0.1;
+    private static final int EFFECT_PARTICLES = 4;
+
     final int networkId;
     final @NotNull BlockPos blockPos;
     final @Nullable String name;
@@ -754,44 +758,60 @@ public class Gateways implements Module, Listener {
         this.particleTask.cancel();
       }
 
-      if (isActive) {
-        this.particleTask =
-            Schedule.periodically(
-                20,
-                () -> {
-                  Collection<Player> players = this.getNearbyPlayers(12);
-                  new ParticleBuilder(Particle.DUST)
-                      .location(this.topLocation)
-                      .data(new Particle.DustOptions(this.topColour.color, 2))
-                      .receivers(players)
-                      .count(5)
-                      .spawn();
-                  new ParticleBuilder(Particle.DUST)
-                      .location(this.bottomLocation)
-                      .data(new Particle.DustOptions(this.bottomColour.color, 2))
-                      .receivers(players)
-                      .count(5)
-                      .spawn();
-                });
-      } else {
-        this.particleTask =
-            Schedule.periodically(
-                20,
-                () -> {
-                  Collection<Player> players = this.getNearbyPlayers(8);
-                  new ParticleBuilder(Particle.DUST)
-                      .location(this.topLocation)
-                      .receivers(players)
-                      .data(new Particle.DustOptions(this.topColour.color, 1))
-                      .count(1)
-                      .spawn();
-                  new ParticleBuilder(Particle.DUST)
-                      .location(this.bottomLocation)
-                      .receivers(players)
-                      .data(new Particle.DustOptions(this.bottomColour.color, 1))
-                      .count(1)
-                      .spawn();
-                });
+      this.particleTask =
+          Schedule.periodically(
+              2,
+              () ->
+                  this.spawnCylinderParticles(
+                      this.getNearbyPlayers(isActive ? 12 : 8), isActive ? 8 : 4));
+    }
+
+    private void spawnCylinderParticles(@NotNull Collection<Player> players, int ringsPerSection) {
+      double baseRotation = this.blockPos.getWorld().getGameTime() * EFFECT_SPEED;
+      double angleStep = 2 * Math.PI / EFFECT_PARTICLES;
+
+      // reuse location objects to reduce gc pressure
+      World world = this.blockPos.getWorld();
+      Location bottomParticleLoc = new Location(world, 0, 0, 0);
+      Location topParticleLoc = new Location(world, 0, 0, 0);
+
+      for (int ring = 0; ring < ringsPerSection; ring++) {
+        double ringFraction = (double) ring / ringsPerSection;
+        double bottomY = this.bottomLocation.getY() + ringFraction - 0.5;
+        double topY = this.topLocation.getY() + ringFraction - 0.5;
+        double ringRotation = baseRotation + (ring * 0.2);
+
+        for (int i = 0; i < EFFECT_PARTICLES; i++) {
+          double angle = ringRotation + (i * angleStep);
+          double cosAngle = Math.cos(angle);
+          double sinAngle = Math.sin(angle);
+
+          // bottom particle
+          double x = this.bottomLocation.getX() + EFFECT_RADIUS * cosAngle;
+          double z = this.bottomLocation.getZ() + EFFECT_RADIUS * sinAngle;
+          bottomParticleLoc.setX(x);
+          bottomParticleLoc.setY(bottomY);
+          bottomParticleLoc.setZ(z);
+          new ParticleBuilder(Particle.TRAIL)
+              .location(bottomParticleLoc)
+              .data(new Particle.Trail(bottomParticleLoc, this.bottomColour.color, 5))
+              .receivers(players)
+              .count(1)
+              .spawn();
+
+          // top particle
+          x = this.topLocation.getX() + EFFECT_RADIUS * cosAngle;
+          z = this.topLocation.getZ() + EFFECT_RADIUS * sinAngle;
+          topParticleLoc.setX(x);
+          topParticleLoc.setY(topY);
+          topParticleLoc.setZ(z);
+          new ParticleBuilder(Particle.TRAIL)
+              .location(topParticleLoc)
+              .data(new Particle.Trail(topParticleLoc, this.topColour.color, 5))
+              .receivers(players)
+              .count(1)
+              .spawn();
+        }
       }
     }
 
