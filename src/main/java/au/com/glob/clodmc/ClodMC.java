@@ -26,13 +26,6 @@ public final class ClodMC extends JavaPlugin implements Listener {
   public ClodMC() {
     super();
     instance = this;
-
-    try {
-      Bedrock.apiTest();
-      this.geyserLoaded = true;
-    } catch (NoClassDefFoundError e) {
-      this.geyserLoaded = false;
-    }
   }
 
   @Override
@@ -66,6 +59,12 @@ public final class ClodMC extends JavaPlugin implements Listener {
 
   @EventHandler
   public void onServerLoad(@NotNull ServerLoadEvent event) {
+    try {
+      Bedrock.apiTest();
+      this.geyserLoaded = true;
+    } catch (NoClassDefFoundError e) {
+      this.geyserLoaded = false;
+    }
     Players.updateWhitelisted();
     Logger.info("clod-mc started");
   }
