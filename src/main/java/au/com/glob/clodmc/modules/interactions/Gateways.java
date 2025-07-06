@@ -522,7 +522,14 @@ public class Gateways implements Module, Listener {
               player.clearTitle();
               if (result != null && result) {
                 this.ignore.put(player, BlockPos.of(finalTeleportPos));
-                player.playSound(finalTeleportPos, Sound.ENTITY_PLAYER_TELEPORT, 1, 1);
+                if (Players.isBedrock(player)) {
+                  // delay playing the sound by a tick to work around a Geyser issue
+                  Schedule.delayed(
+                      1,
+                      () -> player.playSound(finalTeleportPos, Sound.ENTITY_PLAYER_TELEPORT, 1, 1));
+                } else {
+                  player.playSound(finalTeleportPos, Sound.ENTITY_PLAYER_TELEPORT, 1, 1);
+                }
                 player
                     .getLocation()
                     .getWorld()
@@ -766,14 +773,39 @@ public class Gateways implements Module, Listener {
       this.particleTask =
           Schedule.periodically(
               2,
-              () ->
-                  this.spawnCylinderParticles(
-                      this.getNearbyPlayers(isActive ? 12 : 8), isActive ? 8 : 4));
+              () -> {
+                Collection<Player> players = this.getNearbyPlayers(isActive ? 12 : 8);
+                if (players.isEmpty()) {
+                  return;
+                }
+
+                List<Player> javaPlayers = new ArrayList<>();
+                List<Player> bedrockPlayers = new ArrayList<>();
+                if (ClodMC.instance.isGeyserLoaded()) {
+                  for (Player player : players) {
+                    if (Players.isBedrock(player)) {
+                      bedrockPlayers.add(player);
+                    } else {
+                      javaPlayers.add(player);
+                    }
+                  }
+                } else {
+                  javaPlayers.addAll(players);
+                }
+
+                if (!javaPlayers.isEmpty()) {
+                  this.spawnJavaParticles(javaPlayers, isActive);
+                }
+                if (isActive && !bedrockPlayers.isEmpty()) {
+                  this.spawnBedrockParticles(bedrockPlayers);
+                }
+              });
     }
 
-    private void spawnCylinderParticles(@NotNull Collection<Player> players, int ringsPerSection) {
+    private void spawnJavaParticles(@NotNull Collection<Player> players, boolean isActive) {
       double baseRotation = this.blockPos.getWorld().getGameTime() * EFFECT_SPEED;
       double angleStep = 2 * Math.PI / EFFECT_PARTICLES;
+      int ringsPerSection = isActive ? 8 : 4;
 
       // reuse location objects to reduce gc pressure
       World world = this.blockPos.getWorld();
@@ -798,8 +830,8 @@ public class Gateways implements Module, Listener {
           bottomParticleLoc.setY(bottomY);
           bottomParticleLoc.setZ(z);
           new ParticleBuilder(Particle.TRAIL)
-              .location(bottomParticleLoc)
               .data(new Particle.Trail(bottomParticleLoc, this.bottomColour.color, 5))
+              .location(bottomParticleLoc)
               .receivers(players)
               .count(1)
               .spawn();
@@ -811,13 +843,28 @@ public class Gateways implements Module, Listener {
           topParticleLoc.setY(topY);
           topParticleLoc.setZ(z);
           new ParticleBuilder(Particle.TRAIL)
-              .location(topParticleLoc)
               .data(new Particle.Trail(topParticleLoc, this.topColour.color, 5))
+              .location(topParticleLoc)
               .receivers(players)
               .count(1)
               .spawn();
         }
       }
+    }
+
+    private void spawnBedrockParticles(@NotNull Collection<Player> players) {
+      new ParticleBuilder(Particle.DUST)
+          .data(new Particle.DustOptions(this.topColour.color, 1))
+          .location(this.topLocation)
+          .receivers(players)
+          .count(1)
+          .spawn();
+      new ParticleBuilder(Particle.DUST)
+          .data(new Particle.DustOptions(this.bottomColour.color, 1))
+          .location(this.bottomLocation)
+          .receivers(players)
+          .count(1)
+          .spawn();
     }
 
     private void updateLights(int lightLevel) {

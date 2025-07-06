@@ -13,11 +13,13 @@ repositories {
     maven(url = "https://repo.papermc.io/repository/maven-public/")
     maven(url = "https://jitpack.io")
     maven(url = "https://repo.bluecolored.de/releases")
+    maven(url = "https://repo.opencollab.dev/main")
 }
 
 dependencies {
     compileOnly("io.papermc.paper:paper-api:1.21.7-R0.1-SNAPSHOT")
     compileOnly("com.github.GriefPrevention:GriefPrevention:16.18.4")
+    compileOnly("org.geysermc.geyser:api:2.7.0-SNAPSHOT")
     compileOnly("de.bluecolored.bluemap:BlueMapAPI:2.7.2")
     compileOnly("org.jetbrains:annotations:15.0")
     errorprone("com.google.errorprone:error_prone_core:2.36.0")

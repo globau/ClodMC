@@ -2,6 +2,7 @@ package au.com.glob.clodmc;
 
 import au.com.glob.clodmc.modules.Module;
 import au.com.glob.clodmc.modules.ModuleRegistry;
+import au.com.glob.clodmc.util.Bedrock;
 import au.com.glob.clodmc.util.ConfigUtil;
 import au.com.glob.clodmc.util.Logger;
 import au.com.glob.clodmc.util.Players;
@@ -13,7 +14,6 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.server.ServerLoadEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import vendored.com.jeff_media.customblockdata.CustomBlockData;
 
 public final class ClodMC extends JavaPlugin implements Listener {
@@ -21,10 +21,18 @@ public final class ClodMC extends JavaPlugin implements Listener {
   public static @NotNull ClodMC instance;
 
   private final @NotNull ModuleRegistry moduleRegistry = new ModuleRegistry();
+  private boolean geyserLoaded;
 
   public ClodMC() {
     super();
     instance = this;
+
+    try {
+      Bedrock.apiTest();
+      this.geyserLoaded = true;
+    } catch (NoClassDefFoundError e) {
+      this.geyserLoaded = false;
+    }
   }
 
   @Override
@@ -67,7 +75,7 @@ public final class ClodMC extends JavaPlugin implements Listener {
     Players.updateWhitelisted();
   }
 
-  public static @Nullable <T extends Module> T getModule(@NotNull Class<T> moduleClass) {
-    return instance.moduleRegistry.get(moduleClass);
+  public boolean isGeyserLoaded() {
+    return this.geyserLoaded;
   }
 }

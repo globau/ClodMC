@@ -16,3 +16,6 @@ dependencies:
     BlueMap:
       load: BEFORE
       required: false
+    Geyser-Spigot:
+      load: BEFORE
+      required: false

@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -55,5 +56,9 @@ public class Players {
         .map(Map.Entry::getValue)
         .findFirst()
         .orElse(null);
+  }
+
+  public static boolean isBedrock(@NotNull Player player) {
+    return ClodMC.instance.isGeyserLoaded() && Bedrock.isBedrockUUID(player.getUniqueId());
   }
 }
