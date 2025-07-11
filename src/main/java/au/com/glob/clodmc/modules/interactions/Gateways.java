@@ -257,7 +257,7 @@ public class Gateways implements Module, Listener {
     }
   }
 
-  @EventHandler
+  @EventHandler(ignoreCancelled = true)
   public void onBlockPlace(@NotNull BlockPlaceEvent event) {
     // prevent placing blocks in the 2 blocks above an anchorBlock
     BlockPos below1Pos = BlockPos.of(event.getBlock().getLocation()).down();
@@ -317,7 +317,7 @@ public class Gateways implements Module, Listener {
     this.save();
   }
 
-  @EventHandler
+  @EventHandler(ignoreCancelled = true)
   public void onEntityChangeBlock(@NotNull EntityChangeBlockEvent event) {
     // if a falling entity turns into a block inside the gateway, break the block
     if (event.getEntity() instanceof FallingBlock fallingBlock) {
@@ -330,7 +330,7 @@ public class Gateways implements Module, Listener {
     }
   }
 
-  @EventHandler
+  @EventHandler(ignoreCancelled = true)
   public void onBlockBreak(@NotNull BlockBreakEvent event) {
     BlockPos blockPos = BlockPos.of(event.getBlock().getLocation());
     AnchorBlock anchorBlock = this.instances.get(blockPos);
@@ -561,7 +561,7 @@ public class Gateways implements Module, Listener {
     this.ignore.remove(event.getPlayer());
   }
 
-  @EventHandler(priority = EventPriority.LOWEST)
+  @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
   public void onPlayerInteract(@NotNull PlayerInteractEvent event) {
     if (event.getAction() != Action.RIGHT_CLICK_BLOCK || event.getClickedBlock() == null) {
       return;
