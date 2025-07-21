@@ -12,13 +12,14 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.WorldBorder;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
+@NullMarked
 public class BlueMapWorldBorder extends BlueMap.Addon {
-  private static final @NotNull Color LINE_COLOUR = new Color("#a52a2aff");
-  private static final @NotNull Color FILL_COLOUR = new Color("#00000000");
+  private static final Color LINE_COLOUR = new Color("#a52a2aff");
+  private static final Color FILL_COLOUR = new Color("#00000000");
 
-  protected BlueMapWorldBorder(@NotNull BlueMapAPI api) {
+  protected BlueMapWorldBorder(BlueMapAPI api) {
     super(api);
   }
 

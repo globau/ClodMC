@@ -88,13 +88,14 @@ import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.util.NumberConversions;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 /** Player built point-to-point teleports */
+@NullMarked
 public class Gateways implements Module, Listener {
   @SuppressWarnings({"NotNullFieldNotInitialized", "NullAway.Init"})
-  private static @NotNull Gateways instance;
+  private static Gateways instance;
 
   private static @Nullable BlueMapGateways blueMapGateways;
 
@@ -102,13 +103,12 @@ public class Gateways implements Module, Listener {
   private static final int MIN_RANDOM_TP_DISTANCE = 1500;
   private static final int RANDOM_TP_COOLDOWN = 60; // seconds
 
-  private final @NotNull File configFile =
-      new File(ClodMC.instance.getDataFolder(), "gateways.yml");
-  private final @NotNull Map<BlockPos, AnchorBlock> instances = new HashMap<>();
-  private final @NotNull Map<Player, BlockPos> ignore = new HashMap<>();
-  private final @NotNull Random random = new Random();
+  private final File configFile = new File(ClodMC.instance.getDataFolder(), "gateways.yml");
+  private final Map<BlockPos, AnchorBlock> instances = new HashMap<>();
+  private final Map<Player, BlockPos> ignore = new HashMap<>();
+  private final Random random = new Random();
 
-  private static final @NotNull List<Colour> COLOURS =
+  private static final List<Colour> COLOURS =
       List.of(
           new Colour(Material.WHITE_WOOL, "white", 0, Color.fromRGB(0xf9ffff)),
           new Colour(Material.ORANGE_WOOL, "orange", 1, Color.fromRGB(0xf9801d)),
@@ -141,7 +141,7 @@ public class Gateways implements Module, Listener {
     CommandBuilder.build("gateways")
         .description("List gateway in use")
         .executor(
-            (@NotNull EitherCommandSender sender) -> {
+            (EitherCommandSender sender) -> {
               if (this.instances.isEmpty()) {
                 Chat.warning(sender, "No gateways");
                 return;
@@ -209,13 +209,13 @@ public class Gateways implements Module, Listener {
   }
 
   @EventHandler
-  public void onPrepareItemCraft(@NotNull PrepareItemCraftEvent event) {
+  public void onPrepareItemCraft(PrepareItemCraftEvent event) {
     ItemStack item = event.getInventory().getResult();
     if (!AnchorItem.isAnchor(item)) {
       return;
     }
 
-    ItemStack[] matrix = event.getInventory().getMatrix();
+    @Nullable ItemStack[] matrix = event.getInventory().getMatrix();
     Colour topColour = Colour.of(matrix[1]);
     Colour bottomColour = Colour.of(matrix[4]);
     if (topColour == null || bottomColour == null) {
@@ -249,7 +249,7 @@ public class Gateways implements Module, Listener {
   }
 
   @EventHandler
-  public void onCraftItem(@NotNull CraftItemEvent event) {
+  public void onCraftItem(CraftItemEvent event) {
     ItemStack item = event.getCurrentItem();
 
     if (AnchorItem.isAnchor(item)) {
@@ -258,7 +258,7 @@ public class Gateways implements Module, Listener {
   }
 
   @EventHandler(ignoreCancelled = true)
-  public void onBlockPlace(@NotNull BlockPlaceEvent event) {
+  public void onBlockPlace(BlockPlaceEvent event) {
     // prevent placing blocks in the 2 blocks above an anchorBlock
     BlockPos below1Pos = BlockPos.of(event.getBlock().getLocation()).down();
     BlockPos below2Pos = below1Pos.down();
@@ -318,7 +318,7 @@ public class Gateways implements Module, Listener {
   }
 
   @EventHandler(ignoreCancelled = true)
-  public void onEntityChangeBlock(@NotNull EntityChangeBlockEvent event) {
+  public void onEntityChangeBlock(EntityChangeBlockEvent event) {
     // if a falling entity turns into a block inside the gateway, break the block
     if (event.getEntity() instanceof FallingBlock fallingBlock) {
       BlockPos belowPos = BlockPos.of(event.getBlock().getLocation()).down();
@@ -331,7 +331,7 @@ public class Gateways implements Module, Listener {
   }
 
   @EventHandler(ignoreCancelled = true)
-  public void onBlockBreak(@NotNull BlockBreakEvent event) {
+  public void onBlockBreak(BlockBreakEvent event) {
     BlockPos blockPos = BlockPos.of(event.getBlock().getLocation());
     AnchorBlock anchorBlock = this.instances.get(blockPos);
     if (anchorBlock == null) {
@@ -360,7 +360,7 @@ public class Gateways implements Module, Listener {
   }
 
   @EventHandler
-  public void onPlayerMove(@NotNull PlayerMoveEvent event) {
+  public void onPlayerMove(PlayerMoveEvent event) {
     Player player = event.getPlayer();
     if (player.getGameMode().equals(GameMode.SPECTATOR)) {
       return;
@@ -518,7 +518,7 @@ public class Gateways implements Module, Listener {
     player
         .teleportAsync(teleportPos, cause)
         .whenComplete(
-            (Boolean result, Throwable e) -> {
+            (@Nullable Boolean result, Throwable e) -> {
               player.clearTitle();
               if (result != null && result) {
                 this.ignore.put(player, BlockPos.of(finalTeleportPos));
@@ -544,7 +544,7 @@ public class Gateways implements Module, Listener {
   }
 
   @EventHandler
-  public void onPlayerJoin(@NotNull PlayerJoinEvent event) {
+  public void onPlayerJoin(PlayerJoinEvent event) {
     event.getPlayer().discoverRecipe(AnchorItem.RECIPE_KEY);
 
     // if player spawns on an anchor block don't immediately teleport
@@ -557,12 +557,12 @@ public class Gateways implements Module, Listener {
   }
 
   @EventHandler
-  public void onPlayerQuit(@NotNull PlayerQuitEvent event) {
+  public void onPlayerQuit(PlayerQuitEvent event) {
     this.ignore.remove(event.getPlayer());
   }
 
   @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
-  public void onPlayerInteract(@NotNull PlayerInteractEvent event) {
+  public void onPlayerInteract(PlayerInteractEvent event) {
     if (event.getAction() != Action.RIGHT_CLICK_BLOCK || event.getClickedBlock() == null) {
       return;
     }
@@ -573,15 +573,15 @@ public class Gateways implements Module, Listener {
     event.setCancelled(anchorBlock != null);
   }
 
-  public @NotNull Collection<AnchorBlock> getAnchorBlocks() {
+  public Collection<AnchorBlock> getAnchorBlocks() {
     return this.instances.values();
   }
 
-  private static int coloursToNetworkId(@NotNull Colour topColour, @NotNull Colour bottomColour) {
+  private static int coloursToNetworkId(Colour topColour, Colour bottomColour) {
     return (topColour.index << 4) | bottomColour.index;
   }
 
-  private static @NotNull Network networkIdToColours(int networkId) {
+  private static Network networkIdToColours(int networkId) {
     return new Network(networkId);
   }
 
@@ -594,20 +594,20 @@ public class Gateways implements Module, Listener {
     private static final int EFFECT_PARTICLES = 4;
 
     final int networkId;
-    final @NotNull BlockPos blockPos;
+    final BlockPos blockPos;
     final @Nullable String name;
-    final @NotNull String displayName;
+    final String displayName;
 
-    private final @NotNull Location topLocation;
-    private final @NotNull Location bottomLocation;
-    private final @NotNull Colour topColour;
-    private final @NotNull Colour bottomColour;
+    private final Location topLocation;
+    private final Location bottomLocation;
+    private final Colour topColour;
+    private final Colour bottomColour;
 
     private @Nullable AnchorBlock connectedTo = null;
     private @Nullable BukkitTask particleTask = null;
     final boolean isRandom;
 
-    public AnchorBlock(int networkId, @NotNull Location location, @Nullable String name) {
+    public AnchorBlock(int networkId, Location location, @Nullable String name) {
       this.networkId = networkId;
       this.blockPos = BlockPos.of(location);
       this.name = name;
@@ -624,7 +624,7 @@ public class Gateways implements Module, Listener {
     }
 
     @Override
-    public @NotNull String toString() {
+    public String toString() {
       return "AnchorBlock{"
           + "blockPos="
           + this.blockPos
@@ -637,7 +637,7 @@ public class Gateways implements Module, Listener {
           + '}';
     }
 
-    public @NotNull BlockPos getBlockPos() {
+    public BlockPos getBlockPos() {
       return this.blockPos;
     }
 
@@ -645,7 +645,7 @@ public class Gateways implements Module, Listener {
       return this.name;
     }
 
-    public @NotNull String getInformation() {
+    public String getInformation() {
       String prefix = "<yellow>" + this.displayName + "</yellow> - ";
       if (this.isConnected()) {
         return prefix
@@ -658,19 +658,19 @@ public class Gateways implements Module, Listener {
       return prefix + "Disconnected";
     }
 
-    public @NotNull Colour getTopColour() {
+    public Colour getTopColour() {
       return this.topColour;
     }
 
-    public @NotNull Colour getBottomColour() {
+    public Colour getBottomColour() {
       return this.bottomColour;
     }
 
-    private @NotNull String getColourPair() {
+    private String getColourPair() {
       return this.topColour.getDisplayName() + " :: " + this.bottomColour.getDisplayName();
     }
 
-    private void connectTo(@NotNull AnchorBlock otherBlock) {
+    private void connectTo(AnchorBlock otherBlock) {
       this.connectedTo = otherBlock;
       otherBlock.connectedTo = this;
     }
@@ -690,30 +690,30 @@ public class Gateways implements Module, Listener {
       return this.connectedTo;
     }
 
-    private Location facingLocation(@NotNull Location location) {
+    private Location facingLocation(Location location) {
       double yawRadians = Math.toRadians(location.getYaw());
       double facingX = location.getX() - Math.sin(yawRadians);
       double facingZ = location.getZ() + Math.cos(yawRadians);
       return new Location(location.getWorld(), facingX, location.getY(), facingZ);
     }
 
-    private Block facingBlock(@NotNull Location location) {
+    private Block facingBlock(Location location) {
       return this.facingLocation(location).getBlock();
     }
 
-    private boolean isFacingAnchor(@NotNull Location location) {
+    private boolean isFacingAnchor(Location location) {
       return Gateways.instance.instances.containsKey(BlockPos.of(this.facingLocation(location)));
     }
 
-    private boolean isFacingAir(@NotNull Location location) {
+    private boolean isFacingAir(Location location) {
       return this.facingBlock(location).isEmpty();
     }
 
-    private boolean isFacingSolid(@NotNull Location location) {
+    private boolean isFacingSolid(Location location) {
       return this.facingBlock(location).isSolid();
     }
 
-    private @NotNull Location teleportLocation(@NotNull Player player) {
+    private Location teleportLocation(Player player) {
       // rotate player to avoid facing a wall
 
       // get standing-on block, bottom, and top blocks for the player's location
@@ -802,7 +802,7 @@ public class Gateways implements Module, Listener {
               });
     }
 
-    private void spawnJavaParticles(@NotNull Collection<Player> players, boolean isActive) {
+    private void spawnJavaParticles(Collection<Player> players, boolean isActive) {
       double baseRotation = this.blockPos.getWorld().getGameTime() * EFFECT_SPEED;
       double angleStep = 2 * Math.PI / EFFECT_PARTICLES;
       int ringsPerSection = isActive ? 8 : 4;
@@ -852,7 +852,7 @@ public class Gateways implements Module, Listener {
       }
     }
 
-    private void spawnBedrockParticles(@NotNull Collection<Player> players) {
+    private void spawnBedrockParticles(Collection<Player> players) {
       new ParticleBuilder(Particle.DUST)
           .data(new Particle.DustOptions(this.topColour.color, 1))
           .location(this.topLocation)
@@ -882,7 +882,7 @@ public class Gateways implements Module, Listener {
       }
     }
 
-    private @NotNull Collection<Player> getNearbyPlayers(int radius) {
+    private Collection<Player> getNearbyPlayers(int radius) {
       // nearby players, excluding those standing on the anchor
       return this.bottomLocation
           .getWorld()
@@ -908,7 +908,7 @@ public class Gateways implements Module, Listener {
     }
 
     @Override
-    public @NotNull Map<String, Object> serialize() {
+    public Map<String, Object> serialize() {
       // note: doesn't store adjustY
       Map<String, Object> serialised = new HashMap<>();
       serialised.put("title", this.displayName);
@@ -924,7 +924,7 @@ public class Gateways implements Module, Listener {
     }
 
     @SuppressWarnings("unused")
-    public static @NotNull AnchorBlock deserialize(@NotNull Map<String, Object> args) {
+    public static AnchorBlock deserialize(Map<String, Object> args) {
       World world = Bukkit.getWorld((String) args.get("world"));
       if (world == null) {
         throw new IllegalArgumentException("unknown world");
@@ -944,25 +944,22 @@ public class Gateways implements Module, Listener {
   //
 
   private static class AnchorItem {
-    private static final @NotNull NamespacedKey RECIPE_KEY = new NamespacedKey("clod-mc", "anchor");
-    private static final String @NotNull [] SHAPE = new String[] {"PWP", "EWE", "ERE"};
-    private static final @NotNull Map<Character, Material> SHAPE_MATERIALS =
+    private static final NamespacedKey RECIPE_KEY = new NamespacedKey("clod-mc", "anchor");
+    private static final String[] SHAPE = new String[] {"PWP", "EWE", "ERE"};
+    private static final Map<Character, Material> SHAPE_MATERIALS =
         Map.of(
             'P', Material.ENDER_PEARL,
             'W', Material.AIR,
             'E', Material.END_STONE,
             'R', Material.RESPAWN_ANCHOR);
 
-    private static final @NotNull String DEFAULT_ANCHOR_NAME = "Gateway Anchor";
+    private static final String DEFAULT_ANCHOR_NAME = "Gateway Anchor";
 
-    private static final @NotNull NamespacedKey NETWORK_KEY =
-        new NamespacedKey("clod-mc", "network");
-    private static final @NotNull NamespacedKey TOP_KEY =
-        new NamespacedKey("clod-mc", "network-top");
-    private static final @NotNull NamespacedKey BOTTOM_KEY =
-        new NamespacedKey("clod-mc", "network-bottom");
+    private static final NamespacedKey NETWORK_KEY = new NamespacedKey("clod-mc", "network");
+    private static final NamespacedKey TOP_KEY = new NamespacedKey("clod-mc", "network-top");
+    private static final NamespacedKey BOTTOM_KEY = new NamespacedKey("clod-mc", "network-bottom");
 
-    private static @NotNull ShapedRecipe getRecipe() {
+    private static ShapedRecipe getRecipe() {
       Material[] materials =
           COLOURS.stream().map((Colour colour) -> colour.material).toArray(Material[]::new);
 
@@ -979,7 +976,7 @@ public class Gateways implements Module, Listener {
       return recipe;
     }
 
-    private static @NotNull ItemStack create() {
+    private static ItemStack create() {
       ItemStack item = new ItemStack(Material.RESPAWN_ANCHOR);
       ItemMeta meta = item.getItemMeta();
       meta.displayName(Component.text(DEFAULT_ANCHOR_NAME));
@@ -997,7 +994,7 @@ public class Gateways implements Module, Listener {
       return meta != null && meta.getPersistentDataContainer().has(RECIPE_KEY);
     }
 
-    private static int getNetworkId(@NotNull ItemStack item) {
+    private static int getNetworkId(ItemStack item) {
       Integer networkId =
           item.getItemMeta()
               .getPersistentDataContainer()
@@ -1008,17 +1005,14 @@ public class Gateways implements Module, Listener {
       return networkId;
     }
 
-    private static @Nullable String getName(@NotNull ItemStack item) {
+    private static @Nullable String getName(ItemStack item) {
       Component displayName = item.getItemMeta().displayName();
       String plainTextName = StringUtil.asText(Objects.requireNonNull(displayName));
       return plainTextName.equals(DEFAULT_ANCHOR_NAME) ? null : plainTextName;
     }
 
     private static void setMeta(
-        @NotNull ItemStack anchorItem,
-        int networkId,
-        @Nullable String name,
-        @Nullable String suffix) {
+        ItemStack anchorItem, int networkId, @Nullable String name, @Nullable String suffix) {
       Network network = networkIdToColours(networkId);
       ItemMeta meta = anchorItem.getItemMeta();
       meta.displayName(Component.text(name == null ? DEFAULT_ANCHOR_NAME : name));
@@ -1035,7 +1029,7 @@ public class Gateways implements Module, Listener {
       anchorItem.setItemMeta(meta);
     }
 
-    private static void clearExtraMeta(@NotNull ItemStack anchorItem) {
+    private static void clearExtraMeta(ItemStack anchorItem) {
       ItemMeta meta = anchorItem.getItemMeta();
       Integer networkIdBoxed =
           meta.getPersistentDataContainer().get(NETWORK_KEY, PersistentDataType.INTEGER);
@@ -1045,22 +1039,21 @@ public class Gateways implements Module, Listener {
 
   //
 
-  public record Colour(
-      @NotNull Material material, @NotNull String name, int index, @NotNull Color color) {
+  public record Colour(Material material, String name, int index, Color color) {
     @Override
-    public @NotNull String toString() {
+    public String toString() {
       return this.name;
     }
 
-    public @NotNull String getName() {
+    public String getName() {
       return this.name;
     }
 
-    private @NotNull String getDisplayName() {
+    private String getDisplayName() {
       return StringUtil.toTitleCase(this.name.replace('_', ' '));
     }
 
-    private @NotNull TextComponent getText() {
+    private TextComponent getText() {
       return Component.text(this.getDisplayName());
     }
 
@@ -1090,8 +1083,8 @@ public class Gateways implements Module, Listener {
   //
 
   private static class Network {
-    public final @NotNull Gateways.Colour top;
-    public final @NotNull Gateways.Colour bottom;
+    public final Gateways.Colour top;
+    public final Gateways.Colour bottom;
 
     Network(int networkId) {
       Colour topColour = Colour.of((networkId >> 4) & 0x0F);
@@ -1105,11 +1098,11 @@ public class Gateways implements Module, Listener {
   }
 
   public static class BlueMapGateways extends BlueMap.Addon {
-    private static final @NotNull String MARKER_FILENAME = "gateway.svg";
+    private static final String MARKER_FILENAME = "gateway.svg";
 
-    private final @NotNull Map<World, MarkerSet> markerSets = new HashMap<>(3);
+    private final Map<World, MarkerSet> markerSets = new HashMap<>(3);
 
-    public BlueMapGateways(@NotNull BlueMapAPI api) {
+    public BlueMapGateways(BlueMapAPI api) {
       super(api);
       blueMapGateways = this;
 
@@ -1135,10 +1128,6 @@ public class Gateways implements Module, Listener {
 
     @Override
     public void update() {
-      if (this.api == null) {
-        return;
-      }
-
       for (MarkerSet markerSet : this.markerSets.values()) {
         markerSet.getMarkers().clear();
       }
@@ -1199,12 +1188,12 @@ public class Gateways implements Module, Listener {
   public static class BlockPos {
     // same as Location, but for the block
     // can be replaced by io.papermc.paper.math.BlockPosition once that's no longer experimental
-    final @NotNull World world;
+    final World world;
     final int x;
     final int y;
     final int z;
 
-    private BlockPos(@NotNull World world, int x, int y, int z) {
+    private BlockPos(World world, int x, int y, int z) {
       this.world = world;
       this.x = x;
       this.y = y;
@@ -1212,7 +1201,7 @@ public class Gateways implements Module, Listener {
     }
 
     @Override
-    public @NotNull String toString() {
+    public String toString() {
       return "BlockPos{"
           + this.world.getName()
           + " "
@@ -1224,7 +1213,7 @@ public class Gateways implements Module, Listener {
           + '}';
     }
 
-    public @NotNull String getString(boolean includeWorld) {
+    public String getString(boolean includeWorld) {
       String prefix = "";
       if (includeWorld) {
         prefix =
@@ -1257,15 +1246,15 @@ public class Gateways implements Module, Listener {
       return Objects.hash(this.world, this.x, this.y, this.z);
     }
 
-    public static BlockPos of(@NotNull Location loc) {
+    public static BlockPos of(Location loc) {
       return new BlockPos(loc.getWorld(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ());
     }
 
-    public @NotNull Location asLocation() {
+    public Location asLocation() {
       return new Location(this.world, this.x + 0.5, this.y, this.z + 0.5);
     }
 
-    public @NotNull World getWorld() {
+    public World getWorld() {
       return this.world;
     }
 
@@ -1281,15 +1270,15 @@ public class Gateways implements Module, Listener {
       return this.z;
     }
 
-    public @NotNull Gateways.BlockPos down() {
+    public Gateways.BlockPos down() {
       return new BlockPos(this.world, this.x, this.y - 1, this.z);
     }
 
-    public @NotNull Gateways.BlockPos up() {
+    public Gateways.BlockPos up() {
       return new BlockPos(this.world, this.x, this.y + 1, this.z);
     }
 
-    public @NotNull Block getBlock() {
+    public Block getBlock() {
       return this.world.getBlockAt(this.x, this.y, this.z);
     }
   }

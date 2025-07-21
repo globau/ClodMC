@@ -13,14 +13,15 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.server.ServerLoadEvent;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 import vendored.com.jeff_media.customblockdata.CustomBlockData;
 
+@NullMarked
 public final class ClodMC extends JavaPlugin implements Listener {
   @SuppressWarnings({"NotNullFieldNotInitialized", "NullAway.Init"})
-  public static @NotNull ClodMC instance;
+  public static ClodMC instance;
 
-  private final @NotNull ModuleRegistry moduleRegistry = new ModuleRegistry();
+  private final ModuleRegistry moduleRegistry = new ModuleRegistry();
   private boolean geyserLoaded;
 
   public ClodMC() {
@@ -58,7 +59,7 @@ public final class ClodMC extends JavaPlugin implements Listener {
   }
 
   @EventHandler
-  public void onServerLoad(@NotNull ServerLoadEvent event) {
+  public void onServerLoad(ServerLoadEvent event) {
     try {
       Bedrock.apiTest();
       this.geyserLoaded = true;
@@ -70,7 +71,7 @@ public final class ClodMC extends JavaPlugin implements Listener {
   }
 
   @EventHandler
-  public void onPlayerJoin(@NotNull PlayerJoinEvent event) {
+  public void onPlayerJoin(PlayerJoinEvent event) {
     Players.updateWhitelisted();
   }
 

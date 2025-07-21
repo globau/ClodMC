@@ -20,14 +20,15 @@ import org.bukkit.entity.Horse;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.util.BoundingBox;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 /** player teleport helpers */
+@NullMarked
 public class TeleportUtil {
   private static final int CHECK_RADIUS = 3;
   private static final int MAX_RADIUS = 8;
   private static final int POP_RADIUS = 16;
-  private static final Vector3D @NotNull [] SHIFT_VECTORS;
+  private static final Vector3D[] SHIFT_VECTORS;
 
   private record Vector3D(int x, int y, int z) {}
 
@@ -44,13 +45,10 @@ public class TeleportUtil {
     SHIFT_VECTORS = pos.toArray(new Vector3D[0]);
   }
 
-  private static final org.bukkit.@NotNull Color TELEPORT_COLUR_A =
-      org.bukkit.Color.fromRGB(0x00BFFF);
-  private static final org.bukkit.@NotNull Color TELEPORT_COLUR_B =
-      org.bukkit.Color.fromRGB(0xFFFFFF);
+  private static final org.bukkit.Color TELEPORT_COLUR_A = org.bukkit.Color.fromRGB(0x00BFFF);
+  private static final org.bukkit.Color TELEPORT_COLUR_B = org.bukkit.Color.fromRGB(0xFFFFFF);
 
-  public static void teleport(
-      @NotNull Player player, @NotNull Location location, @NotNull String reason) {
+  public static void teleport(Player player, Location location, String reason) {
     Location fromLoc = player.getLocation();
 
     Location destinationLoc;
@@ -98,7 +96,7 @@ public class TeleportUtil {
             });
   }
 
-  public static @NotNull Location getStandingPos(@NotNull Player player) {
+  public static Location getStandingPos(Player player) {
     // player.getLocation() returns the centre of the player; if the player
     // is standing on the edge of a block, their centre will be over a different
     // block from what they are standing on.
@@ -123,7 +121,7 @@ public class TeleportUtil {
     return player.getLocation();
   }
 
-  public static @NotNull Location getSafePos(@NotNull Location location) {
+  public static Location getSafePos(Location location) {
     World world = location.getWorld();
     int x = location.getBlockX();
     int y = location.getBlockY();
@@ -214,7 +212,7 @@ public class TeleportUtil {
     return safeLocation;
   }
 
-  public static boolean isUnsafe(@NotNull Block feetBlock) {
+  public static boolean isUnsafe(Block feetBlock) {
     Material feetMaterial = feetBlock.getType();
     Block surfaceBlock = feetBlock.getRelative(BlockFace.DOWN);
     Material surfaceMaterial = surfaceBlock.getType();
@@ -251,7 +249,7 @@ public class TeleportUtil {
         || feetBlock.getRelative(BlockFace.UP).isSolid();
   }
 
-  private static boolean canStandOn(@NotNull Block block) {
+  private static boolean canStandOn(Block block) {
     Material material = block.getType();
     if (Tag.WOOL_CARPETS.isTagged(material) || material == Material.SCAFFOLDING) {
       return true;
@@ -260,7 +258,7 @@ public class TeleportUtil {
     return block.isSolid();
   }
 
-  public static @NotNull Location getRandomLoc(@NotNull Location loc, int randomRadius) {
+  public static Location getRandomLoc(Location loc, int randomRadius) {
     loc = loc.clone();
     int attempts = 0;
     while (attempts <= randomRadius) {
@@ -279,7 +277,7 @@ public class TeleportUtil {
     return loc;
   }
 
-  private static void playTeleportSound(@NotNull Location loc, @NotNull Player excludedPlayer) {
+  private static void playTeleportSound(Location loc, Player excludedPlayer) {
     for (Player player : loc.getNearbyPlayers(POP_RADIUS)) {
       if (!player.equals(excludedPlayer)) {
         player.playSound(
@@ -291,7 +289,7 @@ public class TeleportUtil {
     }
   }
 
-  private static void showTeleportParticles(@NotNull Location loc) {
+  private static void showTeleportParticles(Location loc) {
     World world = loc.getWorld();
     if (world == null) {
       return;

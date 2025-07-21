@@ -6,11 +6,12 @@ import net.kyori.adventure.text.Component;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.server.ServerListPingEvent;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 /** Set MOTD automatically based on server type (prod, stage, dev) */
+@NullMarked
 public class MOTD implements Module, Listener {
-  private final @NotNull Component motd;
+  private final Component motd;
 
   public MOTD() {
     String hostname = System.getenv("HOSTNAME");
@@ -34,7 +35,7 @@ public class MOTD implements Module, Listener {
   }
 
   @EventHandler
-  public void onServerListPing(@NotNull ServerListPingEvent event) {
+  public void onServerListPing(ServerListPingEvent event) {
     event.motd(this.motd);
   }
 }

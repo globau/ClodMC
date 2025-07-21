@@ -26,19 +26,19 @@ import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.server.ServerCommandEvent;
 import org.bukkit.util.NumberConversions;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 /** Queue and deliver whispers sent to offline players */
+@NullMarked
 public class OfflineMessages implements Module, Listener {
-  @NotNull final Pattern msgPattern = Pattern.compile("^/?msg\\s+(\\S+)\\s+(.+)$");
+  final Pattern msgPattern = Pattern.compile("^/?msg\\s+(\\S+)\\s+(.+)$");
 
   public OfflineMessages() {
     ConfigurationSerialization.registerClass(OfflineMessages.Message.class);
   }
 
-  private boolean handleOfflineMsg(
-      @NotNull Sender sender, @NotNull String recipient, @NotNull String message) {
+  private boolean handleOfflineMsg(Sender sender, String recipient, String message) {
     // most messages will be directed at online players, check that first
     Player player = Bukkit.getPlayerExact(recipient);
     if (player != null && player.isOnline()) {
@@ -67,7 +67,7 @@ public class OfflineMessages implements Module, Listener {
     return true;
   }
 
-  private List<Message> loadMessages(@NotNull Player player) {
+  private List<Message> loadMessages(Player player) {
     return this.loadMessages(PlayerDataFiles.of(player).getList("messages"));
   }
 
@@ -84,7 +84,7 @@ public class OfflineMessages implements Module, Listener {
   }
 
   @EventHandler
-  public void onPlayerCommandPreprocess(@NotNull PlayerCommandPreprocessEvent event) {
+  public void onPlayerCommandPreprocess(PlayerCommandPreprocessEvent event) {
     Matcher matcher = this.msgPattern.matcher(event.getMessage());
     if (matcher.matches()
         && this.handleOfflineMsg(
@@ -96,7 +96,7 @@ public class OfflineMessages implements Module, Listener {
   }
 
   @EventHandler
-  public void onServerCommand(@NotNull ServerCommandEvent event) {
+  public void onServerCommand(ServerCommandEvent event) {
     Matcher matcher = this.msgPattern.matcher(event.getCommand());
     if (matcher.matches()
         && this.handleOfflineMsg(
@@ -108,7 +108,7 @@ public class OfflineMessages implements Module, Listener {
   }
 
   @EventHandler
-  public void onPlayerJoin(@NotNull PlayerJoinEvent event) {
+  public void onPlayerJoin(PlayerJoinEvent event) {
     Player player = event.getPlayer();
     List<Message> messages = this.loadMessages(player);
     if (messages.isEmpty()) {
@@ -127,12 +127,12 @@ public class OfflineMessages implements Module, Listener {
         });
   }
 
-  private record Sender(@NotNull CommandSender recipient, @NotNull String name) {
-    void fyi(@NotNull String message) {
+  private record Sender(CommandSender recipient, String name) {
+    void fyi(String message) {
       Chat.fyi(this.recipient, message);
     }
 
-    void error(@NotNull String message) {
+    void error(String message) {
       Chat.error(this.recipient, message);
     }
   }
@@ -140,16 +140,16 @@ public class OfflineMessages implements Module, Listener {
   @SerializableAs("ClodMC.Message")
   public static class Message implements ConfigurationSerializable {
     private final long timestamp;
-    private final @NotNull String sender;
-    private final @NotNull String message;
+    private final String sender;
+    private final String message;
 
-    public Message(long timestamp, @NotNull String sender, @NotNull String message) {
+    public Message(long timestamp, String sender, String message) {
       this.timestamp = timestamp;
       this.sender = sender;
       this.message = message;
     }
 
-    public void sendTo(@NotNull Player player) {
+    public void sendTo(Player player) {
       Chat.whisper(
           player,
           StringUtil.relativeTime(System.currentTimeMillis() / 1000L - this.timestamp)
@@ -160,7 +160,7 @@ public class OfflineMessages implements Module, Listener {
     }
 
     @Override
-    public @NotNull Map<String, Object> serialize() {
+    public Map<String, Object> serialize() {
       Map<String, Object> serialised = new HashMap<>();
       serialised.put("timestamp", this.timestamp);
       serialised.put("sender", this.sender);
@@ -169,7 +169,7 @@ public class OfflineMessages implements Module, Listener {
     }
 
     @SuppressWarnings("unused")
-    public static @NotNull Message deserialize(@NotNull Map<String, Object> args) {
+    public static Message deserialize(Map<String, Object> args) {
       return new Message(
           NumberConversions.toLong(args.get("timestamp")),
           Objects.requireNonNull((String) args.get("sender")),

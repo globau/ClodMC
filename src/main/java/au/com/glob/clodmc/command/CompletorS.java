@@ -2,9 +2,10 @@ package au.com.glob.clodmc.command;
 
 import java.util.List;
 import org.bukkit.command.CommandSender;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 @FunctionalInterface
+@NullMarked
 public interface CompletorS extends Completor {
-  @NotNull List<String> accept(@NotNull CommandSender sender, @NotNull List<String> args);
+  List<String> accept(CommandSender sender, List<String> args);
 }

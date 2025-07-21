@@ -23,14 +23,15 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.BlockStateMeta;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 /** When picking blocks, look inside held shulker boxes too */
+@NullMarked
 public class DeepPockets implements Module, Listener {
   private record ShulkerItemStack(int playerSlot, int shulkerSlot, int amount) {}
 
   @EventHandler
-  public void onPlayerPickItem(@NotNull PlayerPickItemEvent event) {
+  public void onPlayerPickItem(PlayerPickItemEvent event) {
     Player player = event.getPlayer();
 
     // nothing to do if the item is readily available, or the player isn't in survival mode

@@ -5,15 +5,16 @@ import au.com.glob.clodmc.command.EitherCommandSender;
 import au.com.glob.clodmc.modules.Module;
 import java.util.StringJoiner;
 import org.bukkit.Bukkit;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 /** /tps for all players */
+@NullMarked
 public class ServerStatus implements Module {
   public ServerStatus() {
     CommandBuilder.build("server-status")
         .description("Shows server status")
         .executor(
-            (@NotNull EitherCommandSender sender) -> {
+            (EitherCommandSender sender) -> {
               double[] tps = Bukkit.getTPS();
               StringJoiner values = new StringJoiner(", ");
               for (double avg : tps) {

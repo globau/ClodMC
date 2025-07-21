@@ -10,25 +10,26 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
+@NullMarked
 @SuppressWarnings({"UnusedReturnValue", "SameParameterValue"})
 public class CommandBuilder {
-  private final @NotNull String name;
+  private final String name;
   private @Nullable String usage;
   private @Nullable String description;
   private @Nullable Executor executor;
   private @Nullable Completor completor;
   private boolean requiresOp = false;
 
-  private static final @NotNull List<CommandBuilder> builders = new ArrayList<>();
+  private static final List<CommandBuilder> builders = new ArrayList<>();
 
-  private CommandBuilder(@NotNull String name) {
+  private CommandBuilder(String name) {
     this.name = name;
   }
 
-  public static CommandBuilder build(@NotNull String name) {
+  public static CommandBuilder build(String name) {
     CommandBuilder builder = new CommandBuilder(name);
     builders.add(builder);
     return builder;
@@ -41,67 +42,67 @@ public class CommandBuilder {
     builders.clear();
   }
 
-  public @NotNull CommandBuilder usage(@NotNull String usage) {
+  public CommandBuilder usage(String usage) {
     this.usage = usage;
     return this;
   }
 
-  public @NotNull CommandBuilder description(@NotNull String description) {
+  public CommandBuilder description(String description) {
     this.description = description;
     return this;
   }
 
-  public @NotNull CommandBuilder requiresOp() {
+  public CommandBuilder requiresOp() {
     this.requiresOp = true;
     return this;
   }
 
-  public @NotNull CommandBuilder executor(@NotNull ExecutorP executor) {
+  public CommandBuilder executor(ExecutorP executor) {
     this.executor = executor;
     return this;
   }
 
-  public @NotNull CommandBuilder executor(@NotNull ExecutorPS executor) {
+  public CommandBuilder executor(ExecutorPS executor) {
     this.executor = executor;
     return this;
   }
 
-  public @NotNull CommandBuilder executor(@NotNull ExecutorES executor) {
+  public CommandBuilder executor(ExecutorES executor) {
     this.executor = executor;
     return this;
   }
 
-  public @NotNull CommandBuilder executor(@NotNull ExecutorESS executor) {
+  public CommandBuilder executor(ExecutorESS executor) {
     this.executor = executor;
     return this;
   }
 
-  public @NotNull CommandBuilder executor(@NotNull ExecutorEP executor) {
+  public CommandBuilder executor(ExecutorEP executor) {
     this.executor = executor;
     return this;
   }
 
-  public @NotNull CommandBuilder executor(@NotNull ExecutorEPS executor) {
+  public CommandBuilder executor(ExecutorEPS executor) {
     this.executor = executor;
     return this;
   }
 
-  public @NotNull CommandBuilder executor(@NotNull ExecutorESP executor) {
+  public CommandBuilder executor(ExecutorESP executor) {
     this.executor = executor;
     return this;
   }
 
-  public @NotNull CommandBuilder executor(@NotNull ExecutorE executor) {
+  public CommandBuilder executor(ExecutorE executor) {
     this.executor = executor;
     return this;
   }
 
-  public @NotNull CommandBuilder completor(@NotNull CompletorP completor) {
+  public CommandBuilder completor(CompletorP completor) {
     this.completor = completor;
     return this;
   }
 
-  public @NotNull CommandBuilder completor(@NotNull CompletorS completor) {
+  public CommandBuilder completor(CompletorS completor) {
     this.completor = completor;
     return this;
   }
@@ -118,10 +119,7 @@ public class CommandBuilder {
     Command command =
         new Command(this.name, this.description, this.usage, List.of()) {
           @Override
-          public boolean execute(
-              @NotNull CommandSender sender,
-              @NotNull String commandLabel,
-              String @NotNull [] args) {
+          public boolean execute(CommandSender sender, String commandLabel, String[] args) {
             CommandBuilder that = CommandBuilder.this;
             if (that.executor == null) {
               return false;
@@ -167,8 +165,7 @@ public class CommandBuilder {
           }
 
           @Override
-          public @NotNull List<String> tabComplete(
-              @NotNull CommandSender sender, @NotNull String alias, String @NotNull [] args)
+          public List<String> tabComplete(CommandSender sender, String alias, String[] args)
               throws IllegalArgumentException {
             CommandBuilder that = CommandBuilder.this;
             if (that.completor == null) {
@@ -190,7 +187,7 @@ public class CommandBuilder {
     ClodMC.instance.getServer().getCommandMap().register("clod-mc", command);
   }
 
-  private @NotNull Player toPlayer(@NotNull CommandSender sender) throws CommandError {
+  private Player toPlayer(CommandSender sender) throws CommandError {
     if (!(sender instanceof Player player)) {
       throw new CommandError("This command can only be run by a player");
     }
@@ -200,8 +197,8 @@ public class CommandBuilder {
     return player;
   }
 
-  private @Nullable Player toPlayer(String @NotNull [] args, int index) {
-    if (args.length - 1 < index || args[index] == null || args[index].isEmpty()) {
+  private @Nullable Player toPlayer(String[] args, int index) {
+    if (args.length - 1 < index || args[index].isEmpty()) {
       return null;
     }
     Player player = Bukkit.getPlayerExact(args[index]);
@@ -211,8 +208,8 @@ public class CommandBuilder {
     return player;
   }
 
-  private @Nullable String toString(String @NotNull [] args, int index) {
-    if (args.length - 1 < index || args[index] == null || args[index].isEmpty()) {
+  private @Nullable String toString(String[] args, int index) {
+    if (args.length - 1 < index || args[index].isEmpty()) {
       return null;
     }
     return args[index].isEmpty() ? null : args[index];

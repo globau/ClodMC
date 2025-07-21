@@ -1,8 +1,9 @@
 package au.com.glob.clodmc.command;
 
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 @FunctionalInterface
+@NullMarked
 public interface ExecutorE extends Executor {
-  void accept(@NotNull EitherCommandSender sender) throws CommandError;
+  void accept(EitherCommandSender sender) throws CommandError;
 }

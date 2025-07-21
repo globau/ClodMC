@@ -8,12 +8,13 @@ import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import net.kyori.adventure.translation.GlobalTranslator;
 import net.kyori.adventure.translation.Translatable;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 /** String helpers */
+@NullMarked
 public class StringUtil {
-  public static @NotNull String relativeTime(long seconds) {
+  public static String relativeTime(long seconds) {
     long dd = TimeUnit.SECONDS.toDays(seconds);
     long hh = TimeUnit.SECONDS.toHours(seconds) % 24;
     long mm = TimeUnit.SECONDS.toMinutes(seconds) % 60;
@@ -32,15 +33,15 @@ public class StringUtil {
     }
   }
 
-  public static @NotNull String plural(long value, @NotNull String unit) {
+  public static String plural(long value, String unit) {
     return String.format("%d %s%s", value, unit, value == 1 ? "" : "s");
   }
 
-  public static @NotNull String plural2(long value, @NotNull String unit) {
+  public static String plural2(long value, String unit) {
     return value == 1 ? unit : String.format("%d %ss", value, unit);
   }
 
-  public static @NotNull String joinComma(@NotNull List<String> items) {
+  public static String joinComma(List<String> items) {
     if (items.isEmpty()) {
       return "";
     }
@@ -53,7 +54,7 @@ public class StringUtil {
     return String.join(", ", items.subList(0, items.size() - 1)) + ", and " + items.getLast();
   }
 
-  public static @NotNull String toTitleCase(@NotNull String value) {
+  public static String toTitleCase(String value) {
     StringBuilder titleCase = new StringBuilder();
     for (String word : value.split("\\s+", -1)) {
       titleCase
@@ -64,21 +65,21 @@ public class StringUtil {
     return titleCase.toString().trim();
   }
 
-  public static @NotNull String asText(@NotNull Translatable component) {
+  public static String asText(Translatable component) {
     return asText(
         GlobalTranslator.render(
             Component.translatable(component.translationKey()), Locale.ENGLISH));
   }
 
-  public static @NotNull String asText(@NotNull Component component) {
+  public static String asText(Component component) {
     return PlainTextComponentSerializer.plainText().serialize(component);
   }
 
-  public static @NotNull String asText(@Nullable Component component, @NotNull String fallback) {
+  public static String asText(@Nullable Component component, String fallback) {
     return component == null ? fallback : asText(component);
   }
 
-  public static @NotNull Component asComponent(@NotNull String value) {
+  public static Component asComponent(String value) {
     return MiniMessage.miniMessage().deserialize(value);
   }
 }

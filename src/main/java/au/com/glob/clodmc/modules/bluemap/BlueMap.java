@@ -10,19 +10,20 @@ import java.util.ArrayList;
 import java.util.List;
 import org.bukkit.Bukkit;
 import org.bukkit.event.Listener;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 /** Bridge between ClodMC modules and BlueMap */
+@NullMarked
 public class BlueMap implements Module, Listener {
-  private final @NotNull List<Addon> addons = new ArrayList<>(4);
+  private final List<Addon> addons = new ArrayList<>(4);
 
   @Override
   public String dependsOn() {
     return "BlueMap";
   }
 
-  private void register(@NotNull Class<? extends Addon> cls, @Nullable BlueMapAPI api) {
+  private void register(Class<? extends Addon> cls, @Nullable BlueMapAPI api) {
     try {
       this.addons.add(cls.getDeclaredConstructor(BlueMapAPI.class).newInstance(api));
     } catch (Exception e) {
@@ -62,7 +63,7 @@ public class BlueMap implements Module, Listener {
   public abstract static class Addon {
     protected @Nullable BlueMapAPI api;
 
-    protected Addon(@NotNull BlueMapAPI api) {
+    protected Addon(BlueMapAPI api) {
       this.api = api;
     }
 

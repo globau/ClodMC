@@ -12,11 +12,12 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.CreatureSpawnEvent;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 /** Prevents enemy mobs from spawning within areas claimed by admin (eg. spawn island) */
+@NullMarked
 public class PreventMobSpawn implements Listener, Module {
-  private final @NotNull List<AdminClaim> adminClaims = new ArrayList<>(1);
+  private final List<AdminClaim> adminClaims = new ArrayList<>(1);
 
   @Override
   public void initialise() {
@@ -33,7 +34,7 @@ public class PreventMobSpawn implements Listener, Module {
   }
 
   @EventHandler(priority = EventPriority.LOWEST)
-  public void onCreatureSpawnEvent(@NotNull CreatureSpawnEvent event) {
+  public void onCreatureSpawnEvent(CreatureSpawnEvent event) {
     if (event.getEntity() instanceof Enemy) {
       for (AdminClaim adminClaim : this.adminClaims) {
         if (adminClaim.contains(event.getLocation())) {
@@ -45,13 +46,13 @@ public class PreventMobSpawn implements Listener, Module {
   }
 
   private static final class AdminClaim {
-    private final @NotNull World world;
+    private final World world;
     private final double minX;
     private final double minZ;
     private final double maxX;
     private final double maxZ;
 
-    private AdminClaim(@NotNull Claim claim) {
+    private AdminClaim(Claim claim) {
       this.world = claim.getLesserBoundaryCorner().getWorld();
       this.minX = claim.getLesserBoundaryCorner().getX();
       this.minZ = claim.getLesserBoundaryCorner().getZ();
@@ -59,7 +60,7 @@ public class PreventMobSpawn implements Listener, Module {
       this.maxZ = claim.getGreaterBoundaryCorner().getZ();
     }
 
-    boolean contains(@NotNull Location loc) {
+    boolean contains(Location loc) {
       return loc.getWorld().equals(this.world)
           && loc.getX() >= this.minX
           && loc.getX() <= this.maxX

@@ -11,15 +11,16 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerTeleportEvent;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 /** /back command to return to where you last teleported from */
+@NullMarked
 public class Back implements Module, Listener {
   public Back() {
     CommandBuilder.build("back")
         .description("Teleport to previous location")
         .executor(
-            (@NotNull Player player) -> {
+            (Player player) -> {
               PlayerDataFile dataFile = PlayerDataFiles.of(player);
               Location location = (Location) dataFile.get("back");
               if (location == null) {
@@ -30,7 +31,7 @@ public class Back implements Module, Listener {
   }
 
   @EventHandler
-  public void onPlayerTeleport(@NotNull PlayerTeleportEvent event) {
+  public void onPlayerTeleport(PlayerTeleportEvent event) {
     if (event.getCause() == PlayerTeleportEvent.TeleportCause.COMMAND) {
       PlayerDataFile dataFile = PlayerDataFiles.of(event.getPlayer());
       dataFile.set("back", event.getPlayer().getLocation());

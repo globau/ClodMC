@@ -10,24 +10,24 @@ import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionAttachment;
 import org.bukkit.permissions.PermissionAttachmentInfo;
 import org.bukkit.plugin.Plugin;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
-@SuppressWarnings("deprecation")
+@NullMarked
 public class EitherCommandSender implements CommandSender {
-  private final @NotNull CommandSender sender;
+  private final CommandSender sender;
 
-  public EitherCommandSender(@NotNull CommandSender sender) {
+  public EitherCommandSender(CommandSender sender) {
     this.sender = sender;
   }
 
   @Override
-  public @NotNull Component name() {
+  public Component name() {
     return this.sender.name();
   }
 
   @Override
-  public @NotNull String getName() {
+  public String getName() {
     return this.sender.getName();
   }
 
@@ -35,84 +35,87 @@ public class EitherCommandSender implements CommandSender {
     return this.sender instanceof Player;
   }
 
-  public @NotNull Player asPlayer() {
+  public Player asPlayer() {
     assert this.sender instanceof Player;
     return (Player) this.sender;
   }
 
-  public boolean is(@NotNull CommandSender sender) {
+  public boolean is(CommandSender sender) {
     return this.sender.equals(sender);
   }
 
   @Override
-  public void sendMessage(@NotNull String message) {
+  public void sendMessage(String message) {
     this.sender.sendMessage(message);
   }
 
   @Override
-  public void sendMessage(@NotNull String... messages) {
+  public void sendMessage(String... messages) {
     this.sender.sendMessage(messages);
   }
 
   @Override
-  public void sendMessage(@Nullable UUID sender, @NotNull String message) {
-    this.sender.sendMessage(sender, message);
+  @Deprecated
+  public void sendMessage(@Nullable UUID sender, String message) {
+    this.sender.sendPlainMessage(message);
   }
 
   @Override
-  public void sendMessage(@Nullable UUID sender, @NotNull String... messages) {
-    this.sender.sendMessage(sender, messages);
+  @Deprecated
+  public void sendMessage(@Nullable UUID sender, String... messages) {
+    for (String message : messages) {
+      this.sendMessage(message);
+    }
   }
 
   @Override
-  public @NotNull PermissionAttachment addAttachment(@NotNull Plugin plugin) {
+  public PermissionAttachment addAttachment(Plugin plugin) {
     return this.sender.addAttachment(plugin);
   }
 
   @Override
-  public @NotNull PermissionAttachment addAttachment(
-      @NotNull Plugin plugin, @NotNull String name, boolean value) {
+  public PermissionAttachment addAttachment(Plugin plugin, String name, boolean value) {
     return this.sender.addAttachment(plugin, name, value);
   }
 
   @Override
-  public @Nullable PermissionAttachment addAttachment(@NotNull Plugin plugin, int ticks) {
+  public @Nullable PermissionAttachment addAttachment(Plugin plugin, int ticks) {
     return this.sender.addAttachment(plugin, ticks);
   }
 
   @Override
   public @Nullable PermissionAttachment addAttachment(
-      @NotNull Plugin plugin, @NotNull String name, boolean value, int ticks) {
+      Plugin plugin, String name, boolean value, int ticks) {
     return this.sender.addAttachment(plugin, name, value, ticks);
   }
 
   @Override
-  public void removeAttachment(@NotNull PermissionAttachment attachment) {
+  public void removeAttachment(PermissionAttachment attachment) {
     this.sender.removeAttachment(attachment);
   }
 
   @Override
-  public @NotNull Set<PermissionAttachmentInfo> getEffectivePermissions() {
+  public Set<PermissionAttachmentInfo> getEffectivePermissions() {
     return this.sender.getEffectivePermissions();
   }
 
   @Override
-  public boolean hasPermission(@NotNull Permission perm) {
+  public boolean hasPermission(Permission perm) {
     return this.sender.hasPermission(perm);
   }
 
   @Override
-  public boolean hasPermission(@NotNull String name) {
+  public boolean hasPermission(String name) {
     return this.sender.hasPermission(name);
   }
 
   @Override
-  public boolean isPermissionSet(@NotNull Permission perm) {
+  public boolean isPermissionSet(Permission perm) {
     return this.sender.isPermissionSet(perm);
   }
 
   @Override
-  public boolean isPermissionSet(@NotNull String name) {
+  public boolean isPermissionSet(String name) {
     return this.sender.isPermissionSet(name);
   }
 
@@ -132,12 +135,12 @@ public class EitherCommandSender implements CommandSender {
   }
 
   @Override
-  public @NotNull Server getServer() {
+  public Server getServer() {
     return this.sender.getServer();
   }
 
   @Override
-  public @NotNull Spigot spigot() {
+  public Spigot spigot() {
     return this.sender.spigot();
   }
 }

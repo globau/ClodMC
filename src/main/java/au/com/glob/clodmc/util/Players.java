@@ -11,16 +11,17 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
+@NullMarked
 public class Players {
   // Attribute.BLOCK_INTERACTION_RANGE + 1
   public static final int INTERACTION_RANGE = 5;
 
-  private static volatile @NotNull Map<String, UUID> whitelisted = new HashMap<>();
+  private static volatile Map<String, UUID> whitelisted = new HashMap<>();
 
-  public static @NotNull Map<String, UUID> getWhitelisted() {
+  public static Map<String, UUID> getWhitelisted() {
     return whitelisted;
   }
 
@@ -46,11 +47,11 @@ public class Players {
         });
   }
 
-  public static boolean isWhitelisted(@NotNull String name) {
+  public static boolean isWhitelisted(String name) {
     return whitelisted.keySet().stream().anyMatch((String p) -> p.equalsIgnoreCase(name));
   }
 
-  public static @Nullable UUID getWhitelistedUUID(@NotNull String name) {
+  public static @Nullable UUID getWhitelistedUUID(String name) {
     return whitelisted.entrySet().stream()
         .filter((Map.Entry<String, UUID> entry) -> entry.getKey().equalsIgnoreCase(name))
         .map(Map.Entry::getValue)
@@ -58,7 +59,7 @@ public class Players {
         .orElse(null);
   }
 
-  public static boolean isBedrock(@NotNull Player player) {
+  public static boolean isBedrock(Player player) {
     return ClodMC.instance.isGeyserLoaded() && Bedrock.isBedrockUUID(player.getUniqueId());
   }
 }

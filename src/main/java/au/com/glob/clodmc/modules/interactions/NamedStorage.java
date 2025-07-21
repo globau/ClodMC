@@ -11,12 +11,13 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerMoveEvent;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 /** If a container has been named in an anvil, show that name when looking at it */
+@NullMarked
 public class NamedStorage implements Module, Listener {
   @EventHandler
-  public void onPlayerMove(@NotNull PlayerMoveEvent event) {
+  public void onPlayerMove(PlayerMoveEvent event) {
     Player player = event.getPlayer();
     Block block = player.getTargetBlockExact(Players.INTERACTION_RANGE);
     if (block == null) {

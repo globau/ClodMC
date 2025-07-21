@@ -45,15 +45,16 @@ import java.util.Iterator;
 import java.util.Map;
 import org.bukkit.Bukkit;
 import org.bukkit.event.Listener;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
-@SuppressWarnings({"UnstableApiUsage", "unused"})
+@SuppressWarnings({"UnstableApiUsage"})
+@NullMarked
 public class ModuleRegistry implements Iterable<Module>, PluginBootstrap {
-  private final @NotNull Map<Class<? extends Module>, Module> modules = new HashMap<>();
+  private final Map<Class<? extends Module>, Module> modules = new HashMap<>();
 
   @Override
-  public void bootstrap(@NotNull BootstrapContext context) {
+  public void bootstrap(BootstrapContext context) {
     VeinMiner.bootstrap(new BootstrapContextHelper(context));
   }
 
@@ -113,7 +114,7 @@ public class ModuleRegistry implements Iterable<Module>, PluginBootstrap {
     CommandBuilder.registerBuilders();
   }
 
-  private void register(@NotNull Module module) {
+  private void register(Module module) {
     String dependsOn = module.dependsOn();
     if (dependsOn != null && !Bukkit.getPluginManager().isPluginEnabled(dependsOn)) {
       Logger.warning(
@@ -134,12 +135,12 @@ public class ModuleRegistry implements Iterable<Module>, PluginBootstrap {
   }
 
   @Override
-  public @NotNull Iterator<Module> iterator() {
+  public Iterator<Module> iterator() {
     return this.modules.values().iterator();
   }
 
   @SuppressWarnings("unchecked")
-  public @Nullable <T extends Module> T get(@NotNull Class<T> moduleClass) {
+  public @Nullable <T extends Module> T get(Class<T> moduleClass) {
     Module module = this.modules.get(moduleClass);
     return (T) module;
   }

@@ -36,19 +36,19 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.inventory.EquipmentSlotGroup;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 /** Mine connected blocks with one action */
-@SuppressWarnings("UnstableApiUsage")
+@NullMarked
 public class VeinMiner implements Module, Listener {
-  @NotNull private static final TypedKey<Enchantment> VEINMINE_KEY =
+  private static final TypedKey<Enchantment> VEINMINE_KEY =
       TypedKey.create(RegistryKey.ENCHANTMENT, Key.key("clod-mc:veinminer"));
 
   private static final int DELAY = 1;
   private static final int MAX_CHAIN = 100;
   private static final int COST = 1;
-  private static final @NotNull List<BlockFace> FACES =
+  private static final List<BlockFace> FACES =
       List.of(
           BlockFace.NORTH,
           BlockFace.SOUTH,
@@ -57,18 +57,19 @@ public class VeinMiner implements Module, Listener {
           BlockFace.UP,
           BlockFace.DOWN);
 
-  private final @NotNull Enchantment veinmineEnchantment;
-  private final @NotNull Set<UUID> cooldownUUIDs = new HashSet<>();
+  private final Enchantment veinmineEnchantment;
+  private final Set<UUID> cooldownUUIDs = new HashSet<>();
 
-  public static void bootstrap(@NotNull BootstrapContextHelper context) {
+  @SuppressWarnings("UnstableApiUsage")
+  public static void bootstrap(BootstrapContextHelper context) {
     context.enchantment(
         VEINMINE_KEY,
         List.of(
             EnchantmentTagKeys.TRADEABLE,
             EnchantmentTagKeys.NON_TREASURE,
             EnchantmentTagKeys.NON_TREASURE),
-        (RegistryComposeEvent<Enchantment, EnchantmentRegistryEntry.@NotNull Builder> event,
-            @NotNull EnchantmentRegistryEntry.@NotNull Builder builder) ->
+        (RegistryComposeEvent<Enchantment, EnchantmentRegistryEntry.Builder> event,
+            EnchantmentRegistryEntry.Builder builder) ->
             builder
                 .description(
                     Component.translatable("enchantment." + VEINMINE_KEY.value(), "Veinmine"))
@@ -94,7 +95,7 @@ public class VeinMiner implements Module, Listener {
   }
 
   @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
-  public void onBlockBreak(@NotNull BlockBreakEvent event) {
+  public void onBlockBreak(BlockBreakEvent event) {
     Player player = event.getPlayer();
     Block block = event.getBlock();
 
@@ -137,10 +138,10 @@ public class VeinMiner implements Module, Listener {
   }
 
   private void breakBlocks(
-      @NotNull Block block,
-      @NotNull ItemStack tool,
-      @NotNull Set<Block> processed,
-      @NotNull Player player,
+      Block block,
+      ItemStack tool,
+      Set<Block> processed,
+      Player player,
       @Nullable Claim initialClaim) {
     Material material = block.getType();
     if (material == Material.AIR) {
@@ -170,7 +171,8 @@ public class VeinMiner implements Module, Listener {
               block.getLocation(), true, false, initialClaim);
       boolean canBreak = true;
       if (claim != null) {
-        Supplier<String> denalMessage = claim.checkPermission(player, ClaimPermission.Build, null);
+        Supplier<@Nullable String> denalMessage =
+            claim.checkPermission(player, ClaimPermission.Build, null);
         canBreak = denalMessage == null || denalMessage.get() == null;
       }
       if (canBreak) {

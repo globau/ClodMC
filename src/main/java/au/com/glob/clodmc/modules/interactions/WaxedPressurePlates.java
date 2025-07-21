@@ -19,15 +19,16 @@ import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 import vendored.com.jeff_media.customblockdata.CustomBlockData;
 
 /** Allow waxing a pressure plate to prevent it activating */
+@NullMarked
 public class WaxedPressurePlates implements Module, Listener {
-  private static final @NotNull NamespacedKey WAXED_KEY = new NamespacedKey("clod-mc", "waxed");
+  private static final NamespacedKey WAXED_KEY = new NamespacedKey("clod-mc", "waxed");
 
   @EventHandler
-  public void onPlayerInteract(@NotNull PlayerInteractEvent event) {
+  public void onPlayerInteract(PlayerInteractEvent event) {
     Block block = event.getClickedBlock();
     if (block == null) {
       return;

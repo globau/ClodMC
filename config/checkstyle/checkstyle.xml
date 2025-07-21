@@ -394,5 +394,9 @@
       <property name="query" value="//LAMBDA[IDENT][1]"/>
       <message key="matchxpath.match" value="Lambda parameters must have type."/>
     </module>
+    <!-- glob: forbid jetbrains annotations (use jspecify) -->
+    <module name="IllegalImport">
+      <property name="illegalPkgs" value="org.jetbrains.annotations"/>
+    </module>
   </module>
 </module>

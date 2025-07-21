@@ -16,10 +16,11 @@ import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 /** Set limited number of named teleport locations */
+@NullMarked
 public class Homes implements Listener, Module {
   protected static final int MAX_HOMES = 3;
 
@@ -28,7 +29,7 @@ public class Homes implements Listener, Module {
         .usage("/home [name]")
         .description("Teleport home")
         .executor(
-            (@NotNull Player player, @Nullable String name) -> {
+            (Player player, @Nullable String name) -> {
               name = name == null ? "home" : name;
 
               Map<String, Location> homes = this.getHomes(player);
@@ -41,14 +42,12 @@ public class Homes implements Listener, Module {
               TeleportUtil.teleport(
                   player, location, name.equals("home") ? "home" : "to '" + name + "'");
             })
-        .completor(
-            (@NotNull Player player, @NotNull List<String> args) ->
-                this.completeHomes(player, args));
+        .completor((Player player, List<String> args) -> this.completeHomes(player, args));
 
     CommandBuilder.build("homes")
         .description("List homes")
         .executor(
-            (@NotNull Player player) -> {
+            (Player player) -> {
               Map<String, Location> homes = this.getHomes(player);
 
               if (homes.isEmpty()) {
@@ -66,7 +65,7 @@ public class Homes implements Listener, Module {
         .usage("/sethome [name]")
         .description("Sets a home to your current location")
         .executor(
-            (@NotNull Player player, @Nullable String name) -> {
+            (Player player, @Nullable String name) -> {
               name = name == null ? "home" : name;
 
               Map<String, Location> homes = this.getHomes(player);
@@ -98,7 +97,7 @@ public class Homes implements Listener, Module {
         .usage("/delhome [name]")
         .description("Delete home")
         .executor(
-            (@NotNull Player player, @Nullable String name) -> {
+            (Player player, @Nullable String name) -> {
               name = name == null ? "home" : name;
 
               Map<String, Location> homes = this.getHomes(player);
@@ -116,12 +115,10 @@ public class Homes implements Listener, Module {
                 Chat.info(player, "Deleted home '" + name + "'");
               }
             })
-        .completor(
-            (@NotNull Player player, @NotNull List<String> args) ->
-                this.completeHomes(player, args));
+        .completor((Player player, List<String> args) -> this.completeHomes(player, args));
   }
 
-  private @NotNull List<String> completeHomes(@NotNull Player player, @NotNull List<String> args) {
+  private List<String> completeHomes(Player player, List<String> args) {
     if (args.isEmpty()) {
       return List.of();
     }
@@ -133,7 +130,7 @@ public class Homes implements Listener, Module {
         .toList();
   }
 
-  private @NotNull Map<String, Location> getHomes(@NotNull Player player) {
+  private Map<String, Location> getHomes(Player player) {
     PlayerDataFile dataFile = PlayerDataFiles.of(player);
 
     ConfigurationSection section = dataFile.getConfigurationSection("homes");
@@ -148,7 +145,7 @@ public class Homes implements Listener, Module {
     return result;
   }
 
-  private void setHomes(@NotNull Player player, @NotNull Map<String, Location> homes) {
+  private void setHomes(Player player, Map<String, Location> homes) {
     PlayerDataFile dataFile = PlayerDataFiles.of(player);
     ConfigurationSection section = dataFile.getConfigurationSection("homes");
     if (section != null) {

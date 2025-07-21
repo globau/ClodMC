@@ -14,16 +14,17 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.server.ServerLoadEvent;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 /** Don't allow non-op players to connect unless all required plugins are loaded */
+@NullMarked
 public class RequiredPlugins implements Listener, Module {
-  private static final @NotNull List<String> REQUIRED = List.of("GriefPrevention");
+  private static final List<String> REQUIRED = List.of("GriefPrevention");
 
   private boolean preventLogin = true;
 
   @EventHandler
-  public void onServerLoad(@NotNull ServerLoadEvent event) {
+  public void onServerLoad(ServerLoadEvent event) {
     StringJoiner missing = new StringJoiner(" ");
     for (String name : REQUIRED) {
       if (!Bukkit.getPluginManager().isPluginEnabled(name)) {
@@ -41,7 +42,7 @@ public class RequiredPlugins implements Listener, Module {
 
   @SuppressWarnings("UnstableApiUsage")
   @EventHandler
-  public void onPlayerConnectionValidateLogin(@NotNull PlayerConnectionValidateLoginEvent event) {
+  public void onPlayerConnectionValidateLogin(PlayerConnectionValidateLoginEvent event) {
     if (!this.preventLogin) {
       return;
     }

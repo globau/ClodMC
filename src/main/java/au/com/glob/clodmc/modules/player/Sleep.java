@@ -13,12 +13,13 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.world.TimeSkipEvent;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 /** Tell players who slept and skipped the night */
+@NullMarked
 public class Sleep implements Listener, Module {
   @EventHandler
-  public void onTimeSkip(@NotNull TimeSkipEvent event) {
+  public void onTimeSkip(TimeSkipEvent event) {
     Collection<? extends Player> players = ClodMC.instance.getServer().getOnlinePlayers();
     List<String> sleeping =
         new java.util.ArrayList<>(

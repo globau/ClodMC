@@ -30,14 +30,15 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BookMeta;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 /** Give players the Welcome Book, with rules and customisations */
+@NullMarked
 public class WelcomeBook implements Module, Listener {
-  private static final @NotNull String TITLE = "Welcome to Clod-MC";
-  private static final @NotNull String AUTHOR = "glob";
-  private static final @NotNull List<String> PAGES =
+  private static final String TITLE = "Welcome to Clod-MC";
+  private static final String AUTHOR = "glob";
+  private static final List<String> PAGES =
       List.of(
           """
           Welcome to <b>Clod-MC</b>
@@ -168,14 +169,14 @@ public class WelcomeBook implements Module, Listener {
         .description("Give specified player the welcome book")
         .requiresOp()
         .executor(
-            (@NotNull EitherCommandSender sender, @Nullable Player player) -> {
+            (EitherCommandSender sender, @Nullable Player player) -> {
               if (player == null) {
                 throw new CommandUsageError();
               }
               this.giveWelcomeBook(player, sender);
             })
         .completor(
-            (@NotNull CommandSender sender, @NotNull List<String> args) ->
+            (CommandSender sender, List<String> args) ->
                 Bukkit.getOnlinePlayers().stream()
                     .map(Player::getName)
                     .filter(
@@ -204,13 +205,13 @@ public class WelcomeBook implements Module, Listener {
   }
 
   @EventHandler
-  public void onPlayerJoin(@NotNull PlayerJoinEvent event) {
+  public void onPlayerJoin(PlayerJoinEvent event) {
     if (!event.getPlayer().hasPlayedBefore()) {
       Schedule.delayed(5, () -> WelcomeBook.this.giveWelcomeBook(event.getPlayer(), null));
     }
   }
 
-  private void giveWelcomeBook(@NotNull Player recipient, @Nullable CommandSender sender) {
+  private void giveWelcomeBook(Player recipient, @Nullable CommandSender sender) {
     ItemStack bookItem = new ItemStack(Material.WRITTEN_BOOK);
     BookMeta bookMeta = (BookMeta) bookItem.getItemMeta();
 

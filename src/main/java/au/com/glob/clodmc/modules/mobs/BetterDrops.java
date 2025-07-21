@@ -6,13 +6,14 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.inventory.ItemStack;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 /** Improve the drop rates of selected entities */
+@NullMarked
 public class BetterDrops implements Listener, Module {
   @SuppressWarnings("MissingCasesInEnumSwitch")
   @EventHandler
-  public void onEntityDeath(@NotNull EntityDeathEvent event) {
+  public void onEntityDeath(EntityDeathEvent event) {
     // adjust drops for mobs killed by players
     if (event.getEntity().getKiller() == null) {
       return;

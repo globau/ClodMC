@@ -14,19 +14,21 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.server.PluginDisableEvent;
 import org.bukkit.inventory.ItemStack;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 /** Swap between player and admin inventories */
+@NullMarked
 public class AdminInv implements Module, Listener {
-  private final @NotNull Map<UUID, ItemStack[]> playerInventories = new HashMap<>();
-  private final @NotNull Map<UUID, ItemStack[]> adminInventories = new HashMap<>();
+  private final Map<UUID, @Nullable ItemStack[]> playerInventories = new HashMap<>();
+  private final Map<UUID, @Nullable ItemStack[]> adminInventories = new HashMap<>();
 
   public AdminInv() {
     CommandBuilder.build("admininv")
         .description("Toggle admin/player inventory")
         .requiresOp()
         .executor(
-            (@NotNull Player player) -> {
+            (Player player) -> {
               if (this.hasStoredInventory(player)) {
                 this.restoreInventory(player);
                 Chat.info(player, "Switched to Player inventory");
@@ -37,7 +39,7 @@ public class AdminInv implements Module, Listener {
             });
   }
 
-  private void storeInventory(@NotNull Player player) {
+  private void storeInventory(Player player) {
     UUID uuid = player.getUniqueId();
 
     this.playerInventories.put(uuid, player.getInventory().getContents());
@@ -49,7 +51,7 @@ public class AdminInv implements Module, Listener {
     }
   }
 
-  private void restoreInventory(@NotNull Player player) {
+  private void restoreInventory(Player player) {
     UUID uuid = player.getUniqueId();
 
     if (this.playerInventories.containsKey(uuid)) {
@@ -58,20 +60,20 @@ public class AdminInv implements Module, Listener {
     }
   }
 
-  private boolean hasStoredInventory(@NotNull Player player) {
+  private boolean hasStoredInventory(Player player) {
     UUID uuid = player.getUniqueId();
     return this.playerInventories.containsKey(uuid);
   }
 
   @EventHandler
-  public void onPlayerQuit(@NotNull PlayerQuitEvent event) {
+  public void onPlayerQuit(PlayerQuitEvent event) {
     if (event.getPlayer().isOp()) {
       this.restoreInventory(event.getPlayer());
     }
   }
 
   @EventHandler
-  public void onPluginDisable(@NotNull PluginDisableEvent event) {
+  public void onPluginDisable(PluginDisableEvent event) {
     if (event.getPlugin().equals(ClodMC.instance)) {
       for (UUID uuid : this.playerInventories.keySet()) {
         Player player = Bukkit.getPlayer(uuid);

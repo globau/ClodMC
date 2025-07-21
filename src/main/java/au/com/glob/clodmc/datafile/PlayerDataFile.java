@@ -5,11 +5,12 @@ import au.com.glob.clodmc.util.ConfigUtil;
 import java.io.File;
 import java.time.LocalDateTime;
 import org.bukkit.Bukkit;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
+@NullMarked
 public class PlayerDataFile extends DataFile {
-  protected PlayerDataFile(@NotNull String filename) {
+  protected PlayerDataFile(String filename) {
     super(new File(ClodMC.instance.getDataFolder(), filename));
 
     if (!ConfigUtil.sanityChecked) {
@@ -18,11 +19,11 @@ public class PlayerDataFile extends DataFile {
     }
   }
 
-  public @NotNull String getPlayerName() {
+  public String getPlayerName() {
     return this.getString("player.name", "");
   }
 
-  public void setPlayerName(@NotNull String name) {
+  public void setPlayerName(String name) {
     this.set("player.name", name);
   }
 
@@ -50,7 +51,7 @@ public class PlayerDataFile extends DataFile {
     this.set("player.playtime_min", value);
   }
 
-  public void setInvitedBy(@NotNull String name) {
+  public void setInvitedBy(String name) {
     this.set("player.invited_by", name);
   }
 }

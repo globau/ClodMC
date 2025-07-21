@@ -11,22 +11,23 @@ import java.util.StringJoiner;
 import java.util.stream.Stream;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 import org.yaml.snakeyaml.error.YAMLException;
 
 /** config file helpers */
+@NullMarked
 public class ConfigUtil {
   public static boolean sanityChecked = false;
 
   public static class InvalidConfig extends Exception {
-    private final @NotNull List<String> errors;
+    private final List<String> errors;
 
-    public InvalidConfig(@NotNull List<String> errors) {
+    public InvalidConfig(List<String> errors) {
       this.errors = errors;
     }
 
     @Override
-    public @NotNull String getMessage() {
+    public String getMessage() {
       return String.join("\n", this.errors);
     }
 
@@ -63,7 +64,7 @@ public class ConfigUtil {
     sanityChecked = true;
   }
 
-  private static @NotNull List<File> getConfigFiles() throws IOException {
+  private static List<File> getConfigFiles() throws IOException {
     List<Path> paths;
     try (Stream<Path> dataPaths = Files.walk(ClodMC.instance.getDataFolder().toPath())) {
       paths = new ArrayList<>(dataPaths.toList());

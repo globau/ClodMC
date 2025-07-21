@@ -2,9 +2,11 @@ package au.com.glob.clodmc.util;
 
 import au.com.glob.clodmc.ClodMC;
 import java.util.logging.Level;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 /** logfile helpers */
+@NullMarked
 public final class Logger {
   public static void info(@Nullable String message) {
     ClodMC.instance.getLogger().info(message);

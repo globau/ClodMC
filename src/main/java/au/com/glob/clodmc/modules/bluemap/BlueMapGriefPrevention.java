@@ -25,17 +25,18 @@ import org.bukkit.World;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
+@NullMarked
 public class BlueMapGriefPrevention extends BlueMap.Addon implements Listener {
-  private static final @NotNull Color ADMIN_LINE = new Color("#fd6600ff");
-  private static final @NotNull Color ADMIN_FILL = new Color("#fd660096");
-  private static final @NotNull Color PLAYER_LINE = new Color("#0060ffff");
-  private static final @NotNull Color PLAYER_FILL = new Color("#0087ff96");
+  private static final Color ADMIN_LINE = new Color("#fd6600ff");
+  private static final Color ADMIN_FILL = new Color("#fd660096");
+  private static final Color PLAYER_LINE = new Color("#0060ffff");
+  private static final Color PLAYER_FILL = new Color("#0087ff96");
 
-  private final @NotNull Map<World, MarkerSet> markerSets = new HashMap<>(3);
+  private final Map<World, MarkerSet> markerSets = new HashMap<>(3);
 
-  public BlueMapGriefPrevention(@NotNull BlueMapAPI api) {
+  public BlueMapGriefPrevention(BlueMapAPI api) {
     super(api);
 
     for (World world : Bukkit.getWorlds()) {
@@ -106,27 +107,27 @@ public class BlueMapGriefPrevention extends BlueMap.Addon implements Listener {
   }
 
   @EventHandler(priority = EventPriority.MONITOR)
-  public void onClaimCreated(@NotNull ClaimCreatedEvent event) {
+  public void onClaimCreated(ClaimCreatedEvent event) {
     this.update();
   }
 
   @EventHandler(priority = EventPriority.MONITOR)
-  public void onClaimResize(@NotNull ClaimResizeEvent event) {
+  public void onClaimResize(ClaimResizeEvent event) {
     this.update();
   }
 
   @EventHandler(priority = EventPriority.MONITOR)
-  public void onClaimChange(@NotNull ClaimChangeEvent event) {
+  public void onClaimChange(ClaimChangeEvent event) {
     this.update();
   }
 
   @EventHandler(priority = EventPriority.MONITOR)
-  public void onClaimExtend(@NotNull ClaimExtendEvent event) {
+  public void onClaimExtend(ClaimExtendEvent event) {
     this.update();
   }
 
   @EventHandler(priority = EventPriority.MONITOR)
-  public void onClaimDelete(@NotNull ClaimDeletedEvent event) {
+  public void onClaimDelete(ClaimDeletedEvent event) {
     this.update();
   }
 }

@@ -29,10 +29,12 @@ import org.bukkit.Chunk;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 import vendored.com.technicjelle.BMUtils.Cheese;
 
 /** Track minutes a chunk is occupied by at least one player */
+@NullMarked
 public class HeatMap implements Module, Listener {
   public HeatMap() {
     DB db = new DB();
@@ -57,8 +59,8 @@ public class HeatMap implements Module, Listener {
   }
 
   private static class DB {
-    private final @NotNull Connection conn;
-    private final @NotNull PreparedStatement insertStatement;
+    private final Connection conn;
+    private final PreparedStatement insertStatement;
 
     DB() {
       try {
@@ -88,9 +90,9 @@ public class HeatMap implements Module, Listener {
       }
     }
 
-    record HeatmapRow(@NotNull String world, int x, int z, int count) {}
+    record HeatmapRow(String world, int x, int z, int count) {}
 
-    void incChunk(@NotNull Chunk chunk) {
+    void incChunk(Chunk chunk) {
       try {
         this.insertStatement.setString(1, chunk.getWorld().getName());
         this.insertStatement.setInt(2, chunk.getX());
@@ -101,7 +103,7 @@ public class HeatMap implements Module, Listener {
       }
     }
 
-    int getMaxCount(@NotNull World world) {
+    int getMaxCount(World world) {
       try {
         PreparedStatement s =
             this.conn.prepareStatement("SELECT MAX(`count`) FROM heatmap WHERE world = ?");
@@ -114,7 +116,7 @@ public class HeatMap implements Module, Listener {
       }
     }
 
-    int getMarkerCount(@NotNull World world, int minCount) {
+    int getMarkerCount(World world, int minCount) {
       try {
         PreparedStatement s =
             this.conn.prepareStatement(
@@ -129,7 +131,7 @@ public class HeatMap implements Module, Listener {
       }
     }
 
-    Iterator<HeatmapRow> rowIterator(@NotNull World world, int minCount) {
+    @Nullable Iterator<HeatmapRow> rowIterator(World world, int minCount) {
       try {
         PreparedStatement s =
             this.conn.prepareStatement(
@@ -146,7 +148,7 @@ public class HeatMap implements Module, Listener {
           }
 
           @Override
-          public @NotNull HeatmapRow next() {
+          public HeatmapRow next() {
             if (!this.hasNext) {
               throw new NoSuchElementException();
             }
@@ -174,7 +176,7 @@ public class HeatMap implements Module, Listener {
   }
 
   public static class BlueMapHeatMap extends BlueMap.Addon {
-    private static final Color @NotNull [] COLOURS = {
+    private static final Color[] COLOURS = {
       // viridis heatmap colours (hottest last)
       new Color("#440154"),
       new Color("#481a6c"),
@@ -198,7 +200,7 @@ public class HeatMap implements Module, Listener {
 
     private boolean generated = false;
 
-    public BlueMapHeatMap(@NotNull BlueMapAPI api) {
+    public BlueMapHeatMap(BlueMapAPI api) {
       super(api);
     }
 

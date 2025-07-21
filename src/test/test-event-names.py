@@ -14,26 +14,20 @@ for filepath in Path("src").rglob("*.java"):
         method = m[1]
         args = m[2]
 
-        if not args.startswith("@NotNull "):
-            print(f"{line}\n  event argument is not annotated as @NotNull")
-            exit_code = 1
-            continue
-        args = args.removeprefix("@NotNull ")
-
         if not args.endswith(" event"):
-            print(f"{line}\n  event argument is not named 'event'")
+            print(f"{line}\n> event argument is not named 'event'")
             exit_code = 1
             continue
         args = args.removesuffix(" event")
 
         if not args.endswith("Event"):
-            print(f"{line}\n  event class is not named an Event")
+            print(f"{line}\n> event class is not named an Event")
             exit_code = 1
             continue
         args = args.removesuffix("Event")
 
         if method != f"on{args}":
-            print(f"{line}\n  incorrect method name, expected: on{args}")
+            print(f"{line}\n> incorrect method name, expected: on{args}")
             exit_code = 1
 
 sys.exit(exit_code)

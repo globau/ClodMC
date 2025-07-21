@@ -8,15 +8,16 @@ import org.bukkit.GameRule;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 /** Teleport to spawn */
+@NullMarked
 public class Spawn implements Module {
   public Spawn() {
     CommandBuilder.build("spawn")
         .description("Teleport to spawn")
         .executor(
-            (@NotNull Player player) -> {
+            (Player player) -> {
               World world = Bukkit.getWorld("world");
               if (world == null) {
                 return;

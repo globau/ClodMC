@@ -7,12 +7,13 @@ import org.bukkit.Location;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 /** log player death location */
+@NullMarked
 public class DeathLog implements Module, Listener {
   @EventHandler
-  public void onPlayerDeath(@NotNull PlayerDeathEvent event) {
+  public void onPlayerDeath(PlayerDeathEvent event) {
     String died = StringUtil.asText(event.deathMessage(), event.getPlayer().getName() + " died");
     Location loc = event.getPlayer().getLocation();
     String world =

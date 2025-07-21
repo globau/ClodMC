@@ -12,12 +12,13 @@ import java.util.Locale;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 /** /gamemode that doesn't announce */
+@NullMarked
 public class GameMode implements Module {
-  private static final @NotNull List<String> MODES = List.of("survival", "creative", "spectator");
+  private static final List<String> MODES = List.of("survival", "creative", "spectator");
 
   public GameMode() {
     CommandBuilder.build("gamemode")
@@ -25,9 +26,7 @@ public class GameMode implements Module {
         .description("Change player's Game Mode")
         .requiresOp()
         .executor(
-            (@NotNull EitherCommandSender sender,
-                @Nullable String mode,
-                @Nullable Player target) -> {
+            (EitherCommandSender sender, @Nullable String mode, @Nullable Player target) -> {
               if (sender.isPlayer() && !sender.isOp()) {
                 throw new CommandError("You cannot change your game mode");
               }
@@ -62,7 +61,7 @@ public class GameMode implements Module {
               }
             })
         .completor(
-            (@NotNull CommandSender sender, @NotNull List<String> args) -> {
+            (CommandSender sender, List<String> args) -> {
               // no args
               if (args.isEmpty()) {
                 return MODES;

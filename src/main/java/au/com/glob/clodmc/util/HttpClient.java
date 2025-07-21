@@ -9,28 +9,24 @@ import java.net.URI;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 /** HTTP client helpers */
+@NullMarked
 public class HttpClient {
   private HttpClient() {}
 
-  private static final @NotNull String USER_AGENT = "glob.au/clod-mc";
+  private static final String USER_AGENT = "glob.au/clod-mc";
 
-  private static final @NotNull Gson gson = new Gson();
+  private static final Gson gson = new Gson();
 
-  @NotNull public static JsonHttpResponse getJSON(@NotNull String urlString) {
-    return readJsonResponse(request(urlString, null));
-  }
-
-  @NotNull public static JsonHttpResponse getJSON(
-      @NotNull String urlString, @NotNull Map<String, String> headers) {
+  public static JsonHttpResponse getJSON(String urlString, Map<String, String> headers) {
     return readJsonResponse(request(urlString, headers));
   }
 
-  @NotNull private static HttpURLConnection request(
-      @NotNull String urlString, @Nullable Map<String, String> headers) {
+  private static HttpURLConnection request(
+      String urlString, @Nullable Map<String, String> headers) {
     HttpURLConnection connection;
 
     try {
@@ -58,7 +54,7 @@ public class HttpClient {
     return connection;
   }
 
-  private static @NotNull JsonHttpResponse readJsonResponse(@NotNull HttpURLConnection connection) {
+  private static JsonHttpResponse readJsonResponse(HttpURLConnection connection) {
     InputStreamReader streamReader = createReader(connection);
     try (streamReader) {
       if (streamReader == null) {
@@ -71,7 +67,7 @@ public class HttpClient {
     }
   }
 
-  private static @Nullable InputStreamReader createReader(@NotNull HttpURLConnection connection) {
+  private static @Nullable InputStreamReader createReader(HttpURLConnection connection) {
     InputStream stream;
     try {
       stream = connection.getInputStream();

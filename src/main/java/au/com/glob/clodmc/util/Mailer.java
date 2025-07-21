@@ -8,15 +8,16 @@ import java.io.InputStreamReader;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
 import java.time.format.DateTimeFormatter;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 /** email helpers */
+@NullMarked
 public class Mailer {
-  private static final @NotNull String ADMIN_ADDR = "clod@glob.au";
-  private static final @NotNull String HOSTNAME = "in1-smtp.messagingengine.com";
-  private static final @NotNull String SENDER_NAME = "Clod Minecraft Server";
-  private static final @NotNull String SENDER_ADDR = "clod@glob.au";
+  private static final String ADMIN_ADDR = "clod@glob.au";
+  private static final String HOSTNAME = "in1-smtp.messagingengine.com";
+  private static final String SENDER_NAME = "Clod Minecraft Server";
+  private static final String SENDER_ADDR = "clod@glob.au";
 
   private Mailer() {}
 
@@ -26,11 +27,11 @@ public class Mailer {
     }
   }
 
-  public static void emailAdmin(@NotNull String subject) {
+  public static void emailAdmin(String subject) {
     emailAdmin(subject, subject);
   }
 
-  public static void emailAdmin(@NotNull String subject, @NotNull String body) {
+  public static void emailAdmin(String subject, String body) {
     Schedule.asynchronously(
         () -> {
           try {
@@ -41,8 +42,7 @@ public class Mailer {
         });
   }
 
-  public static void send(@NotNull String recipient, @NotNull String subject, @NotNull String body)
-      throws MailerError {
+  public static void send(String recipient, String subject, String body) throws MailerError {
 
     try {
       try (SMTP smtp = new SMTP()) {
@@ -67,9 +67,9 @@ public class Mailer {
   }
 
   private static class SMTP implements Closeable {
-    private final @NotNull Socket socket;
-    private final @NotNull BufferedReader inStream;
-    private final @NotNull DataOutputStream outStream;
+    private final Socket socket;
+    private final BufferedReader inStream;
+    private final DataOutputStream outStream;
 
     @SuppressWarnings("AddressSelection")
     SMTP() throws IOException {
@@ -81,15 +81,15 @@ public class Mailer {
       this.outStream = new DataOutputStream(this.socket.getOutputStream());
     }
 
-    public void sendLine(@NotNull String line) throws IOException {
+    public void sendLine(String line) throws IOException {
       this.outStream.writeBytes(line + "\r\n");
     }
 
-    public @NotNull String readLine() throws IOException {
+    public String readLine() throws IOException {
       return this.inStream.readLine();
     }
 
-    public void waitFor(@NotNull String prefix) throws IOException {
+    public void waitFor(String prefix) throws IOException {
       while (true) {
         String line = this.readLine();
         if (line.startsWith(prefix)) {
@@ -98,7 +98,7 @@ public class Mailer {
       }
     }
 
-    public void sendAndWait(@NotNull String line, @NotNull String prefix) throws IOException {
+    public void sendAndWait(String line, String prefix) throws IOException {
       this.sendLine(line);
       this.waitFor(prefix);
     }

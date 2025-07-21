@@ -8,10 +8,11 @@ import de.bluecolored.bluemap.api.markers.MarkerSet;
 import de.bluecolored.bluemap.api.markers.POIMarker;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
+@NullMarked
 public class BlueMapSpawn extends BlueMap.Addon {
-  protected BlueMapSpawn(@NotNull BlueMapAPI api) {
+  protected BlueMapSpawn(BlueMapAPI api) {
     super(api);
   }
 

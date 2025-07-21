@@ -34,23 +34,24 @@ import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 /** Automatic inventory backup, allowing OPs to /restore_inv */
+@NullMarked
 public class InventoryRestore implements Module, Listener {
-  private static final @NotNull DateTimeFormatter SHORT_DATETIME_FORMAT =
+  private static final DateTimeFormatter SHORT_DATETIME_FORMAT =
       DateTimeFormatter.ofPattern("yyyyMMdd-HHmmss");
-  private static final @NotNull DateTimeFormatter LONG_DATETIME_FORMAT =
+  private static final DateTimeFormatter LONG_DATETIME_FORMAT =
       DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-  private static final @NotNull String SEPARATOR = "-inv-";
-  private static final @NotNull String SUFFIX = ".bak";
+  private static final String SEPARATOR = "-inv-";
+  private static final String SUFFIX = ".bak";
   private static final int UUID_LEN = 36;
   private static final int PREFIX_LEN = UUID_LEN + SEPARATOR.length();
   private static final int SUFFIX_LEN = SUFFIX.length();
   private static final int MAX_BACKUP_COUNT = 5;
 
-  private final @NotNull File backupPath;
+  private final File backupPath;
 
   public InventoryRestore() {
     this.backupPath = ClodMC.instance.getDataFolder().toPath().resolve("players").toFile();
@@ -60,9 +61,7 @@ public class InventoryRestore implements Module, Listener {
         .description("Restore player's inventory from automatic backups")
         .requiresOp()
         .executor(
-            (@NotNull EitherCommandSender sender,
-                @Nullable String playerName,
-                @Nullable String backup) -> {
+            (EitherCommandSender sender, @Nullable String playerName, @Nullable String backup) -> {
               if (playerName == null) {
                 if (!sender.isPlayer()) {
                   throw new CommandUsageError();
@@ -112,7 +111,7 @@ public class InventoryRestore implements Module, Listener {
               }
             })
         .completor(
-            (@NotNull CommandSender sender, @NotNull List<String> args) -> {
+            (CommandSender sender, List<String> args) -> {
               if (args.size() == 1) {
                 // player name
                 return Players.getWhitelisted().keySet().stream()
@@ -132,12 +131,12 @@ public class InventoryRestore implements Module, Listener {
   }
 
   @EventHandler
-  public void onPlayerDeath(@NotNull PlayerDeathEvent event) {
+  public void onPlayerDeath(PlayerDeathEvent event) {
     this.backupPlayerInventory(event.getPlayer(), false);
   }
 
   @EventHandler
-  public void onPlayerJoin(@NotNull PlayerJoinEvent event) {
+  public void onPlayerJoin(PlayerJoinEvent event) {
     PlayerDataFile dataFile = PlayerDataFiles.of(event.getPlayer());
     String backupName = dataFile.getString("restore_inv");
     if (backupName != null) {
@@ -148,13 +147,13 @@ public class InventoryRestore implements Module, Listener {
   }
 
   @EventHandler
-  public void onPlayerCommandPreprocess(@NotNull PlayerCommandPreprocessEvent event) {
+  public void onPlayerCommandPreprocess(PlayerCommandPreprocessEvent event) {
     if (event.getPlayer().isOp() && event.getMessage().equals("/clear")) {
       this.backupPlayerInventory(event.getPlayer(), true);
     }
   }
 
-  private void backupPlayerInventory(@NotNull Player player, boolean notify) {
+  private void backupPlayerInventory(Player player, boolean notify) {
     PlayerInventory inv = player.getInventory();
     if (inv.isEmpty()) {
       return;
@@ -189,7 +188,7 @@ public class InventoryRestore implements Module, Listener {
   }
 
   private void restorePlayerInventory(
-      @Nullable EitherCommandSender sender, @NotNull Player player, @Nullable String backupName) {
+      @Nullable EitherCommandSender sender, Player player, @Nullable String backupName) {
     Schedule.asynchronously(
         () -> {
           File backupFile = this.getBackupFile(player.getUniqueId(), backupName);
@@ -238,7 +237,7 @@ public class InventoryRestore implements Module, Listener {
         });
   }
 
-  private @NotNull List<File> getBackupFiles(@NotNull UUID uuid) {
+  private List<File> getBackupFiles(UUID uuid) {
     String prefix = uuid + SEPARATOR;
     File[] files =
         this.backupPath.listFiles(
@@ -253,15 +252,15 @@ public class InventoryRestore implements Module, Listener {
     return new ArrayList<>(Arrays.asList(files));
   }
 
-  private @NotNull List<String> getBackupNames(@NotNull UUID uuid) {
+  private List<String> getBackupNames(UUID uuid) {
     return this.getBackupFiles(uuid).stream().map(this::getBackupName).toList();
   }
 
-  private @NotNull String getBackupName(@NotNull File file) {
+  private String getBackupName(File file) {
     return file.getName().substring(PREFIX_LEN, file.getName().length() - SUFFIX_LEN);
   }
 
-  private @Nullable File getBackupFile(@NotNull UUID uuid, @Nullable String name) {
+  private @Nullable File getBackupFile(UUID uuid, @Nullable String name) {
     List<File> backups = this.getBackupFiles(uuid);
     if (backups.isEmpty()) {
       return null;
@@ -274,7 +273,7 @@ public class InventoryRestore implements Module, Listener {
             .orElse(null);
   }
 
-  private @NotNull File buildBackupFile(@NotNull UUID uuid) {
+  private File buildBackupFile(UUID uuid) {
     return new File(
         this.backupPath,
         uuid + SEPARATOR + TimeUtil.localNow().format(SHORT_DATETIME_FORMAT) + SUFFIX);

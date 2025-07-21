@@ -20,20 +20,21 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.LeavesDecayEvent;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 /** Nearly instant decaying of leafs */
+@NullMarked
 public class FastLeafDecay implements Listener, Module {
-  private final @NotNull List<Block> scheduledBlocks = new ArrayList<>();
+  private final List<Block> scheduledBlocks = new ArrayList<>();
 
   @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
-  public void onBlockBreak(@NotNull BlockBreakEvent event) {
+  public void onBlockBreak(BlockBreakEvent event) {
     // start trying to break leaves immediately after a log is broken
     this.onBlockRemove(event.getBlock(), 5);
   }
 
   @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
-  public void onLeavesDecay(@NotNull LeavesDecayEvent event) {
+  public void onLeavesDecay(LeavesDecayEvent event) {
     // check neighbours when a leaf decays to trigger a cascade
     this.onBlockRemove(event.getBlock(), 2);
   }
@@ -71,7 +72,7 @@ public class FastLeafDecay implements Listener, Module {
     }
   }
 
-  private void decay(@NotNull Block block) {
+  private void decay(Block block) {
     // make sure we're decaying a loaded leaf block
     if (!this.scheduledBlocks.remove(block)
         || !block.getWorld().isChunkLoaded(block.getX() >> 4, block.getZ() >> 4)
@@ -86,6 +87,7 @@ public class FastLeafDecay implements Listener, Module {
     }
 
     // allow other plugins to cancel decay
+    @SuppressWarnings("UnstableApiUsage")
     LeavesDecayEvent event = new LeavesDecayEvent(block);
     Bukkit.getServer().getPluginManager().callEvent(event);
     if (event.isCancelled()) {

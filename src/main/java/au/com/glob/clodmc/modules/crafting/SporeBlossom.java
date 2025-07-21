@@ -13,11 +13,12 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.RecipeChoice;
 import org.bukkit.inventory.ShapelessRecipe;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 /** Adds a crafting recipe for Spore Blossoms */
+@NullMarked
 public class SporeBlossom implements Module, Listener {
-  private final @NotNull ShapelessRecipe recipe;
+  private final ShapelessRecipe recipe;
 
   public SporeBlossom() {
     this.recipe =
@@ -30,7 +31,7 @@ public class SporeBlossom implements Module, Listener {
   }
 
   @EventHandler
-  public void onPlayerJoin(@NotNull PlayerJoinEvent event) {
+  public void onPlayerJoin(PlayerJoinEvent event) {
     Schedule.asynchronously(
         () -> {
           Player player = event.getPlayer();
@@ -52,7 +53,7 @@ public class SporeBlossom implements Module, Listener {
   }
 
   @EventHandler(ignoreCancelled = true)
-  public void onEntityPickupItem(@NotNull EntityPickupItemEvent event) {
+  public void onEntityPickupItem(EntityPickupItemEvent event) {
     if (!(event.getEntity() instanceof Player player)) {
       return;
     }

@@ -18,17 +18,18 @@ import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * Allow waxing an item-frame to prevent item rotation/removal and allow click-through to containers
  */
+@NullMarked
 public class WaxedItemFrames implements Module, Listener {
-  private static final @NotNull NamespacedKey WAXED_KEY = new NamespacedKey("clod-mc", "waxed");
+  private static final NamespacedKey WAXED_KEY = new NamespacedKey("clod-mc", "waxed");
 
   @SuppressWarnings("MissingCasesInEnumSwitch")
   @EventHandler
-  public void onPlayerInteractEntity(@NotNull PlayerInteractEntityEvent event) {
+  public void onPlayerInteractEntity(PlayerInteractEntityEvent event) {
     if (!(event.getRightClicked() instanceof ItemFrame itemFrame)) {
       return;
     }

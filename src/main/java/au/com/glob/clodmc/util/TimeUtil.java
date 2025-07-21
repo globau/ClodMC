@@ -3,18 +3,19 @@ package au.com.glob.clodmc.util;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 /** Date/Time/Timezone helpers */
+@NullMarked
 public class TimeUtil {
-  private static final @NotNull ZoneId LOCAL_TZ = ZoneId.of("Australia/Perth");
-  private static final @NotNull ZoneId UTC = ZoneId.of("UTC");
+  private static final ZoneId LOCAL_TZ = ZoneId.of("Australia/Perth");
+  private static final ZoneId UTC = ZoneId.of("UTC");
 
-  public static @NotNull LocalDateTime localNow() {
+  public static LocalDateTime localNow() {
     return LocalDateTime.now(LOCAL_TZ);
   }
 
-  public static @NotNull ZonedDateTime utcNow() {
+  public static ZonedDateTime utcNow() {
     return ZonedDateTime.now(UTC);
   }
 }

@@ -22,17 +22,18 @@ import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 /** Automatic and manual afk; players are visibly afk in the tab-list */
+@NullMarked
 public class AFK implements Listener, Module {
   @SuppressWarnings({"NotNullFieldNotInitialized", "NullAway.Init"})
-  public static @NotNull AFK instance;
+  public static AFK instance;
 
   private static final int IDLE_TIME = 300; // seconds
   private static final int CHECK_INTERVAL = 5; // seconds
 
-  private final @NotNull HashMap<UUID, PlayerState> playerStates = new HashMap<>();
+  private final HashMap<UUID, PlayerState> playerStates = new HashMap<>();
 
   public AFK() {
     instance = this;
@@ -40,7 +41,7 @@ public class AFK implements Listener, Module {
     CommandBuilder.build("afk")
         .description("Toggle AFK status")
         .executor(
-            (@NotNull Player player) -> {
+            (Player player) -> {
               PlayerState playerState = this.playerStates.get(player.getUniqueId());
               if (playerState != null) {
                 playerState.toggleAway();
@@ -52,7 +53,7 @@ public class AFK implements Listener, Module {
     afkTeam.removeEntries(afkTeam.getEntries());
   }
 
-  private @NotNull Team getAfkTeam() {
+  private Team getAfkTeam() {
     Scoreboard scoreboard = Bukkit.getScoreboardManager().getMainScoreboard();
     Team team = scoreboard.getTeam("AFK");
     if (team == null) {
@@ -84,7 +85,7 @@ public class AFK implements Listener, Module {
 
   // events
 
-  private void onAction(@NotNull Player player) {
+  private void onAction(Player player) {
     PlayerState playerState = this.playerStates.get(player.getUniqueId());
     if (playerState != null) {
       playerState.onAction();
@@ -92,38 +93,38 @@ public class AFK implements Listener, Module {
   }
 
   @EventHandler
-  public void onPlayerJoin(@NotNull PlayerJoinEvent event) {
+  public void onPlayerJoin(PlayerJoinEvent event) {
     PlayerState playerState = new PlayerState(event.getPlayer());
     playerState.setBack(false);
     this.playerStates.put(event.getPlayer().getUniqueId(), playerState);
   }
 
   @EventHandler
-  public void onPlayerQuit(@NotNull PlayerQuitEvent event) {
+  public void onPlayerQuit(PlayerQuitEvent event) {
     this.onAction(event.getPlayer());
   }
 
   @EventHandler
-  public void onAsyncChat(@NotNull AsyncChatEvent event) {
+  public void onAsyncChat(AsyncChatEvent event) {
     Schedule.nextTick(() -> AFK.this.onAction(event.getPlayer()));
   }
 
   @EventHandler
-  public void onPlayerMove(@NotNull PlayerMoveEvent event) {
+  public void onPlayerMove(PlayerMoveEvent event) {
     if (event.hasChangedBlock()) {
       this.onAction(event.getPlayer());
     }
   }
 
   @EventHandler
-  public void onEntityDamageByEntity(@NotNull EntityDamageByEntityEvent event) {
+  public void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
     if (event.getDamager() instanceof Player player) {
       this.onAction(player);
     }
   }
 
   @EventHandler
-  public void onPlayerCommandPreprocess(@NotNull PlayerCommandPreprocessEvent event) {
+  public void onPlayerCommandPreprocess(PlayerCommandPreprocessEvent event) {
     if (event.getMessage().equals("/afk") || event.getMessage().startsWith("/afk ")) {
       return;
     }
@@ -131,26 +132,26 @@ public class AFK implements Listener, Module {
   }
 
   @EventHandler
-  public void onPlayerInteract(@NotNull PlayerInteractEvent event) {
+  public void onPlayerInteract(PlayerInteractEvent event) {
     this.onAction(event.getPlayer());
   }
 
   @EventHandler
-  public void onBlockPlace(@NotNull BlockPlaceEvent event) {
+  public void onBlockPlace(BlockPlaceEvent event) {
     this.onAction(event.getPlayer());
   }
 
   @EventHandler
-  public void onBlockBreak(@NotNull BlockBreakEvent event) {
+  public void onBlockBreak(BlockBreakEvent event) {
     this.onAction(event.getPlayer());
   }
 
   private static final class PlayerState {
-    private final @NotNull Player player;
+    private final Player player;
     private long lastInteractionTime;
     private boolean isAway;
 
-    private PlayerState(@NotNull Player player) {
+    private PlayerState(Player player) {
       this.player = player;
       this.lastInteractionTime = System.currentTimeMillis() / 1000;
       this.isAway = false;

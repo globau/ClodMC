@@ -18,17 +18,18 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 /** /seen command; show how long it's been since the server last saw the player */
+@NullMarked
 public class Seen implements Module, Listener {
   public Seen() {
     CommandBuilder.build("seen")
         .usage("/seen <player>")
         .description("Show time since player's last login")
         .executor(
-            (@NotNull EitherCommandSender sender, @Nullable String playerName) -> {
+            (EitherCommandSender sender, @Nullable String playerName) -> {
               if (playerName == null) {
                 throw new CommandUsageError();
               }
@@ -66,7 +67,7 @@ public class Seen implements Module, Listener {
               Chat.info(sender, playerName + " was last seen " + dateAgo + " ago");
             })
         .completor(
-            (@NotNull CommandSender sender, @NotNull List<String> args) ->
+            (CommandSender sender, List<String> args) ->
                 Players.getWhitelisted().keySet().stream()
                     .sorted(String.CASE_INSENSITIVE_ORDER)
                     .filter(

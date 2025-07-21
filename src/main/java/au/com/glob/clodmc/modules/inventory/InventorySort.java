@@ -35,11 +35,13 @@ import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.MusicInstrumentMeta;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 /** Sort containers by shift+right-clicking in the inventory screen */
+@NullMarked
 public class InventorySort implements Listener, Module {
-  private static final @NotNull Map<String, Integer> materialOrder = new HashMap<>(1477);
+  private static final Map<String, Integer> materialOrder = new HashMap<>(1477);
 
   public InventorySort() {
     super();
@@ -120,7 +122,7 @@ public class InventorySort implements Listener, Module {
   }
 
   @EventHandler(priority = EventPriority.HIGHEST)
-  public void onInventoryClick(@NotNull InventoryClickEvent event) {
+  public void onInventoryClick(InventoryClickEvent event) {
     if (!(event.getWhoClicked() instanceof Player
         && event.getClick() == ClickType.SHIFT_RIGHT
         && event.getSlotType() == InventoryType.SlotType.CONTAINER)) {
@@ -181,7 +183,7 @@ public class InventorySort implements Listener, Module {
                 .toList());
 
     // update container
-    List<ItemStack> inventoryContents = new ArrayList<>(inventory.getSize());
+    List<@Nullable ItemStack> inventoryContents = new ArrayList<>(inventory.getSize());
     for (int i = 0; i < inventory.getSize(); i++) {
       if (i < minSlot || i > maxSlot) {
         inventoryContents.add(inventory.getItem(i));
@@ -203,10 +205,10 @@ public class InventorySort implements Listener, Module {
   }
 
   private static class InventoryItem implements Comparable<InventoryItem> {
-    private final @NotNull ItemStack itemStack;
+    private final ItemStack itemStack;
     private final int materialIndex;
-    private final @NotNull String name;
-    private final @NotNull String extra;
+    private final String name;
+    private final String extra;
     private final int amount;
     private final int damage;
 
@@ -257,7 +259,7 @@ public class InventorySort implements Listener, Module {
     }
 
     @Override
-    public @NotNull String toString() {
+    public String toString() {
       StringJoiner joiner = new StringJoiner(":", "[", "]");
       joiner.add(String.valueOf(this.materialIndex));
       joiner.add(this.name);
@@ -267,12 +269,12 @@ public class InventorySort implements Listener, Module {
       return joiner.toString();
     }
 
-    public @NotNull ItemStack getItemStack() {
+    public ItemStack getItemStack() {
       return this.itemStack;
     }
 
     @Override
-    public int compareTo(@NotNull InventorySort.InventoryItem o) {
+    public int compareTo(InventorySort.InventoryItem o) {
       int comp;
       // material
       comp = Integer.compare(this.materialIndex, o.materialIndex);

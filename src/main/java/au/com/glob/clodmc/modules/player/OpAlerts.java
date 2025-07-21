@@ -8,25 +8,26 @@ import java.util.List;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 /** Collect startup alerts and send them to the first operator that logs in */
+@NullMarked
 public class OpAlerts implements Module, Listener {
   @SuppressWarnings({"NotNullFieldNotInitialized", "NullAway.Init"})
-  private static @NotNull OpAlerts instance;
+  private static OpAlerts instance;
 
-  private final @NotNull List<String> alerts = new ArrayList<>();
+  private final List<String> alerts = new ArrayList<>();
 
   public OpAlerts() {
     instance = this;
   }
 
-  public static void addAlert(@NotNull String alert) {
+  public static void addAlert(String alert) {
     instance.alerts.add(alert);
   }
 
   @EventHandler
-  public void onPlayerJoin(@NotNull PlayerJoinEvent event) {
+  public void onPlayerJoin(PlayerJoinEvent event) {
     if (this.alerts.isEmpty() || !event.getPlayer().isOp()) {
       return;
     }

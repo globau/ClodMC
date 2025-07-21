@@ -1,7 +1,9 @@
 package au.com.glob.clodmc.modules;
 
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
+@NullMarked
 public interface Module {
   default @Nullable String dependsOn() {
     return null;

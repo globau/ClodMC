@@ -9,12 +9,13 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 /** Collect data about players */
+@NullMarked
 public class PlayerTracker implements Module, Listener {
   @EventHandler
-  public void onPlayerJoin(@NotNull PlayerJoinEvent event) {
+  public void onPlayerJoin(PlayerJoinEvent event) {
     PlayerDataFile dataFile = PlayerDataFiles.of(event.getPlayer());
     dataFile.setPlayerName(event.getPlayer().getName());
     dataFile.touchLastLogin();
@@ -22,7 +23,7 @@ public class PlayerTracker implements Module, Listener {
   }
 
   @EventHandler
-  public void onPlayerQuit(@NotNull PlayerQuitEvent event) {
+  public void onPlayerQuit(PlayerQuitEvent event) {
     PlayerDataFile dataFile = PlayerDataFiles.of(event.getPlayer());
     dataFile.touchLastLogout();
     dataFile.setPlaytimeMins(

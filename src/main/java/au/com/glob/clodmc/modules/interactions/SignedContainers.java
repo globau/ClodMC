@@ -17,12 +17,13 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 /** When right-clicking on a waxed sign attached to a chest, open the chest instead of noop */
+@NullMarked
 public class SignedContainers implements Module, Listener {
   @EventHandler
-  public void onPlayerInteract(@NotNull PlayerInteractEvent event) {
+  public void onPlayerInteract(PlayerInteractEvent event) {
     if (event.getAction() != Action.RIGHT_CLICK_BLOCK || event.getHand() != EquipmentSlot.HAND) {
       return;
     }

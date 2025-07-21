@@ -34,10 +34,11 @@ import org.bukkit.Statistic;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 /** Allows players with enough playtime on the server to add others to the whitelist */
+@NullMarked
 public class Invite implements Module {
   private static final int MIN_PLAY_TIME = 240; // minutes
 
@@ -64,7 +65,7 @@ public class Invite implements Module {
         .usage("/invite <java|bedrock> <player>")
         .description("Add a player to the whitelist")
         .executor(
-            (@NotNull EitherCommandSender sender, @Nullable String type, @Nullable String name) -> {
+            (EitherCommandSender sender, @Nullable String type, @Nullable String name) -> {
               if (GameType.of(type) == null || name == null) {
                 throw new CommandUsageError();
               }
@@ -154,7 +155,7 @@ public class Invite implements Module {
                   });
             })
         .completor(
-            (@NotNull CommandSender sender, @NotNull List<String> args) -> {
+            (CommandSender sender, List<String> args) -> {
               List<String> types = List.of("java", "bedrock");
               if (args.isEmpty()) {
                 return types;
@@ -180,7 +181,7 @@ public class Invite implements Module {
     }
   }
 
-  private @Nullable UUID lookupUUID(@NotNull GameType gameType, @NotNull String name) {
+  private @Nullable UUID lookupUUID(GameType gameType, String name) {
     assert this.apiKey != null;
     String url =
         "https://mcprofile.io/api/v1/"
@@ -198,7 +199,7 @@ public class Invite implements Module {
     return response.has(field) ? UUID.fromString(response.get(field).getAsString()) : null;
   }
 
-  private boolean isWhitelisted(@NotNull UUID uuid) {
+  private boolean isWhitelisted(UUID uuid) {
     String uuidString = uuid.toString();
     try {
       Path whitelistFile =
@@ -222,14 +223,14 @@ public class Invite implements Module {
     JAVA("java"),
     BEDROCK("bedrock");
 
-    private final @NotNull String name;
+    private final String name;
 
-    GameType(@NotNull String name) {
+    GameType(String name) {
       this.name = name;
     }
 
     @Override
-    public @NotNull String toString() {
+    public String toString() {
       return this.name;
     }
 

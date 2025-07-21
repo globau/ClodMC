@@ -1,10 +1,11 @@
 package au.com.glob.clodmc.command;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 @FunctionalInterface
+@NullMarked
 public interface ExecutorESS extends Executor {
-  void accept(@NotNull EitherCommandSender sender, @Nullable String arg1, @Nullable String arg2)
+  void accept(EitherCommandSender sender, @Nullable String arg1, @Nullable String arg2)
       throws CommandError;
 }

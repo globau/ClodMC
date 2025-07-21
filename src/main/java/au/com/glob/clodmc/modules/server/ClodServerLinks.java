@@ -7,13 +7,14 @@ import org.bukkit.ServerLinks;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerLinksSendEvent;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 /** Set server links in MC client pause screen */
 @SuppressWarnings("UnstableApiUsage")
+@NullMarked
 public class ClodServerLinks implements Module, Listener {
   @EventHandler
-  public void onPlayerLinksSend(@NotNull PlayerLinksSendEvent event) {
+  public void onPlayerLinksSend(PlayerLinksSendEvent event) {
     ServerLinks links = event.getLinks();
     links.addLink(
         StringUtil.asComponent("<yellow>Real-time Map</yellow>"),

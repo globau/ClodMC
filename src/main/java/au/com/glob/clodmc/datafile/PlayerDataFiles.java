@@ -4,27 +4,28 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
+@NullMarked
 public class PlayerDataFiles {
-  protected static final @NotNull Map<String, PlayerDataFile> instances = new HashMap<>();
+  protected static final Map<String, PlayerDataFile> instances = new HashMap<>();
 
-  public @NotNull static PlayerDataFile of(@NotNull String filename) {
+  public static PlayerDataFile of(String filename) {
     if (!instances.containsKey(filename)) {
       instances.put(filename, new PlayerDataFile(filename));
     }
     return instances.get(filename);
   }
 
-  public static @NotNull PlayerDataFile of(@NotNull Player player) {
+  public static PlayerDataFile of(Player player) {
     return of(player.getUniqueId());
   }
 
-  public static @NotNull PlayerDataFile of(@NotNull UUID uuid) {
+  public static PlayerDataFile of(UUID uuid) {
     return of("players/" + uuid + ".yml");
   }
 
-  public static void unload(@NotNull Player player) {
+  public static void unload(Player player) {
     instances.remove("players/" + player.getUniqueId() + ".yml");
   }
 }

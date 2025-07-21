@@ -10,17 +10,18 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
+@NullMarked
 public class DataFile extends YamlConfiguration {
-  private static final @NotNull DateTimeFormatter DATE_TIME_FORMATTER =
+  private static final DateTimeFormatter DATE_TIME_FORMATTER =
       DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
-  private final @NotNull File file;
+  private final File file;
   private boolean exists;
 
-  public DataFile(@NotNull File file) {
+  public DataFile(File file) {
     super();
 
     this.file = file;
@@ -48,15 +49,15 @@ public class DataFile extends YamlConfiguration {
     }
   }
 
-  public void remove(@NotNull String path) {
+  public void remove(String path) {
     this.set(path, null);
   }
 
-  public void setDateTime(@NotNull String path, @NotNull LocalDateTime dateTime) {
+  public void setDateTime(String path, LocalDateTime dateTime) {
     this.set(path, dateTime.format(DATE_TIME_FORMATTER));
   }
 
-  @Nullable public LocalDateTime getDateTime(@NotNull String path) {
+  @Nullable public LocalDateTime getDateTime(String path) {
     try {
       return LocalDateTime.parse(this.getString(path, ""), DATE_TIME_FORMATTER);
     } catch (DateTimeParseException e) {
@@ -64,7 +65,7 @@ public class DataFile extends YamlConfiguration {
     }
   }
 
-  public void touch(@NotNull String path) {
+  public void touch(String path) {
     this.setDateTime(path, TimeUtil.localNow());
   }
 }
