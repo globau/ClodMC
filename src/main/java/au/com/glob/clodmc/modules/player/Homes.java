@@ -42,7 +42,7 @@ public class Homes implements Listener, Module {
               TeleportUtil.teleport(
                   player, location, name.equals("home") ? "home" : "to '" + name + "'");
             })
-        .completor((Player player, List<String> args) -> this.completeHomes(player, args));
+        .completor(this::completeHomes);
 
     CommandBuilder.build("homes")
         .description("List homes")
@@ -115,7 +115,7 @@ public class Homes implements Listener, Module {
                 Chat.info(player, "Deleted home '" + name + "'");
               }
             })
-        .completor((Player player, List<String> args) -> this.completeHomes(player, args));
+        .completor(this::completeHomes);
   }
 
   private List<String> completeHomes(Player player, List<String> args) {

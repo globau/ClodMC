@@ -61,7 +61,7 @@ public class BlueMap implements Module, Listener {
   }
 
   public abstract static class Addon {
-    protected @Nullable BlueMapAPI api;
+    protected final BlueMapAPI api;
 
     protected Addon(BlueMapAPI api) {
       this.api = api;
