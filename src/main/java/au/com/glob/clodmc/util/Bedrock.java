@@ -8,6 +8,7 @@ import org.jspecify.annotations.NullMarked;
 
 @NullMarked
 public class Bedrock {
+  // not using a weak reference as the player count is low, and the server restarts nightly
   private static final Map<UUID, Boolean> IS_BEDROCK_CACHE = new HashMap<>();
 
   public static void apiTest() {

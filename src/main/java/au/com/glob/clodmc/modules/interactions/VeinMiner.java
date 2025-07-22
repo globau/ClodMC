@@ -16,6 +16,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
+import java.util.WeakHashMap;
 import java.util.function.Supplier;
 import me.ryanhamshire.GriefPrevention.Claim;
 import me.ryanhamshire.GriefPrevention.ClaimPermission;
@@ -58,7 +59,7 @@ public class VeinMiner implements Module, Listener {
           BlockFace.DOWN);
 
   private final Enchantment veinmineEnchantment;
-  private final Set<UUID> cooldownUUIDs = new HashSet<>();
+  private final Set<UUID> cooldownUUIDs = Collections.newSetFromMap(new WeakHashMap<>());
 
   @SuppressWarnings("UnstableApiUsage")
   public static void bootstrap(BootstrapContextHelper context) {
