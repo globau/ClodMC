@@ -130,8 +130,8 @@ public class VeinMiner implements Module, Listener {
       for (BlockFace face : FACES) {
         Block touchingBlock = block.getRelative(face);
         if (touchingBlock.getType().equals(block.getType())) {
-          this.cooldownUUIDs.add(player.getUniqueId());
-          Schedule.delayed(20, () -> this.cooldownUUIDs.remove(player.getUniqueId()));
+          Schedule.delayed(3, () -> this.cooldownUUIDs.add(player.getUniqueId()));
+          Schedule.delayed(23, () -> this.cooldownUUIDs.remove(player.getUniqueId()));
           break;
         }
       }
