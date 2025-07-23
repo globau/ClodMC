@@ -891,8 +891,7 @@ public class Gateways implements Module, Listener {
           .filter(
               (Player player) -> {
                 Location playerLoc = player.getLocation();
-                return !(playerLoc.getWorld().equals(this.bottomLocation.getWorld())
-                    && playerLoc.getBlockX() == this.bottomLocation.getBlockX()
+                return !(playerLoc.getBlockX() == this.bottomLocation.getBlockX()
                     && playerLoc.getBlockY() == this.bottomLocation.getBlockY()
                     && playerLoc.getBlockZ() == this.bottomLocation.getBlockZ());
               })
