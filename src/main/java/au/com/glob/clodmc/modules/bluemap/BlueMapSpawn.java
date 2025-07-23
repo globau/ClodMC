@@ -18,10 +18,6 @@ public class BlueMapSpawn extends BlueMap.Addon {
 
   @Override
   public void update() {
-    if (this.api == null) {
-      return;
-    }
-
     for (World world : Bukkit.getWorlds()) {
       MarkerSet markerSet = MarkerSet.builder().label("Spawn").defaultHidden(false).build();
       markerSet.put(

@@ -722,8 +722,8 @@ public class Gateways implements Module, Listener {
       return this.facingLocation(location).getBlock();
     }
 
-    private boolean isFacingAnchor(Location location) {
-      return Gateways.instance.instances.containsKey(BlockPos.of(this.facingLocation(location)));
+    private boolean notFacingAnchor(Location location) {
+      return !Gateways.instance.instances.containsKey(BlockPos.of(this.facingLocation(location)));
     }
 
     private boolean isFacingAir(Location location) {
@@ -750,7 +750,7 @@ public class Gateways implements Module, Listener {
       while (attempts <= 4
           && !(this.isFacingAir(bottomLoc)
               && this.isFacingAir(topLoc)
-              && !this.isFacingAnchor(blockLoc))) {
+              && this.notFacingAnchor(blockLoc))) {
         blockLoc.setYaw(((blockLoc.getYaw() + 90) + 180) % 360 - 180);
         bottomLoc.setYaw(blockLoc.getYaw());
         topLoc.setYaw(blockLoc.getYaw());
@@ -760,7 +760,7 @@ public class Gateways implements Module, Listener {
       // didn't find air, try again without the anchor check
       if (!(this.isFacingAir(bottomLoc)
           && this.isFacingAir(topLoc)
-          && !this.isFacingAnchor(blockLoc))) {
+          && this.notFacingAnchor(blockLoc))) {
         attempts = 1;
         while (attempts <= 4 && !(this.isFacingAir(bottomLoc) && this.isFacingAir(topLoc))) {
           bottomLoc.setYaw(((bottomLoc.getYaw() + 90) + 180) % 360 - 180);
@@ -823,7 +823,6 @@ public class Gateways implements Module, Listener {
       double angleStep = 2 * Math.PI / EFFECT_PARTICLES;
       int ringsPerSection = isActive ? 8 : 4;
 
-      // reuse location objects to reduce gc pressure
       World world = this.blockPos.world();
       Location bottomParticleLoc = new Location(world, 0, 0, 0);
       Location topParticleLoc = new Location(world, 0, 0, 0);
@@ -839,7 +838,6 @@ public class Gateways implements Module, Listener {
           double cosAngle = Math.cos(angle);
           double sinAngle = Math.sin(angle);
 
-          // bottom particle
           double x = this.bottomLocation.getX() + EFFECT_RADIUS * cosAngle;
           double z = this.bottomLocation.getZ() + EFFECT_RADIUS * sinAngle;
           bottomParticleLoc.setX(x);
@@ -852,7 +850,6 @@ public class Gateways implements Module, Listener {
               .count(1)
               .spawn();
 
-          // top particle
           x = this.topLocation.getX() + EFFECT_RADIUS * cosAngle;
           z = this.topLocation.getZ() + EFFECT_RADIUS * sinAngle;
           topParticleLoc.setX(x);

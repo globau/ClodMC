@@ -48,10 +48,6 @@ public class BlueMapGriefPrevention extends BlueMap.Addon implements Listener {
 
   @Override
   protected void update() {
-    if (this.api == null) {
-      return;
-    }
-
     for (MarkerSet markerSet : this.markerSets.values()) {
       markerSet.getMarkers().clear();
     }

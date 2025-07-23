@@ -25,10 +25,6 @@ public class BlueMapWorldBorder extends BlueMap.Addon {
 
   @Override
   public void update() {
-    if (this.api == null) {
-      return;
-    }
-
     for (World world : Bukkit.getWorlds()) {
       WorldBorder border = world.getWorldBorder();
       Location centre = border.getCenter();

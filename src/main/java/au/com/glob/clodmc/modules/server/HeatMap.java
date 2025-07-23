@@ -206,7 +206,7 @@ public class HeatMap implements Module, Listener {
 
     @Override
     public void update() {
-      if (this.api == null || this.generated) {
+      if (this.generated) {
         return;
       }
       Schedule.asynchronously(
@@ -217,8 +217,6 @@ public class HeatMap implements Module, Listener {
     }
 
     private void buildMarkers() {
-      assert this.api != null;
-
       DB db = new DB();
       try {
         for (World world : Bukkit.getWorlds()) {
