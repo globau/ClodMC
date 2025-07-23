@@ -35,6 +35,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -79,6 +80,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.RecipeChoice;
@@ -102,6 +104,7 @@ public class Gateways implements Module, Listener {
   private static final int MAX_RANDOM_TP_TIME = 60; // minutes
   private static final int MIN_RANDOM_TP_DISTANCE = 1500;
   private static final int RANDOM_TP_COOLDOWN = 60; // seconds
+  private static final int VISIBLE_RANGE_SQUARED = 16 * 16;
 
   private final File configFile = new File(ClodMC.instance.getDataFolder(), "gateways.yml");
   private final Map<BlockPos, AnchorBlock> instances = new HashMap<>();
@@ -341,7 +344,7 @@ public class Gateways implements Module, Listener {
     // remove portal and disconnect
     anchorBlock.stopVisuals();
     this.instances.remove(blockPos);
-    AnchorBlock otherAnchorBlock = anchorBlock.connectedAnchorBlock();
+    AnchorBlock otherAnchorBlock = anchorBlock.connectedTo;
     if (otherAnchorBlock != null) {
       otherAnchorBlock.disconnect();
       otherAnchorBlock.updateVisuals();
@@ -356,12 +359,18 @@ public class Gateways implements Module, Listener {
 
     ItemStack anchorItem = AnchorItem.create();
     AnchorItem.setMeta(anchorItem, anchorBlock.networkId, anchorBlock.name, null);
-    anchorBlock.blockPos.getWorld().dropItem(anchorBlock.blockPos.asLocation(), anchorItem);
+    anchorBlock.blockPos.world().dropItem(anchorBlock.blockPos.asLocation(), anchorItem);
   }
 
   @EventHandler
   public void onPlayerMove(PlayerMoveEvent event) {
     Player player = event.getPlayer();
+
+    // keep track of gateways within range of players
+    if (event.hasChangedBlock()) {
+      this.updateNearbyAnchors(player);
+    }
+
     if (player.getGameMode().equals(GameMode.SPECTATOR)) {
       return;
     }
@@ -501,7 +510,7 @@ public class Gateways implements Module, Listener {
     } else {
       // teleport to connected anchor
 
-      AnchorBlock connectedTo = anchorBlock.connectedAnchorBlock();
+      AnchorBlock connectedTo = anchorBlock.connectedTo;
       if (connectedTo == null) {
         player.sendActionBar(StringUtil.asComponent(anchorBlock.getInformation()));
         return;
@@ -544,21 +553,42 @@ public class Gateways implements Module, Listener {
   }
 
   @EventHandler
+  public void onPlayerTeleport(PlayerTeleportEvent event) {
+    this.updateNearbyAnchors(event.getPlayer(), event.getTo());
+  }
+
+  @EventHandler
+  public void onPlayerRespawn(PlayerRespawnEvent event) {
+    this.updateNearbyAnchors(event.getPlayer(), event.getRespawnLocation());
+  }
+
+  @EventHandler
   public void onPlayerJoin(PlayerJoinEvent event) {
-    event.getPlayer().discoverRecipe(AnchorItem.RECIPE_KEY);
+    Player player = event.getPlayer();
+
+    // add recipe to book
+    player.discoverRecipe(AnchorItem.RECIPE_KEY);
+
+    // enable visuals for nearby anchors
+    this.updateNearbyAnchors(player);
 
     // if player spawns on an anchor block don't immediately teleport
-    Player player = event.getPlayer();
     BlockPos standingOnPos = BlockPos.of(player.getLocation()).down();
     AnchorBlock anchorBlock = this.instances.get(standingOnPos);
-    if (anchorBlock != null && anchorBlock.isConnected()) {
+    if (anchorBlock != null && anchorBlock.connectedTo != null) {
       this.ignore.put(player, BlockPos.of(player.getLocation()));
     }
   }
 
   @EventHandler
   public void onPlayerQuit(PlayerQuitEvent event) {
-    this.ignore.remove(event.getPlayer());
+    Player player = event.getPlayer();
+
+    this.ignore.remove(player);
+
+    for (AnchorBlock anchorBlock : this.instances.values()) {
+      anchorBlock.removeNearbyPlayer(player);
+    }
   }
 
   @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
@@ -571,6 +601,20 @@ public class Gateways implements Module, Listener {
     AnchorBlock anchorBlock =
         this.instances.get(BlockPos.of(event.getClickedBlock().getLocation()));
     event.setCancelled(anchorBlock != null);
+  }
+
+  public void updateNearbyAnchors(Player player, Location location) {
+    for (AnchorBlock anchorBlock : this.instances.values()) {
+      if (anchorBlock.canSeeVisualsFrom(location)) {
+        anchorBlock.addNearbyPlayer(player);
+      } else {
+        anchorBlock.removeNearbyPlayer(player);
+      }
+    }
+  }
+
+  public void updateNearbyAnchors(Player player) {
+    this.updateNearbyAnchors(player, player.getLocation());
   }
 
   public Collection<AnchorBlock> getAnchorBlocks() {
@@ -593,10 +637,10 @@ public class Gateways implements Module, Listener {
     private static final double EFFECT_SPEED = 0.1;
     private static final int EFFECT_PARTICLES = 4;
 
-    final int networkId;
-    final BlockPos blockPos;
-    final @Nullable String name;
-    final String displayName;
+    private final int networkId;
+    private final BlockPos blockPos;
+    private final @Nullable String name;
+    private final String displayName;
 
     private final Location topLocation;
     private final Location bottomLocation;
@@ -605,7 +649,8 @@ public class Gateways implements Module, Listener {
 
     private @Nullable AnchorBlock connectedTo = null;
     private @Nullable BukkitTask particleTask = null;
-    final boolean isRandom;
+    private final List<NearbyPlayer> nearbyPlayers = new ArrayList<>();
+    private final boolean isRandom;
 
     public AnchorBlock(int networkId, Location location, @Nullable String name) {
       this.networkId = networkId;
@@ -637,17 +682,9 @@ public class Gateways implements Module, Listener {
           + '}';
     }
 
-    public BlockPos getBlockPos() {
-      return this.blockPos;
-    }
-
-    public @Nullable String getName() {
-      return this.name;
-    }
-
-    public String getInformation() {
+    private String getInformation() {
       String prefix = "<yellow>" + this.displayName + "</yellow> - ";
-      if (this.isConnected()) {
+      if (this.connectedTo != null) {
         return prefix
             + this.connectedTo.blockPos.getString(
                 !this.blockPos.world.equals(this.connectedTo.blockPos.world));
@@ -656,14 +693,6 @@ public class Gateways implements Module, Listener {
         return prefix + "Random Location";
       }
       return prefix + "Disconnected";
-    }
-
-    public Colour getTopColour() {
-      return this.topColour;
-    }
-
-    public Colour getBottomColour() {
-      return this.bottomColour;
     }
 
     private String getColourPair() {
@@ -680,14 +709,6 @@ public class Gateways implements Module, Listener {
         this.connectedTo.connectedTo = null;
       }
       this.connectedTo = null;
-    }
-
-    private boolean isConnected() {
-      return this.connectedTo != null;
-    }
-
-    private @Nullable AnchorBlock connectedAnchorBlock() {
-      return this.connectedTo;
     }
 
     private Location facingLocation(Location location) {
@@ -766,49 +787,44 @@ public class Gateways implements Module, Listener {
 
       this.updateLights(isActive ? 12 : 0);
 
+      // re-calculate nearby players
+      this.nearbyPlayers.clear();
+      for (Player player : Bukkit.getOnlinePlayers()) {
+        if (this.canSeeVisualsFrom(player.getLocation())) {
+          this.addNearbyPlayer(player);
+        }
+      }
+
       if (this.particleTask != null) {
         this.particleTask.cancel();
       }
-
       this.particleTask =
           Schedule.periodically(
               2,
               () -> {
-                Collection<Player> players = this.getNearbyPlayers(isActive ? 12 : 8);
-                if (players.isEmpty()) {
-                  return;
-                }
-
-                List<Player> javaPlayers = new ArrayList<>();
-                List<Player> bedrockPlayers = new ArrayList<>();
-                if (ClodMC.instance.isGeyserLoaded()) {
-                  for (Player player : players) {
-                    if (Players.isBedrock(player)) {
-                      bedrockPlayers.add(player);
-                    } else {
-                      javaPlayers.add(player);
-                    }
-                  }
-                } else {
-                  javaPlayers.addAll(players);
-                }
-
-                if (!javaPlayers.isEmpty()) {
-                  this.spawnJavaParticles(javaPlayers, isActive);
-                }
-                if (isActive && !bedrockPlayers.isEmpty()) {
-                  this.spawnBedrockParticles(bedrockPlayers);
+                if (!this.nearbyPlayers.isEmpty()) {
+                  this.spawnJavaParticles(
+                      this.nearbyPlayers.stream()
+                          .filter(NearbyPlayer::isJava)
+                          .map(NearbyPlayer::getPlayer)
+                          .toList(),
+                      isActive);
+                  this.spawnBedrockParticles(
+                      this.nearbyPlayers.stream()
+                          .filter(NearbyPlayer::isBedrock)
+                          .map(NearbyPlayer::getPlayer)
+                          .toList());
                 }
               });
     }
 
     private void spawnJavaParticles(Collection<Player> players, boolean isActive) {
-      double baseRotation = this.blockPos.getWorld().getGameTime() * EFFECT_SPEED;
+      double baseRotation = this.blockPos.world().getGameTime() * EFFECT_SPEED;
       double angleStep = 2 * Math.PI / EFFECT_PARTICLES;
       int ringsPerSection = isActive ? 8 : 4;
 
       // reuse location objects to reduce gc pressure
-      World world = this.blockPos.getWorld();
+      World world = this.blockPos.world();
       Location bottomParticleLoc = new Location(world, 0, 0, 0);
       Location topParticleLoc = new Location(world, 0, 0, 0);
 
@@ -852,7 +868,7 @@ public class Gateways implements Module, Listener {
       }
     }
 
-    private void spawnBedrockParticles(Collection<Player> players) {
+    private void spawnBedrockParticles(List<Player> players) {
       new ParticleBuilder(Particle.DUST)
           .data(new Particle.DustOptions(this.topColour.color, 1))
           .location(this.topLocation)
@@ -868,7 +884,7 @@ public class Gateways implements Module, Listener {
     }
 
     private void updateLights(int lightLevel) {
-      World world = this.blockPos.getWorld();
+      World world = this.blockPos.world();
       for (Location loc : List.of(this.topLocation, this.bottomLocation)) {
         Block block = world.getBlockAt(loc);
         if (lightLevel == 0) {
@@ -882,20 +898,29 @@ public class Gateways implements Module, Listener {
       }
     }
 
-    private Collection<Player> getNearbyPlayers(int radius) {
-      // nearby players, excluding those standing on the anchor
-      return this.bottomLocation
-          .getWorld()
-          .getNearbyPlayers(this.bottomLocation, radius, radius, radius)
-          .stream()
-          .filter(
-              (Player player) -> {
-                Location playerLoc = player.getLocation();
-                return !(playerLoc.getBlockX() == this.bottomLocation.getBlockX()
-                    && playerLoc.getBlockY() == this.bottomLocation.getBlockY()
-                    && playerLoc.getBlockZ() == this.bottomLocation.getBlockZ());
-              })
-          .toList();
+    private boolean canSeeVisualsFrom(Location playerLoc) {
+      return this.bottomLocation.getWorld() == playerLoc.getWorld()
+          && this.bottomLocation.distanceSquared(playerLoc) <= VISIBLE_RANGE_SQUARED
+          && !(playerLoc.getBlockX() == this.bottomLocation.getBlockX()
+              && playerLoc.getBlockY() == this.bottomLocation.getBlockY()
+              && playerLoc.getBlockZ() == this.bottomLocation.getBlockZ());
+    }
+
+    private void addNearbyPlayer(Player player) {
+      NearbyPlayer nearbyPlayer = new NearbyPlayer(player);
+      if (!this.nearbyPlayers.contains(nearbyPlayer)) {
+        this.nearbyPlayers.add(nearbyPlayer);
+      }
+    }
+
+    private void removeNearbyPlayer(Player player) {
+      Iterator<NearbyPlayer> iter = this.nearbyPlayers.iterator();
+      while (iter.hasNext()) {
+        if (iter.next().player.equals(player)) {
+          iter.remove();
+          break;
+        }
+      }
     }
 
     private void stopVisuals() {
@@ -911,10 +936,10 @@ public class Gateways implements Module, Listener {
       // note: doesn't store adjustY
       Map<String, Object> serialised = new HashMap<>();
       serialised.put("title", this.displayName);
-      serialised.put("world", this.blockPos.getWorld().getName());
-      serialised.put("x", this.blockPos.getX());
-      serialised.put("y", this.blockPos.getY());
-      serialised.put("z", this.blockPos.getZ());
+      serialised.put("world", this.blockPos.world().getName());
+      serialised.put("x", this.blockPos.x());
+      serialised.put("y", this.blockPos.y());
+      serialised.put("z", this.blockPos.z());
       serialised.put("id", this.networkId);
       if (this.name != null) {
         serialised.put("name", this.name);
@@ -1038,13 +1063,9 @@ public class Gateways implements Module, Listener {
 
   //
 
-  public record Colour(Material material, String name, int index, Color color) {
+  private record Colour(Material material, String name, int index, Color color) {
     @Override
     public String toString() {
-      return this.name;
-    }
-
-    public String getName() {
       return this.name;
     }
 
@@ -1082,10 +1103,10 @@ public class Gateways implements Module, Listener {
   //
 
   private static class Network {
-    public final Gateways.Colour top;
-    public final Gateways.Colour bottom;
+    private final Gateways.Colour top;
+    private final Gateways.Colour bottom;
 
-    Network(int networkId) {
+    private Network(int networkId) {
       Colour topColour = Colour.of((networkId >> 4) & 0x0F);
       Colour bottomColour = Colour.of(networkId & 0x0F);
       if (topColour == null || bottomColour == null) {
@@ -1133,35 +1154,30 @@ public class Gateways implements Module, Listener {
 
       Set<String> seenColours = new HashSet<>();
       for (AnchorBlock anchorBlock : Gateways.instance.getAnchorBlocks()) {
-        if (anchorBlock.getName() == null) {
+        if (anchorBlock.name == null) {
           continue;
         }
 
-        String id =
-            "gw-"
-                + anchorBlock.getTopColour().getName()
-                + "-"
-                + anchorBlock.getBottomColour().getName()
-                + "-";
+        String id = "gw-" + anchorBlock.topColour.name + "-" + anchorBlock.bottomColour.name + "-";
         id = id + (seenColours.contains(id) ? "b" : "a");
         seenColours.add(id);
 
-        Objects.requireNonNull(this.markerSets.get(anchorBlock.getBlockPos().getWorld()))
+        Objects.requireNonNull(this.markerSets.get(anchorBlock.blockPos.world()))
             .getMarkers()
             .put(
                 id,
                 POIMarker.builder()
                     .label(
-                        anchorBlock.getName()
+                        anchorBlock.name
                             + "\n"
-                            + anchorBlock.getBlockPos().getX()
+                            + anchorBlock.blockPos.x()
                             + ", "
-                            + anchorBlock.getBlockPos().getZ())
+                            + anchorBlock.blockPos.z())
                     .position(
                         Vector3d.from(
-                            anchorBlock.getBlockPos().getX() + 0.5,
-                            anchorBlock.getBlockPos().getY() + 0.5,
-                            anchorBlock.getBlockPos().getZ() + 0.5))
+                            anchorBlock.blockPos.x() + 0.5,
+                            anchorBlock.blockPos.y() + 0.5,
+                            anchorBlock.blockPos.z() + 0.5))
                     .icon("assets/" + MARKER_FILENAME, new Vector2i(25, 45))
                     .build());
       }
@@ -1184,21 +1200,52 @@ public class Gateways implements Module, Listener {
     }
   }
 
-  public static class BlockPos {
-    // same as Location, but for the block
-    // can be replaced by io.papermc.paper.math.BlockPosition once that's no longer experimental
-    final World world;
-    final int x;
-    final int y;
-    final int z;
+  private static final class NearbyPlayer {
+    private final Player player;
+    private final boolean isBedrock;
 
-    private BlockPos(World world, int x, int y, int z) {
-      this.world = world;
-      this.x = x;
-      this.y = y;
-      this.z = z;
+    private NearbyPlayer(Player player) {
+      this.player = player;
+      this.isBedrock = Players.isBedrock(player);
     }
 
+    public Player getPlayer() {
+      return this.player;
+    }
+
+    private boolean isJava() {
+      return !this.isBedrock;
+    }
+
+    private boolean isBedrock() {
+      return this.isBedrock;
+    }
+
+    @Override
+    public boolean equals(@Nullable Object obj) {
+      if (obj == this) {
+        return true;
+      }
+      if (obj == null || obj.getClass() != this.getClass()) {
+        return false;
+      }
+      return this.player.equals(((NearbyPlayer) obj).player);
+    }
+
+    @Override
+    public int hashCode() {
+      return this.player.hashCode();
+    }
+
+    @Override
+    public String toString() {
+      return "NearbyPlayer[" + "player=" + this.player + ", " + "isBedrock=" + this.isBedrock + ']';
+    }
+  }
+
+  private record BlockPos(World world, int x, int y, int z) {
+    // same as Location, but for the block
+    // can be replaced by io.papermc.paper.math.BlockPosition once that's no longer experimental
     @Override
     public String toString() {
       return "BlockPos{"
@@ -1212,7 +1259,7 @@ public class Gateways implements Module, Listener {
           + '}';
     }
 
-    public String getString(boolean includeWorld) {
+    private String getString(boolean includeWorld) {
       String prefix = "";
       if (includeWorld) {
         prefix =
@@ -1227,57 +1274,33 @@ public class Gateways implements Module, Listener {
     }
 
     @Override
-    public final boolean equals(@Nullable Object other) {
+    public boolean equals(@Nullable Object other) {
       if (this == other) {
         return true;
       }
-      if (!(other instanceof BlockPos otherPos)) {
+      if (!(other instanceof BlockPos(World world1, int x1, int y1, int z1))) {
         return false;
       }
-      return this.x == otherPos.x
-          && this.y == otherPos.y
-          && this.z == otherPos.z
-          && this.world.equals(otherPos.world);
+      return this.x == x1 && this.y == y1 && this.z == z1 && this.world.equals(world1);
     }
 
-    @Override
-    public int hashCode() {
-      return Objects.hash(this.world, this.x, this.y, this.z);
-    }
-
-    public static BlockPos of(Location loc) {
+    private static BlockPos of(Location loc) {
       return new BlockPos(loc.getWorld(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ());
     }
 
-    public Location asLocation() {
+    private Location asLocation() {
       return new Location(this.world, this.x + 0.5, this.y, this.z + 0.5);
     }
 
-    public World getWorld() {
-      return this.world;
-    }
-
-    public int getX() {
-      return this.x;
-    }
-
-    public int getY() {
-      return this.y;
-    }
-
-    public int getZ() {
-      return this.z;
-    }
-
-    public Gateways.BlockPos down() {
+    private Gateways.BlockPos down() {
       return new BlockPos(this.world, this.x, this.y - 1, this.z);
     }
 
-    public Gateways.BlockPos up() {
+    private Gateways.BlockPos up() {
       return new BlockPos(this.world, this.x, this.y + 1, this.z);
     }
 
-    public Block getBlock() {
+    private Block getBlock() {
       return this.world.getBlockAt(this.x, this.y, this.z);
     }
   }
