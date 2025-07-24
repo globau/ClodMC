@@ -1,8 +1,8 @@
 package au.com.glob.clodmc.modules.bluemap;
 
 import au.com.glob.clodmc.modules.Module;
-import au.com.glob.clodmc.modules.interactions.Gateways;
-import au.com.glob.clodmc.modules.server.HeatMap;
+import au.com.glob.clodmc.modules.interactions.gateways.BlueMapGateways;
+import au.com.glob.clodmc.modules.server.heapmap.BlueMapHeatMap;
 import au.com.glob.clodmc.util.Logger;
 import au.com.glob.clodmc.util.Schedule;
 import de.bluecolored.bluemap.api.BlueMapAPI;
@@ -38,8 +38,8 @@ public class BlueMap implements Module, Listener {
           Logger.info("Initialising BlueMap addons");
           this.register(BlueMapSpawn.class, api);
           this.register(BlueMapWorldBorder.class, api);
-          this.register(Gateways.BlueMapGateways.class, api);
-          this.register(HeatMap.BlueMapHeatMap.class, api);
+          this.register(BlueMapGateways.class, api);
+          this.register(BlueMapHeatMap.class, api);
           if (Bukkit.getPluginManager().isPluginEnabled("GriefPrevention")) {
             this.register(BlueMapGriefPrevention.class, api);
           }
@@ -58,15 +58,5 @@ public class BlueMap implements Module, Listener {
                 }
               });
         });
-  }
-
-  public abstract static class Addon {
-    protected final BlueMapAPI api;
-
-    protected Addon(BlueMapAPI api) {
-      this.api = api;
-    }
-
-    protected abstract void update();
   }
 }

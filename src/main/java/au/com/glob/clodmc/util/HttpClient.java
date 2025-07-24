@@ -21,7 +21,7 @@ public class HttpClient {
 
   private static final Gson gson = new Gson();
 
-  public static JsonHttpResponse getJSON(String urlString, Map<String, String> headers) {
+  public static HttpJsonResponse getJSON(String urlString, Map<String, String> headers) {
     return readJsonResponse(request(urlString, headers));
   }
 
@@ -54,14 +54,14 @@ public class HttpClient {
     return connection;
   }
 
-  private static JsonHttpResponse readJsonResponse(HttpURLConnection connection) {
+  private static HttpJsonResponse readJsonResponse(HttpURLConnection connection) {
     InputStreamReader streamReader = createReader(connection);
     try (streamReader) {
       if (streamReader == null) {
-        return new JsonHttpResponse(null);
+        return new HttpJsonResponse(null);
       }
       JsonObject response = gson.fromJson(streamReader, JsonObject.class);
-      return new JsonHttpResponse(response);
+      return new HttpJsonResponse(response);
     } catch (Exception exception) {
       throw new RuntimeException("Failed to read response", exception);
     }
@@ -78,23 +78,5 @@ public class HttpClient {
       return new InputStreamReader(stream, StandardCharsets.UTF_8);
     }
     return null;
-  }
-
-  public static class HttpResponse<T> {
-    private final @Nullable T response;
-
-    public HttpResponse(@Nullable T response) {
-      this.response = response;
-    }
-
-    public @Nullable T getResponse() {
-      return this.response;
-    }
-  }
-
-  public static final class JsonHttpResponse extends HttpResponse<JsonObject> {
-    JsonHttpResponse(@Nullable JsonObject response) {
-      super(response);
-    }
   }
 }

@@ -1,15 +1,8 @@
 package au.com.glob.clodmc.util;
 
-import java.io.BufferedReader;
-import java.io.Closeable;
-import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.Socket;
-import java.nio.charset.StandardCharsets;
 import java.time.format.DateTimeFormatter;
 import org.jspecify.annotations.NullMarked;
-import org.jspecify.annotations.Nullable;
 
 /** email helpers */
 @NullMarked
@@ -21,12 +14,6 @@ public class Mailer {
 
   private Mailer() {}
 
-  public static class MailerError extends Exception {
-    public MailerError(@Nullable String message) {
-      super(message);
-    }
-  }
-
   public static void emailAdmin(String subject) {
     emailAdmin(subject, subject);
   }
@@ -36,16 +23,15 @@ public class Mailer {
         () -> {
           try {
             send(ADMIN_ADDR, subject, body);
-          } catch (MailerError e) {
+          } catch (MailerException e) {
             Logger.warning(e.getMessage());
           }
         });
   }
 
-  public static void send(String recipient, String subject, String body) throws MailerError {
-
+  public static void send(String recipient, String subject, String body) throws MailerException {
     try {
-      try (SMTP smtp = new SMTP()) {
+      try (SMTPClient smtp = new SMTPClient(HOSTNAME)) {
         smtp.waitFor("220 ");
         smtp.sendAndWait("HELO glob.au", "250 ");
         smtp.sendAndWait("MAIL FROM: " + SENDER_ADDR, "250 ");
@@ -62,50 +48,7 @@ public class Mailer {
         smtp.sendAndWait("QUIT", "221 ");
       }
     } catch (IOException e) {
-      throw new MailerError(e.getMessage());
-    }
-  }
-
-  private static class SMTP implements Closeable {
-    private final Socket socket;
-    private final BufferedReader inStream;
-    private final DataOutputStream outStream;
-
-    @SuppressWarnings("AddressSelection")
-    SMTP() throws IOException {
-      this.socket = new Socket(HOSTNAME, 25);
-      this.socket.setSoTimeout(5000);
-      this.inStream =
-          new BufferedReader(
-              new InputStreamReader(this.socket.getInputStream(), StandardCharsets.UTF_8));
-      this.outStream = new DataOutputStream(this.socket.getOutputStream());
-    }
-
-    public void sendLine(String line) throws IOException {
-      this.outStream.writeBytes(line + "\r\n");
-    }
-
-    public String readLine() throws IOException {
-      return this.inStream.readLine();
-    }
-
-    public void waitFor(String prefix) throws IOException {
-      while (true) {
-        String line = this.readLine();
-        if (line.startsWith(prefix)) {
-          return;
-        }
-      }
-    }
-
-    public void sendAndWait(String line, String prefix) throws IOException {
-      this.sendLine(line);
-      this.waitFor(prefix);
-    }
-
-    @Override
-    public void close() throws IOException {
-      this.socket.close();
+      throw new MailerException(e.getMessage());
     }
   }
 }

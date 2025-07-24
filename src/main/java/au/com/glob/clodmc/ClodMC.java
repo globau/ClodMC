@@ -4,6 +4,7 @@ import au.com.glob.clodmc.modules.Module;
 import au.com.glob.clodmc.modules.ModuleRegistry;
 import au.com.glob.clodmc.util.Bedrock;
 import au.com.glob.clodmc.util.ConfigUtil;
+import au.com.glob.clodmc.util.InvalidConfigException;
 import au.com.glob.clodmc.util.Logger;
 import au.com.glob.clodmc.util.Players;
 import java.io.File;
@@ -50,7 +51,7 @@ public final class ClodMC extends JavaPlugin implements Listener {
       for (Module module : this.moduleRegistry) {
         module.loadConfig();
       }
-    } catch (ConfigUtil.InvalidConfig e) {
+    } catch (InvalidConfigException e) {
       e.logErrors();
       // disable plugins to prevent firing onServerLoad and similar events
       Bukkit.getPluginManager().disablePlugins();

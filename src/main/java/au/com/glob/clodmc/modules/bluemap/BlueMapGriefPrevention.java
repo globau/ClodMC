@@ -28,7 +28,7 @@ import org.bukkit.event.Listener;
 import org.jspecify.annotations.NullMarked;
 
 @NullMarked
-public class BlueMapGriefPrevention extends BlueMap.Addon implements Listener {
+public class BlueMapGriefPrevention extends Addon implements Listener {
   private static final Color ADMIN_LINE = new Color("#fd6600ff");
   private static final Color ADMIN_FILL = new Color("#fd660096");
   private static final Color PLAYER_LINE = new Color("#0060ffff");

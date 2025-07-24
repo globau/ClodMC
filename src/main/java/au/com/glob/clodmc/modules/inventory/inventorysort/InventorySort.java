@@ -1,4 +1,4 @@
-package au.com.glob.clodmc.modules.inventory;
+package au.com.glob.clodmc.modules.inventory.inventorysort;
 
 import au.com.glob.clodmc.ClodMC;
 import au.com.glob.clodmc.modules.Module;
@@ -14,12 +14,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
-import java.util.StringJoiner;
 import org.bukkit.Material;
-import org.bukkit.MusicInstrument;
 import org.bukkit.Registry;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Donkey;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
@@ -31,17 +27,13 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.Damageable;
-import org.bukkit.inventory.meta.EnchantmentStorageMeta;
-import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.inventory.meta.MusicInstrumentMeta;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
 /** Sort containers by shift+right-clicking in the inventory screen */
 @NullMarked
 public class InventorySort implements Listener, Module {
-  private static final Map<String, Integer> materialOrder = new HashMap<>(1477);
+  static final Map<String, Integer> materialOrder = new HashMap<>(1477);
 
   public InventorySort() {
     super();
@@ -201,103 +193,6 @@ public class InventorySort implements Listener, Module {
       if (viewer instanceof Player player) {
         player.updateInventory();
       }
-    }
-  }
-
-  private static class InventoryItem implements Comparable<InventoryItem> {
-    private final ItemStack itemStack;
-    private final int materialIndex;
-    private final String name;
-    private final String extra;
-    private final int amount;
-    private final int damage;
-
-    public InventoryItem(ItemStack itemStack) {
-      this.itemStack = itemStack;
-
-      // index into inventory_order.txt
-      Integer index = InventorySort.materialOrder.get(itemStack.getType().name());
-      this.materialIndex = Objects.requireNonNullElse(index, 0);
-
-      // visible in-game name
-      this.name = StringUtil.asText(itemStack);
-
-      ItemMeta meta = itemStack.getItemMeta();
-      if (meta != null) {
-        StringJoiner extraJoiner = new StringJoiner(".");
-
-        if (meta instanceof EnchantmentStorageMeta enchantmentStorageMeta) {
-          // enchantment storage (eg. book)
-          for (Map.Entry<Enchantment, Integer> entry :
-              enchantmentStorageMeta.getStoredEnchants().entrySet()) {
-            extraJoiner.add(StringUtil.asText(entry.getKey()));
-            extraJoiner.add(String.valueOf(entry.getValue()));
-          }
-        } else if (meta instanceof MusicInstrumentMeta musicInstrumentMeta) {
-          // goat horns
-          MusicInstrument instrument = musicInstrumentMeta.getInstrument();
-          if (instrument != null) {
-            extraJoiner.add(StringUtil.asText(instrument));
-          }
-        }
-
-        this.extra = extraJoiner.toString();
-
-        // damage
-        if (meta instanceof Damageable damageableMeta) {
-          this.damage = damageableMeta.getDamage();
-        } else {
-          this.damage = 0;
-        }
-      } else {
-        this.extra = "";
-        this.damage = 0;
-      }
-
-      // amount
-      this.amount = itemStack.getAmount();
-    }
-
-    @Override
-    public String toString() {
-      StringJoiner joiner = new StringJoiner(":", "[", "]");
-      joiner.add(String.valueOf(this.materialIndex));
-      joiner.add(this.name);
-      joiner.add(this.extra);
-      joiner.add(String.valueOf(this.amount));
-      joiner.add(String.valueOf(this.damage));
-      return joiner.toString();
-    }
-
-    public ItemStack getItemStack() {
-      return this.itemStack;
-    }
-
-    @Override
-    public int compareTo(InventorySort.InventoryItem o) {
-      int comp;
-      // material
-      comp = Integer.compare(this.materialIndex, o.materialIndex);
-      if (comp != 0) {
-        return comp;
-      }
-      // item description
-      comp = this.name.compareTo(o.name);
-      if (comp != 0) {
-        return comp;
-      }
-      // item extra
-      comp = this.extra.compareTo(o.extra);
-      if (comp != 0) {
-        return comp;
-      }
-      // stack size, largest first
-      comp = Integer.compare(o.amount, this.amount);
-      if (comp != 0) {
-        return comp;
-      }
-      // durability, undamaged first
-      return Integer.compare(this.damage, o.damage);
     }
   }
 }

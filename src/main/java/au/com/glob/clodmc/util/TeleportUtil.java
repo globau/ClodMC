@@ -28,21 +28,19 @@ public class TeleportUtil {
   private static final int CHECK_RADIUS = 3;
   private static final int MAX_RADIUS = 8;
   private static final int POP_RADIUS = 16;
-  private static final Vector3D[] SHIFT_VECTORS;
-
-  private record Vector3D(int x, int y, int z) {}
+  private static final Vector3i[] SHIFT_VECTORS;
 
   static {
-    final List<Vector3D> pos = new ArrayList<>();
+    final List<Vector3i> pos = new ArrayList<>();
     for (int x = -CHECK_RADIUS; x <= CHECK_RADIUS; x++) {
       for (int y = -CHECK_RADIUS; y <= CHECK_RADIUS; y++) {
         for (int z = -CHECK_RADIUS; z <= CHECK_RADIUS; z++) {
-          pos.add(new Vector3D(x, y, z));
+          pos.add(new Vector3i(x, y, z));
         }
       }
     }
-    pos.sort(Comparator.comparingInt((Vector3D a) -> a.x * a.x + a.y * a.y + a.z * a.z));
-    SHIFT_VECTORS = pos.toArray(new Vector3D[0]);
+    pos.sort(Comparator.comparingInt((Vector3i a) -> a.x * a.x + a.y * a.y + a.z * a.z));
+    SHIFT_VECTORS = pos.toArray(new Vector3i[0]);
   }
 
   private static final org.bukkit.Color TELEPORT_COLUR_A = org.bukkit.Color.fromRGB(0x00BFFF);

@@ -22,6 +22,7 @@ dependencies {
     compileOnly("org.geysermc.geyser:api:2.7.0-SNAPSHOT")
     compileOnly("de.bluecolored.bluemap:BlueMapAPI:2.7.2")
     compileOnly("org.jetbrains:annotations:15.0")
+    compileOnly("com.puppycrawl.tools:checkstyle:10.26.1")
     errorprone("com.google.errorprone:error_prone_core:2.36.0")
     api("org.jetbrains:annotations:15.0")
     api("org.jspecify:jspecify:1.0.0")
@@ -48,9 +49,21 @@ tasks.withType<JavaCompile>().configureEach {
     options.errorprone.excludedPaths.set(".*/vendored/.*")
 }
 
+val checkstyleChecksJar by
+    tasks.registering(Jar::class) {
+        from(layout.buildDirectory.dir("classes/java/main")) { include("au/com/glob/checks/**") }
+        archiveBaseName.set("checkstyle-checks")
+        dependsOn(tasks.compileJava)
+    }
+
 checkstyle {
     toolVersion = "10.14.0"
     maxWarnings = 0
+}
+
+tasks.withType<Checkstyle>().configureEach {
+    dependsOn(checkstyleChecksJar)
+    checkstyleClasspath += files(checkstyleChecksJar)
 }
 
 configurations.checkstyle {
@@ -58,6 +71,14 @@ configurations.checkstyle {
         "com.google.collections:google-collections",
     ) {
         select("com.google.guava:guava:23.0")
+    }
+}
+
+configurations.compileClasspath {
+    resolutionStrategy.capabilitiesResolution.withCapability(
+        "com.google.collections:google-collections",
+    ) {
+        select("com.google.guava:guava:33.3.1-jre")
     }
 }
 

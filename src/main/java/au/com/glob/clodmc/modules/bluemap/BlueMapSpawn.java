@@ -11,7 +11,7 @@ import org.bukkit.World;
 import org.jspecify.annotations.NullMarked;
 
 @NullMarked
-public class BlueMapSpawn extends BlueMap.Addon {
+public class BlueMapSpawn extends Addon {
   protected BlueMapSpawn(BlueMapAPI api) {
     super(api);
   }

@@ -398,5 +398,7 @@
     <module name="IllegalImport">
       <property name="illegalPkgs" value="org.jetbrains.annotations"/>
     </module>
+    <!-- glob: forbid inner classes/records/enums/interfaces/annotations -->
+    <module name="au.com.glob.checks.NoInnerTypesCheck"/>
   </module>
 </module>

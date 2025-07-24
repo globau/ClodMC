@@ -1,4 +1,4 @@
-package au.com.glob.clodmc.modules.inventory;
+package au.com.glob.clodmc.modules.inventory.deeppockets;
 
 import au.com.glob.clodmc.modules.Module;
 import au.com.glob.clodmc.util.Players;
@@ -28,7 +28,6 @@ import org.jspecify.annotations.NullMarked;
 /** When picking blocks, look inside held shulker boxes too */
 @NullMarked
 public class DeepPockets implements Module, Listener {
-  private record ShulkerItemStack(int playerSlot, int shulkerSlot, int amount) {}
 
   @EventHandler
   public void onPlayerPickItem(PlayerPickItemEvent event) {
@@ -84,7 +83,7 @@ public class DeepPockets implements Module, Listener {
     // find the largest stack across all shulkers
     ShulkerItemStack largestShulkerStack =
         shulkerItemStacks.stream()
-            .max(Comparator.comparingInt(ShulkerItemStack::amount))
+            .max(Comparator.comparingInt((ShulkerItemStack itemStack) -> itemStack.amount))
             .orElse(null);
     int playerSlot = largestShulkerStack.playerSlot;
     int shulkerSlot = largestShulkerStack.shulkerSlot;

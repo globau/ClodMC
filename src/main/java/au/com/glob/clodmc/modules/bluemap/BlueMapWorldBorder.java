@@ -15,7 +15,7 @@ import org.bukkit.WorldBorder;
 import org.jspecify.annotations.NullMarked;
 
 @NullMarked
-public class BlueMapWorldBorder extends BlueMap.Addon {
+public class BlueMapWorldBorder extends Addon {
   private static final Color LINE_COLOUR = new Color("#a52a2aff");
   private static final Color FILL_COLOUR = new Color("#00000000");
 

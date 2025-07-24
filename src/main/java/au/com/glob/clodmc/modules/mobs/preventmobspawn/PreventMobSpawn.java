@@ -1,12 +1,10 @@
-package au.com.glob.clodmc.modules.mobs;
+package au.com.glob.clodmc.modules.mobs.preventmobspawn;
 
 import au.com.glob.clodmc.modules.Module;
 import java.util.ArrayList;
 import java.util.List;
 import me.ryanhamshire.GriefPrevention.Claim;
 import me.ryanhamshire.GriefPrevention.GriefPrevention;
-import org.bukkit.Location;
-import org.bukkit.World;
 import org.bukkit.entity.Enemy;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -42,30 +40,6 @@ public class PreventMobSpawn implements Listener, Module {
           return;
         }
       }
-    }
-  }
-
-  private static final class AdminClaim {
-    private final World world;
-    private final double minX;
-    private final double minZ;
-    private final double maxX;
-    private final double maxZ;
-
-    private AdminClaim(Claim claim) {
-      this.world = claim.getLesserBoundaryCorner().getWorld();
-      this.minX = claim.getLesserBoundaryCorner().getX();
-      this.minZ = claim.getLesserBoundaryCorner().getZ();
-      this.maxX = claim.getGreaterBoundaryCorner().getX();
-      this.maxZ = claim.getGreaterBoundaryCorner().getZ();
-    }
-
-    boolean contains(Location loc) {
-      return loc.getWorld().equals(this.world)
-          && loc.getX() >= this.minX
-          && loc.getX() <= this.maxX
-          && loc.getZ() >= this.minZ
-          && loc.getZ() <= this.maxZ;
     }
   }
 }

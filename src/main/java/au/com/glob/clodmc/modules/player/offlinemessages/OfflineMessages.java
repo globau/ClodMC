@@ -1,31 +1,22 @@
-package au.com.glob.clodmc.modules.player;
+package au.com.glob.clodmc.modules.player.offlinemessages;
 
 import au.com.glob.clodmc.datafile.PlayerDataFile;
 import au.com.glob.clodmc.datafile.PlayerDataFiles;
 import au.com.glob.clodmc.modules.Module;
-import au.com.glob.clodmc.util.Chat;
 import au.com.glob.clodmc.util.Schedule;
-import au.com.glob.clodmc.util.StringUtil;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
-import org.bukkit.command.CommandSender;
-import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
-import org.bukkit.configuration.serialization.SerializableAs;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.server.ServerCommandEvent;
-import org.bukkit.util.NumberConversions;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
@@ -35,7 +26,7 @@ public class OfflineMessages implements Module, Listener {
   final Pattern msgPattern = Pattern.compile("^/?msg\\s+(\\S+)\\s+(.+)$");
 
   public OfflineMessages() {
-    ConfigurationSerialization.registerClass(OfflineMessages.Message.class);
+    ConfigurationSerialization.registerClass(Message.class);
   }
 
   private boolean handleOfflineMsg(Sender sender, String recipient, String message) {
@@ -125,55 +116,5 @@ public class OfflineMessages implements Module, Listener {
           dataFile.remove("messages");
           dataFile.save();
         });
-  }
-
-  private record Sender(CommandSender recipient, String name) {
-    void fyi(String message) {
-      Chat.fyi(this.recipient, message);
-    }
-
-    void error(String message) {
-      Chat.error(this.recipient, message);
-    }
-  }
-
-  @SerializableAs("ClodMC.Message")
-  public static class Message implements ConfigurationSerializable {
-    private final long timestamp;
-    private final String sender;
-    private final String message;
-
-    public Message(long timestamp, String sender, String message) {
-      this.timestamp = timestamp;
-      this.sender = sender;
-      this.message = message;
-    }
-
-    public void sendTo(Player player) {
-      Chat.whisper(
-          player,
-          StringUtil.relativeTime(System.currentTimeMillis() / 1000L - this.timestamp)
-              + " ago "
-              + this.sender
-              + " whispered to you: "
-              + this.message);
-    }
-
-    @Override
-    public Map<String, Object> serialize() {
-      Map<String, Object> serialised = new HashMap<>();
-      serialised.put("timestamp", this.timestamp);
-      serialised.put("sender", this.sender);
-      serialised.put("message", this.message);
-      return serialised;
-    }
-
-    @SuppressWarnings("unused")
-    public static Message deserialize(Map<String, Object> args) {
-      return new Message(
-          NumberConversions.toLong(args.get("timestamp")),
-          Objects.requireNonNull((String) args.get("sender")),
-          Objects.requireNonNull((String) args.get("message")));
-    }
   }
 }

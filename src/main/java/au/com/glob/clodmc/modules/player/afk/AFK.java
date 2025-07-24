@@ -1,8 +1,7 @@
-package au.com.glob.clodmc.modules.player;
+package au.com.glob.clodmc.modules.player.afk;
 
 import au.com.glob.clodmc.command.CommandBuilder;
 import au.com.glob.clodmc.modules.Module;
-import au.com.glob.clodmc.util.Chat;
 import au.com.glob.clodmc.util.Schedule;
 import au.com.glob.clodmc.util.StringUtil;
 import io.papermc.paper.event.player.AsyncChatEvent;
@@ -53,7 +52,7 @@ public class AFK implements Listener, Module {
     afkTeam.removeEntries(afkTeam.getEntries());
   }
 
-  private Team getAfkTeam() {
+  Team getAfkTeam() {
     Scoreboard scoreboard = Bukkit.getScoreboardManager().getMainScoreboard();
     Team team = scoreboard.getTeam("AFK");
     if (team == null) {
@@ -144,62 +143,5 @@ public class AFK implements Listener, Module {
   @EventHandler
   public void onBlockBreak(BlockBreakEvent event) {
     this.onAction(event.getPlayer());
-  }
-
-  private static final class PlayerState {
-    private final Player player;
-    private long lastInteractionTime;
-    private boolean isAway;
-
-    private PlayerState(Player player) {
-      this.player = player;
-      this.lastInteractionTime = System.currentTimeMillis() / 1000;
-      this.isAway = false;
-    }
-
-    public void onAction() {
-      this.lastInteractionTime = System.currentTimeMillis() / 1000;
-      if (this.isAway) {
-        this.setBack(true);
-      }
-    }
-
-    public void toggleAway() {
-      if (this.isAway) {
-        this.onAction();
-      } else {
-        this.setAway(true);
-      }
-    }
-
-    public void setAway(boolean announce) {
-      this.isAway = true;
-      AFK.instance.getAfkTeam().addEntry(this.player.getName());
-      if (announce) {
-        this.announce();
-      }
-    }
-
-    public void setBack(boolean announce) {
-      this.isAway = false;
-      AFK.instance.getAfkTeam().removeEntry(this.player.getName());
-      if (announce) {
-        this.announce();
-      }
-    }
-
-    private void announce() {
-      for (Player player : Bukkit.getOnlinePlayers()) {
-        if (player.equals(this.player)) {
-          Chat.fyi(player, this.isAway ? "You are now AFK" : "You are no longer AFK");
-        } else {
-          Chat.fyi(
-              player,
-              this.isAway
-                  ? this.player.getName() + " is now AFK"
-                  : this.player.getName() + " is no longer AFK");
-        }
-      }
-    }
   }
 }

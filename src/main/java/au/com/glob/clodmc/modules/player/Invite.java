@@ -9,7 +9,9 @@ import au.com.glob.clodmc.datafile.PlayerDataFile;
 import au.com.glob.clodmc.datafile.PlayerDataFiles;
 import au.com.glob.clodmc.modules.Module;
 import au.com.glob.clodmc.util.Chat;
+import au.com.glob.clodmc.util.ClientType;
 import au.com.glob.clodmc.util.HttpClient;
+import au.com.glob.clodmc.util.HttpJsonResponse;
 import au.com.glob.clodmc.util.Logger;
 import au.com.glob.clodmc.util.Mailer;
 import au.com.glob.clodmc.util.Players;
@@ -66,7 +68,7 @@ public class Invite implements Module {
         .description("Add a player to the whitelist")
         .executor(
             (EitherCommandSender sender, @Nullable String type, @Nullable String name) -> {
-              if (GameType.of(type) == null || name == null) {
+              if (ClientType.of(type) == null || name == null) {
                 throw new CommandUsageError();
               }
 
@@ -89,10 +91,10 @@ public class Invite implements Module {
               Schedule.asynchronously(
                   () -> {
                     try {
-                      GameType gameType = GameType.of(type);
+                      ClientType clientType = ClientType.of(type);
 
                       // check mcprofile.io
-                      UUID uuid = this.lookupUUID(Objects.requireNonNull(gameType), name);
+                      UUID uuid = this.lookupUUID(Objects.requireNonNull(clientType), name);
                       if (uuid == null) {
                         throw new CommandError("Failed to find player with name: " + name);
                       }
@@ -113,7 +115,7 @@ public class Invite implements Module {
                           () -> {
                             try {
                               String command =
-                                  (gameType == GameType.JAVA
+                                  (clientType == ClientType.JAVA
                                       ? "whitelist add " + name
                                       : "fwhitelist add " + uuid);
                               if (!Bukkit.dispatchCommand(Bukkit.getConsoleSender(), command)) {
@@ -136,7 +138,7 @@ public class Invite implements Module {
                                   "clod-mc: "
                                       + name
                                       + " ("
-                                      + gameType
+                                      + clientType
                                       + ")"
                                       + " added to the whitelist by "
                                       + sender.getName());
@@ -181,21 +183,21 @@ public class Invite implements Module {
     }
   }
 
-  private @Nullable UUID lookupUUID(GameType gameType, String name) {
+  private @Nullable UUID lookupUUID(ClientType clientType, String name) {
     assert this.apiKey != null;
     String url =
         "https://mcprofile.io/api/v1/"
-            + (gameType == GameType.JAVA ? "java/username" : "bedrock/gamertag")
+            + (clientType == ClientType.JAVA ? "java/username" : "bedrock/gamertag")
             + "/"
             + URLEncoder.encode(name, StandardCharsets.UTF_8);
 
-    HttpClient.JsonHttpResponse result = HttpClient.getJSON(url, Map.of("x-api-key", this.apiKey));
+    HttpJsonResponse result = HttpClient.getJSON(url, Map.of("x-api-key", this.apiKey));
     JsonObject response = result.getResponse();
     if (response == null) {
       return null;
     }
 
-    String field = gameType == GameType.JAVA ? "uuid" : "floodgateuid";
+    String field = clientType == ClientType.JAVA ? "uuid" : "floodgateuid";
     return response.has(field) ? UUID.fromString(response.get(field).getAsString()) : null;
   }
 
@@ -217,33 +219,5 @@ public class Invite implements Module {
       Logger.exception(e);
     }
     return false;
-  }
-
-  private enum GameType {
-    JAVA("java"),
-    BEDROCK("bedrock");
-
-    private final String name;
-
-    GameType(String name) {
-      this.name = name;
-    }
-
-    @Override
-    public String toString() {
-      return this.name;
-    }
-
-    public static @Nullable GameType of(@Nullable String name) {
-      if (name == null) {
-        return null;
-      }
-      for (GameType gameType : GameType.values()) {
-        if (gameType.name.equalsIgnoreCase(name)) {
-          return gameType;
-        }
-      }
-      return null;
-    }
   }
 }

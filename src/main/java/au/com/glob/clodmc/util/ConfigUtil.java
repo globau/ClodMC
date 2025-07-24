@@ -19,26 +19,7 @@ import org.yaml.snakeyaml.error.YAMLException;
 public class ConfigUtil {
   public static boolean sanityChecked = false;
 
-  public static class InvalidConfig extends Exception {
-    private final List<String> errors;
-
-    public InvalidConfig(List<String> errors) {
-      this.errors = errors;
-    }
-
-    @Override
-    public String getMessage() {
-      return String.join("\n", this.errors);
-    }
-
-    public void logErrors() {
-      for (String line : this.errors) {
-        Logger.error(line);
-      }
-    }
-  }
-
-  public static void sanityCheckConfigs() throws InvalidConfig {
+  public static void sanityCheckConfigs() throws InvalidConfigException {
     List<String> errors = new ArrayList<>(0);
     try {
       for (File file : getConfigFiles()) {
@@ -58,7 +39,7 @@ public class ConfigUtil {
       errors.add(e.getMessage());
     }
     if (!errors.isEmpty()) {
-      throw new InvalidConfig(errors);
+      throw new InvalidConfigException(errors);
     }
 
     sanityChecked = true;

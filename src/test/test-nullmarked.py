@@ -5,7 +5,7 @@ from pathlib import Path
 
 exit_code = 0
 
-for filepath in Path("src/main/java/au/com/glob/clodmc").rglob("*.java"):
+for filepath in Path("src/main/java/au/com/glob").rglob("*.java"):
     content = filepath.read_text()
 
     top_level_declarations = []
@@ -30,7 +30,8 @@ for filepath in Path("src/main/java/au/com/glob/clodmc").rglob("*.java"):
         if (
             brace_depth <= 1
             and re.search(
-                r"^\s*(?:public\s+)?(?:class|interface|enum|record)\s+\w+", stripped
+                r"^\s*(?:public\s+)?(?:final\s*)?(?:class|interface|enum|record)\s+\w+",
+                stripped,
             )
             and not re.search(
                 r"\bstatic\b.*\b(?:class|interface|enum|record)\b", stripped
