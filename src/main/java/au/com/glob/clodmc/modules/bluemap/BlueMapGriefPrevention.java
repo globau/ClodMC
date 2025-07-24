@@ -123,7 +123,7 @@ public class BlueMapGriefPrevention extends Addon implements Listener {
   }
 
   @EventHandler(priority = EventPriority.MONITOR)
-  public void onClaimDelete(ClaimDeletedEvent event) {
+  public void onClaimDeleted(ClaimDeletedEvent event) {
     this.update();
   }
 }

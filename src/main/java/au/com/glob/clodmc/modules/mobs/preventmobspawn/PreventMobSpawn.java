@@ -32,7 +32,7 @@ public class PreventMobSpawn implements Listener, Module {
   }
 
   @EventHandler(priority = EventPriority.LOWEST)
-  public void onCreatureSpawnEvent(CreatureSpawnEvent event) {
+  public void onCreatureSpawn(CreatureSpawnEvent event) {
     if (event.getEntity() instanceof Enemy) {
       for (AdminClaim adminClaim : this.adminClaims) {
         if (adminClaim.contains(event.getLocation())) {
