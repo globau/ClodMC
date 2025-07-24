@@ -402,6 +402,7 @@
         </module>
         <!-- glob: custom checks -->
         <module name="au.com.glob.checks.EventHandlerNamingCheck"/>
+        <module name="au.com.glob.checks.ModuleDescriptionCheck"/>
         <module name="au.com.glob.checks.NoInnerTypesCheck"/>
         <module name="au.com.glob.checks.NullMarkedCheck"/>
         <module name="au.com.glob.checks.VendoredClassSuppressionCheck"/>

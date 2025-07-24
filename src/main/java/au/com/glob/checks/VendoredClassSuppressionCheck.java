@@ -3,9 +3,6 @@ package au.com.glob.checks;
 import com.puppycrawl.tools.checkstyle.api.AbstractCheck;
 import com.puppycrawl.tools.checkstyle.api.DetailAST;
 import com.puppycrawl.tools.checkstyle.api.TokenTypes;
-import java.io.IOException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
@@ -31,14 +28,7 @@ public class VendoredClassSuppressionCheck extends AbstractCheck {
 
   @Override
   public void visitToken(DetailAST ast) {
-    Path filePath = Paths.get(this.getFilePath());
-    try {
-      Path cwd = Path.of(".").toRealPath();
-      Path relativePath = cwd.relativize(filePath);
-      if (!relativePath.startsWith("src/main/java/vendored")) {
-        return;
-      }
-    } catch (IOException e) {
+    if (!CheckUtils.isRelativeTo(this.getFilePath(), "src/main/java/vendored/")) {
       return;
     }
 
