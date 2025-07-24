@@ -9,9 +9,10 @@ import com.flowpowered.math.vector.Vector2i;
 import de.bluecolored.bluemap.api.BlueMapAPI;
 import de.bluecolored.bluemap.api.BlueMapMap;
 import de.bluecolored.bluemap.api.BlueMapWorld;
-import de.bluecolored.bluemap.api.markers.ExtrudeMarker;
 import de.bluecolored.bluemap.api.markers.MarkerSet;
+import de.bluecolored.bluemap.api.markers.ShapeMarker;
 import de.bluecolored.bluemap.api.math.Color;
+import de.bluecolored.bluemap.api.math.Shape;
 import java.io.File;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -26,7 +27,9 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
+import org.bukkit.Location;
 import org.bukkit.World;
+import org.bukkit.WorldBorder;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.jspecify.annotations.NullMarked;
@@ -195,6 +198,7 @@ public class HeatMap implements Module, Listener {
       new Color("#d2e21b"),
       new Color("#fde725")
     };
+    private static final Color OVERLAY_COLOUR = new Color("#000000aa");
 
     private static final int MAX_MARKERS_PER_WORLD = 750;
 
@@ -260,6 +264,25 @@ public class HeatMap implements Module, Listener {
 
           MarkerSet markerSet = MarkerSet.builder().label("HeatMap").defaultHidden(true).build();
 
+          // overlay between the map and the heatmap markers to make them readable
+          WorldBorder border = world.getWorldBorder();
+          Location centre = border.getCenter();
+          double radius = border.getSize() / 2.0 + 500.0;
+          Shape shape =
+              Shape.createRect(
+                  centre.getBlockX() - radius,
+                  centre.getBlockZ() - radius,
+                  centre.getBlockX() + radius,
+                  centre.getBlockZ() + radius);
+          markerSet.put(
+              "heatmap-overlay",
+              ShapeMarker.builder()
+                  .shape(shape, world.getMaxHeight() + 1)
+                  .lineColor(OVERLAY_COLOUR)
+                  .fillColor(OVERLAY_COLOUR)
+                  .label("")
+                  .build());
+
           // create platter and marker for each colour
           int id = 0;
           for (int i = 0; i < COLOURS.length; i++) {
@@ -271,9 +294,9 @@ public class HeatMap implements Module, Listener {
             // markers
             for (Cheese cheese : platter) {
               markerCount++;
-              ExtrudeMarker marker =
-                  ExtrudeMarker.builder()
-                      .shape(cheese.getShape(), world.getMinHeight() + 1, world.getMaxHeight() - 1)
+              ShapeMarker marker =
+                  ShapeMarker.builder()
+                      .shape(cheese.getShape(), world.getMaxHeight() + 2)
                       .label(String.valueOf(chunkLists.get(i).size()))
                       .lineColor(colour)
                       .fillColor(colour)
