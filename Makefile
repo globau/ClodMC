@@ -1,5 +1,4 @@
 java-files := $(shell find src -name '*.java')
-test-files := $(shell find src/test -name '*.java' -or -name '*.py')
 config-files := $(shell find src -name '*.yml') *.gradle.kts Makefile
 version := $(shell src/build/version.py)
 gradle := ./gradlew $(shell ./src/build/gradle-args.py)
@@ -24,5 +23,6 @@ clean:
 
 .PHONY: test
 test:
-	@for N in src/test/test-*; do $$N || exit 1; done
+	uvx ruff check --config .ruff.toml
+	uvx ruff format --config .ruff.toml --check
 	$(gradle) check --rerun-tasks
