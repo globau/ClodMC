@@ -1,4 +1,4 @@
-package au.com.glob.clodmc.modules.interactions.gateways;
+package au.com.glob.clodmc.util;
 
 import java.util.Objects;
 import org.bukkit.Location;
@@ -8,14 +8,11 @@ import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
 @NullMarked
-final class BlockPos {
-  // same as Location, but for the block
-  // can be replaced by io.papermc.paper.math.BlockPosition once that's no longer experimental
-
-  final World world;
-  final int x;
-  final int y;
-  final int z;
+public class BlockPos {
+  public final World world;
+  public final int x;
+  public final int y;
+  public final int z;
 
   BlockPos(World world, int x, int y, int z) {
     this.world = world;
@@ -29,7 +26,7 @@ final class BlockPos {
     return "BlockPos{" + this.world.getName() + " " + this.x + ", " + this.y + ", " + this.z + '}';
   }
 
-  String getString(boolean includeWorld) {
+  public String getString(boolean includeWorld) {
     String prefix = "";
     if (includeWorld) {
       prefix =
@@ -57,23 +54,23 @@ final class BlockPos {
         && this.world.equals(otherPos.world);
   }
 
-  static BlockPos of(Location loc) {
+  public static BlockPos of(Location loc) {
     return new BlockPos(loc.getWorld(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ());
   }
 
-  Location asLocation() {
+  public Location asLocation() {
     return new Location(this.world, this.x + 0.5, this.y, this.z + 0.5);
   }
 
-  BlockPos down() {
+  public BlockPos down() {
     return new BlockPos(this.world, this.x, this.y - 1, this.z);
   }
 
-  BlockPos up() {
+  public BlockPos up() {
     return new BlockPos(this.world, this.x, this.y + 1, this.z);
   }
 
-  Block getBlock() {
+  public Block getBlock() {
     return this.world.getBlockAt(this.x, this.y, this.z);
   }
 

@@ -1,5 +1,6 @@
 package au.com.glob.clodmc.modules.interactions.gateways;
 
+import au.com.glob.clodmc.util.BlockPos;
 import au.com.glob.clodmc.util.Schedule;
 import com.destroystokyo.paper.ParticleBuilder;
 import java.util.ArrayList;

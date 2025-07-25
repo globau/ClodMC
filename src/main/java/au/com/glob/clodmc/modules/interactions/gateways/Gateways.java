@@ -6,6 +6,7 @@ import au.com.glob.clodmc.command.EitherCommandSender;
 import au.com.glob.clodmc.datafile.PlayerDataFile;
 import au.com.glob.clodmc.datafile.PlayerDataFiles;
 import au.com.glob.clodmc.modules.Module;
+import au.com.glob.clodmc.util.BlockPos;
 import au.com.glob.clodmc.util.Chat;
 import au.com.glob.clodmc.util.ConfigUtil;
 import au.com.glob.clodmc.util.Logger;
