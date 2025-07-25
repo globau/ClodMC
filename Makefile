@@ -1,5 +1,5 @@
 java-files := $(shell find src -name '*.java')
-config-files := $(shell find src -name '*.yml') *.gradle.kts Makefile config/spotless.xml.prefs
+config-files := $(shell find src -name '*.yml') *.gradle.kts Makefile $(shell find config -type f)
 xml-files := $(shell find src -name '*.xml')
 version := $(shell src/build/version.py)
 gradle := ./gradlew $(shell ./src/build/gradle-args.py)
