@@ -114,6 +114,14 @@ spotless {
         trimTrailingWhitespace()
         endWithNewline()
     }
+    format("xml") {
+        target("**/*.xml")
+        targetExclude(".*/**")
+        eclipseWtp(com.diffplug.spotless.extra.wtp.EclipseWtpFormatterStep.XML)
+            .configFile("config/spotless.xml.prefs")
+        trimTrailingWhitespace()
+        endWithNewline()
+    }
 }
 
 tasks.processResources {
