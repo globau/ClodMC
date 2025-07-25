@@ -66,6 +66,11 @@ tasks.withType<Checkstyle>().configureEach {
     checkstyleClasspath += files(checkstyleChecksJar)
 }
 
+tasks.checkstyleMain {
+    source += fileTree("src/main/resources") { include("**/*.yml") }
+    source += fileTree(".") { include("build.gradle.kts") }
+}
+
 configurations.checkstyle {
     resolutionStrategy.capabilitiesResolution.withCapability(
         "com.google.collections:google-collections",
