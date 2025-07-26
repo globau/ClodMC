@@ -52,7 +52,7 @@ tasks.withType<JavaCompile>().configureEach {
 val checkstyleChecksJar by
     tasks.registering(Jar::class) {
         from(layout.buildDirectory.dir("classes/java/main")) { include("au/com/glob/checks/**") }
-        archiveBaseName.set("checkstyle-checks")
+        archiveFileName.set("checkstyle-checks.jar")
         dependsOn(tasks.compileJava)
     }
 
