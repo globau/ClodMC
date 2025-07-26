@@ -10,6 +10,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import org.bukkit.Bukkit;
+import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Particle;
@@ -28,7 +29,6 @@ import org.jspecify.annotations.Nullable;
 @NullMarked
 public class AnchorBlock implements ConfigurationSerializable {
   private static final double EFFECT_RADIUS = 0.375;
-  private static final double EFFECT_SPEED = 0.1;
   private static final int EFFECT_PARTICLES = 4;
 
   final int networkId;
@@ -213,19 +213,23 @@ public class AnchorBlock implements ConfigurationSerializable {
   }
 
   private void spawnJavaParticles(Collection<Player> players, boolean isActive) {
-    double baseRotation = this.blockPos.world.getGameTime() * EFFECT_SPEED;
+    double baseRotation = this.blockPos.world.getGameTime();
     double angleStep = 2 * Math.PI / EFFECT_PARTICLES;
     int ringsPerSection = isActive ? 8 : 4;
 
     World world = this.blockPos.world;
-    Location bottomParticleLoc = new Location(world, 0, 0, 0);
-    Location topParticleLoc = new Location(world, 0, 0, 0);
+    Location particleLoc = new Location(world, 0, 0, 0);
 
     for (int ring = 0; ring < ringsPerSection; ring++) {
       double ringFraction = (double) ring / ringsPerSection;
       double bottomY = this.bottomLocation.getY() + ringFraction - 0.5;
       double topY = this.topLocation.getY() + ringFraction - 0.5;
       double ringRotation = baseRotation + (ring * 0.2);
+      double totalHeightFraction = ringFraction * 0.5;
+      double topHeightFraction = 0.5 + ringFraction * 0.5;
+
+      Color bottomSectionColour = this.getColourAtFraction(totalHeightFraction);
+      Color topSectionColour = this.getColourAtFraction(topHeightFraction);
 
       for (int i = 0; i < EFFECT_PARTICLES; i++) {
         double angle = ringRotation + (i * angleStep);
@@ -234,29 +238,52 @@ public class AnchorBlock implements ConfigurationSerializable {
 
         double x = this.bottomLocation.getX() + EFFECT_RADIUS * cosAngle;
         double z = this.bottomLocation.getZ() + EFFECT_RADIUS * sinAngle;
-        bottomParticleLoc.setX(x);
-        bottomParticleLoc.setY(bottomY);
-        bottomParticleLoc.setZ(z);
+        particleLoc.setX(x);
+        particleLoc.setY(bottomY);
+        particleLoc.setZ(z);
         new ParticleBuilder(Particle.TRAIL)
-            .data(new Particle.Trail(bottomParticleLoc, this.bottomColour.color, 5))
-            .location(bottomParticleLoc)
+            .data(new Particle.Trail(particleLoc, bottomSectionColour, 5))
+            .location(particleLoc)
             .receivers(players)
             .count(1)
             .spawn();
 
         x = this.topLocation.getX() + EFFECT_RADIUS * cosAngle;
         z = this.topLocation.getZ() + EFFECT_RADIUS * sinAngle;
-        topParticleLoc.setX(x);
-        topParticleLoc.setY(topY);
-        topParticleLoc.setZ(z);
+        particleLoc.setX(x);
+        particleLoc.setY(topY);
+        particleLoc.setZ(z);
         new ParticleBuilder(Particle.TRAIL)
-            .data(new Particle.Trail(topParticleLoc, this.topColour.color, 5))
-            .location(topParticleLoc)
+            .data(new Particle.Trail(particleLoc, topSectionColour, 5))
+            .location(particleLoc)
             .receivers(players)
             .count(1)
             .spawn();
       }
     }
+  }
+
+  private Color getColourAtFraction(double fraction) {
+    if (fraction <= 0.45) {
+      // pure bottom colour (45%)
+      return this.bottomColour.color;
+    }
+    if (fraction >= 0.55) {
+      // pure top colour (45%)
+      return this.topColour.color;
+    }
+    // gradient zone (10%)
+    double gradientFraction = (fraction - 0.45) / 0.1;
+    int topR = this.topColour.color.getRed();
+    int topG = this.topColour.color.getGreen();
+    int topB = this.topColour.color.getBlue();
+    int bottomR = this.bottomColour.color.getRed();
+    int bottomG = this.bottomColour.color.getGreen();
+    int bottomB = this.bottomColour.color.getBlue();
+    return Color.fromRGB(
+        (int) (bottomR + (topR - bottomR) * gradientFraction),
+        (int) (bottomG + (topG - bottomG) * gradientFraction),
+        (int) (bottomB + (topB - bottomB) * gradientFraction));
   }
 
   private void spawnBedrockParticles(List<Player> players) {
