@@ -21,10 +21,8 @@ dependencies {
     compileOnly("com.github.GriefPrevention:GriefPrevention:16.18.4")
     compileOnly("org.geysermc.geyser:api:2.7.0-SNAPSHOT")
     compileOnly("de.bluecolored.bluemap:BlueMapAPI:2.7.2")
-    compileOnly("org.jetbrains:annotations:15.0")
     compileOnly("com.puppycrawl.tools:checkstyle:10.26.1")
     errorprone("com.google.errorprone:error_prone_core:2.36.0")
-    api("org.jetbrains:annotations:15.0")
     api("org.jspecify:jspecify:1.0.0")
 }
 
