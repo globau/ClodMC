@@ -53,6 +53,7 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityChangeBlockEvent;
 import org.bukkit.event.inventory.CraftItemEvent;
+import org.bukkit.event.inventory.PrepareAnvilEvent;
 import org.bukkit.event.inventory.PrepareItemCraftEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
@@ -178,25 +179,12 @@ public class Gateways implements Module, Listener {
     }
     int networkId = coloursToNetworkId(topColour, bottomColour);
 
-    // add lore and metadata to crafted anchors
-    boolean isDuplicate =
-        this.instances.values().stream()
-            .anyMatch((AnchorBlock anchorBlock) -> anchorBlock.networkId == networkId);
-    boolean isRandomDest = networkId == RANDOM_NETWORK_ID;
+    AnchorItem.setMeta(item, networkId);
+
     int amount = 2;
-    if (isRandomDest && event.getView().getPlayer() instanceof Player player) {
+    if (networkId == RANDOM_NETWORK_ID && event.getView().getPlayer() instanceof Player player) {
       amount = player.isOp() ? 1 : 0;
     }
-
-    String suffix;
-    if (isRandomDest) {
-      suffix = "random";
-    } else if (isDuplicate) {
-      suffix = "duplicate";
-    } else {
-      suffix = null;
-    }
-    AnchorItem.setMeta(item, networkId, null, suffix);
     item.setAmount(amount);
 
     event.getInventory().setResult(item);
@@ -208,6 +196,14 @@ public class Gateways implements Module, Listener {
 
     if (AnchorItem.isAnchor(item)) {
       AnchorItem.clearExtraMeta(item);
+    }
+  }
+
+  @EventHandler
+  public void onPrepareAnvil(PrepareAnvilEvent event) {
+    ItemStack item = event.getResult();
+    if (AnchorItem.isAnchor(item)) {
+      AnchorItem.refreshMeta(item);
     }
   }
 

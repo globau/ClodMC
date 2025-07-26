@@ -83,6 +83,9 @@ class AnchorItem {
 
   static @Nullable String getName(ItemStack item) {
     Component displayName = item.getItemMeta().displayName();
+    if (displayName == null) {
+      return null;
+    }
     String plainTextName = StringUtil.asText(Objects.requireNonNull(displayName));
     return plainTextName.equals(DEFAULT_ANCHOR_NAME) ? null : plainTextName;
   }
@@ -103,6 +106,28 @@ class AnchorItem {
     container.set(TOP_KEY, PersistentDataType.STRING, network.top.name);
     container.set(BOTTOM_KEY, PersistentDataType.STRING, network.bottom.name);
     anchorItem.setItemMeta(meta);
+  }
+
+  static void setMeta(ItemStack anchorItem, int networkId) {
+    boolean isDuplicate =
+        Gateways.instance.instances.values().stream()
+            .anyMatch((AnchorBlock anchorBlock) -> anchorBlock.networkId == networkId);
+    boolean isRandomDest = networkId == Gateways.RANDOM_NETWORK_ID;
+
+    String suffix;
+    if (isRandomDest) {
+      suffix = "random";
+    } else if (isDuplicate) {
+      suffix = "duplicate";
+    } else {
+      suffix = null;
+    }
+
+    AnchorItem.setMeta(anchorItem, networkId, getName(anchorItem), suffix);
+  }
+
+  static void refreshMeta(ItemStack anchorItem) {
+    setMeta(anchorItem, getNetworkId(anchorItem));
   }
 
   static void clearExtraMeta(ItemStack anchorItem) {
