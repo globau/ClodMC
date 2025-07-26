@@ -49,4 +49,4 @@ jobs:
             --generate-notes \
             --notes-file release.md \
             --title="ClodMC-${{ steps.tag.outputs.ver }}" \
-            README.md build/libs/*.jar
+            README.md build/libs/ClodMC-*.jar
