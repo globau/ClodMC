@@ -29,7 +29,11 @@ import org.jspecify.annotations.Nullable;
 @NullMarked
 public class AnchorBlock implements ConfigurationSerializable {
   private static final double EFFECT_RADIUS = 0.375;
+  private static final double EFFECT_SPEED_ACTIVE = 0.075;
+  private static final double EFFECT_SPEED_INACTIVE = 0.05;
   private static final int EFFECT_PARTICLES = 4;
+  private static final int EFFECT_PARTICLES_TRAIL_ACTIVE = 5;
+  private static final int EFFECT_PARTICLES_TRAIL_INACTIVE = 3;
 
   final int networkId;
   final BlockPos blockPos;
@@ -213,7 +217,9 @@ public class AnchorBlock implements ConfigurationSerializable {
   }
 
   private void spawnJavaParticles(Collection<Player> players, boolean isActive) {
-    double baseRotation = this.blockPos.world.getGameTime();
+    double baseRotation =
+        this.blockPos.world.getGameTime()
+            * (isActive ? EFFECT_SPEED_ACTIVE : EFFECT_SPEED_INACTIVE);
     double angleStep = 2 * Math.PI / EFFECT_PARTICLES;
     int ringsPerSection = isActive ? 8 : 4;
 
@@ -236,25 +242,29 @@ public class AnchorBlock implements ConfigurationSerializable {
         double cosAngle = Math.cos(angle);
         double sinAngle = Math.sin(angle);
 
-        double x = this.bottomLocation.getX() + EFFECT_RADIUS * cosAngle;
-        double z = this.bottomLocation.getZ() + EFFECT_RADIUS * sinAngle;
-        particleLoc.setX(x);
+        particleLoc.setX(this.bottomLocation.getX() + EFFECT_RADIUS * cosAngle);
         particleLoc.setY(bottomY);
-        particleLoc.setZ(z);
+        particleLoc.setZ(this.bottomLocation.getZ() + EFFECT_RADIUS * sinAngle);
         new ParticleBuilder(Particle.TRAIL)
-            .data(new Particle.Trail(particleLoc, bottomSectionColour, 5))
+            .data(
+                new Particle.Trail(
+                    particleLoc,
+                    bottomSectionColour,
+                    isActive ? EFFECT_PARTICLES_TRAIL_ACTIVE : EFFECT_PARTICLES_TRAIL_INACTIVE))
             .location(particleLoc)
             .receivers(players)
             .count(1)
             .spawn();
 
-        x = this.topLocation.getX() + EFFECT_RADIUS * cosAngle;
-        z = this.topLocation.getZ() + EFFECT_RADIUS * sinAngle;
-        particleLoc.setX(x);
+        particleLoc.setX(this.topLocation.getX() + EFFECT_RADIUS * cosAngle);
         particleLoc.setY(topY);
-        particleLoc.setZ(z);
+        particleLoc.setZ(this.topLocation.getZ() + EFFECT_RADIUS * sinAngle);
         new ParticleBuilder(Particle.TRAIL)
-            .data(new Particle.Trail(particleLoc, topSectionColour, 5))
+            .data(
+                new Particle.Trail(
+                    particleLoc,
+                    topSectionColour,
+                    isActive ? EFFECT_PARTICLES_TRAIL_ACTIVE : EFFECT_PARTICLES_TRAIL_INACTIVE))
             .location(particleLoc)
             .receivers(players)
             .count(1)
