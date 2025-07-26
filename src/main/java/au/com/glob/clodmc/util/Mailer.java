@@ -31,7 +31,7 @@ public class Mailer {
 
   public static void send(String recipient, String subject, String body) throws MailerException {
     try {
-      try (SMTPClient smtp = new SMTPClient(HOSTNAME)) {
+      try (CommandServer smtp = new CommandServer(HOSTNAME)) {
         smtp.waitFor("220 ");
         smtp.sendAndWait("HELO glob.au", "250 ");
         smtp.sendAndWait("MAIL FROM: " + SENDER_ADDR, "250 ");

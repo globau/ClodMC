@@ -10,12 +10,12 @@ import java.nio.charset.StandardCharsets;
 import org.jspecify.annotations.NullMarked;
 
 @NullMarked
-public class SMTPClient implements Closeable {
+public class CommandServer implements Closeable {
   private final Socket socket;
   private final BufferedReader inStream;
   private final DataOutputStream outStream;
 
-  SMTPClient(String hostname) throws IOException {
+  CommandServer(String hostname) throws IOException {
     this.socket = new Socket(hostname, 25);
     this.socket.setSoTimeout(5000);
     this.inStream =
