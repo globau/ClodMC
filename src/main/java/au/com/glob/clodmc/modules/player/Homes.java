@@ -22,7 +22,8 @@ import org.jspecify.annotations.Nullable;
 /** Set limited number of named teleport locations */
 @NullMarked
 public class Homes implements Listener, Module {
-  protected static final int MAX_HOMES = 3;
+  private static final int MAX_HOMES = 3;
+  private static final String DEFAULT_NAME = "home";
 
   public Homes() {
     CommandBuilder.build("home")
@@ -30,17 +31,17 @@ public class Homes implements Listener, Module {
         .description("Teleport home")
         .executor(
             (Player player, @Nullable String name) -> {
-              name = name == null ? "home" : name;
+              name = name == null ? DEFAULT_NAME : name;
 
               Map<String, Location> homes = this.getHomes(player);
               if (homes.isEmpty() || !homes.containsKey(name)) {
                 throw new CommandError(
-                    name.equals("home") ? "No home set" : "No such home '" + name + "'");
+                    name.equals(DEFAULT_NAME) ? "No home set" : "No such home '" + name + "'");
               }
 
               Location location = homes.get(name);
               TeleportUtil.teleport(
-                  player, location, name.equals("home") ? "home" : "to '" + name + "'");
+                  player, location, name.equals(DEFAULT_NAME) ? "home" : "to '" + name + "'");
             })
         .completor(this::completeHomes);
 
@@ -66,7 +67,7 @@ public class Homes implements Listener, Module {
         .description("Sets a home to your current location")
         .executor(
             (Player player, @Nullable String name) -> {
-              name = name == null ? "home" : name;
+              name = name == null ? DEFAULT_NAME : name;
 
               Map<String, Location> homes = this.getHomes(player);
               boolean existing = homes.containsKey(name);
@@ -85,7 +86,7 @@ public class Homes implements Listener, Module {
               homes.put(name, location);
               this.setHomes(player, homes);
 
-              if (name.equals("home")) {
+              if (name.equals(DEFAULT_NAME)) {
                 Chat.info(
                     player, "Home " + (existing ? "updated" : "set") + " to you current location");
               } else {
@@ -98,18 +99,18 @@ public class Homes implements Listener, Module {
         .description("Delete home")
         .executor(
             (Player player, @Nullable String name) -> {
-              name = name == null ? "home" : name;
+              name = name == null ? DEFAULT_NAME : name;
 
               Map<String, Location> homes = this.getHomes(player);
               if (homes.isEmpty() || !homes.containsKey(name)) {
                 throw new CommandError(
-                    name.equals("home") ? "No home set" : "No such home '" + name + "'");
+                    name.equals(DEFAULT_NAME) ? "No home set" : "No such home '" + name + "'");
               }
 
               homes.remove(name);
               this.setHomes(player, homes);
 
-              if (name.equals("home")) {
+              if (name.equals(DEFAULT_NAME)) {
                 Chat.info(player, "Deleted home");
               } else {
                 Chat.info(player, "Deleted home '" + name + "'");
