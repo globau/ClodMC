@@ -136,47 +136,66 @@ public class AnchorBlock implements ConfigurationSerializable {
     // rotate player to avoid facing a wall
 
     // get standing-on block, bottom, and top blocks for the player's location
-    // snapped to 90 degrees of rotation
     Location blockLoc = this.blockPos.asLocation();
-    blockLoc.setYaw((float) Math.round(player.getLocation().getYaw() / 90.0) * 90);
     blockLoc.setPitch(player.getLocation().getPitch());
     Location bottomLoc = blockLoc.clone().add(0, 1, 0);
     Location topLoc = bottomLoc.clone().add(0, 1, 0);
 
-    // check for air; treat air blocks above other anchors as solid
-    int attempts = 1;
-    while (attempts <= 4
-        && !(this.isFacingAir(bottomLoc)
-            && this.isFacingAir(topLoc)
-            && this.notFacingAnchor(blockLoc))) {
-      blockLoc.setYaw(((blockLoc.getYaw() + 90) + 180) % 360 - 180);
-      bottomLoc.setYaw(blockLoc.getYaw());
-      topLoc.setYaw(blockLoc.getYaw());
-      attempts++;
+    // snap yaws to 90 degrees of rotation
+    float playerYaw = Math.round(player.getLocation().getYaw() / 90.0) * 90;
+    float[] yaws = new float[4];
+    float y = playerYaw;
+    for (int i = 0; i < 4; i++) {
+      yaws[i] = y;
+      y = ((y + 90) + 180) % 360 - 180;
     }
 
-    // didn't find air, try again without the anchor check
-    if (!(this.isFacingAir(bottomLoc)
-        && this.isFacingAir(topLoc)
-        && this.notFacingAnchor(blockLoc))) {
-      attempts = 1;
-      while (attempts <= 4 && !(this.isFacingAir(bottomLoc) && this.isFacingAir(topLoc))) {
-        bottomLoc.setYaw(((bottomLoc.getYaw() + 90) + 180) % 360 - 180);
-        topLoc.setYaw(bottomLoc.getYaw());
-        attempts++;
+    // air blocks, avoid anchors
+    for (float yaw : yaws) {
+      blockLoc.setYaw(yaw);
+      bottomLoc.setYaw(yaw);
+      topLoc.setYaw(yaw);
+      if (this.isFacingAir(bottomLoc)
+          && this.isFacingAir(topLoc)
+          && this.notFacingAnchor(blockLoc)) {
+        return bottomLoc;
       }
     }
 
-    // didn't find air, settle for non-solid
-    if (!(this.isFacingAir(bottomLoc) && this.isFacingAir(topLoc))) {
-      attempts = 1;
-      while (attempts <= 4 && (this.isFacingSolid(bottomLoc) || this.isFacingSolid(topLoc))) {
-        bottomLoc.setYaw(((bottomLoc.getYaw() + 90) + 180) % 360 - 180);
-        topLoc.setYaw(bottomLoc.getYaw());
-        attempts++;
+    // non-solid, avoid anchors
+    for (float yaw : yaws) {
+      blockLoc.setYaw(yaw);
+      bottomLoc.setYaw(yaw);
+      topLoc.setYaw(yaw);
+      if (!this.isFacingSolid(bottomLoc)
+          && !this.isFacingSolid(topLoc)
+          && this.notFacingAnchor(blockLoc)) {
+        return bottomLoc;
       }
     }
 
+    // air, anchors ok
+    for (float yaw : yaws) {
+      blockLoc.setYaw(yaw);
+      bottomLoc.setYaw(yaw);
+      topLoc.setYaw(yaw);
+      if (!this.isFacingAir(bottomLoc) && !this.isFacingAir(topLoc)) {
+        return bottomLoc;
+      }
+    }
+
+    // non-solid, anchors ok
+    for (float yaw : yaws) {
+      blockLoc.setYaw(yaw);
+      bottomLoc.setYaw(yaw);
+      topLoc.setYaw(yaw);
+      if (!this.isFacingSolid(bottomLoc) && !this.isFacingSolid(topLoc)) {
+        return bottomLoc;
+      }
+    }
+
+    // original rotation
+    blockLoc.setYaw(playerYaw);
     return bottomLoc;
   }
 
