@@ -24,7 +24,9 @@ public class Mailer {
           try {
             send(ADMIN_ADDR, subject, body);
           } catch (MailerException e) {
-            Logger.warning(e.getMessage());
+            if (e.getMessage() != null) {
+              Logger.warning(e.getMessage());
+            }
           }
         });
   }

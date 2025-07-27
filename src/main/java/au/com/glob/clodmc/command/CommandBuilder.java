@@ -212,6 +212,6 @@ public class CommandBuilder {
     if (args.length - 1 < index || args[index].isEmpty()) {
       return null;
     }
-    return args[index].isEmpty() ? null : args[index];
+    return args[index];
   }
 }
