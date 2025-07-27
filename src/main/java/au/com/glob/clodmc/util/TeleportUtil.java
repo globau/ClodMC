@@ -67,13 +67,12 @@ public class TeleportUtil {
 
     String prefix = "Teleporting you ";
     if (player.isInsideVehicle()) {
-      if (player.getVehicle() instanceof Horse) {
-        prefix = "Dismounting your horse and teleporting you ";
-      } else if (player.getVehicle() instanceof Boat) {
-        prefix = "Dismounting your boat and teleporting you ";
-      } else {
-        prefix = "Dismounting and teleporting you ";
-      }
+      prefix =
+          switch (player.getVehicle()) {
+            case Horse ignored -> "Dismounting your horse and teleporting you ";
+            case Boat ignored -> "Dismounting your boat and teleporting you ";
+            case null, default -> "Dismounting and teleporting you ";
+          };
     }
     Chat.fyi(player, prefix + reason);
 

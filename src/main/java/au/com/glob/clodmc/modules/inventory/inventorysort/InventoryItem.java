@@ -36,29 +36,31 @@ class InventoryItem implements Comparable<InventoryItem> {
     if (meta != null) {
       StringJoiner extraJoiner = new StringJoiner(".");
 
-      if (meta instanceof EnchantmentStorageMeta enchantmentStorageMeta) {
-        // enchantment storage (eg. book)
-        for (Map.Entry<Enchantment, Integer> entry :
-            enchantmentStorageMeta.getStoredEnchants().entrySet()) {
-          extraJoiner.add(StringUtil.asText(entry.getKey()));
-          extraJoiner.add(String.valueOf(entry.getValue()));
+      switch (meta) {
+        case EnchantmentStorageMeta enchantmentStorageMeta -> {
+          // enchantment storage (eg. book)
+          for (Map.Entry<Enchantment, Integer> entry :
+              enchantmentStorageMeta.getStoredEnchants().entrySet()) {
+            extraJoiner.add(StringUtil.asText(entry.getKey()));
+            extraJoiner.add(String.valueOf(entry.getValue()));
+          }
         }
-      } else if (meta instanceof MusicInstrumentMeta musicInstrumentMeta) {
-        // goat horns
-        MusicInstrument instrument = musicInstrumentMeta.getInstrument();
-        if (instrument != null) {
-          extraJoiner.add(StringUtil.asText(instrument));
+        case MusicInstrumentMeta musicInstrumentMeta -> {
+          // goat horns
+          MusicInstrument instrument = musicInstrumentMeta.getInstrument();
+          if (instrument != null) {
+            extraJoiner.add(StringUtil.asText(instrument));
+          }
+        }
+        default -> {
+          // nothing
         }
       }
 
       this.extra = extraJoiner.toString();
 
       // damage
-      if (meta instanceof Damageable damageableMeta) {
-        this.damage = damageableMeta.getDamage();
-      } else {
-        this.damage = 0;
-      }
+      this.damage = meta instanceof Damageable damageableMeta ? damageableMeta.getDamage() : 0;
     } else {
       this.extra = "";
       this.damage = 0;

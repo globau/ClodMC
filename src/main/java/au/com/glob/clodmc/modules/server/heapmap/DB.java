@@ -26,15 +26,19 @@ class DB {
       this.conn = DriverManager.getConnection("jdbc:sqlite:" + dbFile);
       this.conn
           .prepareStatement(
-              "CREATE TABLE IF NOT EXISTS "
-                  + "heatmap(world CHAR, x INT, z INT, count INT, UNIQUE(world, x, z))")
+              """
+              CREATE TABLE IF NOT EXISTS
+                heatmap(world CHAR, x INT, z INT, count INT, UNIQUE(world, x, z))
+              """)
           .execute();
       this.insertStatement =
           this.conn.prepareStatement(
-              "INSERT INTO heatmap(world,x,z,count) "
-                  + "VALUES(?,?,?,1) "
-                  + "ON CONFLICT(world,x,z) "
-                  + "  DO UPDATE SET count=count+1;");
+              """
+              INSERT INTO heatmap(world,x,z,count)
+              VALUES(?,?,?,1)
+              ON CONFLICT(world,x,z)
+                DO UPDATE SET count=count+1
+              """);
     } catch (SQLException e) {
       throw new RuntimeException(e);
     }

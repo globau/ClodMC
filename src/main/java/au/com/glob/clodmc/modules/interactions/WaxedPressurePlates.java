@@ -13,7 +13,6 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
@@ -37,48 +36,50 @@ public class WaxedPressurePlates implements Module, Listener {
       return;
     }
 
-    // pressure plate activated
-    if (event.getAction() == Action.PHYSICAL) {
-      // cancel interaction if waxed
-      PersistentDataContainer customBlockData = new CustomBlockData(block, ClodMC.instance);
-      if (customBlockData.has(WAXED_KEY)) {
+    switch (event.getAction()) {
+      case PHYSICAL -> {
+        // pressure plate activated - cancel interaction if waxed
+        PersistentDataContainer customBlockData = new CustomBlockData(block, ClodMC.instance);
+        if (customBlockData.has(WAXED_KEY)) {
+          event.setCancelled(true);
+        }
+      }
+
+      case RIGHT_CLICK_BLOCK -> {
+        // right-clicked - apply wax if holding honeycomb
+        Player player = event.getPlayer();
+        EquipmentSlot hand = event.getHand();
+        if (hand == null) {
+          return;
+        }
+        ItemStack itemInHand = player.getInventory().getItem(hand);
+        if (itemInHand.getType() != Material.HONEYCOMB) {
+          return;
+        }
+
+        // not already waxed
+        PersistentDataContainer customBlockData = new CustomBlockData(block, ClodMC.instance);
+        if (customBlockData.has(WAXED_KEY)) {
+          return;
+        }
+
+        // set waxed attribute and consume honeycomb
+        customBlockData.set(WAXED_KEY, PersistentDataType.BYTE, (byte) 1);
+        if (player.getGameMode() == GameMode.SURVIVAL) {
+          player.getInventory().getItem(event.getHand()).setAmount(itemInHand.getAmount() - 1);
+        }
+
+        // sound and particles
+        Location loc = block.getLocation();
+        player.playSound(loc, Sound.ITEM_HONEYCOMB_WAX_ON, 1.0f, 1.0f);
+        player.getWorld().spawnParticle(Particle.WAX_ON, loc.add(0.5, 0.1, 0.5), 7, 0.25, 0, 0.25);
+
         event.setCancelled(true);
-        return;
-      }
-      return;
-    }
-
-    // right-clicked
-    if (event.getAction() == Action.RIGHT_CLICK_BLOCK) {
-      Player player = event.getPlayer();
-      // holding honeycomb
-      EquipmentSlot hand = event.getHand();
-      if (hand == null) {
-        return;
-      }
-      ItemStack itemInHand = player.getInventory().getItem(hand);
-      if (itemInHand.getType() != Material.HONEYCOMB) {
-        return;
       }
 
-      // not already waxed
-      PersistentDataContainer customBlockData = new CustomBlockData(block, ClodMC.instance);
-      if (customBlockData.has(WAXED_KEY)) {
-        return;
+      default -> {
+        // no-op
       }
-
-      // set waxed attribute and consume honeycomb
-      customBlockData.set(WAXED_KEY, PersistentDataType.BYTE, (byte) 1);
-      if (player.getGameMode() == GameMode.SURVIVAL) {
-        player.getInventory().getItem(event.getHand()).setAmount(itemInHand.getAmount() - 1);
-      }
-
-      // sound and particles
-      Location loc = block.getLocation();
-      player.playSound(loc, Sound.ITEM_HONEYCOMB_WAX_ON, 1.0f, 1.0f);
-      player.getWorld().spawnParticle(Particle.WAX_ON, loc.add(0.5, 0.1, 0.5), 7, 0.25, 0, 0.25);
-
-      event.setCancelled(true);
     }
   }
 }
