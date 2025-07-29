@@ -253,7 +253,7 @@ public class Cheese {
     } while (!position.equals(start));
 
     // optimize one last time with the start moved to the end
-    line.add(line.remove(0));
+    line.add(line.removeFirst());
     optimizeEnd(line);
 
     // remove all empty multi-value-map collections
