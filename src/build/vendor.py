@@ -21,7 +21,7 @@ def main() -> None:
     print(f"vendoring {name}")
 
     config: dict[str, Any] = dict(vendored_config.items(name))
-    config["files"] = config["files"].strip().splitlines()
+    config["include"] = config["include"].strip().splitlines()
     config["exclude"] = set(config.get("exclude", "").strip().splitlines())
 
     src_path = Path(f".git/vendored/{name}")
@@ -44,7 +44,7 @@ def main() -> None:
 
     # build list of files
     copy_filepaths = []
-    for src_filename in config["files"]:
+    for src_filename in config["include"]:
         if src_filename.endswith("/"):
             path = src_path / src_filename.rstrip("/")
             for src_filepath in [fp for fp in path.rglob("*") if not fp.is_dir()]:
