@@ -24,6 +24,7 @@ dependencies {
     compileOnly("com.puppycrawl.tools:checkstyle:10.26.1")
     errorprone("com.google.errorprone:error_prone_core:2.36.0")
     api("org.jspecify:jspecify:1.0.0")
+    checkstyle(project(":checkstyleChecks"))
 }
 
 group = "au.com.glob"
@@ -47,21 +48,9 @@ tasks.withType<JavaCompile>().configureEach {
     options.errorprone.excludedPaths.set(".*/vendored/.*")
 }
 
-val checkstyleChecksJar by
-    tasks.registering(Jar::class) {
-        from(layout.buildDirectory.dir("classes/java/main")) { include("au/com/glob/checks/**") }
-        archiveFileName.set("checkstyle-checks.jar")
-        dependsOn(tasks.compileJava)
-    }
-
 checkstyle {
     toolVersion = "10.14.0"
     maxWarnings = 0
-}
-
-tasks.withType<Checkstyle>().configureEach {
-    dependsOn(checkstyleChecksJar)
-    checkstyleClasspath += files(checkstyleChecksJar)
 }
 
 tasks.checkstyleMain {
