@@ -3,9 +3,9 @@ import java.io.BufferedReader
 
 plugins {
     id("java-library")
-    id("com.diffplug.spotless") version "7.0.2"
+    id("com.diffplug.spotless") version "7.2.1"
     id("checkstyle")
-    id("net.ltgt.errorprone") version "4.1.0"
+    id("net.ltgt.errorprone") version "4.2.0"
 }
 
 repositories {
@@ -17,12 +17,11 @@ repositories {
 }
 
 dependencies {
-    compileOnly("io.papermc.paper:paper-api:1.21.7-R0.1-SNAPSHOT")
+    compileOnly("io.papermc.paper:paper-api:1.21.8-R0.1-SNAPSHOT")
     compileOnly("com.github.GriefPrevention:GriefPrevention:16.18.4")
-    compileOnly("org.geysermc.geyser:api:2.7.0-SNAPSHOT")
+    compileOnly("org.geysermc.geyser:api:2.8.2-SNAPSHOT")
     compileOnly("de.bluecolored.bluemap:BlueMapAPI:2.7.2")
-    compileOnly("com.puppycrawl.tools:checkstyle:10.26.1")
-    errorprone("com.google.errorprone:error_prone_core:2.36.0")
+    errorprone("com.google.errorprone:error_prone_core:2.41.0")
     api("org.jspecify:jspecify:1.0.0")
     checkstyle(project(":checkstyleChecks"))
 }
@@ -49,29 +48,13 @@ tasks.withType<JavaCompile>().configureEach {
 }
 
 checkstyle {
-    toolVersion = "10.14.0"
+    toolVersion = "10.26.1"
     maxWarnings = 0
 }
 
 tasks.checkstyleMain {
     source += fileTree("src/main/resources") { include("**/*.yml") }
     source += fileTree(".") { include("build.gradle.kts") }
-}
-
-configurations.checkstyle {
-    resolutionStrategy.capabilitiesResolution.withCapability(
-        "com.google.collections:google-collections",
-    ) {
-        select("com.google.guava:guava:23.0")
-    }
-}
-
-configurations.compileClasspath {
-    resolutionStrategy.capabilitiesResolution.withCapability(
-        "com.google.collections:google-collections",
-    ) {
-        select("com.google.guava:guava:33.3.1-jre")
-    }
 }
 
 spotless {
@@ -88,7 +71,7 @@ spotless {
         endWithNewline()
     }
     java {
-        googleJavaFormat("1.25.2").reflowLongStrings().skipJavadocFormatting()
+        googleJavaFormat("1.28.0").reflowLongStrings().skipJavadocFormatting()
         formatAnnotations()
     }
     kotlin {
