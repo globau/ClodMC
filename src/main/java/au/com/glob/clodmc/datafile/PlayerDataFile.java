@@ -8,6 +8,15 @@ import org.bukkit.Bukkit;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
+/**
+ * YAML-based player data persistence with automatic UUID-based file management.
+ *
+ * <p>Provides type-safe access to player data stored in individual YAML files under the players/
+ * directory. Files are automatically created, loaded, and cached per player UUID.
+ *
+ * <p>Data is stored in a structured format with common player metadata under the "player.*" path
+ * and module-specific data under module-named paths.
+ */
 @NullMarked
 public class PlayerDataFile extends DataFile {
   protected PlayerDataFile(String filename) {

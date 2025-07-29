@@ -81,20 +81,20 @@ public class ModuleDescriptionCheck extends AbstractCheck {
       root = root.getParent();
     }
 
-    return this.findCommentNearLine(root, classLineNo);
+    return this.findCommentBeforeLine(root, classLineNo);
   }
 
-  private boolean findCommentNearLine(DetailAST node, int targetLine) {
+  private boolean findCommentBeforeLine(DetailAST node, int targetLine) {
     if (node.getType() == TokenTypes.BLOCK_COMMENT_BEGIN) {
       int commentLine = node.getLineNo();
-      if (commentLine < targetLine && (targetLine - commentLine) <= 3) {
+      if (commentLine < targetLine) {
         return true;
       }
     }
 
     DetailAST child = node.getFirstChild();
     while (child != null) {
-      if (this.findCommentNearLine(child, targetLine)) {
+      if (this.findCommentBeforeLine(child, targetLine)) {
         return true;
       }
       child = child.getNextSibling();

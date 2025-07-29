@@ -6,6 +6,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 import org.jspecify.annotations.NullMarked;
 
+/** wrappers around Bukkit scheduling, with clearer and cleaner semantics */
 @NullMarked
 public class Schedule {
   public static void asynchronously(Runnable task) {
@@ -40,9 +41,5 @@ public class Schedule {
 
   public static void onMainThread(Runnable task) {
     Bukkit.getScheduler().scheduleSyncDelayedTask(ClodMC.instance, task);
-  }
-
-  public static void onMainThreadPeriodically(long delay, long period, Runnable task) {
-    Bukkit.getScheduler().scheduleSyncRepeatingTask(ClodMC.instance, task, delay, period);
   }
 }

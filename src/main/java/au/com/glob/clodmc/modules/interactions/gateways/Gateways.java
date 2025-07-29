@@ -65,7 +65,31 @@ import org.bukkit.inventory.ItemStack;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
-/** Player built point-to-point teleports */
+/**
+ * Player-built point-to-point teleportation system using coloured wool anchors.
+ *
+ * <p>Gateway system architecture:
+ *
+ * <ul>
+ *   <li>anchor blocks: in-world anchor for gateways
+ *   <li>anchor item: in-inventory or dropped anchor block
+ *   <li>colour-based networking: two-colour combinations define teleport networks
+ *   <li>network linking: gateways with same colour pair teleport between each other; only one pair
+ *       of linked colours can be placed
+ *   <li>special networks: black-black provides random wilderness teleportation
+ * </ul>
+ *
+ * <p>Teleportation behaviour:
+ *
+ * <ul>
+ *   <li>players enter gateway by walking onto anchor block
+ *   <li>prevents immediate return teleportation with ignore system
+ *   <li>BlueMap integration shows named anchor block locations on web map
+ * </ul>
+ *
+ * <p>Data persistence managed through gateways.yml with automatic saving and loading. Includes
+ * admin commands for listing active gateways and debugging.
+ */
 @NullMarked
 public class Gateways implements Module, Listener {
   @SuppressWarnings({"NotNullFieldNotInitialized", "NullAway.Init"})

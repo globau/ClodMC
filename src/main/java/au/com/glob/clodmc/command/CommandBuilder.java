@@ -13,6 +13,28 @@ import org.bukkit.entity.Player;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
+/**
+ * Builder for creating type-safe Bukkit commands with automatic argument parsing.
+ *
+ * <p>The command framework uses a type-safe executor pattern where different executor interfaces
+ * correspond to different command signatures. Interface names use letter codes:
+ *
+ * <ul>
+ *   <li>E - either player or console sender
+ *   <li>P - player argument
+ *   <li>S - string argument
+ * </ul>
+ *
+ * <p>Executor types combine these codes to define command signatures (e.g., ExecutorEPS = either
+ * sender + player argument + string argument).
+ *
+ * <p>Arguments are automatically parsed and validated. Player arguments resolve player names to
+ * Player objects, with automatic error handling for unknown players. String arguments are extracted
+ * from command arguments and can be null if not provided.
+ *
+ * <p>All commands are automatically registered with error handling, usage message display, and
+ * permission checking.
+ */
 @NullMarked
 @SuppressWarnings({"UnusedReturnValue", "SameParameterValue"})
 public class CommandBuilder {

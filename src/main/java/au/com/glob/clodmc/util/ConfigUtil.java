@@ -20,6 +20,7 @@ public class ConfigUtil {
   public static boolean sanityChecked = false;
 
   public static void sanityCheckConfigs() throws InvalidConfigException {
+    // check configs for loading issues with configs (eg. malformed, missing classes)
     List<String> errors = new ArrayList<>(0);
     try {
       for (File file : getConfigFiles()) {
