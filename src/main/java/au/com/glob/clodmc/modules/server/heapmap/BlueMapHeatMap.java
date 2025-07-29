@@ -69,8 +69,6 @@ public class BlueMapHeatMap extends Addon {
     DB db = new DB();
     try {
       for (World world : Bukkit.getWorlds()) {
-        int markerCount = 0;
-
         // determine min and max heatmap values
         int minCount = 0;
         int rowCount;
@@ -131,6 +129,7 @@ public class BlueMapHeatMap extends Addon {
                 .build());
 
         // create platter and marker for each colour
+        int markerCount = 0;
         int id = 0;
         for (int i = 0; i < COLOURS.length; i++) {
           Color colour = COLOURS[i];
