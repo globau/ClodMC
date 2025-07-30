@@ -13,7 +13,7 @@ import org.jspecify.annotations.NullMarked;
 /** Prevent some mobs from breaking or moving blocks */
 @NullMarked
 public class PreventMobGriefing implements Listener, Module {
-  @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+  @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
   public void onEntityExplode(EntityExplodeEvent event) {
     // stop creeper explosions from destroying blocks
     if (event.getEntity() instanceof Creeper) {
@@ -21,7 +21,7 @@ public class PreventMobGriefing implements Listener, Module {
     }
   }
 
-  @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+  @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
   public void onEntityChangeBlock(EntityChangeBlockEvent event) {
     // stop endermen from picking up blocks
     if (event.getEntity() instanceof Enderman) {

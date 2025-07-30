@@ -6,6 +6,7 @@ import au.com.glob.clodmc.modules.Module;
 import au.com.glob.clodmc.util.Schedule;
 import org.bukkit.Statistic;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
@@ -14,7 +15,7 @@ import org.jspecify.annotations.NullMarked;
 /** Collect data about players */
 @NullMarked
 public class PlayerTracker implements Module, Listener {
-  @EventHandler
+  @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
   public void onPlayerJoin(PlayerJoinEvent event) {
     PlayerDataFile dataFile = PlayerDataFiles.of(event.getPlayer());
     dataFile.setPlayerName(event.getPlayer().getName());
@@ -22,7 +23,7 @@ public class PlayerTracker implements Module, Listener {
     dataFile.save();
   }
 
-  @EventHandler
+  @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
   public void onPlayerQuit(PlayerQuitEvent event) {
     PlayerDataFile dataFile = PlayerDataFiles.of(event.getPlayer());
     dataFile.touchLastLogout();

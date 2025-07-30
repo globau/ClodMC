@@ -5,6 +5,7 @@ import au.com.glob.clodmc.util.StringUtil;
 import java.net.URI;
 import org.bukkit.ServerLinks;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerLinksSendEvent;
 import org.jspecify.annotations.NullMarked;
@@ -13,7 +14,7 @@ import org.jspecify.annotations.NullMarked;
 @SuppressWarnings("UnstableApiUsage")
 @NullMarked
 public class ClodServerLinks implements Module, Listener {
-  @EventHandler
+  @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
   public void onPlayerLinksSend(PlayerLinksSendEvent event) {
     ServerLinks links = event.getLinks();
     links.addLink(

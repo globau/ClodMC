@@ -10,6 +10,7 @@ import java.util.UUID;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.server.PluginDisableEvent;
@@ -65,14 +66,14 @@ public class AdminInv implements Module, Listener {
     return this.playerInventories.containsKey(uuid);
   }
 
-  @EventHandler
+  @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
   public void onPlayerQuit(PlayerQuitEvent event) {
     if (event.getPlayer().isOp()) {
       this.restoreInventory(event.getPlayer());
     }
   }
 
-  @EventHandler
+  @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
   public void onPluginDisable(PluginDisableEvent event) {
     if (event.getPlugin().equals(ClodMC.instance)) {
       for (UUID uuid : this.playerInventories.keySet()) {

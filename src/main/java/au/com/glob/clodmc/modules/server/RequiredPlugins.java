@@ -12,6 +12,7 @@ import java.util.UUID;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.server.ServerLoadEvent;
 import org.jspecify.annotations.NullMarked;
@@ -23,7 +24,7 @@ public class RequiredPlugins implements Listener, Module {
 
   private boolean preventLogin = true;
 
-  @EventHandler
+  @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
   public void onServerLoad(ServerLoadEvent event) {
     StringJoiner missing = new StringJoiner(" ");
     for (String name : REQUIRED) {
@@ -41,7 +42,7 @@ public class RequiredPlugins implements Listener, Module {
   }
 
   @SuppressWarnings("UnstableApiUsage")
-  @EventHandler
+  @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
   public void onPlayerConnectionValidateLogin(PlayerConnectionValidateLoginEvent event) {
     if (!this.preventLogin) {
       return;

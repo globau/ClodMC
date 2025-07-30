@@ -26,6 +26,7 @@ import org.bukkit.Sound;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.ItemStack;
@@ -204,7 +205,7 @@ public class WelcomeBook implements Module, Listener {
     }
   }
 
-  @EventHandler
+  @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
   public void onPlayerJoin(PlayerJoinEvent event) {
     if (!event.getPlayer().hasPlayedBefore()) {
       Schedule.delayed(5, () -> WelcomeBook.this.giveWelcomeBook(event.getPlayer(), null));

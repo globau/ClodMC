@@ -4,6 +4,7 @@ import au.com.glob.clodmc.modules.Module;
 import au.com.glob.clodmc.util.StringUtil;
 import net.kyori.adventure.text.Component;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.server.ServerListPingEvent;
 import org.jspecify.annotations.NullMarked;
@@ -34,7 +35,7 @@ public class MOTD implements Module, Listener {
     this.motd = StringUtil.asComponent(motd);
   }
 
-  @EventHandler
+  @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
   public void onServerListPing(ServerListPingEvent event) {
     event.motd(this.motd);
   }

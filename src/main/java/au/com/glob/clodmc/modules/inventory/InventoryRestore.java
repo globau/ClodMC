@@ -28,6 +28,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
@@ -130,12 +131,12 @@ public class InventoryRestore implements Module, Listener {
             });
   }
 
-  @EventHandler
+  @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
   public void onPlayerDeath(PlayerDeathEvent event) {
     this.backupPlayerInventory(event.getPlayer(), false);
   }
 
-  @EventHandler
+  @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
   public void onPlayerJoin(PlayerJoinEvent event) {
     PlayerDataFile dataFile = PlayerDataFiles.of(event.getPlayer());
     String backupName = dataFile.getString("restore_inv");
@@ -146,7 +147,7 @@ public class InventoryRestore implements Module, Listener {
     }
   }
 
-  @EventHandler
+  @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
   public void onPlayerCommandPreprocess(PlayerCommandPreprocessEvent event) {
     if (event.getPlayer().isOp() && event.getMessage().equals("/clear")) {
       this.backupPlayerInventory(event.getPlayer(), true);

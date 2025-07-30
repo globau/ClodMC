@@ -187,7 +187,7 @@ public class Gateways implements Module, Listener {
     }
   }
 
-  @EventHandler
+  @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
   public void onPrepareItemCraft(PrepareItemCraftEvent event) {
     ItemStack item = event.getInventory().getResult();
     if (!AnchorItem.isAnchor(item)) {
@@ -214,7 +214,7 @@ public class Gateways implements Module, Listener {
     event.getInventory().setResult(item);
   }
 
-  @EventHandler
+  @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
   public void onCraftItem(CraftItemEvent event) {
     ItemStack item = event.getCurrentItem();
 
@@ -223,7 +223,7 @@ public class Gateways implements Module, Listener {
     }
   }
 
-  @EventHandler
+  @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
   public void onPrepareAnvil(PrepareAnvilEvent event) {
     ItemStack item = event.getResult();
     if (AnchorItem.isAnchor(item)) {
@@ -231,7 +231,7 @@ public class Gateways implements Module, Listener {
     }
   }
 
-  @EventHandler(ignoreCancelled = true)
+  @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
   public void onBlockPlace(BlockPlaceEvent event) {
     // prevent placing blocks in the 2 blocks above an anchorBlock
     BlockPos below1Pos = BlockPos.of(event.getBlock().getLocation()).down();
@@ -291,7 +291,7 @@ public class Gateways implements Module, Listener {
     this.save();
   }
 
-  @EventHandler(ignoreCancelled = true)
+  @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
   public void onEntityChangeBlock(EntityChangeBlockEvent event) {
     // if a falling entity turns into a block inside the gateway, break the block
     if (event.getEntity() instanceof FallingBlock fallingBlock) {
@@ -304,7 +304,7 @@ public class Gateways implements Module, Listener {
     }
   }
 
-  @EventHandler(ignoreCancelled = true)
+  @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
   public void onBlockBreak(BlockBreakEvent event) {
     BlockPos blockPos = BlockPos.of(event.getBlock().getLocation());
     AnchorBlock anchorBlock = this.instances.get(blockPos);
@@ -333,7 +333,7 @@ public class Gateways implements Module, Listener {
     anchorBlock.blockPos.world.dropItem(anchorBlock.blockPos.asLocation(), anchorItem);
   }
 
-  @EventHandler
+  @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
   public void onPlayerMove(PlayerMoveEvent event) {
     Player player = event.getPlayer();
 
@@ -523,17 +523,17 @@ public class Gateways implements Module, Listener {
             });
   }
 
-  @EventHandler
+  @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
   public void onPlayerTeleport(PlayerTeleportEvent event) {
     this.updateNearbyAnchors(event.getPlayer(), event.getTo());
   }
 
-  @EventHandler
+  @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
   public void onPlayerRespawn(PlayerRespawnEvent event) {
     this.updateNearbyAnchors(event.getPlayer(), event.getRespawnLocation());
   }
 
-  @EventHandler
+  @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
   public void onPlayerJoin(PlayerJoinEvent event) {
     Player player = event.getPlayer();
 
@@ -551,7 +551,7 @@ public class Gateways implements Module, Listener {
     }
   }
 
-  @EventHandler
+  @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
   public void onPlayerQuit(PlayerQuitEvent event) {
     Player player = event.getPlayer();
 
@@ -562,7 +562,7 @@ public class Gateways implements Module, Listener {
     }
   }
 
-  @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+  @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
   public void onPlayerInteract(PlayerInteractEvent event) {
     if (event.getAction() != Action.RIGHT_CLICK_BLOCK || event.getClickedBlock() == null) {
       return;

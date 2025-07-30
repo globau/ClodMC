@@ -102,27 +102,27 @@ public class BlueMapGriefPrevention extends Addon implements Listener {
     }
   }
 
-  @EventHandler(priority = EventPriority.MONITOR)
+  @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
   public void onClaimCreated(ClaimCreatedEvent event) {
     this.update();
   }
 
-  @EventHandler(priority = EventPriority.MONITOR)
+  @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
   public void onClaimResize(ClaimResizeEvent event) {
     this.update();
   }
 
-  @EventHandler(priority = EventPriority.MONITOR)
+  @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
   public void onClaimChange(ClaimChangeEvent event) {
     this.update();
   }
 
-  @EventHandler(priority = EventPriority.MONITOR)
+  @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
   public void onClaimExtend(ClaimExtendEvent event) {
     this.update();
   }
 
-  @EventHandler(priority = EventPriority.MONITOR)
+  @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
   public void onClaimDeleted(ClaimDeletedEvent event) {
     this.update();
   }

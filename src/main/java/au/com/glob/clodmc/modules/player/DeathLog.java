@@ -5,6 +5,7 @@ import au.com.glob.clodmc.util.Logger;
 import au.com.glob.clodmc.util.StringUtil;
 import org.bukkit.Location;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.jspecify.annotations.NullMarked;
@@ -12,7 +13,7 @@ import org.jspecify.annotations.NullMarked;
 /** log player death location */
 @NullMarked
 public class DeathLog implements Module, Listener {
-  @EventHandler
+  @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
   public void onPlayerDeath(PlayerDeathEvent event) {
     String died = StringUtil.asText(event.deathMessage(), event.getPlayer().getName() + " died");
     Location loc = event.getPlayer().getLocation();

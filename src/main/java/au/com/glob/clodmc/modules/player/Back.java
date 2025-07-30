@@ -9,6 +9,7 @@ import au.com.glob.clodmc.util.TeleportUtil;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.jspecify.annotations.NullMarked;
@@ -30,7 +31,7 @@ public class Back implements Module, Listener {
             });
   }
 
-  @EventHandler
+  @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
   public void onPlayerTeleport(PlayerTeleportEvent event) {
     if (event.getCause() == PlayerTeleportEvent.TeleportCause.COMMAND) {
       PlayerDataFile dataFile = PlayerDataFiles.of(event.getPlayer());

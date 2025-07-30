@@ -7,6 +7,7 @@ import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
@@ -30,7 +31,7 @@ public class SporeBlossom implements Module, Listener {
     Bukkit.addRecipe(this.recipe);
   }
 
-  @EventHandler
+  @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
   public void onPlayerJoin(PlayerJoinEvent event) {
     Schedule.asynchronously(
         () -> {
@@ -52,7 +53,7 @@ public class SporeBlossom implements Module, Listener {
         });
   }
 
-  @EventHandler(ignoreCancelled = true)
+  @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
   public void onEntityPickupItem(EntityPickupItemEvent event) {
     if (!(event.getEntity() instanceof Player player)) {
       return;

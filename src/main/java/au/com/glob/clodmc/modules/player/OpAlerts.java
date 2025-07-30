@@ -6,6 +6,7 @@ import au.com.glob.clodmc.util.Schedule;
 import java.util.ArrayList;
 import java.util.List;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.jspecify.annotations.NullMarked;
@@ -26,7 +27,7 @@ public class OpAlerts implements Module, Listener {
     instance.alerts.add(alert);
   }
 
-  @EventHandler
+  @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
   public void onPlayerJoin(PlayerJoinEvent event) {
     if (this.alerts.isEmpty() || !event.getPlayer().isOp()) {
       return;

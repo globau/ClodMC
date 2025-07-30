@@ -3,6 +3,7 @@ package au.com.glob.clodmc.modules.mobs;
 import au.com.glob.clodmc.modules.Module;
 import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.inventory.ItemStack;
@@ -12,7 +13,7 @@ import org.jspecify.annotations.NullMarked;
 @NullMarked
 public class BetterDrops implements Listener, Module {
   @SuppressWarnings("MissingCasesInEnumSwitch")
-  @EventHandler
+  @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
   public void onEntityDeath(EntityDeathEvent event) {
     // adjust drops for mobs killed by players
     if (event.getEntity().getKiller() == null) {

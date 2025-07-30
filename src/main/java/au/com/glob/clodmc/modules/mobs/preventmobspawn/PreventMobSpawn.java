@@ -31,7 +31,7 @@ public class PreventMobSpawn implements Listener, Module {
     return "GriefPrevention";
   }
 
-  @EventHandler(priority = EventPriority.LOWEST)
+  @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
   public void onCreatureSpawn(CreatureSpawnEvent event) {
     if (event.getEntity() instanceof Enemy) {
       for (AdminClaim adminClaim : this.adminClaims) {

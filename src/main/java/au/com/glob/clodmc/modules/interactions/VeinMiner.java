@@ -95,7 +95,7 @@ public class VeinMiner implements Module, Listener {
     return "GriefPrevention";
   }
 
-  @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
+  @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
   public void onBlockBreak(BlockBreakEvent event) {
     Player player = event.getPlayer();
     Block block = event.getBlock();

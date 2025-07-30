@@ -113,7 +113,7 @@ public class InventorySort implements Listener, Module {
     }
   }
 
-  @EventHandler(priority = EventPriority.HIGHEST)
+  @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
   public void onInventoryClick(InventoryClickEvent event) {
     if (!(event.getWhoClicked() instanceof Player
         && event.getClick() == ClickType.SHIFT_RIGHT
