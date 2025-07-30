@@ -105,7 +105,7 @@ public class MonitorEventHandlerCheck extends AbstractCheck {
       }
       child = child.getNextSibling();
     }
-    
+
     return false;
   }
 
@@ -147,17 +147,20 @@ public class MonitorEventHandlerCheck extends AbstractCheck {
     DetailAST methodName = receiver != null ? receiver.getNextSibling() : null;
 
     // check if the receiver is the event parameter
-    if (receiver != null && receiver.getType() == TokenTypes.IDENT 
+    if (receiver != null
+        && receiver.getType() == TokenTypes.IDENT
         && eventParamName.equals(receiver.getText())) {
-      
+
       // check if the method name starts with "set"
       if (methodName != null && methodName.getType() == TokenTypes.IDENT) {
         String method = methodName.getText();
-        if (method.startsWith("set") && method.length() > 3 
+        if (method.startsWith("set")
+            && method.length() > 3
             && Character.isUpperCase(method.charAt(3))) {
-          this.log(methodCall, 
-              "MONITOR priority event handlers cannot call setter methods on the event parameter: " 
-              + method);
+          this.log(
+              methodCall,
+              "MONITOR priority event handlers cannot call setter methods on the event parameter: "
+                  + method);
         }
       }
     }

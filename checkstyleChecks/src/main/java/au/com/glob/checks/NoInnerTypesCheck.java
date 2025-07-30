@@ -41,8 +41,8 @@ public class NoInnerTypesCheck extends AbstractCheck {
           || parent.getType() == TokenTypes.RECORD_DEF
           || parent.getType() == TokenTypes.ANNOTATION_DEF) {
 
-        String typeName = this.getTypeName(ast);
-        String typeKind = this.getTypeKind(ast.getType());
+        String typeName = CheckUtils.getTypeName(ast);
+        String typeKind = CheckUtils.getTypeKind(ast.getType());
 
         this.log(
             ast,
@@ -52,21 +52,5 @@ public class NoInnerTypesCheck extends AbstractCheck {
       }
       parent = parent.getParent();
     }
-  }
-
-  private String getTypeName(DetailAST ast) {
-    DetailAST nameNode = ast.findFirstToken(TokenTypes.IDENT);
-    return nameNode != null ? nameNode.getText() : "unknown";
-  }
-
-  private String getTypeKind(int tokenType) {
-    return switch (tokenType) {
-      case TokenTypes.CLASS_DEF -> "Class";
-      case TokenTypes.INTERFACE_DEF -> "Interface";
-      case TokenTypes.ENUM_DEF -> "Enum";
-      case TokenTypes.RECORD_DEF -> "Record";
-      case TokenTypes.ANNOTATION_DEF -> "Annotation";
-      default -> "Type";
-    };
   }
 }

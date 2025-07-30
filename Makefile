@@ -1,4 +1,4 @@
-java-files := $(shell find src -name '*.java')
+java-files := $(shell find src -name '*.java') $(shell find checkstyleChecks/src -name '*.java')
 config-files := $(shell find src -name '*.yml') *.gradle.kts Makefile $(shell find config -type f)
 xml-files := $(shell find src -name '*.xml')
 version := $(shell src/build/version.py)

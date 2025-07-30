@@ -57,6 +57,37 @@ tasks.checkstyleMain {
     source += fileTree(".") { include("build.gradle.kts") }
 }
 
+allprojects {
+    apply(plugin = "com.diffplug.spotless")
+
+    spotless {
+        java {
+            googleJavaFormat("1.28.0").reflowLongStrings().skipJavadocFormatting()
+            formatAnnotations()
+        }
+        kotlin {
+            target("*.kts")
+            ktfmt()
+            ktlint()
+        }
+    }
+}
+
+configure(subprojects) {
+    spotless {
+        format("xml") {
+            target("**/*.xml")
+            targetExclude(".*/**")
+            eclipseWtp(com.diffplug.spotless.extra.wtp.EclipseWtpFormatterStep.XML)
+                .configFile(rootProject.file("config/spotless.xml.prefs"))
+            trimTrailingWhitespace()
+            endWithNewline()
+        }
+    }
+}
+
+tasks.named("spotlessApply") { dependsOn(subprojects.map { "${it.path}:spotlessApply" }) }
+
 spotless {
     format("text") {
         target(
@@ -69,15 +100,6 @@ spotless {
         )
         trimTrailingWhitespace()
         endWithNewline()
-    }
-    java {
-        googleJavaFormat("1.28.0").reflowLongStrings().skipJavadocFormatting()
-        formatAnnotations()
-    }
-    kotlin {
-        target("*.kts")
-        ktfmt()
-        ktlint()
     }
     yaml {
         target("src/main/resources/*.yml")

@@ -4,7 +4,6 @@ import com.puppycrawl.tools.checkstyle.api.AbstractCheck;
 import com.puppycrawl.tools.checkstyle.api.DetailAST;
 import com.puppycrawl.tools.checkstyle.api.TokenTypes;
 import org.jspecify.annotations.NullMarked;
-import org.jspecify.annotations.Nullable;
 
 /** checkstyle check that enforces event handler naming conventions. */
 @NullMarked
@@ -27,11 +26,11 @@ public class EventHandlerNamingCheck extends AbstractCheck {
 
   @Override
   public void visitToken(DetailAST ast) {
-    if (!this.hasEventHandlerAnnotation(ast)) {
+    if (CheckUtils.getAnnotation(ast, "EventHandler") == null) {
       return;
     }
 
-    String methodName = this.getMethodName(ast);
+    String methodName = CheckUtils.getName(ast);
     if (methodName == null) {
       return;
     }
@@ -46,19 +45,16 @@ public class EventHandlerNamingCheck extends AbstractCheck {
     if (firstParam == null) {
       return;
     }
-
     DetailAST secondParam = firstParam.getNextSibling();
     while (secondParam != null && secondParam.getType() != TokenTypes.PARAMETER_DEF) {
       secondParam = secondParam.getNextSibling();
     }
     if (secondParam != null) {
-      // more than one parameter
       return;
     }
 
-    String paramName = this.getParameterName(firstParam);
-    String paramType = this.getParameterType(firstParam);
-
+    String paramName = CheckUtils.getName(firstParam);
+    String paramType = CheckUtils.getParameterType(firstParam);
     if (paramName == null || paramType == null) {
       return;
     }
@@ -83,74 +79,6 @@ public class EventHandlerNamingCheck extends AbstractCheck {
       this.log(
           ast,
           "event handler method name should be '" + expectedMethodName + "', found: " + methodName);
-    }
-  }
-
-  private boolean hasEventHandlerAnnotation(DetailAST methodDef) {
-    DetailAST modifiers = methodDef.findFirstToken(TokenTypes.MODIFIERS);
-    if (modifiers == null) {
-      return false;
-    }
-
-    DetailAST annotation = modifiers.findFirstToken(TokenTypes.ANNOTATION);
-    while (annotation != null) {
-      DetailAST annotationName = annotation.findFirstToken(TokenTypes.IDENT);
-      if (annotationName != null && "EventHandler".equals(annotationName.getText())) {
-        return true;
-      }
-      do {
-        annotation = annotation.getNextSibling();
-      } while (annotation != null && annotation.getType() != TokenTypes.ANNOTATION);
-    }
-    return false;
-  }
-
-  private @Nullable String getMethodName(DetailAST methodDef) {
-    DetailAST nameNode = methodDef.findFirstToken(TokenTypes.IDENT);
-    return nameNode != null ? nameNode.getText() : null;
-  }
-
-  private @Nullable String getParameterName(DetailAST paramDef) {
-    DetailAST nameNode = paramDef.findFirstToken(TokenTypes.IDENT);
-    return nameNode != null ? nameNode.getText() : null;
-  }
-
-  private @Nullable String getParameterType(DetailAST paramDef) {
-    DetailAST typeNode = paramDef.findFirstToken(TokenTypes.TYPE);
-    if (typeNode == null) {
-      return null;
-    }
-
-    // handle simple type (IDENT)
-    DetailAST identNode = typeNode.findFirstToken(TokenTypes.IDENT);
-    if (identNode != null) {
-      return identNode.getText();
-    }
-
-    // handle qualified type (DOT)
-    DetailAST dotNode = typeNode.findFirstToken(TokenTypes.DOT);
-    if (dotNode != null) {
-      return this.getQualifiedTypeName(dotNode);
-    }
-
-    return null;
-  }
-
-  private String getQualifiedTypeName(DetailAST dotNode) {
-    StringBuilder sb = new StringBuilder();
-    this.buildQualifiedName(dotNode, sb);
-    return sb.toString();
-  }
-
-  private void buildQualifiedName(DetailAST node, StringBuilder sb) {
-    if (node.getType() == TokenTypes.IDENT) {
-      sb.append(node.getText());
-    } else if (node.getType() == TokenTypes.DOT) {
-      DetailAST left = node.getFirstChild();
-      DetailAST right = left.getNextSibling();
-      this.buildQualifiedName(left, sb);
-      sb.append('.');
-      this.buildQualifiedName(right, sb);
     }
   }
 }

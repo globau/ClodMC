@@ -35,68 +35,11 @@ public class NullMarkedCheck extends AbstractCheck {
     }
 
     // check if this is a top-level type declaration
-    if (this.isTopLevelDeclaration(ast)) {
+    if (CheckUtils.isTopLevelDeclaration(ast)) {
       // check if the file has @NullMarked annotation
-      if (!this.hasNullMarkedAnnotation(ast)) {
+      if (CheckUtils.getAnnotation(ast, "NullMarked") == null) {
         this.log(ast, "file with top-level type declarations is missing @NullMarked annotation");
       }
     }
-  }
-
-  private boolean hasNullMarkedAnnotation(DetailAST ast) {
-    // traverse up to the compilation unit (root) and search for @NullMarked annotation
-    DetailAST root = ast;
-    while (root.getParent() != null) {
-      root = root.getParent();
-    }
-
-    return this.findNullMarkedAnnotation(root);
-  }
-
-  private boolean findNullMarkedAnnotation(DetailAST node) {
-    // check if this node is a @NullMarked annotation
-    if (node.getType() == TokenTypes.ANNOTATION) {
-      DetailAST annotationName = node.findFirstToken(TokenTypes.IDENT);
-      if (annotationName != null && "NullMarked".equals(annotationName.getText())) {
-        return true;
-      }
-    }
-
-    // recursively search children
-    DetailAST child = node.getFirstChild();
-    while (child != null) {
-      if (this.findNullMarkedAnnotation(child)) {
-        return true;
-      }
-      child = child.getNextSibling();
-    }
-
-    return false;
-  }
-
-  private boolean isTopLevelDeclaration(DetailAST ast) {
-    // check if this is a type declaration
-    int tokenType = ast.getType();
-    if (tokenType != TokenTypes.CLASS_DEF
-        && tokenType != TokenTypes.INTERFACE_DEF
-        && tokenType != TokenTypes.ENUM_DEF
-        && tokenType != TokenTypes.RECORD_DEF) {
-      return false;
-    }
-
-    // check if it's at the top level (not nested inside another type)
-    DetailAST parent = ast.getParent();
-    while (parent != null) {
-      int parentType = parent.getType();
-      if (parentType == TokenTypes.CLASS_DEF
-          || parentType == TokenTypes.INTERFACE_DEF
-          || parentType == TokenTypes.ENUM_DEF
-          || parentType == TokenTypes.RECORD_DEF) {
-        return false; // this is a nested type
-      }
-      parent = parent.getParent();
-    }
-
-    return true;
   }
 }
