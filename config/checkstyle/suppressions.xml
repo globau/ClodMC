@@ -6,4 +6,7 @@
 
 <suppressions>
     <suppress files="/src/main/java/vendored/" checks=".*" />
+    <suppress files="/src/main/java/au/com/glob/clodmc/build/" id="SystemOut" />
+    <suppress files="/src/main/java/au/com/glob/clodmc/build/"
+        checks="NullMarkedCheck" />
 </suppressions>

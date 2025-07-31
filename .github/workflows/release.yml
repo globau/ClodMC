@@ -29,7 +29,7 @@ jobs:
       - name: tag
         id: tag
         run: |
-          VER=$(./src/build/version.py)
+          VER=$(make -f Makefile-build version)
           echo "ver=$VER" >> $GITHUB_OUTPUT
           TAG=v$VER
           echo "tag=$TAG" >> $GITHUB_OUTPUT

@@ -1,0 +1,6 @@
+build/classes/au/com/glob/clodmc/build/Version.class: src/main/java/au/com/glob/clodmc/build/Version.java
+	@javac -d build/classes src/main/java/au/com/glob/clodmc/build/Version.java
+
+.PHONY: version
+version: build/classes/au/com/glob/clodmc/build/Version.class
+	@java -cp build/classes au.com.glob.clodmc.build.Version

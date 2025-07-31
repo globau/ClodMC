@@ -1,7 +1,7 @@
 java-files := $(shell find src -name '*.java') $(shell find checkstyleChecks/src -name '*.java')
 config-files := $(shell find src -name '*.yml') *.gradle.kts Makefile $(shell find config -type f)
 xml-files := $(shell find src -name '*.xml')
-version := $(shell src/build/version.py)
+version := $(shell make -f Makefile-build version)
 gradle := ./gradlew $(shell ./src/build/gradle-args.py)
 
 build: build/libs/ClodMC-$(version).jar
