@@ -1,9 +1,6 @@
 package au.com.glob.clodmc.build;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -17,23 +14,16 @@ import java.util.stream.Stream;
 public class JavaHome {
   private static final int JDK_VERSION = 21;
 
-  private static String readStream(InputStream stream) throws IOException {
-    try (BufferedReader reader =
-        new BufferedReader(new InputStreamReader(stream, StandardCharsets.UTF_8))) {
-      return reader.readLine();
-    }
-  }
-
-  private static String versionFromBin(String javaFilename)
-      throws IOException, InterruptedException {
-    ProcessBuilder pb = new ProcessBuilder(javaFilename, "--version");
+  private static String capture(String... command) throws IOException, InterruptedException {
+    ProcessBuilder pb = new ProcessBuilder(command);
     Process process = pb.start();
-    String stdout = readStream(process.getInputStream());
+    String output = new String(process.getInputStream().readAllBytes(), StandardCharsets.UTF_8);
     int exitCode = process.waitFor();
     if (exitCode != 0) {
-      throw new RuntimeException("java: " + readStream(process.getErrorStream()));
+      throw new RuntimeException(
+          new String(process.getErrorStream().readAllBytes(), StandardCharsets.UTF_8));
     }
-    return stdout.trim();
+    return output;
   }
 
   public static void main(String[] args) {
@@ -61,7 +51,7 @@ public class JavaHome {
             String javaHome = versionPath + "/Contents/Home";
             String javaFilename = javaHome + "/bin/java";
             if (Files.exists(Path.of(javaFilename))) {
-              String versionOutput = versionFromBin(javaFilename);
+              String versionOutput = capture(javaFilename, "--version");
               Matcher matcher1 = Pattern.compile("^\\S+ (\\d+)\\.").matcher(versionOutput);
               if (matcher1.find()) {
                 int version = Integer.parseInt(matcher1.group(1));
