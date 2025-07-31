@@ -13,6 +13,7 @@ import java.util.stream.Stream;
 @SuppressWarnings("NullabilityAnnotations")
 public class JavaHome {
   private static final int JDK_VERSION = 21;
+  private static final Path CACHE_FILE = Path.of("build/java_homr");
 
   private static String capture(String... command) throws IOException, InterruptedException {
     ProcessBuilder pb = new ProcessBuilder(command);
@@ -26,14 +27,43 @@ public class JavaHome {
     return output;
   }
 
+  private static String readCached() {
+    try {
+      String cachedJavaHome = Files.readString(CACHE_FILE).trim();
+      if (Files.exists(Path.of(cachedJavaHome + "/bin/java"))) {
+        return cachedJavaHome;
+      }
+      Files.delete(CACHE_FILE);
+    } catch (IOException e) {
+      // ignored
+    }
+    return null;
+  }
+
+  private static void writeCached(String path) {
+    try {
+      Files.writeString(CACHE_FILE, path + "\n");
+    } catch (IOException e) {
+      // ignored
+    }
+  }
+
   public static void main(String[] args) {
     try {
+      String cached = readCached();
+      if (cached != null) {
+        System.out.println(cached);
+        return;
+      }
+
       // check the running java version
       Matcher matcher = Pattern.compile("^(\\d+)\\.").matcher(System.getProperty("java.version"));
       if (matcher.find()) {
         int version = Integer.parseInt(matcher.group(1));
         if (version == JDK_VERSION) {
-          System.out.println(System.getProperty("java.home"));
+          String javaHome = System.getProperty("java.home");
+          writeCached(javaHome);
+          System.out.println(javaHome);
           return;
         }
       }
@@ -56,6 +86,7 @@ public class JavaHome {
               if (matcher1.find()) {
                 int version = Integer.parseInt(matcher1.group(1));
                 if (version == JDK_VERSION) {
+                  writeCached(javaHome);
                   System.out.println(javaHome);
                   return;
                 }
