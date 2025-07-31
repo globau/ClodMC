@@ -43,7 +43,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           git fetch --tags
-          ./src/build/build-release-readme.py > release.md
+          make -f Makefile-build readme > release.md
           gh release create ${{ steps.tag.outputs.tag }} \
             --repo="$GITHUB_REPOSITORY" \
             --generate-notes \
