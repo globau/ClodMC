@@ -4,3 +4,10 @@ build/classes/au/com/glob/clodmc/build/Version.class: src/main/java/au/com/glob/
 .PHONY: version
 version: build/classes/au/com/glob/clodmc/build/Version.class
 	@java -cp build/classes au.com.glob.clodmc.build.Version
+
+build/classes/au/com/glob/clodmc/build/JavaHome.class: src/main/java/au/com/glob/clodmc/build/JavaHome.java
+	@javac -d build/classes src/main/java/au/com/glob/clodmc/build/JavaHome.java
+
+.PHONY: javahome
+javahome: build/classes/au/com/glob/clodmc/build/JavaHome.class
+	@java -cp build/classes au.com.glob.clodmc.build.JavaHome
