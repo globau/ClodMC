@@ -5,6 +5,9 @@ import subprocess
 import sys
 from pathlib import Path
 
+# output gradle args to force use of the correct java version
+# ./gradlew `./src/build/gradle-args.py` ...
+
 JDK_VERSION = 21
 
 

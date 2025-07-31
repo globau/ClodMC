@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
-import datetime
 import subprocess
 import sys
+from datetime import UTC, datetime
+
+# output a version number derived from the latest commit's timestamp
 
 
 def main() -> None:
@@ -14,7 +16,7 @@ def main() -> None:
     )
     # in gmt+8
     timestamp = int(p.stdout.strip())
-    dt = datetime.datetime.fromtimestamp(timestamp + 60 * 60 * 8, datetime.timezone.utc)
+    dt = datetime.fromtimestamp(timestamp + 60 * 60 * 8, UTC)
     # date+hh:mm pretending to be a version string
     print(dt.strftime("%y.%m%d.%H%M"))
 

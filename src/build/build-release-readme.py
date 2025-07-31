@@ -4,6 +4,8 @@ import subprocess
 import sys
 from pathlib import Path
 
+# augment README.md with a list of recent changes from the commit log
+
 
 def main() -> None:
     root_path = subprocess.run(

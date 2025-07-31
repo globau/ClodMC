@@ -7,6 +7,8 @@ import sys
 from pathlib import Path
 from typing import Any
 
+# update vendored libraries
+
 
 def main() -> None:
     vendored_filepath = Path.cwd() / "src/vendored/vendored.ini"
