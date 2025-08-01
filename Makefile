@@ -1,8 +1,8 @@
 java-files := $(shell find src -name '*.java') $(shell find checkstyleChecks/src -name '*.java')
 config-files := $(shell find src -name '*.yml') *.gradle.kts Makefile $(shell find config -type f)
 xml-files := $(shell find src -name '*.xml')
-version := $(shell make -f Makefile-build version)
-gradle := ./gradlew -Dorg.gradle.java.home=$(shell make -f Makefile-build javahome)
+version := $(shell ./scripts/version)
+gradle := ./gradlew -Dorg.gradle.java.home=$(shell ./scripts/java-home)
 
 build: build/libs/ClodMC-$(version).jar
 build/libs/ClodMC-$(version).jar: $(java-files) $(config-files)

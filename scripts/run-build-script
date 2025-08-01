@@ -1,0 +1,21 @@
+CLASS=$1
+if [ -z "$CLASS" ]; then
+    exit 1
+fi
+shift
+
+SRC="src/main/java/au/com/glob/clodmc/build/$CLASS.java"
+OUT="build/classes/au/com/glob/clodmc/build"
+CLS="$OUT/$CLASS.class"
+
+if [ ! -e "$SRC" ]; then
+    echo "file not found: $SRC"
+    exit 1
+fi
+
+mkdir -p "$OUT"
+if [ ! -f "$CLS" ] || [ "$SRC" -nt "$CLS" ]; then
+    javac -d build/classes "$SRC"
+fi
+
+java -cp build/classes au.com.glob.clodmc.build.$CLASS $*

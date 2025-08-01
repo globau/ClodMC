@@ -118,7 +118,7 @@ public class Vendor {
               .toList();
 
       List<String> lines = new ArrayList<>();
-      lines.add("# use `java src/main/java/au/com/glob/clodmc/build/Vendor.java` to apply");
+      lines.add("# use `scripts/vendor` to update");
       for (LibraryConfig lib : sortedConfigs) {
         lines.add("#");
         lines.add(lib.name + ".repo=" + lib.repo);
@@ -147,8 +147,7 @@ public class Vendor {
   public static void main(String[] args) {
     try {
       if (args.length != 1) {
-        throw new RuntimeException(
-            "usage: java src/main/java/au/com/glob/clodmc/build/Vendor.java <library-name>");
+        throw new RuntimeException("usage: scripts/vendor <library-name>");
       }
       String libraryName = args[0];
 
