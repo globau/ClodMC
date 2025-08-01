@@ -13,8 +13,6 @@ build/libs/ClodMC-$(version).jar: $(java-files) $(config-files)
 format: build/format
 build/format: $(java-files) $(test-files) $(config-files) $(xml-files)
 	@mkdir -p build
-	uvx ruff check --config .ruff.toml --fix-only --unsafe-fixes --exit-zero --show-fixes
-	uvx ruff format --config .ruff.toml
 	$(gradle) :spotlessApply
 	@touch $@
 
@@ -24,6 +22,4 @@ clean:
 
 .PHONY: test
 test:
-	uvx ruff check --config .ruff.toml
-	uvx ruff format --config .ruff.toml --check
 	$(gradle) check --rerun-tasks
