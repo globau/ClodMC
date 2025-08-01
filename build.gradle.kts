@@ -31,7 +31,7 @@ group = "au.com.glob"
 description = "ClodMC"
 
 version =
-    ProcessBuilder("make", "-f", "Makefile-build version")
+    ProcessBuilder("make", "-f", "Makefile-build", "version")
         .start()
         .inputStream
         .bufferedReader()
