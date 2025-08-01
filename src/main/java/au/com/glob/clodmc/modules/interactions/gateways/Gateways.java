@@ -98,7 +98,6 @@ public class Gateways implements Module, Listener {
   private static final int MAX_RANDOM_TP_TIME = 60; // minutes
   private static final int MIN_RANDOM_TP_DISTANCE = 1500;
   private static final int RANDOM_TP_COOLDOWN = 60; // seconds
-  static final int VISIBLE_RANGE_SQUARED = 16 * 16;
 
   private final File configFile = new File(ClodMC.instance.getDataFolder(), "gateways.yml");
   final Map<BlockPos, AnchorBlock> instances = new HashMap<>();
@@ -168,9 +167,9 @@ public class Gateways implements Module, Listener {
       }
     }
 
-    // emit particles
+    // visuals
     for (AnchorBlock anchorBlock : this.instances.values()) {
-      anchorBlock.updateVisuals();
+      anchorBlock.visuals.update();
     }
   }
 
@@ -280,11 +279,11 @@ public class Gateways implements Module, Listener {
         anchorBlock.disconnect();
       } else {
         anchorBlock.connectTo(otherAnchorBlock);
-        otherAnchorBlock.updateVisuals();
+        otherAnchorBlock.visuals.update();
       }
     }
 
-    anchorBlock.updateVisuals();
+    anchorBlock.visuals.update();
 
     // save
     this.instances.put(anchorBlock.blockPos, anchorBlock);
@@ -313,12 +312,12 @@ public class Gateways implements Module, Listener {
     }
 
     // remove portal and disconnect
-    anchorBlock.stopVisuals();
+    anchorBlock.visuals.disable();
     this.instances.remove(blockPos);
     AnchorBlock otherAnchorBlock = anchorBlock.connectedTo;
     if (otherAnchorBlock != null) {
       otherAnchorBlock.disconnect();
-      otherAnchorBlock.updateVisuals();
+      otherAnchorBlock.visuals.update();
     }
     this.save();
 
@@ -558,7 +557,7 @@ public class Gateways implements Module, Listener {
     this.ignore.remove(player);
 
     for (AnchorBlock anchorBlock : this.instances.values()) {
-      anchorBlock.removeNearbyPlayer(player);
+      anchorBlock.visuals.removeNearbyPlayer(player);
     }
   }
 
@@ -576,11 +575,7 @@ public class Gateways implements Module, Listener {
 
   public void updateNearbyAnchors(Player player, Location location) {
     for (AnchorBlock anchorBlock : this.instances.values()) {
-      if (anchorBlock.canSeeVisualsFrom(location)) {
-        anchorBlock.addNearbyPlayer(player);
-      } else {
-        anchorBlock.removeNearbyPlayer(player);
-      }
+      anchorBlock.visuals.updateNearbyPlayer(player, location);
     }
   }
 
