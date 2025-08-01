@@ -13,7 +13,7 @@ import java.util.stream.Stream;
 @SuppressWarnings("NullabilityAnnotations")
 public class JavaHome {
   private static final int JDK_VERSION = 21;
-  private static final Path CACHE_FILE = Path.of("build/java_homr");
+  private static final Path CACHE_FILE = Path.of("build/java_home");
 
   private static String capture(String... command) throws IOException, InterruptedException {
     ProcessBuilder pb = new ProcessBuilder(command);
