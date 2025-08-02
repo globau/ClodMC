@@ -6,6 +6,7 @@ import org.jspecify.annotations.NullMarked;
 public enum ChatStyle {
   FYI("<grey>"),
   WHISPER("<grey><i>"),
+  PLAIN(""),
   INFO("<yellow>"),
   WARNING("<yellow><i>"),
   ERROR("<red>");

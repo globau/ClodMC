@@ -11,16 +11,16 @@ import org.jspecify.annotations.Nullable;
 public class CheckUtils {
   private CheckUtils() {}
 
-  public static boolean isRelativeTo(String filename, String relativePath) {
+  public static String getRelativeFilename(String filename) {
     Path path = Paths.get(filename).getParent();
     while (!path.getFileName().toString().equals("src")) {
       path = path.getParent();
     }
     String rootPath = path.getParent().toString() + "/";
+    return filename.startsWith(rootPath) ? filename.substring(rootPath.length()) : filename;
+  }
 
-    if (filename.startsWith(rootPath)) {
-      filename = filename.substring(rootPath.length() - 1);
-    }
+  public static boolean isRelativeTo(String filename, String relativePath) {
     if (!relativePath.startsWith("/")) {
       relativePath = "/" + relativePath;
     }
@@ -28,7 +28,7 @@ public class CheckUtils {
       relativePath = relativePath + "/";
     }
 
-    return filename.startsWith(relativePath);
+    return getRelativeFilename(filename).startsWith(relativePath);
   }
 
   public static @Nullable DetailAST getAnnotation(DetailAST methodDef, String name) {

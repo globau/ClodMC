@@ -18,6 +18,10 @@ public final class Chat {
     sendMessage(sender, ChatStyle.WHISPER, message);
   }
 
+  public static void plain(CommandSender sender, String message) {
+    sendMessage(sender, ChatStyle.PLAIN, message);
+  }
+
   public static void info(CommandSender sender, String message) {
     sendMessage(sender, ChatStyle.INFO, message);
   }
