@@ -15,20 +15,17 @@ import org.jspecify.annotations.NullMarked;
 /** Prevents enemy mobs from spawning within areas claimed by admin (eg. spawn island) */
 @NullMarked
 public class PreventMobSpawn implements Listener, Module {
+  public static final String REQUIRED_PLUGIN = "GriefPrevention";
+
   private final List<AdminClaim> adminClaims = new ArrayList<>(1);
 
   @Override
-  public void initialise() {
+  public void loadConfig() {
     for (Claim claim : GriefPrevention.instance.dataStore.getClaims()) {
       if (claim.isAdminClaim()) {
         this.adminClaims.add(new AdminClaim(claim));
       }
     }
-  }
-
-  @Override
-  public String dependsOn() {
-    return "GriefPrevention";
   }
 
   @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)

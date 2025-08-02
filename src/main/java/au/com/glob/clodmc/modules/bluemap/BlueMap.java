@@ -16,12 +16,9 @@ import org.jspecify.annotations.Nullable;
 /** Bridge between ClodMC modules and BlueMap */
 @NullMarked
 public class BlueMap implements Module, Listener {
-  private final List<Addon> addons = new ArrayList<>(4);
+  public static final String REQUIRED_PLUGIN = "BlueMap";
 
-  @Override
-  public String dependsOn() {
-    return "BlueMap";
-  }
+  private final List<Addon> addons = new ArrayList<>(4);
 
   private void register(Class<? extends Addon> cls, @Nullable BlueMapAPI api) {
     try {

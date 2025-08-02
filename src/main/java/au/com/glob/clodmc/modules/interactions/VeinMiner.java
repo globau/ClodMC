@@ -43,6 +43,8 @@ import org.jspecify.annotations.Nullable;
 /** Mine connected blocks with one action */
 @NullMarked
 public class VeinMiner implements Module, Listener {
+  public static final String REQUIRED_PLUGIN = "GriefPrevention";
+
   private static final TypedKey<Enchantment> VEINMINE_KEY =
       TypedKey.create(RegistryKey.ENCHANTMENT, Key.key("clod-mc:veinminer"));
 
@@ -88,11 +90,6 @@ public class VeinMiner implements Module, Listener {
         RegistryAccess.registryAccess()
             .getRegistry(RegistryKey.ENCHANTMENT)
             .getOrThrow(VEINMINE_KEY);
-  }
-
-  @Override
-  public String dependsOn() {
-    return "GriefPrevention";
   }
 
   @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)

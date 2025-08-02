@@ -60,78 +60,86 @@ public class ModuleRegistry implements Iterable<Module>, PluginBootstrap {
 
   public void registerAll() {
     // core - used by other modules
-    this.register(new OpAlerts());
+    this.register(OpAlerts.class);
 
     // crafting
-    this.register(new SporeBlossom());
+    this.register(SporeBlossom.class);
 
     // interactions
-    this.register(new FastLeafDecay());
-    this.register(new Gateways());
-    this.register(new NamedStorage());
-    this.register(new SignedContainers());
-    this.register(new VeinMiner());
-    this.register(new WaxedItemFrames());
-    this.register(new WaxedPressurePlates());
+    this.register(FastLeafDecay.class);
+    this.register(Gateways.class);
+    this.register(NamedStorage.class);
+    this.register(SignedContainers.class);
+    this.register(VeinMiner.class, VeinMiner.REQUIRED_PLUGIN);
+    this.register(WaxedItemFrames.class);
+    this.register(WaxedPressurePlates.class);
 
     // inventory
-    this.register(new AdminInv());
-    this.register(new DeepPockets());
-    this.register(new InventoryRestore());
-    this.register(new InventorySort());
+    this.register(AdminInv.class);
+    this.register(DeepPockets.class);
+    this.register(InventoryRestore.class);
+    this.register(InventorySort.class);
 
     // mobs
-    this.register(new BetterDrops());
-    this.register(new ExplodingCreepers());
-    this.register(new PreventMobGriefing());
-    this.register(new PreventMobSpawn());
+    this.register(BetterDrops.class);
+    this.register(ExplodingCreepers.class);
+    this.register(PreventMobGriefing.class);
+    this.register(PreventMobSpawn.class, PreventMobSpawn.REQUIRED_PLUGIN);
 
     // player
-    this.register(new AFK());
-    this.register(new Back());
-    this.register(new DeathLog());
-    this.register(new GameMode());
-    this.register(new Homes());
-    this.register(new Invite());
-    this.register(new OfflineMessages());
-    this.register(new PlayerTracker());
-    this.register(new Seen());
-    this.register(new Sleep());
-    this.register(new Spawn());
-    this.register(new WelcomeBook());
+    this.register(AFK.class);
+    this.register(Back.class);
+    this.register(DeathLog.class);
+    this.register(GameMode.class);
+    this.register(Homes.class);
+    this.register(Invite.class);
+    this.register(OfflineMessages.class);
+    this.register(PlayerTracker.class);
+    this.register(Seen.class);
+    this.register(Sleep.class);
+    this.register(Spawn.class);
+    this.register(WelcomeBook.class);
 
     // server
-    this.register(new ClodServerLinks());
-    this.register(new HeatMap());
-    this.register(new MOTD());
-    this.register(new RequiredPlugins());
-    this.register(new ServerStatus());
+    this.register(ClodServerLinks.class);
+    this.register(HeatMap.class);
+    this.register(MOTD.class);
+    this.register(RequiredPlugins.class);
+    this.register(ServerStatus.class);
 
     // bluemap
-    this.register(new BlueMap());
+    this.register(BlueMap.class, BlueMap.REQUIRED_PLUGIN);
 
     // register commands built by modules
     CommandBuilder.registerBuilders();
   }
 
-  private void register(Module module) {
-    String dependsOn = module.dependsOn();
-    if (dependsOn != null && !Bukkit.getPluginManager().isPluginEnabled(dependsOn)) {
+  private void register(Class<? extends Module> moduleClass, @Nullable String requiredPlugin) {
+    if (requiredPlugin != null && !Bukkit.getPluginManager().isPluginEnabled(requiredPlugin)) {
       Logger.warning(
-          "Cannot load "
-              + module.getClass().getSimpleName()
+          "Cannot load module "
+              + moduleClass.getSimpleName()
               + ": depends on plugin "
-              + dependsOn
+              + requiredPlugin
               + " which is not enabled");
       return;
     }
 
-    this.modules.put(module.getClass(), module);
-    module.initialise();
+    Module module;
+    try {
+      module = moduleClass.getDeclaredConstructor().newInstance();
+    } catch (Exception e) {
+      throw new RuntimeException(e);
+    }
+    this.modules.put(moduleClass, module);
 
     if (module instanceof Listener listener) {
       Bukkit.getServer().getPluginManager().registerEvents(listener, ClodMC.instance);
     }
+  }
+
+  private void register(Class<? extends Module> moduleClass) {
+    this.register(moduleClass, null);
   }
 
   @Override
