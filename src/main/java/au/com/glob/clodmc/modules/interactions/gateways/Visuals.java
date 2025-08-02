@@ -22,6 +22,8 @@ import org.jspecify.annotations.Nullable;
 @NullMarked
 public class Visuals {
   private static final int VISIBLE_RANGE_SQUARED = 32 * 32;
+  private static final int ACTIVE_RING_COUNT = 8;
+  private static final int INACTIVE_RING_COUNT = 4;
   private static final double EFFECT_RADIUS = 0.375;
   private static final double EFFECT_SPEED_ACTIVE = 0.075;
   private static final double EFFECT_SPEED_INACTIVE = 0.05;
@@ -40,14 +42,70 @@ public class Visuals {
   private @Nullable BukkitTask particleTask = null;
   private final List<NearbyPlayer> nearbyPlayers = new ArrayList<>();
 
+  private final double[] activeBottomRingY;
+  private final double[] activeTopRingY;
+  private final Color[] activeBottomRingColours;
+  private final Color[] activeTopRingColours;
+
+  private final double[] inactiveBottomRingY;
+  private final double[] inactiveTopRingY;
+  private final Color[] inactiveBottomRingColours;
+  private final Color[] inactiveTopRingColours;
+
+  private final double[] ringRotationOffsets;
+
   Visuals(AnchorBlock anchorBlock) {
     this.anchorBlock = anchorBlock;
     this.blockLocation = anchorBlock.blockPos.asLocation();
-    this.topLocation = this.blockLocation.clone().add(0.0, 2, 0.0);
     this.bottomLocation = this.blockLocation.clone().add(0.0, 1, 0.0);
+    this.topLocation = this.blockLocation.clone().add(0.0, 2, 0.0);
     Network network = Gateways.networkIdToColours(anchorBlock.networkId);
-    this.topColour = network.top;
     this.bottomColour = network.bottom;
+    this.topColour = network.top;
+
+    this.activeBottomRingY = new double[ACTIVE_RING_COUNT];
+    this.activeTopRingY = new double[ACTIVE_RING_COUNT];
+    this.activeBottomRingColours = new Color[ACTIVE_RING_COUNT];
+    this.activeTopRingColours = new Color[ACTIVE_RING_COUNT];
+    this.preCalculateRingData(
+        ACTIVE_RING_COUNT,
+        this.activeBottomRingY,
+        this.activeTopRingY,
+        this.activeBottomRingColours,
+        this.activeTopRingColours);
+
+    this.inactiveBottomRingY = new double[INACTIVE_RING_COUNT];
+    this.inactiveTopRingY = new double[INACTIVE_RING_COUNT];
+    this.inactiveBottomRingColours = new Color[INACTIVE_RING_COUNT];
+    this.inactiveTopRingColours = new Color[INACTIVE_RING_COUNT];
+    this.preCalculateRingData(
+        INACTIVE_RING_COUNT,
+        this.inactiveBottomRingY,
+        this.inactiveTopRingY,
+        this.inactiveBottomRingColours,
+        this.inactiveTopRingColours);
+
+    this.ringRotationOffsets = new double[Math.max(ACTIVE_RING_COUNT, INACTIVE_RING_COUNT)];
+    for (int ring = 0; ring < this.ringRotationOffsets.length; ring++) {
+      this.ringRotationOffsets[ring] = ring * 0.2;
+    }
+  }
+
+  private void preCalculateRingData(
+      int ringCount,
+      double[] bottomRingY,
+      double[] topRingY,
+      Color[] bottomRingColours,
+      Color[] topRingColours) {
+    for (int ring = 0; ring < ringCount; ring++) {
+      double ringFraction = (double) ring / ringCount;
+      bottomRingY[ring] = this.bottomLocation.getY() + ringFraction;
+      topRingY[ring] = this.topLocation.getY() + ringFraction;
+      double totalHeightFraction = ringFraction * 0.5;
+      double topHeightFraction = 0.5 + ringFraction * 0.5;
+      bottomRingColours[ring] = this.getColourAtFraction(totalHeightFraction);
+      topRingColours[ring] = this.getColourAtFraction(topHeightFraction);
+    }
   }
 
   void disable() {
@@ -135,18 +193,18 @@ public class Visuals {
 
     double baseRotation =
         world.getGameTime() * (isActive ? EFFECT_SPEED_ACTIVE : EFFECT_SPEED_INACTIVE);
-    int ringsPerSection = isActive ? 8 : 4;
+
+    Color[] bottomRingColours =
+        isActive ? this.activeBottomRingColours : this.inactiveBottomRingColours;
+    Color[] topRingColours = isActive ? this.activeTopRingColours : this.inactiveTopRingColours;
+    double[] bottomRingY = isActive ? this.activeBottomRingY : this.inactiveBottomRingY;
+    double[] topRingY = isActive ? this.activeTopRingY : this.inactiveTopRingY;
+    int ringsPerSection = bottomRingColours.length;
 
     for (int ring = 0; ring < ringsPerSection; ring++) {
-      double ringFraction = (double) ring / ringsPerSection;
-      double bottomY = this.bottomLocation.getY() + ringFraction;
-      double topY = this.topLocation.getY() + ringFraction;
-      double ringRotation = baseRotation + (ring * 0.2);
-      double totalHeightFraction = ringFraction * 0.5;
-      double topHeightFraction = 0.5 + ringFraction * 0.5;
-
-      Color bottomSectionColour = this.getColourAtFraction(totalHeightFraction);
-      Color topSectionColour = this.getColourAtFraction(topHeightFraction);
+      double ringRotation = baseRotation + this.ringRotationOffsets[ring];
+      Color bottomSectionColour = bottomRingColours[ring];
+      Color topSectionColour = topRingColours[ring];
 
       for (int i = 0; i < EFFECT_PARTICLES; i++) {
         double angle = ringRotation + (i * ANGLE_STEP);
@@ -154,7 +212,7 @@ public class Visuals {
         double sinAngle = Math.sin(angle);
 
         particleLoc.setX(this.bottomLocation.getX() + EFFECT_RADIUS * cosAngle);
-        particleLoc.setY(bottomY);
+        particleLoc.setY(bottomRingY[ring]);
         particleLoc.setZ(this.bottomLocation.getZ() + EFFECT_RADIUS * sinAngle);
         new ParticleBuilder(Particle.TRAIL)
             .data(
@@ -168,7 +226,7 @@ public class Visuals {
             .spawn();
 
         particleLoc.setX(this.topLocation.getX() + EFFECT_RADIUS * cosAngle);
-        particleLoc.setY(topY);
+        particleLoc.setY(topRingY[ring]);
         particleLoc.setZ(this.topLocation.getZ() + EFFECT_RADIUS * sinAngle);
         new ParticleBuilder(Particle.TRAIL)
             .data(
