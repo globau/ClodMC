@@ -56,10 +56,10 @@ public class HttpClient {
 
   private static HttpJsonResponse readJsonResponse(HttpURLConnection connection) {
     InputStreamReader streamReader = createReader(connection);
+    if (streamReader == null) {
+      return new HttpJsonResponse(null);
+    }
     try (streamReader) {
-      if (streamReader == null) {
-        return new HttpJsonResponse(null);
-      }
       JsonObject response = gson.fromJson(streamReader, JsonObject.class);
       return new HttpJsonResponse(response);
     } catch (Exception exception) {
