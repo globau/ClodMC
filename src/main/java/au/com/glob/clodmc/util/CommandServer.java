@@ -49,6 +49,8 @@ public class CommandServer implements Closeable {
 
   @Override
   public void close() throws IOException {
+    this.inStream.close();
+    this.outStream.close();
     this.socket.close();
   }
 }
