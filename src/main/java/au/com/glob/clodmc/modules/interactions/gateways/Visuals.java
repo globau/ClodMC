@@ -59,7 +59,7 @@ public class Visuals {
     this.blockLocation = anchorBlock.blockPos.asLocation();
     this.bottomLocation = this.blockLocation.clone().add(0.0, 1, 0.0);
     this.topLocation = this.blockLocation.clone().add(0.0, 2, 0.0);
-    Network network = Gateways.networkIdToColours(anchorBlock.networkId);
+    Network network = Network.of(anchorBlock.networkId);
     this.bottomColour = network.bottom;
     this.topColour = network.top;
 

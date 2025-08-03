@@ -92,7 +92,7 @@ class AnchorItem {
 
   static void setMeta(
       ItemStack anchorItem, int networkId, @Nullable String name, @Nullable String suffix) {
-    Network network = Gateways.networkIdToColours(networkId);
+    Network network = Network.of(networkId);
     ItemMeta meta = anchorItem.getItemMeta();
     meta.displayName(Component.text(name == null ? DEFAULT_ANCHOR_NAME : name));
     List<TextComponent> lore =

@@ -16,4 +16,12 @@ class Network {
     this.top = topColour;
     this.bottom = bottomColour;
   }
+
+  static Network of(int networkId) {
+    return new Network(networkId);
+  }
+
+  static int coloursToNetworkId(Colour topColour, Colour bottomColour) {
+    return (topColour.index << 4) | bottomColour.index;
+  }
 }

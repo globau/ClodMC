@@ -34,7 +34,7 @@ public class AnchorBlock implements ConfigurationSerializable {
     this.blockPos = BlockPos.of(location);
     this.name = name;
 
-    Network network = Gateways.networkIdToColours(networkId);
+    Network network = Network.of(networkId);
     this.topColour = network.top;
     this.bottomColour = network.bottom;
 

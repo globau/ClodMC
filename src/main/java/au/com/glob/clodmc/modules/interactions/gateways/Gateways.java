@@ -106,7 +106,7 @@ public class Gateways implements Module, Listener {
 
   // a black-black gateway teleports the player to a random location
   public static final int RANDOM_NETWORK_ID =
-      coloursToNetworkId(
+      Network.coloursToNetworkId(
           Objects.requireNonNull(Colours.of(Material.BLACK_WOOL)),
           Objects.requireNonNull(Colours.of(Material.BLACK_WOOL)));
 
@@ -200,7 +200,7 @@ public class Gateways implements Module, Listener {
       Logger.error("failed to craft anchor block: invalid colour material");
       return;
     }
-    int networkId = coloursToNetworkId(topColour, bottomColour);
+    int networkId = Network.coloursToNetworkId(topColour, bottomColour);
 
     AnchorItem.setMeta(item, networkId);
 
@@ -491,14 +491,6 @@ public class Gateways implements Module, Listener {
 
   public Collection<AnchorBlock> getAnchorBlocks() {
     return this.instances.values();
-  }
-
-  private static int coloursToNetworkId(Colour topColour, Colour bottomColour) {
-    return (topColour.index << 4) | bottomColour.index;
-  }
-
-  static Network networkIdToColours(int networkId) {
-    return new Network(networkId);
   }
 
   private @Nullable Location randomTeleportLocation(AnchorBlock anchorBlock, Player player) {
