@@ -8,6 +8,7 @@ import java.io.InputStreamReader;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
 import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 @NullMarked
 public class CommandServer implements Closeable {
@@ -28,14 +29,14 @@ public class CommandServer implements Closeable {
     this.outStream.writeBytes("%s\r\n".formatted(line));
   }
 
-  public String readLine() throws IOException {
+  public @Nullable String readLine() throws IOException {
     return this.inStream.readLine();
   }
 
   public void waitFor(String prefix) throws IOException {
     while (true) {
       String line = this.readLine();
-      if (line.startsWith(prefix)) {
+      if (line == null || line.startsWith(prefix)) {
         return;
       }
     }
