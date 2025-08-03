@@ -27,11 +27,11 @@ public class Message implements ConfigurationSerializable {
   public void sendTo(Player player) {
     Chat.whisper(
         player,
-        StringUtil.relativeTime(System.currentTimeMillis() / 1000L - this.timestamp)
-            + " ago "
-            + this.sender
-            + " whispered to you: "
-            + this.message);
+        "%s ago %s whispered to you: %s"
+            .formatted(
+                StringUtil.relativeTime(System.currentTimeMillis() / 1000L - this.timestamp),
+                this.sender,
+                this.message));
   }
 
   @Override

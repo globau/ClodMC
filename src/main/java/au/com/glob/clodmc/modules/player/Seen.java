@@ -41,13 +41,13 @@ public class Seen implements Module, Listener {
 
               Player player = Bukkit.getPlayerExact(playerName);
               if (player != null) {
-                Chat.info(sender, playerName + " is online now");
+                Chat.info(sender, "%s is online now".formatted(playerName));
                 return;
               }
 
               UUID playerUUID = Players.getWhitelistedUUID(playerName);
               if (playerUUID == null) {
-                Chat.error(sender, playerName + " doesn't play on this server");
+                Chat.error(sender, "%s doesn't play on this server".formatted(playerName));
                 return;
               }
               PlayerDataFile dataFile = PlayerDataFiles.of(playerUUID);
@@ -57,14 +57,14 @@ public class Seen implements Module, Listener {
                 date = dataFile.getLastLogin();
               }
               if (date == null) {
-                Chat.warning(sender, "Not sure when " + playerName + " last played");
+                Chat.warning(sender, "Not sure when %s last played".formatted(playerName));
                 return;
               }
 
               String dateAgo =
                   StringUtil.relativeTime(
                       System.currentTimeMillis() / 1000L - date.toEpochSecond(ZoneOffset.of("+8")));
-              Chat.info(sender, playerName + " was last seen " + dateAgo + " ago");
+              Chat.info(sender, "%s was last seen %s ago".formatted(playerName, dateAgo));
             })
         .completor(
             (CommandSender sender, List<String> args) ->

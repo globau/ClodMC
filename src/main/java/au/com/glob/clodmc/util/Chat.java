@@ -7,7 +7,7 @@ import org.jspecify.annotations.NullMarked;
 @NullMarked
 public final class Chat {
   private static void sendMessage(CommandSender sender, ChatStyle style, String message) {
-    sender.sendRichMessage(style.prefix + message);
+    sender.sendRichMessage("%s%s".formatted(style.prefix, message));
   }
 
   public static void fyi(CommandSender sender, String message) {

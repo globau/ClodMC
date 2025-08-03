@@ -16,16 +16,16 @@ public class CheckUtils {
     while (!path.getFileName().toString().equals("src")) {
       path = path.getParent();
     }
-    String rootPath = path.getParent().toString() + "/";
+    String rootPath = "%s/".formatted(path.getParent().toString());
     return filename.startsWith(rootPath) ? filename.substring(rootPath.length()) : filename;
   }
 
   public static boolean isRelativeTo(String filename, String relativePath) {
     if (!relativePath.startsWith("/")) {
-      relativePath = "/" + relativePath;
+      relativePath = "/%s".formatted(relativePath);
     }
     if (!relativePath.endsWith("/")) {
-      relativePath = relativePath + "/";
+      relativePath = "%s/".formatted(relativePath);
     }
 
     return getRelativeFilename(filename).startsWith(relativePath);
@@ -150,7 +150,7 @@ public class CheckUtils {
       // check for qualified names like some.package.Module
       if (child.getType() == TokenTypes.DOT) {
         String qualifiedName = getQualifiedName(child);
-        if (qualifiedName.endsWith("." + name) || name.equals(qualifiedName)) {
+        if (qualifiedName.endsWith(".%s".formatted(name)) || name.equals(qualifiedName)) {
           return true;
         }
       }

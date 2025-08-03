@@ -35,9 +35,9 @@ public class RequiredPlugins implements Listener, Module {
 
     this.preventLogin = missing.length() > 0;
     if (this.preventLogin) {
-      String alert = "Missing required plugin(s): " + missing;
+      String alert = "Missing required plugin(s): %s".formatted(missing);
       OpAlerts.addAlert(alert);
-      Logger.error("\n***\n*** " + alert + "\n***");
+      Logger.error("\n***\n*** %s\n***".formatted(alert));
     }
   }
 

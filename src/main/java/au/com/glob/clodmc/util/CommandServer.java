@@ -25,7 +25,7 @@ public class CommandServer implements Closeable {
   }
 
   public void sendLine(String line) throws IOException {
-    this.outStream.writeBytes(line + "\r\n");
+    this.outStream.writeBytes("%s\r\n".formatted(line));
   }
 
   public String readLine() throws IOException {

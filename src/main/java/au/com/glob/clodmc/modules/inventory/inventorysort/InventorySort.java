@@ -64,13 +64,13 @@ public class InventorySort implements Listener, Module {
         }
         String[] parts = line.split(":", -1);
         if (parts.length != 2) {
-          alerts.add("inventory_order.txt: invalid line " + lineNo);
+          alerts.add("inventory_order.txt: invalid line %d".formatted(lineNo));
           continue;
         }
         orderedMaterials.add(parts[1]);
       }
     } catch (IOException e) {
-      Logger.error("inventory_order.txt: " + e.getMessage());
+      Logger.error("inventory_order.txt: %s".formatted(e.getMessage()));
       return;
     }
 
@@ -79,13 +79,13 @@ public class InventorySort implements Listener, Module {
     for (String material : orderedMaterials) {
       // must exist; these are only warnings as invalid items are ignored
       if (!allMaterials.contains(material)) {
-        warnings.add("inventory_order.txt: invalid: " + material);
+        warnings.add("inventory_order.txt: invalid: %s".formatted(material));
         continue;
       }
 
       // no duplicates
       if (materialOrder.containsKey(material)) {
-        alerts.add("inventory_order.txt: duplicate: " + material);
+        alerts.add("inventory_order.txt: duplicate: %s".formatted(material));
         continue;
       }
 
@@ -100,7 +100,8 @@ public class InventorySort implements Listener, Module {
                 .filter((Material m) -> m.name().equals(name))
                 .findFirst()
                 .orElseThrow();
-        alerts.add("inventory_order.txt: missing: " + StringUtil.asText(material) + " :" + name);
+        alerts.add(
+            "inventory_order.txt: missing: %s :%s".formatted(StringUtil.asText(material), name));
       }
     }
 

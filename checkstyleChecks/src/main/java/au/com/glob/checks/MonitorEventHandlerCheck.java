@@ -159,8 +159,8 @@ public class MonitorEventHandlerCheck extends AbstractCheck {
             && Character.isUpperCase(method.charAt(3))) {
           this.log(
               methodCall,
-              "MONITOR priority event handlers cannot call setter methods on the event parameter: "
-                  + method);
+              "MONITOR priority event handlers cannot call setter methods on the event parameter: %s"
+                  .formatted(method));
         }
       }
     }

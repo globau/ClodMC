@@ -36,13 +36,14 @@ public class Mailer {
       try (CommandServer smtp = new CommandServer(HOSTNAME)) {
         smtp.waitFor("220 ");
         smtp.sendAndWait("HELO glob.au", "250 ");
-        smtp.sendAndWait("MAIL FROM: " + SENDER_ADDR, "250 ");
-        smtp.sendAndWait("RCPT TO: " + recipient, "250 ");
+        smtp.sendAndWait("MAIL FROM: %s".formatted(SENDER_ADDR), "250 ");
+        smtp.sendAndWait("RCPT TO: %s".formatted(recipient), "250 ");
         smtp.sendAndWait("DATA", "354 ");
-        smtp.sendLine("Date: " + TimeUtil.utcNow().format(DateTimeFormatter.RFC_1123_DATE_TIME));
-        smtp.sendLine("From: " + SENDER_NAME + " <" + SENDER_ADDR + ">");
-        smtp.sendLine("To: " + recipient);
-        smtp.sendLine("Subject: " + subject);
+        smtp.sendLine(
+            "Date: %s".formatted(TimeUtil.utcNow().format(DateTimeFormatter.RFC_1123_DATE_TIME)));
+        smtp.sendLine("From: %s <%s>".formatted(SENDER_NAME, SENDER_ADDR));
+        smtp.sendLine("To: %s".formatted(recipient));
+        smtp.sendLine("Subject: %s".formatted(subject));
         smtp.sendLine("");
         smtp.sendLine(body);
         smtp.sendLine("");

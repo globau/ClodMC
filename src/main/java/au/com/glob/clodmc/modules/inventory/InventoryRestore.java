@@ -73,7 +73,7 @@ public class InventoryRestore implements Module, Listener {
 
               UUID uuid = Players.getWhitelistedUUID(playerName);
               if (uuid == null) {
-                throw new CommandError("Unknown player: " + playerName);
+                throw new CommandError("Unknown player: %s".formatted(playerName));
               }
               Player player = Bukkit.getPlayer(uuid);
               if (player != null) {
@@ -98,17 +98,13 @@ public class InventoryRestore implements Module, Listener {
                     LocalDateTime.parse(this.getBackupName(backupFile), SHORT_DATETIME_FORMAT);
                 Chat.info(
                     sender,
-                    "Inventory for "
-                        + dataFile.getPlayerName()
-                        + " will be restored from "
-                        + date.format(LONG_DATETIME_FORMAT)
-                        + " next time they log in");
+                    "Inventory for %s will be restored from %s next time they log in"
+                        .formatted(dataFile.getPlayerName(), date.format(LONG_DATETIME_FORMAT)));
               } catch (DateTimeParseException e) {
                 Chat.info(
                     sender,
-                    "Inventory for "
-                        + dataFile.getPlayerName()
-                        + " will be restored next time they log in");
+                    "Inventory for %s will be restored next time they log in"
+                        .formatted(dataFile.getPlayerName()));
               }
             })
         .completor(
@@ -164,12 +160,12 @@ public class InventoryRestore implements Module, Listener {
     File backupFile = this.buildBackupFile(player.getUniqueId());
     DataFile dataFile = new DataFile(backupFile);
     for (int i = 0; i < inv.getSize(); i++) {
-      dataFile.set("slot." + i, inv.getItem(i));
+      dataFile.set("slot.%d".formatted(i), inv.getItem(i));
     }
     dataFile.save();
 
     String message =
-        "saved " + player.getName() + " inventory as " + this.getBackupName(backupFile);
+        "saved %s inventory as %s".formatted(player.getName(), this.getBackupName(backupFile));
     Logger.info(message);
     if (notify) {
       Chat.info(player, message);
@@ -182,7 +178,7 @@ public class InventoryRestore implements Module, Listener {
           while (backupFiles.size() > MAX_BACKUP_COUNT) {
             File file = backupFiles.removeLast();
             if (!file.delete()) {
-              Logger.error("failed to delete: " + file);
+              Logger.error("failed to delete: %s".formatted(file));
             }
           }
         });
@@ -196,11 +192,9 @@ public class InventoryRestore implements Module, Listener {
           if (backupFile == null) {
             String message =
                 backupName == null
-                    ? "Failed to find any inventory backups for " + player.getName()
-                    : "Failed to find inventory backup for "
-                        + player.getName()
-                        + " named "
-                        + backupName;
+                    ? "Failed to find any inventory backups for %s".formatted(player.getName())
+                    : "Failed to find inventory backup for %s named %s"
+                        .formatted(player.getName(), backupName);
             if (sender == null) {
               Logger.error(message);
             } else {
@@ -215,7 +209,7 @@ public class InventoryRestore implements Module, Listener {
 
                 DataFile dataFile = new DataFile(backupFile);
                 for (int i = 0; i < inv.getSize(); i++) {
-                  inv.setItem(i, (ItemStack) dataFile.get("slot." + i));
+                  inv.setItem(i, (ItemStack) dataFile.get("slot.%d".formatted(i)));
                 }
 
                 LocalDateTime date =
@@ -223,23 +217,20 @@ public class InventoryRestore implements Module, Listener {
                 if (sender == null) {
                   Chat.info(
                       player,
-                      "Your inventory from "
-                          + date.format(LONG_DATETIME_FORMAT)
-                          + " has been restored");
+                      "Your inventory from %s has been restored"
+                          .formatted(date.format(LONG_DATETIME_FORMAT)));
                 } else {
                   Chat.info(
                       sender,
-                      "Inventory for "
-                          + player.getName()
-                          + " restored from "
-                          + date.format(LONG_DATETIME_FORMAT));
+                      "Inventory for %s restored from %s"
+                          .formatted(player.getName(), date.format(LONG_DATETIME_FORMAT)));
                 }
               });
         });
   }
 
   private List<File> getBackupFiles(UUID uuid) {
-    String prefix = uuid + SEPARATOR;
+    String prefix = "%s%s".formatted(uuid, SEPARATOR);
     File[] files =
         this.backupPath.listFiles(
             (File file) -> file.getName().startsWith(prefix) && file.getName().endsWith(SUFFIX));
@@ -277,6 +268,7 @@ public class InventoryRestore implements Module, Listener {
   private File buildBackupFile(UUID uuid) {
     return new File(
         this.backupPath,
-        uuid + SEPARATOR + TimeUtil.localNow().format(SHORT_DATETIME_FORMAT) + SUFFIX);
+        "%s%s%s%s"
+            .formatted(uuid, SEPARATOR, TimeUtil.localNow().format(SHORT_DATETIME_FORMAT), SUFFIX));
   }
 }

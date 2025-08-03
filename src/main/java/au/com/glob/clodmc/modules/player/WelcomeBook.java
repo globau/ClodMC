@@ -192,7 +192,7 @@ public class WelcomeBook implements Module, Listener {
             .map(StringUtil::asComponent)
             .map((Component component) -> JSONComponentSerializer.json().serialize(component))
             .toList();
-    String json = "[" + String.join(",", pagesAsJson) + "]";
+    String json = "[%s]".formatted(String.join(",", pagesAsJson));
 
     Gson gson = new GsonBuilder().setPrettyPrinting().create();
     String prettyJson = gson.toJson(JsonParser.parseString(json));
@@ -201,7 +201,7 @@ public class WelcomeBook implements Module, Listener {
       File jsonFile = new File(ClodMC.instance.getDataFolder(), "welcome-book.json");
       Files.writeString(jsonFile.toPath(), prettyJson);
     } catch (IOException e) {
-      Logger.error("failed to write welcome-book.json: " + e);
+      Logger.error("failed to write welcome-book.json: %s".formatted(e));
     }
   }
 
@@ -232,7 +232,7 @@ public class WelcomeBook implements Module, Listener {
     recipient.playSound(recipient, Sound.ITEM_BOOK_PAGE_TURN, 1.0f, 1.0f);
 
     if (sender != null) {
-      Chat.fyi(sender, "Gave welcome book to " + recipient.getName());
+      Chat.fyi(sender, "Gave welcome book to %s".formatted(recipient.getName()));
     }
   }
 }

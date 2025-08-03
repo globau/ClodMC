@@ -11,7 +11,7 @@ class Network {
     Colour topColour = Colours.of((networkId >> 4) & 0x0F);
     Colour bottomColour = Colours.of(networkId & 0x0F);
     if (topColour == null || bottomColour == null) {
-      throw new RuntimeException("malformed anchor networkID: " + networkId);
+      throw new RuntimeException("malformed anchor networkID: %d".formatted(networkId));
     }
     this.top = topColour;
     this.bottom = bottomColour;

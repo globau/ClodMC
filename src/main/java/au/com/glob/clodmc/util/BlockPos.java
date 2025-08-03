@@ -23,7 +23,7 @@ public class BlockPos {
 
   @Override
   public String toString() {
-    return "BlockPos{" + this.world.getName() + " " + this.x + ", " + this.y + ", " + this.z + '}';
+    return "BlockPos{%s %d, %d, %d}".formatted(this.world.getName(), this.x, this.y, this.z);
   }
 
   public String getString(boolean includeWorld) {
@@ -37,7 +37,7 @@ public class BlockPos {
             default -> "";
           };
     }
-    return prefix + this.x + ", " + this.y + ", " + this.z;
+    return "%s%d, %d, %d".formatted(prefix, this.x, this.y, this.z);
   }
 
   @Override

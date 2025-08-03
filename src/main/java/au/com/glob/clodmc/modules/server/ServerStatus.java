@@ -28,9 +28,9 @@ public class ServerStatus implements Module {
                   colour = "red";
                 }
                 double value = Math.min(Math.round(avg * 100.0) / 100.0, 20.0);
-                values.add("<" + colour + ">" + value + "</" + colour + ">");
+                values.add("<%s>%s</%s>".formatted(colour, value, colour));
               }
-              Chat.plain(sender, "Ticks-per-second from last 1m, 5m, 15m: " + values);
+              Chat.plain(sender, "Ticks-per-second from last 1m, 5m, 15m: %s".formatted(values));
               if (tps[0] > 18) {
                 Chat.info(sender, "Server is healthy");
               } else if (tps[0] > 16) {

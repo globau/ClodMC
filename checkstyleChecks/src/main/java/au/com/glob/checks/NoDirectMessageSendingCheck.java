@@ -67,7 +67,8 @@ public class NoDirectMessageSendingCheck extends AbstractCheck {
     if ("sendMessage".equals(methodName) || "sendRichMessage".equals(methodName)) {
       this.log(
           ast,
-          "direct calls to " + methodName + " are forbidden, use Chat utility methods instead");
+          "direct calls to %s are forbidden, use Chat utility methods instead"
+              .formatted(methodName));
     }
   }
 }

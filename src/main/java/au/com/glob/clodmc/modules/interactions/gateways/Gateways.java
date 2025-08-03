@@ -131,7 +131,7 @@ public class Gateways implements Module, Listener {
                       .distinct()
                       .sorted()
                       .collect(Collectors.joining(", "));
-              Chat.info(sender, "Existing gateways: " + gateways);
+              Chat.info(sender, "Existing gateways: %s".formatted(gateways));
             });
   }
 
@@ -182,7 +182,7 @@ public class Gateways implements Module, Listener {
         BlueMapGateways.instance.update();
       }
     } catch (IOException e) {
-      Logger.error(this.configFile + ": save failed: " + e);
+      Logger.error("%s: save failed: %s".formatted(this.configFile, e));
     }
   }
 
@@ -398,9 +398,10 @@ public class Gateways implements Module, Listener {
           this.ignore.put(player, anchorBlock.blockPos.up());
           Chat.warning(
               player,
-              "You must wait at another "
-                  + StringUtil.plural2(RANDOM_TP_COOLDOWN - secondsSinceRandomTeleport, "second")
-                  + " before teleporting again");
+              "You must wait another %s before teleporting again"
+                  .formatted(
+                      StringUtil.plural2(
+                          RANDOM_TP_COOLDOWN - secondsSinceRandomTeleport, "second")));
           return;
         }
       }
@@ -473,9 +474,8 @@ public class Gateways implements Module, Listener {
 
       Chat.info(
           player,
-          "Sending you "
-              + String.format("%,d", Math.round(playerLocation.distance(teleportPos)))
-              + " blocks away");
+          "Sending you %s blocks away"
+              .formatted(String.format("%,d", Math.round(playerLocation.distance(teleportPos)))));
 
     } else {
       // teleport to connected anchor

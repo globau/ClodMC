@@ -13,7 +13,7 @@ public class FilePermissionsCheck extends AbstractFileSetCheck {
   @Override
   protected void processFiltered(File file, FileText fileText) throws CheckstyleException {
     if (file.canExecute() && CheckUtils.isRelativeTo(file.getAbsolutePath(), "src/main")) {
-      this.log(0, "bad file permissions (+x): " + file.getPath());
+      this.log(0, "bad file permissions (+x): %s".formatted(file.getPath()));
     }
   }
 }

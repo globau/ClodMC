@@ -30,7 +30,7 @@ public class JavaHome {
   private static String readCached() {
     try {
       String cachedJavaHome = Files.readString(CACHE_FILE).trim();
-      if (Files.exists(Path.of(cachedJavaHome + "/bin/java"))) {
+      if (Files.exists(Path.of("%s/bin/java".formatted(cachedJavaHome)))) {
         return cachedJavaHome;
       }
       Files.delete(CACHE_FILE);
@@ -42,7 +42,7 @@ public class JavaHome {
 
   private static void writeCached(String path) {
     try {
-      Files.writeString(CACHE_FILE, path + "\n");
+      Files.writeString(CACHE_FILE, "%s\n".formatted(path));
     } catch (IOException e) {
       // ignored
     }
@@ -71,15 +71,16 @@ public class JavaHome {
       // try to find the correct jdk version in the standard macOS locations
       List<Path> paths =
           List.of(
-              Path.of(System.getProperty("user.home") + "/Library/Java/JavaVirtualMachines"),
+              Path.of(
+                  "%s/Library/Java/JavaVirtualMachines".formatted(System.getProperty("user.home"))),
               Path.of("/Library/Java/JavaVirtualMachines"));
       for (Path jvmPath : paths) {
         try (Stream<Path> stream = Files.list(jvmPath)) {
           List<String> versionPaths =
               stream.filter(Files::isDirectory).map(Path::toString).toList();
           for (String versionPath : versionPaths) {
-            String javaHome = versionPath + "/Contents/Home";
-            String javaFilename = javaHome + "/bin/java";
+            String javaHome = "%s/Contents/Home".formatted(versionPath);
+            String javaFilename = "%s/bin/java".formatted(javaHome);
             if (Files.exists(Path.of(javaFilename))) {
               String versionOutput = capture(javaFilename, "--version");
               Matcher matcher1 = Pattern.compile("^\\S+ (\\d+)\\.").matcher(versionOutput);
@@ -96,7 +97,7 @@ public class JavaHome {
         }
       }
 
-      throw new RuntimeException("failed to find Java " + JDK_VERSION);
+      throw new RuntimeException("failed to find Java %d".formatted(JDK_VERSION));
     } catch (Exception e) {
       System.err.println(e.getMessage());
       System.exit(1);

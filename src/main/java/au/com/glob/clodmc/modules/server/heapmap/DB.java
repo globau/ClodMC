@@ -23,7 +23,7 @@ class DB {
   DB() {
     try {
       File dbFile = new File(ClodMC.instance.getDataFolder(), "heatmap.sqlite");
-      this.conn = DriverManager.getConnection("jdbc:sqlite:" + dbFile);
+      this.conn = DriverManager.getConnection("jdbc:sqlite:%s".formatted(dbFile));
       this.conn
           .prepareStatement(
               """
@@ -48,7 +48,7 @@ class DB {
     try {
       this.conn.close();
     } catch (SQLException e) {
-      Logger.error("heatmap.sqlite#close: " + e.getMessage());
+      Logger.error("heatmap.sqlite#close: %s".formatted(e.getMessage()));
     }
   }
 
@@ -59,7 +59,7 @@ class DB {
       this.insertStatement.setInt(3, chunk.getZ());
       this.insertStatement.execute();
     } catch (SQLException e) {
-      Logger.error("heatmap.sqlite#incChunk: " + e.getMessage());
+      Logger.error("heatmap.sqlite#incChunk: %s".formatted(e.getMessage()));
     }
   }
 
@@ -71,7 +71,7 @@ class DB {
       ResultSet r = s.executeQuery();
       return r.getInt(1);
     } catch (SQLException e) {
-      Logger.error("heatmap.sqlite#getMaxCount: " + e.getMessage());
+      Logger.error("heatmap.sqlite#getMaxCount: %s".formatted(e.getMessage()));
       return 0;
     }
   }
@@ -85,7 +85,7 @@ class DB {
       ResultSet r = s.executeQuery();
       return r.getInt(1);
     } catch (SQLException e) {
-      Logger.error("heatmap.sqlite#getMarkerCount: " + e.getMessage());
+      Logger.error("heatmap.sqlite#getMarkerCount: %s".formatted(e.getMessage()));
       return 0;
     }
   }
@@ -121,13 +121,13 @@ class DB {
             }
             return row;
           } catch (SQLException e) {
-            Logger.error("heatmap.sqlite#rowIterator.1: " + e.getMessage());
+            Logger.error("heatmap.sqlite#rowIterator.1: %s".formatted(e.getMessage()));
             throw new NoSuchElementException();
           }
         }
       };
     } catch (SQLException e) {
-      Logger.error("heatmap.sqlite#rowIterator.2: " + e.getMessage());
+      Logger.error("heatmap.sqlite#rowIterator.2: %s".formatted(e.getMessage()));
       return null;
     }
   }

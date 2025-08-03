@@ -23,11 +23,11 @@ public class StringUtil {
     if (dd >= 7) {
       return plural(dd, "day");
     } else if (dd > 0) {
-      return plural(dd, "day") + " " + plural(hh, "hour");
+      return "%s %s".formatted(plural(dd, "day"), plural(hh, "hour"));
     } else if (hh > 0) {
-      return plural(hh, "hour") + " " + plural(mm, "minute");
+      return "%s %s".formatted(plural(hh, "hour"), plural(mm, "minute"));
     } else if (mm > 0) {
-      return plural(mm, "minute") + " " + plural(seconds, "second");
+      return "%s %s".formatted(plural(mm, "minute"), plural(seconds, "second"));
     } else {
       return plural(seconds, "second");
     }
@@ -51,7 +51,8 @@ public class StringUtil {
     if (items.size() == 2) {
       return String.join(" and ", items);
     }
-    return String.join(", ", items.subList(0, items.size() - 1)) + ", and " + items.getLast();
+    return "%s, and %s"
+        .formatted(String.join(", ", items.subList(0, items.size() - 1)), items.getLast());
   }
 
   public static String toTitleCase(String value) {

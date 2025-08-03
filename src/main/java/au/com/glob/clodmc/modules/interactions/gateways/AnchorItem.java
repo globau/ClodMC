@@ -98,7 +98,7 @@ class AnchorItem {
     List<TextComponent> lore =
         new ArrayList<>(List.of(network.top.getText(), network.bottom.getText()));
     if (suffix != null) {
-      lore.add(Component.text("(" + suffix + ")"));
+      lore.add(Component.text("(%s)".formatted(suffix)));
     }
     meta.lore(lore);
     PersistentDataContainer container = meta.getPersistentDataContainer();

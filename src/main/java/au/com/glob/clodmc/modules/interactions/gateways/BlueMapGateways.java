@@ -46,7 +46,7 @@ public class BlueMapGateways extends Addon {
         Objects.requireNonNull(svgStream).transferTo(out);
       }
     } catch (IOException e) {
-      Logger.error("failed to create " + gatewayFilePath + ": " + e);
+      Logger.error("failed to create %s: %s".formatted(gatewayFilePath, e));
     }
 
     // create markers
@@ -68,8 +68,8 @@ public class BlueMapGateways extends Addon {
         continue;
       }
 
-      String id = "gw-" + anchorBlock.topColour.name + "-" + anchorBlock.bottomColour.name + "-";
-      id = id + (seenColours.contains(id) ? "b" : "a");
+      String id = "gw-%s-%s-".formatted(anchorBlock.topColour.name, anchorBlock.bottomColour.name);
+      id = "%s%s".formatted(id, seenColours.contains(id) ? "b" : "a");
       seenColours.add(id);
 
       Objects.requireNonNull(this.markerSets.get(anchorBlock.blockPos.world))
@@ -78,22 +78,20 @@ public class BlueMapGateways extends Addon {
               id,
               POIMarker.builder()
                   .label(
-                      anchorBlock.name
-                          + "\n"
-                          + anchorBlock.blockPos.x
-                          + ", "
-                          + anchorBlock.blockPos.z)
+                      "%s\n%d, %d"
+                          .formatted(
+                              anchorBlock.name, anchorBlock.blockPos.x, anchorBlock.blockPos.z))
                   .position(
                       Vector3d.from(
                           anchorBlock.blockPos.x + 0.5,
                           anchorBlock.blockPos.y + 0.5,
                           anchorBlock.blockPos.z + 0.5))
-                  .icon("assets/" + MARKER_FILENAME, new Vector2i(25, 45))
+                  .icon("assets/%s".formatted(MARKER_FILENAME), new Vector2i(25, 45))
                   .build());
     }
 
     for (Map.Entry<World, MarkerSet> entry : this.markerSets.entrySet()) {
-      String mapId = "gw-" + entry.getKey().getName();
+      String mapId = "gw-%s".formatted(entry.getKey().getName());
       this.api
           .getWorld(entry.getKey())
           .ifPresent(

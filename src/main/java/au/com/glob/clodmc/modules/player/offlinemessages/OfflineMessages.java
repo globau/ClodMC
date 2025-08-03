@@ -47,7 +47,7 @@ public class OfflineMessages implements Module, Listener {
 
     List<Message> messages = this.loadMessages(dataFile.getList("messages"));
     if (messages.size() >= 10) {
-      sender.error(recipient + "'s mailbox is full");
+      sender.error("%s's mailbox is full".formatted(recipient));
       return false;
     }
     messages.add(new Message(System.currentTimeMillis() / 1000L, sender.name, message));
@@ -55,7 +55,7 @@ public class OfflineMessages implements Module, Listener {
     dataFile.set("messages", messages);
     dataFile.save();
 
-    sender.fyi(recipient + " will receive your message next time they log in");
+    sender.fyi("%s will receive your message next time they log in".formatted(recipient));
     return true;
   }
 

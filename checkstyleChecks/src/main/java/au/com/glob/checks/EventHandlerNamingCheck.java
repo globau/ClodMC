@@ -61,24 +61,25 @@ public class EventHandlerNamingCheck extends AbstractCheck {
 
     // check parameter name is 'event'
     if (!"event".equals(paramName)) {
-      this.log(ast, "event parameter must be named 'event', found: " + paramName);
+      this.log(ast, "event parameter must be named 'event', found: %s".formatted(paramName));
       return;
     }
 
     // check parameter type ends with 'Event'
     if (!paramType.endsWith("Event")) {
-      this.log(ast, "event parameter type must end with 'Event', found: " + paramType);
+      this.log(ast, "event parameter type must end with 'Event', found: %s".formatted(paramType));
       return;
     }
 
     // check method name follows pattern on{EventType}
     String eventType = paramType.substring(0, paramType.length() - 5); // remove "Event"
-    String expectedMethodName = "on" + eventType;
+    String expectedMethodName = "on%s".formatted(eventType);
 
     if (!expectedMethodName.equals(methodName)) {
       this.log(
           ast,
-          "event handler method name should be '" + expectedMethodName + "', found: " + methodName);
+          "event handler method name should be '%s', found: %s"
+              .formatted(expectedMethodName, methodName));
     }
   }
 }

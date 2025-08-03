@@ -15,12 +15,14 @@ import org.jspecify.annotations.NullMarked;
 public class DeathLog implements Module, Listener {
   @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
   public void onPlayerDeath(PlayerDeathEvent event) {
-    String died = StringUtil.asText(event.deathMessage(), event.getPlayer().getName() + " died");
+    String died =
+        StringUtil.asText(event.deathMessage(), "%s died".formatted(event.getPlayer().getName()));
     Location loc = event.getPlayer().getLocation();
     String world =
         loc.getWorld().getName().equals("world") ? "overworld" : loc.getWorld().getName();
     String coords =
-        Math.floor(loc.getX()) + "," + Math.floor(loc.getY()) + "," + Math.floor(loc.getZ());
-    Logger.info(died + " at " + world + "[" + coords + "]");
+        "%s,%s,%s"
+            .formatted(Math.floor(loc.getX()), Math.floor(loc.getY()), Math.floor(loc.getZ()));
+    Logger.info("%s at %s[%s]".formatted(died, world, coords));
   }
 }

@@ -98,11 +98,11 @@ public class Vendor {
             name,
             new LibraryConfig(
                 name,
-                this.props.getProperty(name + ".repo"),
-                this.props.getProperty(name + ".commit"),
-                this.props.getProperty(name + ".path"),
-                this.props.getProperty(name + ".include"),
-                this.props.getProperty(name + ".exclude")));
+                this.props.getProperty("%s.repo".formatted(name)),
+                this.props.getProperty("%s.commit".formatted(name)),
+                this.props.getProperty("%s.path".formatted(name)),
+                this.props.getProperty("%s.include".formatted(name)),
+                this.props.getProperty("%s.exclude".formatted(name))));
       }
     }
 
@@ -121,12 +121,12 @@ public class Vendor {
       lines.add("# use `scripts/vendor` to update");
       for (LibraryConfig lib : sortedConfigs) {
         lines.add("#");
-        lines.add(lib.name + ".repo=" + lib.repo);
-        lines.add(lib.name + ".path=" + lib.path);
-        lines.add(lib.name + ".commit=" + lib.commit);
-        lines.add(lib.name + ".include=" + join(lib.include));
+        lines.add("%s.repo=%s".formatted(lib.name, lib.repo));
+        lines.add("%s.path=%s".formatted(lib.name, lib.path));
+        lines.add("%s.commit=%s".formatted(lib.name, lib.commit));
+        lines.add("%s.include=%s".formatted(lib.name, join(lib.include)));
         if (!lib.exclude.isEmpty()) {
-          lines.add(lib.name + ".exclude=" + join(lib.exclude));
+          lines.add("%s.exclude=%s".formatted(lib.name, join(lib.exclude)));
         }
       }
       Files.write(PROPERTIES_FILE, lines);
@@ -156,18 +156,15 @@ public class Vendor {
       LibraryConfig lib = config.get(libraryName);
       if (lib == null) {
         throw new RuntimeException(
-            "unknown library: "
-                + libraryName
-                + "\n"
-                + "available libraries: "
-                + config.libraryNames());
+            "unknown library: %s\navailable libraries: %s"
+                .formatted(libraryName, config.libraryNames()));
       }
 
       // vendor
-      System.out.println("vendoring " + lib.name);
+      System.out.printf("vendoring %s%n", lib.name);
 
-      Path srcPath = Paths.get(".git/vendored/" + lib.name);
-      Path dstPath = Paths.get("src/main/java/vendored/" + lib.path);
+      Path srcPath = Paths.get(".git/vendored/%s".formatted(lib.name));
+      Path dstPath = Paths.get("src/main/java/vendored/%s".formatted(lib.path));
 
       // clone or update repo
       try {
@@ -210,7 +207,7 @@ public class Vendor {
       copyFilepaths.sort(Comparator.comparing((FileCopy fc) -> fc.src));
       for (FileCopy fc : copyFilepaths) {
         Files.createDirectories(fc.dst.getParent());
-        System.out.println(srcPath.relativize(fc.src) + " -> " + fc.dst);
+        System.out.printf("%s -> %s%n", srcPath.relativize(fc.src), fc.dst);
         Files.copy(fc.src, fc.dst, StandardCopyOption.REPLACE_EXISTING);
         expectedFilepaths.add(dstPath.relativize(fc.dst));
       }
@@ -227,7 +224,7 @@ public class Vendor {
         for (Path relFilename : actualFilepaths) {
           if (!expectedFilepaths.contains(relFilename)) {
             Path filepath = dstPath.resolve(relFilename);
-            System.out.println("deleting " + filepath);
+            System.out.printf("deleting %s%n", filepath);
             Files.delete(filepath);
           }
         }
@@ -237,7 +234,7 @@ public class Vendor {
       run("./gradlew", ":spotlessApply");
 
       // apply patches
-      Path patchDir = Paths.get("src/vendored/" + lib.name);
+      Path patchDir = Paths.get("src/vendored/%s".formatted(lib.name));
       if (Files.exists(patchDir)) {
         try (Stream<Path> patches = Files.list(patchDir)) {
           patches
@@ -251,7 +248,7 @@ public class Vendor {
                       }))
               .forEach(
                   (Path patchPath) -> {
-                    System.out.println("patching " + patchPath);
+                    System.out.printf("patching %s%n", patchPath);
                     try {
                       run("git", "apply", patchPath.toString());
                     } catch (Exception e) {
@@ -266,12 +263,12 @@ public class Vendor {
 
       // update commit .properties
       String sha = capture(srcPath, "git", "rev-parse", "HEAD").trim();
-      config.set(lib.name + ".commit", sha);
+      config.set("%s.commit".formatted(lib.name), sha);
 
       // test build
       run("make", "clean", "test", "build");
 
-      System.out.println("\n" + lib.name + " updated to " + sha);
+      System.out.printf("\n%s updated to %s%n", lib.name, sha);
 
     } catch (Exception e) {
       System.err.println(e.getMessage());

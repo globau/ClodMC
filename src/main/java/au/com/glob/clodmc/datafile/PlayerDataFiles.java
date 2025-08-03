@@ -22,10 +22,10 @@ public class PlayerDataFiles {
   }
 
   public static PlayerDataFile of(UUID uuid) {
-    return of("players/" + uuid + ".yml");
+    return of("players/%s.yml".formatted(uuid));
   }
 
   public static void unload(Player player) {
-    instances.remove("players/" + player.getUniqueId() + ".yml");
+    instances.remove("players/%s.yml".formatted(player.getUniqueId()));
   }
 }

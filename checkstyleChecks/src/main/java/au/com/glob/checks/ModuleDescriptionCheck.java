@@ -43,7 +43,8 @@ public class ModuleDescriptionCheck extends AbstractCheck {
 
       if (!this.hasJavadocComment(ast)) {
         this.log(
-            ast, "module class '" + CheckUtils.getName(ast) + "' is missing javadoc description");
+            ast,
+            "module class '%s' is missing javadoc description".formatted(CheckUtils.getName(ast)));
       }
     }
   }

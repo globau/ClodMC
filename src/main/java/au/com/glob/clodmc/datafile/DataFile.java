@@ -31,9 +31,9 @@ public class DataFile extends YamlConfiguration {
     } catch (FileNotFoundException ignore) {
       // ignore
     } catch (IOException e) {
-      Logger.error("failed to load " + this.file + ": " + e);
+      Logger.error("failed to load %s: %s".formatted(this.file, e));
     } catch (InvalidConfigurationException e) {
-      Logger.error("malformed " + this.file + ": " + e);
+      Logger.error("malformed %s: %s".formatted(this.file, e));
     }
   }
 
@@ -45,7 +45,7 @@ public class DataFile extends YamlConfiguration {
     try {
       this.save(this.file);
     } catch (IOException e) {
-      Logger.error(this.file + ": save failed: " + e);
+      Logger.error("%s: save failed: %s".formatted(this.file, e));
     }
   }
 

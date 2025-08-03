@@ -42,7 +42,7 @@ public class ReleaseReadme {
         Matcher matcher = Pattern.compile("^\\[([^]]*)] (\\S+) (.+)$").matcher(commitLine);
 
         if (!matcher.matches()) {
-          throw new RuntimeException("Failed to parse commit line: " + commitLine);
+          throw new RuntimeException("Failed to parse commit line: %s".formatted(commitLine));
         }
 
         String meta = matcher.group(1).trim();
@@ -67,12 +67,12 @@ public class ReleaseReadme {
             break;
           }
           if (!tag.equals(lastTag)) {
-            System.out.println("\n#### " + tag);
+            System.out.printf("\n#### %s%n", tag);
             lastTag = tag;
           }
         }
 
-        System.out.println("- " + sha + " " + desc);
+        System.out.printf("- %s %s%n", sha, desc);
       }
     } catch (Exception e) {
       System.err.println(e.getMessage());

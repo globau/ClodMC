@@ -35,6 +35,6 @@ public final class Vector3i {
 
   @Override
   public String toString() {
-    return "Vector3i[" + "x=" + this.x + ", " + "y=" + this.y + ", " + "z=" + this.z + ']';
+    return "Vector3i[x=%d, y=%d, z=%d]".formatted(this.x, this.y, this.z);
   }
 }

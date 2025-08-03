@@ -38,7 +38,7 @@ public class Sleep implements Listener, Module {
     for (Player player : players) {
       if (player.getWorld().getEnvironment() == World.Environment.NORMAL) {
         if (sleeping.size() > 1 || !sleeping.getFirst().equals(player.getName())) {
-          Chat.fyi(player, StringUtil.joinComma(sleeping) + " skipped the night");
+          Chat.fyi(player, "%s skipped the night".formatted(StringUtil.joinComma(sleeping)));
         }
       }
     }

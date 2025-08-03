@@ -75,7 +75,8 @@ public class VeinMiner implements Module, Listener {
             EnchantmentRegistryEntry.Builder builder) ->
             builder
                 .description(
-                    Component.translatable("enchantment." + VEINMINE_KEY.value(), "Veinmine"))
+                    Component.translatable(
+                        "enchantment.%s".formatted(VEINMINE_KEY.value()), "Veinmine"))
                 .supportedItems(event.getOrCreateTag(ItemTypeTagKeys.ENCHANTABLE_MINING))
                 .weight(1)
                 .maxLevel(1)

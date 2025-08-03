@@ -46,8 +46,8 @@ public class NoInnerTypesCheck extends AbstractCheck {
 
         this.log(
             ast,
-            "inner." + typeKind.toLowerCase(Locale.ROOT) + ".forbidden",
-            typeKind + " '" + typeName + "' is defined inside another type");
+            "inner.%s.forbidden".formatted(typeKind.toLowerCase(Locale.ROOT)),
+            "%s '%s' is defined inside another type".formatted(typeKind, typeName));
         break;
       }
       parent = parent.getParent();

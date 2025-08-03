@@ -54,7 +54,7 @@ public class Invite implements Module {
       config.load(secretsFile);
       secretApiKey = config.getString("mcprofile.api-key");
     } catch (IOException | InvalidConfigurationException e) {
-      Logger.error("bad or missing " + secretsFile);
+      Logger.error("bad or missing %s".formatted(secretsFile));
       secretApiKey = null;
     }
     this.apiKey = secretApiKey;
@@ -96,18 +96,19 @@ public class Invite implements Module {
                       // check mcprofile.io
                       UUID uuid = this.lookupUUID(Objects.requireNonNull(clientType), name);
                       if (uuid == null) {
-                        throw new CommandError("Failed to find player with name: " + name);
+                        throw new CommandError(
+                            "Failed to find player with name: %s".formatted(name));
                       }
 
                       // check whitelist by uuid
                       if (this.isWhitelisted(uuid)) {
-                        throw new CommandError(name + " is already whitelisted");
+                        throw new CommandError("%s is already whitelisted".formatted(name));
                       }
 
                       // don't allow duplicate player names (because we run without a
                       // floodgate prefix).
                       if (Players.isWhitelisted(name)) {
-                        throw new CommandError("A player named " + name + " already exists");
+                        throw new CommandError("A player named %s already exists".formatted(name));
                       }
 
                       // add to appropriate whitelist
@@ -116,15 +117,15 @@ public class Invite implements Module {
                             try {
                               String command =
                                   (clientType == ClientType.JAVA
-                                      ? "whitelist add " + name
-                                      : "fwhitelist add " + uuid);
+                                      ? "whitelist add %s".formatted(name)
+                                      : "fwhitelist add %s".formatted(uuid));
                               if (!Bukkit.dispatchCommand(Bukkit.getConsoleSender(), command)) {
                                 throw new CommandError("whitelist command failed");
                               }
 
                               // notify player
                               if (sender.isPlayer()) {
-                                Chat.info(sender, name + " added to the whitelist");
+                                Chat.info(sender, "%s added to the whitelist".formatted(name));
                               }
 
                               // record who invited the new player
@@ -135,13 +136,8 @@ public class Invite implements Module {
 
                               // email admin
                               Mailer.emailAdmin(
-                                  "clod-mc: "
-                                      + name
-                                      + " ("
-                                      + clientType
-                                      + ")"
-                                      + " added to the whitelist by "
-                                      + sender.getName());
+                                  "clod-mc: %s (%s) added to the whitelist by %s"
+                                      .formatted(name, clientType, sender.getName()));
                             } catch (CommandError e) {
                               Chat.error(
                                   sender,
@@ -186,10 +182,10 @@ public class Invite implements Module {
   private @Nullable UUID lookupUUID(ClientType clientType, String name) {
     assert this.apiKey != null;
     String url =
-        "https://mcprofile.io/api/v1/"
-            + (clientType == ClientType.JAVA ? "java/username" : "bedrock/gamertag")
-            + "/"
-            + URLEncoder.encode(name, StandardCharsets.UTF_8);
+        "https://mcprofile.io/api/v1/%s/%s"
+            .formatted(
+                clientType == ClientType.JAVA ? "java/username" : "bedrock/gamertag",
+                URLEncoder.encode(name, StandardCharsets.UTF_8));
 
     HttpJsonResponse result = HttpClient.getJSON(url, Map.of("x-api-key", this.apiKey));
     JsonObject response = result.getResponse();

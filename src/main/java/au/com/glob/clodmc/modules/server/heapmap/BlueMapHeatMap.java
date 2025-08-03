@@ -147,11 +147,12 @@ public class BlueMapHeatMap extends Addon {
                     .lineColor(colour)
                     .fillColor(colour)
                     .build();
-            markerSet.put("hm" + id++, marker);
+            markerSet.put("hm%d".formatted(id++), marker);
           }
         }
 
-        Logger.info("bluemap.heatmap added " + markerCount + " markers to " + world.getName());
+        Logger.info(
+            "bluemap.heatmap added %d markers to %s".formatted(markerCount, world.getName()));
 
         // add to map(s)
         this.api
@@ -159,7 +160,7 @@ public class BlueMapHeatMap extends Addon {
             .ifPresent(
                 (BlueMapWorld blueMapWorld) -> {
                   for (BlueMapMap map : blueMapWorld.getMaps()) {
-                    map.getMarkerSets().put("hm-" + map.getName(), markerSet);
+                    map.getMarkerSets().put("hm-%s".formatted(map.getName()), markerSet);
                   }
                 });
       }

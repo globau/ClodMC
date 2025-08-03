@@ -34,7 +34,7 @@ public final class ClodMC extends JavaPlugin implements Listener {
   public void onLoad() {
     File dataFolder = this.getDataFolder();
     if (!dataFolder.exists() && !dataFolder.mkdirs()) {
-      Logger.warning("failed to create " + dataFolder);
+      Logger.warning("failed to create %s".formatted(dataFolder));
     }
   }
 

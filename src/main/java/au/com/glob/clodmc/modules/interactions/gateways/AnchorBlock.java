@@ -38,40 +38,37 @@ public class AnchorBlock implements ConfigurationSerializable {
     this.topColour = network.top;
     this.bottomColour = network.bottom;
 
-    this.displayName = this.getColourPair() + (this.name == null ? "" : " (" + this.name + ")");
+    this.displayName =
+        "%s%s"
+            .formatted(this.getColourPair(), this.name == null ? "" : " (%s)".formatted(this.name));
     this.isRandom = networkId == Gateways.RANDOM_NETWORK_ID;
     this.visuals = new Visuals(this);
   }
 
   @Override
   public String toString() {
-    return "AnchorBlock{"
-        + "blockPos="
-        + this.blockPos
-        + ", topColour="
-        + this.topColour
-        + ", bottomColour="
-        + this.bottomColour
-        + ", connected="
-        + (this.connectedTo != null)
-        + '}';
+    return "AnchorBlock{blockPos=%s, topColour=%s, bottomColour=%s, connected=%s}"
+        .formatted(this.blockPos, this.topColour, this.bottomColour, this.connectedTo != null);
   }
 
   String getInformation() {
-    String prefix = "<yellow>" + this.displayName + "</yellow> - ";
+    String prefix = "<yellow>%s</yellow> - ".formatted(this.displayName);
     if (this.connectedTo != null) {
-      return prefix
-          + this.connectedTo.blockPos.getString(
-              !this.blockPos.world.equals(this.connectedTo.blockPos.world));
+      return "%s%s"
+          .formatted(
+              prefix,
+              this.connectedTo.blockPos.getString(
+                  !this.blockPos.world.equals(this.connectedTo.blockPos.world)));
     }
     if (this.networkId == Gateways.RANDOM_NETWORK_ID) {
-      return prefix + "Random Location";
+      return "%sRandom Location".formatted(prefix);
     }
-    return prefix + "Disconnected";
+    return "%sDisconnected".formatted(prefix);
   }
 
   String getColourPair() {
-    return this.topColour.getDisplayName() + " :: " + this.bottomColour.getDisplayName();
+    return "%s :: %s"
+        .formatted(this.topColour.getDisplayName(), this.bottomColour.getDisplayName());
   }
 
   void connectTo(AnchorBlock otherBlock) {

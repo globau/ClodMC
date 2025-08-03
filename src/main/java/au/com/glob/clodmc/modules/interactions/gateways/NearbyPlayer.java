@@ -33,6 +33,6 @@ final class NearbyPlayer {
 
   @Override
   public String toString() {
-    return "NearbyPlayer[" + "player=" + this.player + ", " + "isBedrock=" + this.isBedrock + ']';
+    return "NearbyPlayer[player=%s, isBedrock=%s]".formatted(this.player, this.isBedrock);
   }
 }

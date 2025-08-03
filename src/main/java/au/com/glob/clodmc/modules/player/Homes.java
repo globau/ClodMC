@@ -36,12 +36,14 @@ public class Homes implements Listener, Module {
               Map<String, Location> homes = this.getHomes(player);
               if (homes.isEmpty() || !homes.containsKey(name)) {
                 throw new CommandError(
-                    name.equals(DEFAULT_NAME) ? "No home set" : "No such home '" + name + "'");
+                    name.equals(DEFAULT_NAME)
+                        ? "No home set"
+                        : "No such home '%s'".formatted(name));
               }
 
               Location location = homes.get(name);
               TeleportUtil.teleport(
-                  player, location, name.equals(DEFAULT_NAME) ? "home" : "to '" + name + "'");
+                  player, location, name.equals(DEFAULT_NAME) ? "home" : "to '%s'".formatted(name));
             })
         .completor(this::completeHomes);
 
@@ -58,7 +60,7 @@ public class Homes implements Listener, Module {
                 for (String name : homes.keySet().stream().sorted().toList()) {
                   joiner.add(name);
                 }
-                Chat.info(player, "Homes: " + joiner);
+                Chat.info(player, "Homes: %s".formatted(joiner));
               }
             });
 
@@ -74,7 +76,7 @@ public class Homes implements Listener, Module {
 
               if (!existing && homes.size() >= MAX_HOMES) {
                 throw new CommandError(
-                    "You have reached the maximum number of homes (" + MAX_HOMES + ")");
+                    "You have reached the maximum number of homes (%d)".formatted(MAX_HOMES));
               }
 
               Location location = TeleportUtil.getStandingPos(player);
@@ -88,9 +90,10 @@ public class Homes implements Listener, Module {
 
               if (name.equals(DEFAULT_NAME)) {
                 Chat.info(
-                    player, "Home " + (existing ? "updated" : "set") + " to you current location");
+                    player,
+                    "Home %s to you current location".formatted(existing ? "updated" : "set"));
               } else {
-                Chat.info(player, "Home '" + name + "' " + (existing ? "updated" : "created"));
+                Chat.info(player, "Home '%s' %s".formatted(name, existing ? "updated" : "created"));
               }
             });
 
@@ -104,7 +107,9 @@ public class Homes implements Listener, Module {
               Map<String, Location> homes = this.getHomes(player);
               if (homes.isEmpty() || !homes.containsKey(name)) {
                 throw new CommandError(
-                    name.equals(DEFAULT_NAME) ? "No home set" : "No such home '" + name + "'");
+                    name.equals(DEFAULT_NAME)
+                        ? "No home set"
+                        : "No such home '%s'".formatted(name));
               }
 
               homes.remove(name);
@@ -113,7 +118,7 @@ public class Homes implements Listener, Module {
               if (name.equals(DEFAULT_NAME)) {
                 Chat.info(player, "Deleted home");
               } else {
-                Chat.info(player, "Deleted home '" + name + "'");
+                Chat.info(player, "Deleted home '%s'".formatted(name));
               }
             })
         .completor(this::completeHomes);
@@ -140,7 +145,8 @@ public class Homes implements Listener, Module {
     }
     Map<String, Location> result = new HashMap<>();
     for (String name : section.getKeys(false)) {
-      Location playerLocation = dataFile.getSerializable("homes." + name, Location.class, null);
+      Location playerLocation =
+          dataFile.getSerializable("homes.%s".formatted(name), Location.class, null);
       result.put(name, Objects.requireNonNull(playerLocation));
     }
     return result;
@@ -157,7 +163,7 @@ public class Homes implements Listener, Module {
       }
     }
     for (String name : homes.keySet()) {
-      dataFile.set("homes." + name, homes.get(name));
+      dataFile.set("homes.%s".formatted(name), homes.get(name));
     }
     dataFile.save();
   }

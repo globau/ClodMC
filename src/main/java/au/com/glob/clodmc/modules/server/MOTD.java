@@ -26,8 +26,8 @@ public class MOTD implements Module, Listener {
     } else if (hostname.endsWith(".glob.au")) {
       // stage
       motd =
-          "<gold>clod-mc</gold> ∙ "
-              + hostname.substring(0, hostname.length() - ".glob.au".length());
+          "<gold>clod-mc</gold> ∙ %s"
+              .formatted(hostname.substring(0, hostname.length() - ".glob.au".length()));
     } else {
       // dev
       motd = "clod-mc ∙ dev";

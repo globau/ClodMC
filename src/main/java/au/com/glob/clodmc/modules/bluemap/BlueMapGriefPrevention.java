@@ -73,21 +73,24 @@ public class BlueMapGriefPrevention extends Addon implements Listener {
       Objects.requireNonNull(this.markerSets.get(world))
           .getMarkers()
           .put(
-              "claim-" + claim.getID(),
+              "claim-%d".formatted(claim.getID()),
               ExtrudeMarker.builder()
                   .position(
                       lesserCorner.getBlockX() + 0.0,
                       lesserCorner.getBlockY() + 0.0,
                       lesserCorner.getBlockZ() + 0.0)
                   .shape(shape, lesserCorner.getBlockY(), world.getMaxHeight())
-                  .label(claim.isAdminClaim() ? "Admin Claim" : claim.getOwnerName() + "'s Claim")
+                  .label(
+                      claim.isAdminClaim()
+                          ? "Admin Claim"
+                          : "%s's Claim".formatted(claim.getOwnerName()))
                   .lineColor(claim.isAdminClaim() ? ADMIN_LINE : PLAYER_LINE)
                   .fillColor(claim.isAdminClaim() ? ADMIN_FILL : PLAYER_FILL)
                   .build());
     }
 
     for (Map.Entry<World, MarkerSet> entry : this.markerSets.entrySet()) {
-      String mapId = "claim-" + entry.getKey().getName();
+      String mapId = "claim-%s".formatted(entry.getKey().getName());
       api.getWorld(entry.getKey())
           .ifPresent(
               (BlueMapWorld world) -> {

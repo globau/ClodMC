@@ -131,11 +131,11 @@ public class CommandBuilder {
 
   private void register() {
     if (this.description == null || this.executor == null) {
-      throw new RuntimeException("incomplete command: " + this.name);
+      throw new RuntimeException("incomplete command: %s".formatted(this.name));
     }
 
     if (this.usage == null) {
-      this.usage = "/" + this.name;
+      this.usage = "/%s".formatted(this.name);
     }
 
     Command command =
@@ -174,13 +174,13 @@ public class CommandBuilder {
                 default -> throw new RuntimeException("executor not handled");
               }
             } catch (CommandUsageError e) {
-              Chat.error(sender, "usage: " + this.usageMessage);
+              Chat.error(sender, "usage: %s".formatted(this.usageMessage));
             } catch (CommandError e) {
               Chat.error(sender, Objects.requireNonNullElse(e.getMessage(), "Internal Error"));
             } catch (Throwable e) {
               String message =
                   e.getMessage() == null ? e.getClass().getSimpleName() : e.getMessage();
-              Chat.error(sender, "Internal command error: " + message);
+              Chat.error(sender, "Internal command error: %s".formatted(message));
               Logger.exception(e);
             }
             return true;
@@ -225,7 +225,7 @@ public class CommandBuilder {
     }
     Player player = Bukkit.getPlayerExact(args[index]);
     if (player == null) {
-      throw new CommandError("Unknown player: " + args[index]);
+      throw new CommandError("Unknown player: %s".formatted(args[index]));
     }
     return player;
   }

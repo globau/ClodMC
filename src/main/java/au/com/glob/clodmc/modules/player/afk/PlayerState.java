@@ -56,8 +56,8 @@ final class PlayerState {
         Chat.fyi(
             player,
             this.isAway
-                ? this.player.getName() + " is now AFK"
-                : this.player.getName() + " is no longer AFK");
+                ? "%s is now AFK".formatted(this.player.getName())
+                : "%s is no longer AFK".formatted(this.player.getName()));
       }
     }
   }

@@ -54,10 +54,10 @@ public class GameMode implements Module {
               mode = StringUtil.toTitleCase(mode);
 
               if (sender.is(target)) {
-                Chat.fyi(sender, "Set own game mode to " + mode);
+                Chat.fyi(sender, "Set own game mode to %s".formatted(mode));
               } else {
-                Chat.fyi(sender, "Set " + target.getName() + "'s game mode to " + mode);
-                Chat.info(target, "Your game mode has been changed to " + mode);
+                Chat.fyi(sender, "Set %s's game mode to %s".formatted(target.getName(), mode));
+                Chat.info(target, "Your game mode has been changed to %s".formatted(mode));
               }
             })
         .completor(

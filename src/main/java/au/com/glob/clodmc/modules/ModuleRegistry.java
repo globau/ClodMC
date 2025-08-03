@@ -118,11 +118,8 @@ public class ModuleRegistry implements Iterable<Module>, PluginBootstrap {
     for (String plugin : requiredPlugins) {
       if (!Bukkit.getPluginManager().isPluginEnabled(plugin)) {
         Logger.warning(
-            "Cannot load module "
-                + moduleClass.getSimpleName()
-                + ": depends on plugin "
-                + plugin
-                + " which is not enabled");
+            "Cannot load module %s: depends on plugin %s which is not enabled"
+                .formatted(moduleClass.getSimpleName(), plugin));
         return;
       }
     }

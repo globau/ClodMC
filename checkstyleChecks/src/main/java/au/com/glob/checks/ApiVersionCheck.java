@@ -46,7 +46,7 @@ public class ApiVersionCheck extends AbstractFileSetCheck {
     }
 
     if (this.buildVersion == null) {
-      this.log(0, "failed to find paper-api version in " + file.getPath());
+      this.log(0, "failed to find paper-api version in %s".formatted(file.getPath()));
     }
 
     this.checkVersions();
@@ -63,7 +63,7 @@ public class ApiVersionCheck extends AbstractFileSetCheck {
     }
 
     if (this.pluginVersion == null) {
-      this.log(0, "failed to find api-version in " + file.getPath());
+      this.log(0, "failed to find api-version in %s".formatted(file.getPath()));
     }
 
     this.checkVersions();
@@ -74,11 +74,8 @@ public class ApiVersionCheck extends AbstractFileSetCheck {
       if (!this.buildVersion.equals(this.pluginVersion)) {
         this.log(
             0,
-            "build paper-api version '"
-                + this.buildVersion
-                + "' does not match plugin '"
-                + this.pluginVersion
-                + "'");
+            "build paper-api version '%s' does not match plugin '%s'"
+                .formatted(this.buildVersion, this.pluginVersion));
       }
     }
   }

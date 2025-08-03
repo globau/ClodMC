@@ -74,7 +74,7 @@ public class TeleportUtil {
             case null, default -> "Dismounting and teleporting you ";
           };
     }
-    Chat.fyi(player, prefix + reason);
+    Chat.fyi(player, "%s%s".formatted(prefix, reason));
 
     player
         .teleportAsync(destinationLoc, PlayerTeleportEvent.TeleportCause.COMMAND)
