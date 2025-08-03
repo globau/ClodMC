@@ -376,106 +376,12 @@ public class Gateways implements Module, Listener {
     PlayerTeleportEvent.TeleportCause cause;
 
     if (anchorBlock.networkId == RANDOM_NETWORK_ID) {
-      teleportPos = playerLocation;
-
-      // only new players can use a random gateway
-      if (!player.isOp()) {
-        int ticks = player.getStatistic(Statistic.PLAY_ONE_MINUTE);
-        long minutesPlayed = Math.round(ticks / 20.0 / 60.0);
-        if (minutesPlayed > MAX_RANDOM_TP_TIME) {
-          Chat.error(player, "New Players Only");
-          return;
-        }
-      }
-
-      // cooldown
-      PlayerDataFile dataFile = PlayerDataFiles.of(player);
-      LocalDateTime now = TimeUtil.localNow();
-      LocalDateTime lastRandomTeleport = dataFile.getDateTime("tpr");
-      if (lastRandomTeleport != null) {
-        long secondsSinceRandomTeleport = Duration.between(lastRandomTeleport, now).toSeconds();
-        if (secondsSinceRandomTeleport < RANDOM_TP_COOLDOWN) {
-          this.ignore.put(player, anchorBlock.blockPos.up());
-          Chat.warning(
-              player,
-              "You must wait another %s before teleporting again"
-                  .formatted(
-                      StringUtil.plural2(
-                          RANDOM_TP_COOLDOWN - secondsSinceRandomTeleport, "second")));
-          return;
-        }
-      }
-      dataFile.setDateTime("tpr", now);
-      dataFile.save();
-
-      // show a message; normally this is only visible if the destination
-      // chunk is slow to load
-      player.showTitle(
-          Title.title(
-              Component.text(""),
-              Component.text("Teleporting"),
-              Title.Times.times(Duration.ZERO, Duration.ofSeconds(2), Duration.ofMillis(500))));
-
-      World world = Bukkit.getWorld("world");
-      if (world == null) {
-        this.ignore.put(player, anchorBlock.blockPos.up());
+      teleportPos = this.randomTeleportLocation(anchorBlock, player);
+      if (teleportPos == null) {
         return;
       }
-      WorldBorder border = world.getWorldBorder();
-
-      int attemptsLeft = 25;
-      while (attemptsLeft > 0) {
-        attemptsLeft--;
-
-        // pick a random location
-        double radius = border.getSize() / 2.0;
-        Location center = border.getCenter();
-        Location randomPos;
-        do {
-          double distance =
-              MIN_RANDOM_TP_DISTANCE
-                  + (this.random.nextDouble() * (radius - MIN_RANDOM_TP_DISTANCE));
-          double angle = 2 * Math.PI * this.random.nextDouble();
-          double x = center.getX() + distance * Math.cos(angle);
-          double z = center.getZ() + distance * Math.sin(angle);
-          double y = world.getHighestBlockYAt(new Location(world, x, 0, z));
-          randomPos = new Location(world, x, y, z);
-        } while (!border.isInside(randomPos));
-
-        // avoid claims
-        Claim claim = GriefPrevention.instance.dataStore.getClaimAt(randomPos, true, null);
-        if (claim != null) {
-          continue;
-        }
-
-        // find a safe location
-        teleportPos = TeleportUtil.getSafePos(randomPos);
-        String biomeKey = teleportPos.getBlock().getBiome().getKey().value();
-        if (biomeKey.equals("ocean")
-            || biomeKey.endsWith("_ocean")
-            || biomeKey.equals("river")
-            || biomeKey.endsWith("_river")) {
-          continue;
-        }
-
-        // getSafePos can put a player into an unsafe location if there aren't any nearby
-        if (!TeleportUtil.isUnsafe(teleportPos.getBlock())) {
-          break;
-        }
-      }
-      if (attemptsLeft == 0) {
-        this.ignore.put(player, anchorBlock.blockPos.up());
-        Chat.error(player, "Failed to find a safe location");
-        return;
-      }
-
       // set the cause as COMMAND to allow /back
       cause = PlayerTeleportEvent.TeleportCause.COMMAND;
-
-      Chat.info(
-          player,
-          "Sending you %s blocks away"
-              .formatted(String.format("%,d", Math.round(playerLocation.distance(teleportPos)))));
 
     } else {
       // teleport to connected anchor
@@ -593,5 +499,102 @@ public class Gateways implements Module, Listener {
 
   static Network networkIdToColours(int networkId) {
     return new Network(networkId);
+  }
+
+  private @Nullable Location randomTeleportLocation(AnchorBlock anchorBlock, Player player) {
+    // only new players can use a random gateway
+    if (!player.isOp()) {
+      int ticks = player.getStatistic(Statistic.PLAY_ONE_MINUTE);
+      long minutesPlayed = Math.round(ticks / 20.0 / 60.0);
+      if (minutesPlayed > MAX_RANDOM_TP_TIME) {
+        Chat.error(player, "New Players Only");
+        return null;
+      }
+    }
+
+    // cooldown
+    PlayerDataFile dataFile = PlayerDataFiles.of(player);
+    LocalDateTime now = TimeUtil.localNow();
+    LocalDateTime lastRandomTeleport = dataFile.getDateTime("tpr");
+    if (lastRandomTeleport != null) {
+      long secondsSinceRandomTeleport = Duration.between(lastRandomTeleport, now).toSeconds();
+      if (secondsSinceRandomTeleport < RANDOM_TP_COOLDOWN) {
+        this.ignore.put(player, anchorBlock.blockPos.up());
+        Chat.warning(
+            player,
+            "You must wait another %s before teleporting again"
+                .formatted(
+                    StringUtil.plural2(RANDOM_TP_COOLDOWN - secondsSinceRandomTeleport, "second")));
+        return null;
+      }
+    }
+    dataFile.setDateTime("tpr", now);
+    dataFile.save();
+
+    // show a message; normally this is only visible if the destination
+    // chunk is slow to load
+    player.showTitle(
+        Title.title(
+            Component.text(""),
+            Component.text("Teleporting"),
+            Title.Times.times(Duration.ZERO, Duration.ofSeconds(2), Duration.ofMillis(500))));
+
+    World world = Bukkit.getWorld("world");
+    if (world == null) {
+      this.ignore.put(player, anchorBlock.blockPos.up());
+      return null;
+    }
+    WorldBorder border = world.getWorldBorder();
+
+    int attemptsLeft = 25;
+    while (attemptsLeft > 0) {
+      attemptsLeft--;
+
+      // pick a random location
+      double radius = border.getSize() / 2.0;
+      Location center = border.getCenter();
+      Location randomPos;
+      do {
+        double distance =
+            MIN_RANDOM_TP_DISTANCE + (this.random.nextDouble() * (radius - MIN_RANDOM_TP_DISTANCE));
+        double angle = 2 * Math.PI * this.random.nextDouble();
+        double x = center.getX() + distance * Math.cos(angle);
+        double z = center.getZ() + distance * Math.sin(angle);
+        double y = world.getHighestBlockYAt(new Location(world, x, 0, z));
+        randomPos = new Location(world, x, y, z);
+      } while (!border.isInside(randomPos));
+
+      // avoid claims
+      Claim claim = GriefPrevention.instance.dataStore.getClaimAt(randomPos, true, null);
+      if (claim != null) {
+        continue;
+      }
+
+      // find a safe location
+      Location teleportPos = TeleportUtil.getSafePos(randomPos);
+      String biomeKey = teleportPos.getBlock().getBiome().getKey().value();
+      if (biomeKey.equals("ocean")
+          || biomeKey.endsWith("_ocean")
+          || biomeKey.equals("river")
+          || biomeKey.endsWith("_river")) {
+        continue;
+      }
+
+      // getSafePos can put a player into an unsafe location if there aren't any safe positions
+      // nearby, which is normally fine but should be avoided here
+      if (TeleportUtil.isUnsafe(teleportPos.getBlock())) {
+        continue;
+      }
+
+      Chat.info(
+          player,
+          "Sending you %s blocks away"
+              .formatted(
+                  String.format("%,d", Math.round(player.getLocation().distance(teleportPos)))));
+      return teleportPos;
+    }
+    this.ignore.put(player, anchorBlock.blockPos.up());
+    Chat.error(player, "Failed to find a safe location");
+    return null;
   }
 }
