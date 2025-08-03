@@ -18,6 +18,8 @@ public class HttpClient {
   private HttpClient() {}
 
   private static final String USER_AGENT = "glob.au/clod-mc";
+  private static final int CONNECT_TIMEOUT_MS = 3000;
+  private static final int READ_TIMEOUT_MS = 5000;
 
   private static final Gson gson = new Gson();
 
@@ -40,8 +42,8 @@ public class HttpClient {
       connection.setRequestMethod("GET");
       connection.setUseCaches(false);
       connection.setRequestProperty("User-Agent", USER_AGENT);
-      connection.setConnectTimeout(3000);
-      connection.setReadTimeout(5000);
+      connection.setConnectTimeout(CONNECT_TIMEOUT_MS);
+      connection.setReadTimeout(READ_TIMEOUT_MS);
       if (headers != null) {
         for (Map.Entry<String, String> entry : headers.entrySet()) {
           connection.setRequestProperty(entry.getKey(), entry.getValue());

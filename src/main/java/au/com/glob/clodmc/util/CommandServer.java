@@ -12,13 +12,16 @@ import org.jspecify.annotations.Nullable;
 
 @NullMarked
 public class CommandServer implements Closeable {
+  private static final int SMTP_PORT = 25;
+  private static final int SOCKET_TIMEOUT_MS = 5000;
+
   private final Socket socket;
   private final BufferedReader inStream;
   private final DataOutputStream outStream;
 
   CommandServer(String hostname) throws IOException {
-    this.socket = new Socket(hostname, 25);
-    this.socket.setSoTimeout(5000);
+    this.socket = new Socket(hostname, SMTP_PORT);
+    this.socket.setSoTimeout(SOCKET_TIMEOUT_MS);
     this.inStream =
         new BufferedReader(
             new InputStreamReader(this.socket.getInputStream(), StandardCharsets.UTF_8));
