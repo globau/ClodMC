@@ -11,9 +11,9 @@ import de.bluecolored.bluemap.api.markers.MarkerSet;
 import de.bluecolored.bluemap.api.markers.ShapeMarker;
 import de.bluecolored.bluemap.api.math.Color;
 import de.bluecolored.bluemap.api.math.Shape;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -85,24 +85,22 @@ public class BlueMapHeatMap extends Addon {
           continue;
         }
 
-        // read chunks, grouped by colour
-        Iterator<HeatmapRow> iter = db.rowIterator(world, minCount);
-        if (iter == null) {
-          continue;
-        }
-
         List<List<Vector2i>> chunkLists = new ArrayList<>(COLOURS.length);
         for (int i = 0; i < COLOURS.length; i++) {
           chunkLists.add(new ArrayList<>());
         }
 
-        while (iter.hasNext()) {
-          HeatmapRow row = iter.next();
-          int index =
-              (int)
-                  Math.floor(
-                      (COLOURS.length - 1) * Math.log(row.count + 1) / Math.log(maxCount + 1));
-          chunkLists.get(index).add(new Vector2i(row.x, row.z));
+        // read chunks, grouped by colour
+        try (HeatMapRows heatMapRows = new HeatMapRows(db, world, minCount)) {
+          for (HeatMapRow row : heatMapRows) {
+            int index =
+                (int)
+                    Math.floor(
+                        (COLOURS.length - 1) * Math.log(row.count + 1) / Math.log(maxCount + 1));
+            chunkLists.get(index).add(new Vector2i(row.x, row.z));
+          }
+        } catch (SQLException e) {
+          continue;
         }
 
         MarkerSet markerSet = MarkerSet.builder().label("HeatMap").defaultHidden(true).build();

@@ -6,18 +6,14 @@ import java.io.File;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Iterator;
-import java.util.NoSuchElementException;
 import org.bukkit.Chunk;
 import org.bukkit.World;
 import org.jspecify.annotations.NullMarked;
-import org.jspecify.annotations.Nullable;
 
 @NullMarked
 class DB {
-  private final Connection conn;
+  final Connection conn;
   private final PreparedStatement insertStatement;
 
   DB() {
@@ -64,12 +60,10 @@ class DB {
   }
 
   int getMaxCount(World world) {
-    try {
-      PreparedStatement s =
-          this.conn.prepareStatement("SELECT MAX(`count`) FROM heatmap WHERE world = ?");
+    try (PreparedStatement s =
+        this.conn.prepareStatement("SELECT MAX(`count`) FROM heatmap WHERE world = ?")) {
       s.setString(1, world.getName());
-      ResultSet r = s.executeQuery();
-      return r.getInt(1);
+      return s.executeQuery().getInt(1);
     } catch (SQLException e) {
       Logger.error("heatmap.sqlite#getMaxCount: %s".formatted(e.getMessage()));
       return 0;
@@ -77,58 +71,14 @@ class DB {
   }
 
   int getMarkerCount(World world, int minCount) {
-    try {
-      PreparedStatement s =
-          this.conn.prepareStatement("SELECT COUNT(*) FROM heatmap WHERE world = ? AND count >= ?");
+    try (PreparedStatement s =
+        this.conn.prepareStatement("SELECT COUNT(*) FROM heatmap WHERE world = ? AND count >= ?")) {
       s.setString(1, world.getName());
       s.setInt(2, minCount);
-      ResultSet r = s.executeQuery();
-      return r.getInt(1);
+      return s.executeQuery().getInt(1);
     } catch (SQLException e) {
       Logger.error("heatmap.sqlite#getMarkerCount: %s".formatted(e.getMessage()));
       return 0;
-    }
-  }
-
-  @Nullable Iterator<HeatmapRow> rowIterator(World world, int minCount) {
-    try {
-      PreparedStatement s =
-          this.conn.prepareStatement(
-              "SELECT x, z, count FROM heatmap WHERE world = ? AND count >= ?");
-      s.setString(1, world.getName());
-      s.setInt(2, minCount);
-      ResultSet rs = s.executeQuery();
-      return new Iterator<>() {
-        private boolean hasNext = rs.next();
-
-        @Override
-        public boolean hasNext() {
-          return this.hasNext;
-        }
-
-        @Override
-        public HeatmapRow next() {
-          if (!this.hasNext) {
-            throw new NoSuchElementException();
-          }
-          try {
-            HeatmapRow row =
-                new HeatmapRow(world.getName(), rs.getInt("x"), rs.getInt("z"), rs.getInt("count"));
-            this.hasNext = rs.next();
-            if (!this.hasNext) {
-              rs.close();
-              s.close();
-            }
-            return row;
-          } catch (SQLException e) {
-            Logger.error("heatmap.sqlite#rowIterator.1: %s".formatted(e.getMessage()));
-            throw new NoSuchElementException();
-          }
-        }
-      };
-    } catch (SQLException e) {
-      Logger.error("heatmap.sqlite#rowIterator.2: %s".formatted(e.getMessage()));
-      return null;
     }
   }
 }

@@ -5,13 +5,13 @@ import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
 @NullMarked
-final class HeatmapRow {
+public final class HeatMapRow {
   private final String world;
   final int x;
   final int z;
   final int count;
 
-  HeatmapRow(String world, int x, int z, int count) {
+  HeatMapRow(String world, int x, int z, int count) {
     this.world = world;
     this.x = x;
     this.z = z;
@@ -26,7 +26,7 @@ final class HeatmapRow {
     if (obj == null || obj.getClass() != this.getClass()) {
       return false;
     }
-    HeatmapRow that = (HeatmapRow) obj;
+    HeatMapRow that = (HeatMapRow) obj;
     return Objects.equals(this.world, that.world) && this.x == that.x && this.z == that.z;
   }
 
