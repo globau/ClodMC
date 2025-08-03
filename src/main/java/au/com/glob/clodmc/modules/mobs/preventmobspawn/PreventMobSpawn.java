@@ -15,8 +15,6 @@ import org.jspecify.annotations.NullMarked;
 /** Prevents enemy mobs from spawning within areas claimed by admin (eg. spawn island) */
 @NullMarked
 public class PreventMobSpawn implements Listener, Module {
-  public static final String REQUIRED_PLUGIN = "GriefPrevention";
-
   private final List<AdminClaim> adminClaims = new ArrayList<>(1);
 
   @Override

@@ -84,7 +84,7 @@ public class ModuleRegistry implements Iterable<Module>, PluginBootstrap {
     this.register(BetterDrops.class);
     this.register(ExplodingCreepers.class);
     this.register(PreventMobGriefing.class);
-    this.register(PreventMobSpawn.class, PreventMobSpawn.REQUIRED_PLUGIN);
+    this.register(PreventMobSpawn.class, "GriefPrevention");
 
     // player
     this.register(AFK.class);
@@ -108,21 +108,23 @@ public class ModuleRegistry implements Iterable<Module>, PluginBootstrap {
     this.register(ServerStatus.class);
 
     // bluemap
-    this.register(BlueMap.class, BlueMap.REQUIRED_PLUGIN);
+    this.register(BlueMap.class, "BlueMap");
 
     // register commands built by modules
     CommandBuilder.registerBuilders();
   }
 
-  private void register(Class<? extends Module> moduleClass, @Nullable String requiredPlugin) {
-    if (requiredPlugin != null && !Bukkit.getPluginManager().isPluginEnabled(requiredPlugin)) {
-      Logger.warning(
-          "Cannot load module "
-              + moduleClass.getSimpleName()
-              + ": depends on plugin "
-              + requiredPlugin
-              + " which is not enabled");
-      return;
+  private void register(Class<? extends Module> moduleClass, String... requiredPlugins) {
+    for (String plugin : requiredPlugins) {
+      if (!Bukkit.getPluginManager().isPluginEnabled(plugin)) {
+        Logger.warning(
+            "Cannot load module "
+                + moduleClass.getSimpleName()
+                + ": depends on plugin "
+                + plugin
+                + " which is not enabled");
+        return;
+      }
     }
 
     Module module;
@@ -136,10 +138,6 @@ public class ModuleRegistry implements Iterable<Module>, PluginBootstrap {
     if (module instanceof Listener listener) {
       Bukkit.getServer().getPluginManager().registerEvents(listener, ClodMC.instance);
     }
-  }
-
-  private void register(Class<? extends Module> moduleClass) {
-    this.register(moduleClass, null);
   }
 
   @Override
