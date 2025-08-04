@@ -64,8 +64,7 @@ public class DataFile extends YamlConfiguration {
   }
 
   // parse datetime from string, null if invalid
-  @Nullable
-  public LocalDateTime getDateTime(String path) {
+  @Nullable public LocalDateTime getDateTime(String path) {
     try {
       return LocalDateTime.parse(this.getString(path, ""), DATE_TIME_FORMATTER);
     } catch (DateTimeParseException e) {
