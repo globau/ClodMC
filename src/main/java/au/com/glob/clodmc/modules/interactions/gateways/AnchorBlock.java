@@ -14,6 +14,7 @@ import org.bukkit.util.NumberConversions;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
+/** represents a gateway anchor block with teleportation capabilities */
 @SerializableAs("ClodMC.AnchorBlock")
 @NullMarked
 public class AnchorBlock implements ConfigurationSerializable {
@@ -29,6 +30,7 @@ public class AnchorBlock implements ConfigurationSerializable {
   final Visuals visuals;
   final boolean isRandom;
 
+  // creates an anchor block with network id, location and optional name
   public AnchorBlock(int networkId, Location location, @Nullable String name) {
     this.networkId = networkId;
     this.blockPos = BlockPos.of(location);
@@ -51,6 +53,7 @@ public class AnchorBlock implements ConfigurationSerializable {
         .formatted(this.blockPos, this.topColour, this.bottomColour, this.connectedTo != null);
   }
 
+  // gets display information about the anchor block
   String getInformation() {
     String prefix = "<yellow>%s</yellow> - ".formatted(this.displayName);
     if (this.connectedTo != null) {
@@ -66,16 +69,19 @@ public class AnchorBlock implements ConfigurationSerializable {
     return "%sDisconnected".formatted(prefix);
   }
 
+  // gets the colour pair display name
   String getColourPair() {
     return "%s :: %s"
         .formatted(this.topColour.getDisplayName(), this.bottomColour.getDisplayName());
   }
 
+  // connects this anchor to another anchor
   void connectTo(AnchorBlock otherBlock) {
     this.connectedTo = otherBlock;
     otherBlock.connectedTo = this;
   }
 
+  // disconnects this anchor from its connected anchor
   void disconnect() {
     if (this.connectedTo != null) {
       this.connectedTo.connectedTo = null;
@@ -83,6 +89,7 @@ public class AnchorBlock implements ConfigurationSerializable {
     this.connectedTo = null;
   }
 
+  // calculates location the player is facing from given location
   private Location facingLocation(Location location) {
     double yawRadians = Math.toRadians(location.getYaw());
     double facingX = location.getX() - Math.sin(yawRadians);
@@ -90,22 +97,27 @@ public class AnchorBlock implements ConfigurationSerializable {
     return new Location(location.getWorld(), facingX, location.getY(), facingZ);
   }
 
+  // gets the block the player is facing from given location
   private Block facingBlock(Location location) {
     return this.facingLocation(location).getBlock();
   }
 
+  // checks if player is not facing an anchor block
   private boolean notFacingAnchor(Location location) {
     return !Gateways.instance.instances.containsKey(BlockPos.of(this.facingLocation(location)));
   }
 
+  // checks if player is facing an air block
   private boolean isFacingAir(Location location) {
     return this.facingBlock(location).isEmpty();
   }
 
+  // checks if player is facing a solid block
   private boolean isFacingSolid(Location location) {
     return this.facingBlock(location).isSolid();
   }
 
+  // calculates optimal teleport location for player considering rotation and safety
   Location teleportLocation(Player player) {
     // rotate player to avoid facing a wall
 
@@ -190,6 +202,7 @@ public class AnchorBlock implements ConfigurationSerializable {
   }
 
   @SuppressWarnings("unused")
+  // deserialises anchor block from configuration map
   public static AnchorBlock deserialize(Map<String, Object> args) {
     World world = Bukkit.getWorld((String) args.get("world"));
     if (world == null) {

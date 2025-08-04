@@ -27,6 +27,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.jspecify.annotations.NullMarked;
 
+/** displays griefprevention claims as markers on bluemap */
 @NullMarked
 public class BlueMapGriefPrevention extends Addon implements Listener {
   private static final Color ADMIN_LINE = new Color("#fd6600ff");
@@ -46,6 +47,7 @@ public class BlueMapGriefPrevention extends Addon implements Listener {
     Bukkit.getPluginManager().registerEvents(this, ClodMC.instance);
   }
 
+  // update claim markers on the bluemap
   @Override
   protected void update() {
     for (MarkerSet markerSet : this.markerSets.values()) {
@@ -105,26 +107,31 @@ public class BlueMapGriefPrevention extends Addon implements Listener {
     }
   }
 
+  // refresh markers when a claim is created
   @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
   public void onClaimCreated(ClaimCreatedEvent event) {
     this.update();
   }
 
+  // refresh markers when a claim is resized
   @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
   public void onClaimResize(ClaimResizeEvent event) {
     this.update();
   }
 
+  // refresh markers when a claim is changed
   @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
   public void onClaimChange(ClaimChangeEvent event) {
     this.update();
   }
 
+  // refresh markers when a claim is extended
   @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
   public void onClaimExtend(ClaimExtendEvent event) {
     this.update();
   }
 
+  // refresh markers when a claim is deleted
   @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
   public void onClaimDeleted(ClaimDeletedEvent event) {
     this.update();

@@ -28,6 +28,7 @@ import org.jspecify.annotations.NullMarked;
 public class WaxedItemFrames implements Module, Listener {
   private static final NamespacedKey WAXED_KEY = new NamespacedKey("clod-mc", "waxed");
 
+  // handle waxing item frames and click-through to containers
   @SuppressWarnings("MissingCasesInEnumSwitch")
   @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
   public void onPlayerInteractEntity(PlayerInteractEntityEvent event) {

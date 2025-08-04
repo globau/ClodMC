@@ -4,6 +4,7 @@ import java.util.Objects;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
+/** represents a chunk with its visit count from the heatmap database */
 @NullMarked
 public final class HeatMapRow {
   private final String world;

@@ -6,6 +6,7 @@ import org.bukkit.command.CommandSender;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
+/** wrapper for command sender with chat utilities */
 @NullMarked
 final class Sender {
   final CommandSender recipient;
@@ -16,10 +17,12 @@ final class Sender {
     this.name = name;
   }
 
+  // send an informational message
   void fyi(String message) {
     Chat.fyi(this.recipient, message);
   }
 
+  // send an error message
   void error(String message) {
     Chat.error(this.recipient, message);
   }

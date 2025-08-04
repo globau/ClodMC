@@ -4,6 +4,7 @@ import java.util.List;
 import org.bukkit.command.CommandSender;
 import org.jspecify.annotations.NullMarked;
 
+/** tab completion for commands accepting any command sender */
 @FunctionalInterface
 @NullMarked
 public interface CompletorS extends Completor {

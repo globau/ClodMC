@@ -23,10 +23,12 @@ public class HttpClient {
 
   private static final Gson gson = new Gson();
 
+  // perform get request and parse json response
   public static HttpJsonResponse getJSON(String urlString, Map<String, String> headers) {
     return readJsonResponse(request(urlString, headers));
   }
 
+  // create and configure http connection
   private static HttpURLConnection request(
       String urlString, @Nullable Map<String, String> headers) {
     HttpURLConnection connection;
@@ -56,6 +58,7 @@ public class HttpClient {
     return connection;
   }
 
+  // read and parse json from http response
   private static HttpJsonResponse readJsonResponse(HttpURLConnection connection) {
     InputStreamReader streamReader = createReader(connection);
     if (streamReader == null) {
@@ -69,6 +72,7 @@ public class HttpClient {
     }
   }
 
+  // create stream reader from connection input or error stream
   private static @Nullable InputStreamReader createReader(HttpURLConnection connection) {
     InputStream stream;
     try {

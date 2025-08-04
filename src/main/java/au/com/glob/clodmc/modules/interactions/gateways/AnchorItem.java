@@ -18,6 +18,7 @@ import org.bukkit.persistence.PersistentDataType;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
+/** manages the gateway anchor item recipe and creation */
 @NullMarked
 class AnchorItem {
   static final NamespacedKey RECIPE_KEY = new NamespacedKey("clod-mc", "anchor");
@@ -35,6 +36,7 @@ class AnchorItem {
   private static final NamespacedKey TOP_KEY = new NamespacedKey("clod-mc", "network-top");
   private static final NamespacedKey BOTTOM_KEY = new NamespacedKey("clod-mc", "network-bottom");
 
+  // creates the crafting recipe for gateway anchor item
   static ShapedRecipe getRecipe() {
     Material[] materials =
         Colours.COLOURS.stream().map((Colour colour) -> colour.material).toArray(Material[]::new);
@@ -52,6 +54,7 @@ class AnchorItem {
     return recipe;
   }
 
+  // creates a new gateway anchor item with default properties
   static ItemStack create() {
     ItemStack item = new ItemStack(Material.RESPAWN_ANCHOR);
     ItemMeta meta = item.getItemMeta();
@@ -62,6 +65,7 @@ class AnchorItem {
     return item;
   }
 
+  // checks if the item is a gateway anchor
   static boolean isAnchor(@Nullable ItemStack item) {
     if (item == null) {
       return false;
@@ -70,6 +74,7 @@ class AnchorItem {
     return meta != null && meta.getPersistentDataContainer().has(RECIPE_KEY);
   }
 
+  // gets the network id from anchor item
   static int getNetworkId(ItemStack item) {
     Integer networkId =
         item.getItemMeta()
@@ -81,6 +86,7 @@ class AnchorItem {
     return networkId;
   }
 
+  // gets the custom name from anchor item
   static @Nullable String getName(ItemStack item) {
     Component displayName = item.getItemMeta().displayName();
     if (displayName == null) {
@@ -90,6 +96,7 @@ class AnchorItem {
     return plainTextName.equals(DEFAULT_ANCHOR_NAME) ? null : plainTextName;
   }
 
+  // sets metadata on anchor item including network id, name and suffix
   static void setMeta(
       ItemStack anchorItem, int networkId, @Nullable String name, @Nullable String suffix) {
     Network network = Network.of(networkId);
@@ -108,6 +115,7 @@ class AnchorItem {
     anchorItem.setItemMeta(meta);
   }
 
+  // sets metadata on anchor item with duplicate and random detection
   static void setMeta(ItemStack anchorItem, int networkId) {
     boolean isDuplicate =
         Gateways.instance.instances.values().stream()
@@ -126,10 +134,12 @@ class AnchorItem {
     AnchorItem.setMeta(anchorItem, networkId, getName(anchorItem), suffix);
   }
 
+  // refreshes metadata on existing anchor item
   static void refreshMeta(ItemStack anchorItem) {
     setMeta(anchorItem, getNetworkId(anchorItem));
   }
 
+  // clears extra metadata from anchor item after crafting
   static void clearExtraMeta(ItemStack anchorItem) {
     ItemMeta meta = anchorItem.getItemMeta();
     Integer networkIdBoxed =

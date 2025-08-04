@@ -14,6 +14,7 @@ import org.bukkit.World;
 import org.bukkit.WorldBorder;
 import org.jspecify.annotations.NullMarked;
 
+/** displays world borders as markers on bluemap */
 @NullMarked
 public class BlueMapWorldBorder extends Addon {
   private static final Color LINE_COLOUR = new Color("#a52a2aff");
@@ -23,6 +24,7 @@ public class BlueMapWorldBorder extends Addon {
     super(api);
   }
 
+  // create world border markers for all worlds
   @Override
   public void update() {
     for (World world : Bukkit.getWorlds()) {

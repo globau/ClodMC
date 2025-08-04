@@ -17,6 +17,7 @@ import org.jspecify.annotations.NullMarked;
 public class PreventMobSpawn implements Listener, Module {
   private final List<AdminClaim> adminClaims = new ArrayList<>(1);
 
+  // cache all admin claims for spawn checking
   @Override
   public void loadConfig() {
     for (Claim claim : GriefPrevention.instance.dataStore.getClaims()) {
@@ -26,6 +27,7 @@ public class PreventMobSpawn implements Listener, Module {
     }
   }
 
+  // prevent enemy mobs from spawning in admin claims
   @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
   public void onCreatureSpawn(CreatureSpawnEvent event) {
     if (event.getEntity() instanceof Enemy) {

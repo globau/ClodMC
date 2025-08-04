@@ -28,7 +28,7 @@ public class Spawn implements Module {
                   TeleportUtil.getRandomLoc(
                       world.getSpawnLocation(), spawnRadius == null ? 8 : spawnRadius);
 
-              // teleport to the center of the block, just above the surface as per vanilla
+              // teleport to the centre of the block, just above the surface as per vanilla
               location.add(0.5, 0.1, 0.5);
               TeleportUtil.teleport(player, location, "to spawn");
             });

@@ -5,18 +5,21 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.jspecify.annotations.NullMarked;
 
+/** tracks player afk state and last interaction time */
 @NullMarked
 final class PlayerState {
   final Player player;
   long lastInteractionTime;
   boolean isAway;
 
+  // create new player state tracking
   PlayerState(Player player) {
     this.player = player;
     this.lastInteractionTime = System.currentTimeMillis() / 1000;
     this.isAway = false;
   }
 
+  // update last interaction time and return from afk
   public void onAction() {
     this.lastInteractionTime = System.currentTimeMillis() / 1000;
     if (this.isAway) {
@@ -24,6 +27,7 @@ final class PlayerState {
     }
   }
 
+  // toggle afk status manually via command
   public void toggleAway() {
     if (this.isAway) {
       this.onAction();
@@ -32,6 +36,7 @@ final class PlayerState {
     }
   }
 
+  // set player as afk
   public void setAway(boolean announce) {
     this.isAway = true;
     AFK.instance.getAfkTeam().addEntry(this.player.getName());
@@ -40,6 +45,7 @@ final class PlayerState {
     }
   }
 
+  // set player as no longer afk
   public void setBack(boolean announce) {
     this.isAway = false;
     AFK.instance.getAfkTeam().removeEntry(this.player.getName());
@@ -48,6 +54,7 @@ final class PlayerState {
     }
   }
 
+  // announce afk status change to all players
   private void announce() {
     for (Player player : Bukkit.getOnlinePlayers()) {
       if (player.equals(this.player)) {

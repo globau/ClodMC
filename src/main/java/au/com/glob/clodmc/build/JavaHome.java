@@ -15,6 +15,7 @@ public class JavaHome {
   private static final int JDK_VERSION = 21;
   private static final Path CACHE_FILE = Path.of("build/java_home");
 
+  // execute command and return stdout output
   private static String capture(String... command) throws IOException, InterruptedException {
     ProcessBuilder pb = new ProcessBuilder(command);
     Process process = pb.start();
@@ -27,6 +28,7 @@ public class JavaHome {
     return output;
   }
 
+  // read cached java home path if valid
   private static String readCached() {
     try {
       String cachedJavaHome = Files.readString(CACHE_FILE).trim();
@@ -40,6 +42,7 @@ public class JavaHome {
     return null;
   }
 
+  // write java home path to cache file
   private static void writeCached(String path) {
     try {
       Files.writeString(CACHE_FILE, "%s\n".formatted(path));
@@ -48,6 +51,7 @@ public class JavaHome {
     }
   }
 
+  // find and output java 21 home directory
   public static void main(String[] args) {
     try {
       String cached = readCached();

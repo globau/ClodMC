@@ -17,6 +17,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.jspecify.annotations.NullMarked;
 import vendored.com.jeff_media.customblockdata.CustomBlockData;
 
+/** main plugin class that handles lifecycle and module coordination */
 @NullMarked
 public final class ClodMC extends JavaPlugin implements Listener {
   @SuppressWarnings({"NotNullFieldNotInitialized", "NullAway.Init"})
@@ -25,11 +26,13 @@ public final class ClodMC extends JavaPlugin implements Listener {
   private final ModuleRegistry moduleRegistry = new ModuleRegistry();
   private boolean geyserLoaded;
 
+  // initialise plugin instance
   public ClodMC() {
     super();
     instance = this;
   }
 
+  // create data folder if needed
   @Override
   public void onLoad() {
     File dataFolder = this.getDataFolder();
@@ -38,6 +41,7 @@ public final class ClodMC extends JavaPlugin implements Listener {
     }
   }
 
+  // register modules and load configs with validation
   @Override
   public void onEnable() {
     Bukkit.getPluginManager().registerEvents(this, this);
@@ -59,6 +63,7 @@ public final class ClodMC extends JavaPlugin implements Listener {
     }
   }
 
+  // test geyser availability and update player list
   @EventHandler
   public void onServerLoad(ServerLoadEvent event) {
     try {
@@ -71,11 +76,13 @@ public final class ClodMC extends JavaPlugin implements Listener {
     Logger.info("clod-mc started");
   }
 
+  // update whitelist when player joins
   @EventHandler
   public void onPlayerJoin(PlayerJoinEvent event) {
     Players.updateWhitelisted();
   }
 
+  // check if geyser plugin is available
   public boolean isGeyserLoaded() {
     return this.geyserLoaded;
   }

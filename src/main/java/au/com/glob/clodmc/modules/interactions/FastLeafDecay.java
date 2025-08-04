@@ -33,12 +33,14 @@ public class FastLeafDecay implements Listener, Module {
     this.onBlockRemove(event.getBlock(), 5);
   }
 
+  // cascade leaf decay when leaves naturally decay
   @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
   public void onLeavesDecay(LeavesDecayEvent event) {
     // check neighbours when a leaf decays to trigger a cascade
     this.onBlockRemove(event.getBlock(), 2);
   }
 
+  // schedule neighbouring leaves to decay after a delay
   private void onBlockRemove(final Block oldBlock, long delay) {
     // block broken must be either a log of leaf
     if (!Tag.LOGS.isTagged(oldBlock.getType()) && !Tag.LEAVES.isTagged(oldBlock.getType())) {
@@ -72,6 +74,7 @@ public class FastLeafDecay implements Listener, Module {
     }
   }
 
+  // decay a single leaf block with particles and sound
   private void decay(Block block) {
     // make sure we're decaying a loaded leaf block
     if (!this.scheduledBlocks.remove(block)

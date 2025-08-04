@@ -30,6 +30,7 @@ import org.jspecify.annotations.NullMarked;
 @NullMarked
 public class DeepPockets implements Module, Listener {
 
+  // search shulker boxes when picking items from inventory
   @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
   public void onPlayerPickItem(PlayerPickItemEvent event) {
     Player player = event.getPlayer();

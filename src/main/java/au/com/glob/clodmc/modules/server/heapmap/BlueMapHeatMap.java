@@ -22,6 +22,7 @@ import org.bukkit.WorldBorder;
 import org.jspecify.annotations.NullMarked;
 import vendored.com.technicjelle.BMUtils.Cheese;
 
+/** generates bluemap heatmap markers from player activity data */
 @NullMarked
 public class BlueMapHeatMap extends Addon {
   private static final Color[] COLOURS = {
@@ -53,6 +54,7 @@ public class BlueMapHeatMap extends Addon {
     super(api);
   }
 
+  // generate heatmap markers once
   @Override
   public void update() {
     if (this.generated) {
@@ -65,6 +67,7 @@ public class BlueMapHeatMap extends Addon {
         });
   }
 
+  // build heatmap markers for all worlds
   private void buildMarkers() {
     DB db = new DB();
     try {

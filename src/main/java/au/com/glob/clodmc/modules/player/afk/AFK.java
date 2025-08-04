@@ -35,6 +35,7 @@ public class AFK implements Listener, Module {
 
   private final HashMap<UUID, PlayerState> playerStates = new HashMap<>();
 
+  // initialise afk system with commands and scoreboard team
   public AFK() {
     instance = this;
 
@@ -53,6 +54,7 @@ public class AFK implements Listener, Module {
     afkTeam.removeEntries(afkTeam.getEntries());
   }
 
+  // get or create afk scoreboard team
   Team getAfkTeam() {
     Scoreboard scoreboard = Bukkit.getScoreboardManager().getMainScoreboard();
     Team team = scoreboard.getTeam("AFK");
@@ -65,6 +67,7 @@ public class AFK implements Listener, Module {
     return team;
   }
 
+  // start periodic task to check for idle players
   @Override
   public void loadConfig() {
     // check for away players every second
@@ -85,6 +88,7 @@ public class AFK implements Listener, Module {
 
   // events
 
+  // handle player activity to update afk status
   private void onAction(Player player) {
     PlayerState playerState = this.playerStates.get(player.getUniqueId());
     if (playerState != null) {
@@ -92,6 +96,7 @@ public class AFK implements Listener, Module {
     }
   }
 
+  // create player state when joining
   @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
   public void onPlayerJoin(PlayerJoinEvent event) {
     PlayerState playerState = new PlayerState(event.getPlayer());
@@ -99,16 +104,19 @@ public class AFK implements Listener, Module {
     this.playerStates.put(event.getPlayer().getUniqueId(), playerState);
   }
 
+  // update activity on quit
   @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
   public void onPlayerQuit(PlayerQuitEvent event) {
     this.onAction(event.getPlayer());
   }
 
+  // update activity on chat
   @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
   public void onAsyncChat(AsyncChatEvent event) {
     Schedule.nextTick(() -> AFK.this.onAction(event.getPlayer()));
   }
 
+  // update activity on movement
   @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
   public void onPlayerMove(PlayerMoveEvent event) {
     if (event.hasChangedBlock()) {
@@ -116,6 +124,7 @@ public class AFK implements Listener, Module {
     }
   }
 
+  // update activity on combat
   @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
   public void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
     if (event.getDamager() instanceof Player player) {
@@ -123,6 +132,7 @@ public class AFK implements Listener, Module {
     }
   }
 
+  // update activity on command use (except afk command)
   @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
   public void onPlayerCommandPreprocess(PlayerCommandPreprocessEvent event) {
     if (event.getMessage().equals("/afk") || event.getMessage().startsWith("/afk ")) {
@@ -131,16 +141,19 @@ public class AFK implements Listener, Module {
     this.onAction(event.getPlayer());
   }
 
+  // update activity on interaction
   @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
   public void onPlayerInteract(PlayerInteractEvent event) {
     this.onAction(event.getPlayer());
   }
 
+  // update activity on block placement
   @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
   public void onBlockPlace(BlockPlaceEvent event) {
     this.onAction(event.getPlayer());
   }
 
+  // update activity on block breaking
   @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
   public void onBlockBreak(BlockBreakEvent event) {
     this.onAction(event.getPlayer());

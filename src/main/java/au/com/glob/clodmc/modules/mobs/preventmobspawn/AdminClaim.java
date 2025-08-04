@@ -5,6 +5,7 @@ import org.bukkit.Location;
 import org.bukkit.World;
 import org.jspecify.annotations.NullMarked;
 
+/** cached admin claim bounds for efficient location checking */
 @NullMarked
 final class AdminClaim {
   private final World world;
@@ -14,6 +15,7 @@ final class AdminClaim {
   private final double maxZ;
 
   AdminClaim(Claim claim) {
+    // cache claim boundaries for performance
     this.world = claim.getLesserBoundaryCorner().getWorld();
     this.minX = claim.getLesserBoundaryCorner().getX();
     this.minZ = claim.getLesserBoundaryCorner().getZ();
@@ -21,6 +23,7 @@ final class AdminClaim {
     this.maxZ = claim.getGreaterBoundaryCorner().getZ();
   }
 
+  // check if location is within this admin claim
   boolean contains(Location loc) {
     return loc.getWorld().equals(this.world)
         && loc.getX() >= this.minX

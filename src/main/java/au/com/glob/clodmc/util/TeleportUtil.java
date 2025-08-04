@@ -46,6 +46,7 @@ public class TeleportUtil {
   private static final org.bukkit.Color TELEPORT_COLUR_A = org.bukkit.Color.fromRGB(0x00BFFF);
   private static final org.bukkit.Color TELEPORT_COLUR_B = org.bukkit.Color.fromRGB(0xFFFFFF);
 
+  // teleport player safely with visual and audio effects
   public static void teleport(Player player, Location location, String reason) {
     Location fromLoc = player.getLocation();
 
@@ -93,6 +94,7 @@ public class TeleportUtil {
             });
   }
 
+  // get location of the block the player is standing on
   public static Location getStandingPos(Player player) {
     // player.getLocation() returns the centre of the player; if the player
     // is standing on the edge of a block, their centre will be over a different
@@ -118,6 +120,7 @@ public class TeleportUtil {
     return player.getLocation();
   }
 
+  // find nearest safe position for teleportation
   public static Location getSafePos(Location location) {
     World world = location.getWorld();
     int x = location.getBlockX();
@@ -209,6 +212,7 @@ public class TeleportUtil {
     return safeLocation;
   }
 
+  // check if block location is unsafe for player
   public static boolean isUnsafe(Block feetBlock) {
     Material feetMaterial = feetBlock.getType();
     Block surfaceBlock = feetBlock.getRelative(BlockFace.DOWN);
@@ -246,6 +250,7 @@ public class TeleportUtil {
         || feetBlock.getRelative(BlockFace.UP).isSolid();
   }
 
+  // check if block can support a standing player
   private static boolean canStandOn(Block block) {
     Material material = block.getType();
     if (Tag.WOOL_CARPETS.isTagged(material) || material == Material.SCAFFOLDING) {
@@ -255,6 +260,7 @@ public class TeleportUtil {
     return block.isSolid();
   }
 
+  // find random safe location within radius
   public static Location getRandomLoc(Location loc, int randomRadius) {
     loc = loc.clone();
     int attempts = 0;
@@ -274,6 +280,7 @@ public class TeleportUtil {
     return loc;
   }
 
+  // play teleport sound effect to nearby players
   private static void playTeleportSound(Location loc, Player excludedPlayer) {
     for (Player player : loc.getNearbyPlayers(POP_RADIUS)) {
       if (!player.equals(excludedPlayer)) {
@@ -286,6 +293,7 @@ public class TeleportUtil {
     }
   }
 
+  // display teleport particle effects
   private static void showTeleportParticles(Location loc) {
     World world = loc.getWorld();
     if (world == null) {

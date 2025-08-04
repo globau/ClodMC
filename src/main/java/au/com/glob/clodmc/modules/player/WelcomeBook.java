@@ -205,6 +205,7 @@ public class WelcomeBook implements Module, Listener {
     }
   }
 
+  // give welcome book to new players
   @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
   public void onPlayerJoin(PlayerJoinEvent event) {
     if (!event.getPlayer().hasPlayedBefore()) {
@@ -212,6 +213,7 @@ public class WelcomeBook implements Module, Listener {
     }
   }
 
+  // create and give welcome book to player
   private void giveWelcomeBook(Player recipient, @Nullable CommandSender sender) {
     ItemStack bookItem = new ItemStack(Material.WRITTEN_BOOK);
     BookMeta bookMeta = (BookMeta) bookItem.getItemMeta();

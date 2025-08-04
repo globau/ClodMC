@@ -7,6 +7,7 @@ import org.bukkit.inventory.ItemStack;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
+/** manages available gateway colours and their material mappings */
 @NullMarked
 public class Colours {
   static final List<Colour> COLOURS =
@@ -28,6 +29,7 @@ public class Colours {
           new Colour(Material.RED_WOOL, "red", 14, Color.fromRGB(0xb02e26)),
           new Colour(Material.BLACK_WOOL, "black", 15, Color.fromRGB(0x1d1c21)));
 
+  // finds colour by material
   static @Nullable Colour of(Material material) {
     for (Colour colour : COLOURS) {
       if (colour.material == material) {
@@ -37,6 +39,7 @@ public class Colours {
     return null;
   }
 
+  // finds colour by index
   static @Nullable Colour of(int index) {
     for (Colour colour : COLOURS) {
       if (colour.index == index) {
@@ -46,6 +49,7 @@ public class Colours {
     return null;
   }
 
+  // finds colour by item material
   static @Nullable Colour of(@Nullable ItemStack item) {
     return item == null ? null : of(item.getType());
   }

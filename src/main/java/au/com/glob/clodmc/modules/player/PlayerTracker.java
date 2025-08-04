@@ -15,6 +15,7 @@ import org.jspecify.annotations.NullMarked;
 /** Collect data about players */
 @NullMarked
 public class PlayerTracker implements Module, Listener {
+  // update player data on join
   @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
   public void onPlayerJoin(PlayerJoinEvent event) {
     PlayerDataFile dataFile = PlayerDataFiles.of(event.getPlayer());
@@ -23,6 +24,7 @@ public class PlayerTracker implements Module, Listener {
     dataFile.save();
   }
 
+  // update player data on quit and schedule file unload
   @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
   public void onPlayerQuit(PlayerQuitEvent event) {
     PlayerDataFile dataFile = PlayerDataFiles.of(event.getPlayer());

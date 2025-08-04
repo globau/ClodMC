@@ -11,6 +11,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.util.NumberConversions;
 import org.jspecify.annotations.NullMarked;
 
+/** represents a whisper message sent to an offline player */
 @SerializableAs("ClodMC.Message")
 @NullMarked
 public class Message implements ConfigurationSerializable {
@@ -24,6 +25,7 @@ public class Message implements ConfigurationSerializable {
     this.message = message;
   }
 
+  // send this message to a player with timestamp
   public void sendTo(Player player) {
     Chat.whisper(
         player,
@@ -34,6 +36,7 @@ public class Message implements ConfigurationSerializable {
                 this.message));
   }
 
+  // serialise message for datafile
   @Override
   public Map<String, Object> serialize() {
     Map<String, Object> serialised = new HashMap<>();
@@ -43,6 +46,7 @@ public class Message implements ConfigurationSerializable {
     return serialised;
   }
 
+  // deserialise message from datafile
   @SuppressWarnings("unused")
   public static Message deserialize(Map<String, Object> args) {
     return new Message(

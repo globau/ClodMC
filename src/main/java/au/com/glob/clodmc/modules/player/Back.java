@@ -31,6 +31,7 @@ public class Back implements Module, Listener {
             });
   }
 
+  // store previous location when player teleports via command
   @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
   public void onPlayerTeleport(PlayerTeleportEvent event) {
     if (event.getCause() == PlayerTeleportEvent.TeleportCause.COMMAND) {

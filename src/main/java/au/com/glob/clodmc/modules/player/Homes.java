@@ -124,6 +124,7 @@ public class Homes implements Listener, Module {
         .completor(this::completeHomes);
   }
 
+  // tab completion for home names
   private List<String> completeHomes(Player player, List<String> args) {
     if (args.isEmpty()) {
       return List.of();
@@ -136,6 +137,7 @@ public class Homes implements Listener, Module {
         .toList();
   }
 
+  // retrieve all homes for a player from data file
   private Map<String, Location> getHomes(Player player) {
     PlayerDataFile dataFile = PlayerDataFiles.of(player);
 
@@ -152,6 +154,7 @@ public class Homes implements Listener, Module {
     return result;
   }
 
+  // save all homes for a player to data file
   private void setHomes(Player player, Map<String, Location> homes) {
     PlayerDataFile dataFile = PlayerDataFiles.of(player);
     ConfigurationSection section = dataFile.getConfigurationSection("homes");

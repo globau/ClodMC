@@ -30,6 +30,7 @@ public class OfflineMessages implements Module, Listener {
     ConfigurationSerialization.registerClass(Message.class);
   }
 
+  // handle a whisper message intended for an offline player
   private boolean handleOfflineMsg(Sender sender, String recipient, String message) {
     // most messages will be directed at online players, check that first
     Player player = Bukkit.getPlayerExact(recipient);
@@ -59,10 +60,12 @@ public class OfflineMessages implements Module, Listener {
     return true;
   }
 
+  // load offline messages for a player from their data file
   private List<Message> loadMessages(Player player) {
     return this.loadMessages(PlayerDataFiles.of(player).getList("messages"));
   }
 
+  // convert config list to message objects
   private List<Message> loadMessages(@Nullable List<?> configValue) {
     List<Message> messages = new ArrayList<>();
     if (configValue != null) {
@@ -75,6 +78,7 @@ public class OfflineMessages implements Module, Listener {
     return messages;
   }
 
+  // intercept /msg commands for offline players
   @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
   public void onPlayerCommandPreprocess(PlayerCommandPreprocessEvent event) {
     Matcher matcher = this.msgPattern.matcher(event.getMessage());
@@ -87,6 +91,7 @@ public class OfflineMessages implements Module, Listener {
     }
   }
 
+  // intercept server /msg commands for offline players
   @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
   public void onServerCommand(ServerCommandEvent event) {
     Matcher matcher = this.msgPattern.matcher(event.getCommand());
@@ -99,6 +104,7 @@ public class OfflineMessages implements Module, Listener {
     }
   }
 
+  // deliver queued messages when player joins
   @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
   public void onPlayerJoin(PlayerJoinEvent event) {
     Player player = event.getPlayer();

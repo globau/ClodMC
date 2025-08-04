@@ -51,12 +51,14 @@ public class CommandBuilder {
     this.name = name;
   }
 
+  // create new command builder with given name
   public static CommandBuilder build(String name) {
     CommandBuilder builder = new CommandBuilder(name);
     builders.add(builder);
     return builder;
   }
 
+  // register all built commands with bukkit
   public static void registerBuilders() {
     for (CommandBuilder builder : builders) {
       builder.register();
@@ -64,71 +66,85 @@ public class CommandBuilder {
     builders.clear();
   }
 
+  // set command usage string
   public CommandBuilder usage(String usage) {
     this.usage = usage;
     return this;
   }
 
+  // set command description
   public CommandBuilder description(String description) {
     this.description = description;
     return this;
   }
 
+  // require op permissions to run this command
   public CommandBuilder requiresOp() {
     this.requiresOp = true;
     return this;
   }
 
+  // set executor for player-only commands
   public CommandBuilder executor(ExecutorP executor) {
     this.executor = executor;
     return this;
   }
 
+  // set executor for player commands with string argument
   public CommandBuilder executor(ExecutorPS executor) {
     this.executor = executor;
     return this;
   }
 
+  // set executor for commands accepting any sender with string argument
   public CommandBuilder executor(ExecutorES executor) {
     this.executor = executor;
     return this;
   }
 
+  // set executor for commands accepting any sender with two string arguments
   public CommandBuilder executor(ExecutorESS executor) {
     this.executor = executor;
     return this;
   }
 
+  // set executor for commands accepting any sender with player argument
   public CommandBuilder executor(ExecutorEP executor) {
     this.executor = executor;
     return this;
   }
 
+  // set executor for commands accepting any sender with player and string arguments
   public CommandBuilder executor(ExecutorEPS executor) {
     this.executor = executor;
     return this;
   }
 
+  // set executor for commands accepting any sender with string and player arguments
   public CommandBuilder executor(ExecutorESP executor) {
     this.executor = executor;
     return this;
   }
 
+  // set executor for commands accepting any sender with no arguments
   public CommandBuilder executor(ExecutorE executor) {
     this.executor = executor;
     return this;
   }
 
+  // set tab completion handler for player commands
   public CommandBuilder completor(CompletorP completor) {
     this.completor = completor;
     return this;
   }
 
+  // set tab completion handler for commands with sender
   public CommandBuilder completor(CompletorS completor) {
     this.completor = completor;
     return this;
   }
 
+  // register command with bukkit command map
   private void register() {
     if (this.description == null || this.executor == null) {
       throw new RuntimeException("incomplete command: %s".formatted(this.name));
@@ -209,6 +225,7 @@ public class CommandBuilder {
     ClodMC.instance.getServer().getCommandMap().register("clod-mc", command);
   }
 
+  // convert command sender to player with permission checks
   private Player toPlayer(CommandSender sender) throws CommandError {
     if (!(sender instanceof Player player)) {
       throw new CommandError("This command can only be run by a player");
@@ -219,6 +236,7 @@ public class CommandBuilder {
     return player;
   }
 
+  // parse player argument from command args
   private @Nullable Player toPlayer(String[] args, int index) {
     if (args.length - 1 < index || args[index].isEmpty()) {
       return null;
@@ -230,6 +248,7 @@ public class CommandBuilder {
     return player;
   }
 
+  // parse string argument from command args
   private @Nullable String toString(String[] args, int index) {
     if (args.length - 1 < index || args[index].isEmpty()) {
       return null;

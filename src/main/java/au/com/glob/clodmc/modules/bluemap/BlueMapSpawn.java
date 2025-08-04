@@ -10,12 +10,14 @@ import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.jspecify.annotations.NullMarked;
 
+/** displays world spawn points as markers on bluemap */
 @NullMarked
 public class BlueMapSpawn extends Addon {
   protected BlueMapSpawn(BlueMapAPI api) {
     super(api);
   }
 
+  // create spawn point markers for all worlds
   @Override
   public void update() {
     for (World world : Bukkit.getWorlds()) {

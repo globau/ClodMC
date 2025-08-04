@@ -19,6 +19,7 @@ import org.yaml.snakeyaml.error.YAMLException;
 public class ConfigUtil {
   public static boolean sanityChecked = false;
 
+  // validate all yaml config files can be loaded
   public static void sanityCheckConfigs() throws InvalidConfigException {
     // check configs for loading issues with configs (eg. malformed, missing classes)
     List<String> errors = new ArrayList<>(0);
@@ -46,6 +47,7 @@ public class ConfigUtil {
     sanityChecked = true;
   }
 
+  // find all yaml files in data folder
   private static List<File> getConfigFiles() throws IOException {
     List<Path> paths;
     try (Stream<Path> dataPaths = Files.walk(ClodMC.instance.getDataFolder().toPath())) {

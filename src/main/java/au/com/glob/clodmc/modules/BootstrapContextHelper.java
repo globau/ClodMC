@@ -19,6 +19,7 @@ import org.bukkit.enchantments.Enchantment;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
+/** wrapper around paper bootstrap context for easier enchantment and tag registration */
 @SuppressWarnings("UnstableApiUsage")
 @NullMarked
 public class BootstrapContextHelper {
@@ -28,6 +29,7 @@ public class BootstrapContextHelper {
     this.manager = context.getLifecycleManager();
   }
 
+  // register custom enchantment with optional tags
   public void enchantment(
       TypedKey<Enchantment> key,
       @Nullable List<TagKey<Enchantment>> tags,

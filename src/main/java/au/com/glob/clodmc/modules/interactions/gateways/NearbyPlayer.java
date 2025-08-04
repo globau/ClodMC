@@ -5,6 +5,7 @@ import org.bukkit.entity.Player;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
+/** represents a nearby player with platform detection for gateway interactions */
 @NullMarked
 final class NearbyPlayer {
   final Player player;

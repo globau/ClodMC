@@ -19,6 +19,7 @@ import org.bukkit.scheduler.BukkitTask;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
+/** manages visual effects and particles for gateway anchors */
 @NullMarked
 public class Visuals {
   private static final int VISIBLE_RANGE_SQUARED = 32 * 32;
@@ -91,6 +92,7 @@ public class Visuals {
     }
   }
 
+  // pre-calculates ring positions and colours for performance
   private void preCalculateRingData(
       int ringCount,
       double[] bottomRingY,
@@ -108,6 +110,7 @@ public class Visuals {
     }
   }
 
+  // disables visual effects and removes light sources
   void disable() {
     if (this.particleTask != null) {
       this.particleTask.cancel();
@@ -116,6 +119,7 @@ public class Visuals {
     this.updateLights(0);
   }
 
+  // updates visual effects based on connection state
   void update() {
     boolean isActive = this.anchorBlock.isRandom || this.anchorBlock.connectedTo != null;
 
@@ -154,6 +158,7 @@ public class Visuals {
             });
   }
 
+  // checks if player can see visuals from location
   private boolean canSeeVisualsFrom(Location playerLoc) {
     return this.bottomLocation.getWorld() == playerLoc.getWorld()
         && this.bottomLocation.distanceSquared(playerLoc) <= VISIBLE_RANGE_SQUARED
@@ -162,6 +167,7 @@ public class Visuals {
             && playerLoc.getBlockZ() == this.bottomLocation.getBlockZ());
   }
 
+  // updates nearby player tracking for visual effects
   void updateNearbyPlayer(Player player, Location location) {
     if (this.canSeeVisualsFrom(location)) {
       this.addNearbyPlayer(player);
@@ -170,6 +176,7 @@ public class Visuals {
     }
   }
 
+  // adds player to nearby players list
   private void addNearbyPlayer(Player player) {
     NearbyPlayer nearbyPlayer = new NearbyPlayer(player);
     if (!this.nearbyPlayers.contains(nearbyPlayer)) {
@@ -177,6 +184,7 @@ public class Visuals {
     }
   }
 
+  // removes player from nearby players list
   void removeNearbyPlayer(Player player) {
     Iterator<NearbyPlayer> iter = this.nearbyPlayers.iterator();
     while (iter.hasNext()) {
@@ -187,6 +195,7 @@ public class Visuals {
     }
   }
 
+  // spawns particle effects for java edition players
   private void spawnJavaParticles(Collection<Player> players, boolean isActive) {
     World world = this.blockLocation.getWorld();
     Location particleLoc = new Location(world, 0, 0, 0);
@@ -242,6 +251,7 @@ public class Visuals {
     }
   }
 
+  // calculates colour gradient at specific height fraction
   private Color getColourAtFraction(double fraction) {
     if (fraction <= 0.45) {
       // pure bottom colour (45%)
@@ -265,6 +275,7 @@ public class Visuals {
         (int) (bottomB + (topB - bottomB) * gradientFraction));
   }
 
+  // spawns simplified particle effects for bedrock players
   private void spawnBedrockParticles(List<Player> players) {
     new ParticleBuilder(Particle.DUST)
         .data(new Particle.DustOptions(this.topColour.color, 1))
@@ -280,6 +291,7 @@ public class Visuals {
         .spawn();
   }
 
+  // updates light blocks above anchor for visual effects
   private void updateLights(int lightLevel) {
     World world = this.blockLocation.getWorld();
     for (Location loc : List.of(this.topLocation, this.bottomLocation)) {

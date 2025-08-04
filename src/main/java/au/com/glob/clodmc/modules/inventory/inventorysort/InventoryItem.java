@@ -13,6 +13,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.MusicInstrumentMeta;
 import org.jspecify.annotations.NullMarked;
 
+/** wrapper for itemstack with sorting comparison logic */
 @NullMarked
 class InventoryItem implements Comparable<InventoryItem> {
   private final ItemStack itemStack;

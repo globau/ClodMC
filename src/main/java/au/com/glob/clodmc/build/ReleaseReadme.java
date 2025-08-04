@@ -12,6 +12,7 @@ import java.util.regex.Pattern;
 /** augment README.md with a list of recent changes from the commit log */
 @SuppressWarnings("NullabilityAnnotations")
 public class ReleaseReadme {
+  // execute command and return stdout output
   private static String capture(String... command) throws IOException, InterruptedException {
     ProcessBuilder pb = new ProcessBuilder(command);
     Process process = pb.start();
@@ -24,6 +25,7 @@ public class ReleaseReadme {
     return output;
   }
 
+  // generate readme with recent changes from git log
   public static void main(String[] args) {
     try {
       String rootPath = capture("git", "rev-parse", "--show-toplevel").trim();

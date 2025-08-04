@@ -19,10 +19,12 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+/** manages vendoring of third-party dependencies into the codebase */
 @SuppressWarnings("NullabilityAnnotations")
 public class Vendor {
   private static final Path PROPERTIES_FILE = Path.of("src/vendored/vendored.properties");
 
+  // execute command in specified directory
   private static void runIn(Path path, String... command) throws IOException, InterruptedException {
     ProcessBuilder pb = new ProcessBuilder(command);
     pb.directory(path.toFile());
@@ -35,10 +37,12 @@ public class Vendor {
     }
   }
 
+  // execute command in current directory
   private static void run(String... command) throws IOException, InterruptedException {
     runIn(Path.of(System.getProperty("user.dir")), command);
   }
 
+  // execute command in specified directory and return stdout output
   private static String capture(Path path, String... command)
       throws IOException, InterruptedException {
     ProcessBuilder pb = new ProcessBuilder(command);
@@ -53,6 +57,7 @@ public class Vendor {
     return output;
   }
 
+  // join collection values into sorted comma-separated string
   private static String join(Collection<String> values) {
     return values.stream().sorted().collect(Collectors.joining(","));
   }
@@ -80,6 +85,7 @@ public class Vendor {
     private final Properties props;
     private final Map<String, LibraryConfig> configs = new HashMap<>();
 
+    // load vendored library configuration from properties file
     Config() throws IOException {
       // load file
       this.props = new Properties();
@@ -106,10 +112,12 @@ public class Vendor {
       }
     }
 
+    // return set of configured library names
     Set<String> libraryNames() {
       return this.configs.keySet();
     }
 
+    // write configuration back to properties file
     private void write() throws IOException {
       List<LibraryConfig> sortedConfigs =
           this.configs.entrySet().stream()
@@ -132,10 +140,12 @@ public class Vendor {
       Files.write(PROPERTIES_FILE, lines);
     }
 
+    // get library configuration by name
     LibraryConfig get(String name) {
       return this.configs.get(name);
     }
 
+    // set property value and save configuration
     void set(String name, String value) throws IOException {
       this.props.setProperty(name, value);
       this.write();
@@ -144,6 +154,7 @@ public class Vendor {
 
   private record FileCopy(Path src, Path dst) {}
 
+  // vendor specified library into codebase
   public static void main(String[] args) {
     try {
       if (args.length != 1) {

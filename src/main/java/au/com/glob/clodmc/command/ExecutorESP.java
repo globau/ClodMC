@@ -4,6 +4,7 @@ import org.bukkit.entity.Player;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
+/** command executor with sender, string argument, and player argument */
 @FunctionalInterface
 @NullMarked
 public interface ExecutorESP extends Executor {

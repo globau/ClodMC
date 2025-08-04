@@ -48,16 +48,19 @@ import org.bukkit.event.Listener;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
+/** registry for all plugin modules with automatic registration and lifecycle management */
 @SuppressWarnings({"UnstableApiUsage"})
 @NullMarked
 public class ModuleRegistry implements Iterable<Module>, PluginBootstrap {
   private final Map<Class<? extends Module>, Module> modules = new HashMap<>();
 
+  // paper bootstrap lifecycle hook for early module registration
   @Override
   public void bootstrap(BootstrapContext context) {
     VeinMiner.bootstrap(new BootstrapContextHelper(context));
   }
 
+  // register all modules organised by category
   public void registerAll() {
     // core - used by other modules
     this.register(OpAlerts.class);
@@ -114,6 +117,7 @@ public class ModuleRegistry implements Iterable<Module>, PluginBootstrap {
     CommandBuilder.registerBuilders();
   }
 
+  // register individual module with plugin dependency validation
   private void register(Class<? extends Module> moduleClass, String... requiredPlugins) {
     for (String plugin : requiredPlugins) {
       if (!Bukkit.getPluginManager().isPluginEnabled(plugin)) {
@@ -137,11 +141,13 @@ public class ModuleRegistry implements Iterable<Module>, PluginBootstrap {
     }
   }
 
+  // iterate over registered modules
   @Override
   public Iterator<Module> iterator() {
     return this.modules.values().iterator();
   }
 
+  // get specific module instance by class type
   @SuppressWarnings("unchecked")
   public @Nullable <T extends Module> T get(Class<T> moduleClass) {
     Module module = this.modules.get(moduleClass);

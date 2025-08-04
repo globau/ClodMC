@@ -24,6 +24,7 @@ public class AdminInv implements Module, Listener {
   private final Map<UUID, @Nullable ItemStack[]> playerInventories = new HashMap<>();
   private final Map<UUID, @Nullable ItemStack[]> adminInventories = new HashMap<>();
 
+  // register the admininv command for inventory swapping
   public AdminInv() {
     CommandBuilder.build("admininv")
         .description("Toggle admin/player inventory")
@@ -40,6 +41,7 @@ public class AdminInv implements Module, Listener {
             });
   }
 
+  // store current player inventory and switch to admin inventory
   private void storeInventory(Player player) {
     UUID uuid = player.getUniqueId();
 
@@ -52,6 +54,7 @@ public class AdminInv implements Module, Listener {
     }
   }
 
+  // restore original player inventory from storage
   private void restoreInventory(Player player) {
     UUID uuid = player.getUniqueId();
 
@@ -61,11 +64,13 @@ public class AdminInv implements Module, Listener {
     }
   }
 
+  // check if player has a stored inventory
   private boolean hasStoredInventory(Player player) {
     UUID uuid = player.getUniqueId();
     return this.playerInventories.containsKey(uuid);
   }
 
+  // restore inventory when player quits to prevent item loss
   @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
   public void onPlayerQuit(PlayerQuitEvent event) {
     if (event.getPlayer().isOp()) {
@@ -73,6 +78,7 @@ public class AdminInv implements Module, Listener {
     }
   }
 
+  // restore all inventories on plugin disable (shutdown) to prevent item loss
   @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
   public void onPluginDisable(PluginDisableEvent event) {
     if (event.getPlugin().equals(ClodMC.instance)) {

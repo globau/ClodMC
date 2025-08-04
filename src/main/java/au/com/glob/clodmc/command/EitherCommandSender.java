@@ -13,6 +13,7 @@ import org.bukkit.plugin.Plugin;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
+/** wrapper for command sender that can be either a player or console */
 @NullMarked
 public class EitherCommandSender implements CommandSender {
   private final CommandSender sender;
@@ -31,15 +32,18 @@ public class EitherCommandSender implements CommandSender {
     return this.sender.getName();
   }
 
+  // check if the sender is a player
   public boolean isPlayer() {
     return this.sender instanceof Player;
   }
 
+  // cast sender to player (requires isPlayer() check first)
   public Player asPlayer() {
     assert this.sender instanceof Player;
     return (Player) this.sender;
   }
 
+  // check if this wrapper contains the given sender
   public boolean is(CommandSender sender) {
     return this.sender.equals(sender);
   }

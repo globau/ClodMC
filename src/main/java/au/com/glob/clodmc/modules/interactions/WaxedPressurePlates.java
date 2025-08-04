@@ -27,6 +27,7 @@ import vendored.com.jeff_media.customblockdata.CustomBlockData;
 public class WaxedPressurePlates implements Module, Listener {
   private static final NamespacedKey WAXED_KEY = new NamespacedKey("clod-mc", "waxed");
 
+  // handle waxing pressure plates and blocking activation when waxed
   @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
   public void onPlayerInteract(PlayerInteractEvent event) {
     Block block = event.getClickedBlock();

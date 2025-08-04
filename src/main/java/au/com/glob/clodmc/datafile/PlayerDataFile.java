@@ -28,38 +28,47 @@ public class PlayerDataFile extends DataFile {
     }
   }
 
+  // get associated player name
   public String getPlayerName() {
     return this.getString("player.name", "");
   }
 
+  // set player name in datafile
   public void setPlayerName(String name) {
     this.set("player.name", name);
   }
 
+  // get last login timestamp
   public @Nullable LocalDateTime getLastLogin() {
     return this.getDateTime("player.last_login");
   }
 
+  // update last login to current time
   public void touchLastLogin() {
     this.touch("player.last_login");
   }
 
+  // get last logout timestamp
   public @Nullable LocalDateTime getLastLogout() {
     return this.getDateTime("player.last_logout");
   }
 
+  // update last logout to current time
   public void touchLastLogout() {
     this.touch("player.last_logout");
   }
 
+  // get total playtime in minutes
   public long getPlaytimeMins() {
     return this.getLong("player.playtime_min", 0);
   }
 
+  // set total playtime in minutes
   public void setPlaytimeMins(long value) {
     this.set("player.playtime_min", value);
   }
 
+  // record who invited this player
   public void setInvitedBy(String name) {
     this.set("player.invited_by", name);
   }

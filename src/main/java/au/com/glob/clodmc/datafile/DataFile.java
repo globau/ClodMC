@@ -13,6 +13,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
+/** yaml configuration file with datetime handling and automatic loading */
 @NullMarked
 public class DataFile extends YamlConfiguration {
   private static final DateTimeFormatter DATE_TIME_FORMATTER =
@@ -21,6 +22,7 @@ public class DataFile extends YamlConfiguration {
   private final File file;
   private boolean exists;
 
+  // load yaml file, sets .exists if the file could be loaded
   public DataFile(File file) {
     super();
 
@@ -37,10 +39,12 @@ public class DataFile extends YamlConfiguration {
     }
   }
 
+  // check if this file existed when loaded
   public boolean isNewFile() {
     return !this.exists;
   }
 
+  // write to disk
   public void save() {
     try {
       this.save(this.file);
@@ -49,15 +53,19 @@ public class DataFile extends YamlConfiguration {
     }
   }
 
+  // remove a key (YamlConfiguration won't write null values)
   public void remove(String path) {
     this.set(path, null);
   }
 
+  // store datetime as formatted string
   public void setDateTime(String path, LocalDateTime dateTime) {
     this.set(path, dateTime.format(DATE_TIME_FORMATTER));
   }
 
-  @Nullable public LocalDateTime getDateTime(String path) {
+  // parse datetime from string, null if invalid
+  @Nullable
+  public LocalDateTime getDateTime(String path) {
     try {
       return LocalDateTime.parse(this.getString(path, ""), DATE_TIME_FORMATTER);
     } catch (DateTimeParseException e) {
@@ -65,6 +73,7 @@ public class DataFile extends YamlConfiguration {
     }
   }
 
+  // set path to current timestamp
   public void touch(String path) {
     this.setDateTime(path, TimeUtil.localNow());
   }

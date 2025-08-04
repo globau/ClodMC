@@ -2,6 +2,7 @@ package au.com.glob.clodmc.modules.interactions.gateways;
 
 import org.jspecify.annotations.NullMarked;
 
+/** represents a gateway network identified by top and bottom colours */
 @NullMarked
 class Network {
   final Colour top;
@@ -17,10 +18,12 @@ class Network {
     this.bottom = bottomColour;
   }
 
+  // creates network instance from network id
   static Network of(int networkId) {
     return new Network(networkId);
   }
 
+  // converts colour pair to network id
   static int coloursToNetworkId(Colour topColour, Colour bottomColour) {
     return (topColour.index << 4) | bottomColour.index;
   }

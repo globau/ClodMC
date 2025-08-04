@@ -7,18 +7,22 @@ import org.jspecify.annotations.NullMarked;
 /** logfile helpers */
 @NullMarked
 public final class Logger {
+  // log info message
   public static void info(String message) {
     ClodMC.instance.getLogger().info(message);
   }
 
+  // log warning message
   public static void warning(String message) {
     ClodMC.instance.getLogger().warning(message);
   }
 
+  // log error message
   public static void error(String message) {
     ClodMC.instance.getLogger().severe(message);
   }
 
+  // log exception with stack trace
   public static void exception(Throwable exception) {
     ClodMC.instance
         .getLogger()

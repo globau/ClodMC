@@ -4,6 +4,7 @@ import java.util.List;
 import org.bukkit.entity.Player;
 import org.jspecify.annotations.NullMarked;
 
+/** tab completion for player-only commands */
 @FunctionalInterface
 @NullMarked
 public interface CompletorP extends Completor {

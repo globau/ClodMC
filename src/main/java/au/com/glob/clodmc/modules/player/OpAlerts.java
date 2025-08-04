@@ -23,10 +23,12 @@ public class OpAlerts implements Module, Listener {
     instance = this;
   }
 
+  // add an alert to be shown to first op who joins
   public static void addAlert(String alert) {
     instance.alerts.add(alert);
   }
 
+  // send pending alerts to first op who joins
   @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
   public void onPlayerJoin(PlayerJoinEvent event) {
     if (this.alerts.isEmpty() || !event.getPlayer().isOp()) {

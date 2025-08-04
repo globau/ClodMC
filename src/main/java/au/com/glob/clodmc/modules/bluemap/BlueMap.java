@@ -18,6 +18,7 @@ import org.jspecify.annotations.Nullable;
 public class BlueMap implements Module, Listener {
   private final List<Addon> addons = new ArrayList<>(4);
 
+  // register bluemap addon instance
   private void register(Class<? extends Addon> cls, @Nullable BlueMapAPI api) {
     try {
       this.addons.add(cls.getDeclaredConstructor(BlueMapAPI.class).newInstance(api));
@@ -26,6 +27,7 @@ public class BlueMap implements Module, Listener {
     }
   }
 
+  // initialise all bluemap addons when api is available
   @Override
   public void loadConfig() {
     BlueMapAPI.onEnable(

@@ -35,6 +35,7 @@ public class MOTD implements Module, Listener {
     this.motd = StringUtil.asComponent(motd);
   }
 
+  // set motd based on hostname environment
   @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
   public void onServerListPing(ServerListPingEvent event) {
     event.motd(this.motd);

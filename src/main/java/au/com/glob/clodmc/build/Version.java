@@ -10,6 +10,7 @@ import java.time.format.DateTimeFormatter;
 /** outputs a version number derived from the latest commit's timestamp */
 @SuppressWarnings("NullabilityAnnotations")
 public class Version {
+  // execute command and return stdout output
   private static String capture(String... command) throws IOException, InterruptedException {
     ProcessBuilder pb = new ProcessBuilder(command);
     Process process = pb.start();
@@ -22,6 +23,7 @@ public class Version {
     return output;
   }
 
+  // generate version string from git commit timestamp
   public static void main(String[] args) {
     try {
       // parse commit timestamp and convert to gmt+8

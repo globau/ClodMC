@@ -10,6 +10,7 @@ import java.nio.charset.StandardCharsets;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
+/** tcp socket wrapper for command-response protocols like smtp */
 @NullMarked
 public class CommandServer implements Closeable {
   private static final int SMTP_PORT = 25;
@@ -28,14 +29,17 @@ public class CommandServer implements Closeable {
     this.outStream = new DataOutputStream(this.socket.getOutputStream());
   }
 
+  // send a line of text with crlf termination
   public void sendLine(String line) throws IOException {
     this.outStream.writeBytes("%s\r\n".formatted(line));
   }
 
+  // read a line of text from the server
   public @Nullable String readLine() throws IOException {
     return this.inStream.readLine();
   }
 
+  // read and discard lines until one starts with the given prefix
   public void waitFor(String prefix) throws IOException {
     while (true) {
       String line = this.readLine();
@@ -45,6 +49,7 @@ public class CommandServer implements Closeable {
     }
   }
 
+  // send a command and wait for a response with the given prefix
   public void sendAndWait(String line, String prefix) throws IOException {
     this.sendLine(line);
     this.waitFor(prefix);

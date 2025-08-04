@@ -63,6 +63,7 @@ public class VeinMiner implements Module, Listener {
   private final Enchantment veinmineEnchantment;
   private final Set<UUID> cooldownUUIDs = Collections.newSetFromMap(new WeakHashMap<>());
 
+  // register the veinmine enchantment during bootstrap
   @SuppressWarnings("UnstableApiUsage")
   public static void bootstrap(BootstrapContextHelper context) {
     context.enchantment(
@@ -86,6 +87,7 @@ public class VeinMiner implements Module, Listener {
                 .activeSlots(EquipmentSlotGroup.MAINHAND));
   }
 
+  // initialise veinminer with the registered enchantment
   public VeinMiner() {
     this.veinmineEnchantment =
         RegistryAccess.registryAccess()
@@ -93,6 +95,7 @@ public class VeinMiner implements Module, Listener {
             .getOrThrow(VEINMINE_KEY);
   }
 
+  // handle vein mining when player breaks a block while sneaking
   @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
   public void onBlockBreak(BlockBreakEvent event) {
     Player player = event.getPlayer();
@@ -136,6 +139,7 @@ public class VeinMiner implements Module, Listener {
     }
   }
 
+  // recursively break connected blocks of the same type
   private void breakBlocks(
       Block block,
       ItemStack tool,

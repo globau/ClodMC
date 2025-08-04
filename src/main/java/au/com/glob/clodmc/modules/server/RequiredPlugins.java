@@ -24,6 +24,7 @@ public class RequiredPlugins implements Listener, Module {
 
   private boolean preventLogin = true;
 
+  // check for required plugins on server load
   @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
   public void onServerLoad(ServerLoadEvent event) {
     StringJoiner missing = new StringJoiner(" ");
@@ -41,6 +42,7 @@ public class RequiredPlugins implements Listener, Module {
     }
   }
 
+  // prevent non-op login if required plugins missing
   @SuppressWarnings("UnstableApiUsage")
   @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
   public void onPlayerConnectionValidateLogin(PlayerConnectionValidateLoginEvent event) {

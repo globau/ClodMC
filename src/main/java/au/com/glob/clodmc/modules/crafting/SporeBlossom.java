@@ -21,6 +21,7 @@ import org.jspecify.annotations.NullMarked;
 public class SporeBlossom implements Module, Listener {
   private final ShapelessRecipe recipe;
 
+  // register the spore blossom crafting recipe
   public SporeBlossom() {
     this.recipe =
         new ShapelessRecipe(
@@ -31,6 +32,7 @@ public class SporeBlossom implements Module, Listener {
     Bukkit.addRecipe(this.recipe);
   }
 
+  // auto-discover recipe when player joins if they have ingredients
   @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
   public void onPlayerJoin(PlayerJoinEvent event) {
     Schedule.asynchronously(
@@ -53,6 +55,7 @@ public class SporeBlossom implements Module, Listener {
         });
   }
 
+  // auto-discover recipe when player picks up required ingredients
   @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
   public void onEntityPickupItem(EntityPickupItemEvent event) {
     if (!(event.getEntity() instanceof Player player)) {

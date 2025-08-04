@@ -9,6 +9,7 @@ import java.util.NoSuchElementException;
 import org.bukkit.World;
 import org.jspecify.annotations.NullMarked;
 
+/** iterable database result set for heatmap rows with resource management */
 @NullMarked
 public class HeatMapRows implements Iterable<HeatMapRow>, AutoCloseable {
   private final PreparedStatement statement;
@@ -23,6 +24,7 @@ public class HeatMapRows implements Iterable<HeatMapRow>, AutoCloseable {
     this.resultSet = this.statement.executeQuery();
   }
 
+  // create iterator over database results
   @Override
   public Iterator<HeatMapRow> iterator() {
     try {
@@ -59,6 +61,7 @@ public class HeatMapRows implements Iterable<HeatMapRow>, AutoCloseable {
     }
   }
 
+  // close database resources
   @Override
   public void close() throws SQLException {
     this.resultSet.close();

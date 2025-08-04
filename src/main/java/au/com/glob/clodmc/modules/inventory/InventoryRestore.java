@@ -54,6 +54,7 @@ public class InventoryRestore implements Module, Listener {
 
   private final File backupPath;
 
+  // register inventory restore commands and set up backup system
   public InventoryRestore() {
     this.backupPath = ClodMC.instance.getDataFolder().toPath().resolve("players").toFile();
 
@@ -127,11 +128,13 @@ public class InventoryRestore implements Module, Listener {
             });
   }
 
+  // backup inventory when player dies
   @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
   public void onPlayerDeath(PlayerDeathEvent event) {
     this.backupPlayerInventory(event.getPlayer(), false);
   }
 
+  // if requested restore inventory backup when player joins
   @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
   public void onPlayerJoin(PlayerJoinEvent event) {
     PlayerDataFile dataFile = PlayerDataFiles.of(event.getPlayer());
@@ -143,6 +146,7 @@ public class InventoryRestore implements Module, Listener {
     }
   }
 
+  // backup inventory when /clear is used
   @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
   public void onPlayerCommandPreprocess(PlayerCommandPreprocessEvent event) {
     if (event.getPlayer().isOp() && event.getMessage().equals("/clear")) {
@@ -150,6 +154,7 @@ public class InventoryRestore implements Module, Listener {
     }
   }
 
+  // save player's current inventory to backup file
   private void backupPlayerInventory(Player player, boolean notify) {
     PlayerInventory inv = player.getInventory();
     if (inv.isEmpty()) {
@@ -184,6 +189,7 @@ public class InventoryRestore implements Module, Listener {
         });
   }
 
+  // restore player inventory from backup file
   private void restorePlayerInventory(
       @Nullable EitherCommandSender sender, Player player, @Nullable String backupName) {
     Schedule.asynchronously(

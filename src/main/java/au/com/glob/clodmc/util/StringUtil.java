@@ -14,6 +14,7 @@ import org.jspecify.annotations.Nullable;
 /** String helpers */
 @NullMarked
 public class StringUtil {
+  // format seconds as human-readable relative time
   public static String relativeTime(long seconds) {
     long dd = TimeUnit.SECONDS.toDays(seconds);
     long hh = TimeUnit.SECONDS.toHours(seconds) % 24;
@@ -33,14 +34,17 @@ public class StringUtil {
     }
   }
 
+  // format value with unit, adding 's' for plural
   public static String plural(long value, String unit) {
     return String.format("%d %s%s", value, unit, value == 1 ? "" : "s");
   }
 
+  // alternative plural formatting with value prefix
   public static String plural2(long value, String unit) {
     return value == 1 ? unit : String.format("%d %ss", value, unit);
   }
 
+  // join list with oxford commas and 'and' for last item
   public static String joinComma(List<String> items) {
     if (items.isEmpty()) {
       return "";
@@ -55,6 +59,7 @@ public class StringUtil {
         .formatted(String.join(", ", items.subList(0, items.size() - 1)), items.getLast());
   }
 
+  // convert string to title case
   public static String toTitleCase(String value) {
     StringBuilder titleCase = new StringBuilder();
     for (String word : value.split("\\s+", -1)) {
@@ -66,20 +71,24 @@ public class StringUtil {
     return titleCase.toString().trim();
   }
 
+  // convert translatable component to plain text
   public static String asText(Translatable component) {
     return asText(
         GlobalTranslator.render(
             Component.translatable(component.translationKey()), Locale.ENGLISH));
   }
 
+  // convert adventure component to plain text
   public static String asText(Component component) {
     return PlainTextComponentSerializer.plainText().serialize(component);
   }
 
+  // convert component to text with fallback
   public static String asText(@Nullable Component component, String fallback) {
     return component == null ? fallback : asText(component);
   }
 
+  // parse minimessage string into component
   public static Component asComponent(String value) {
     return MiniMessage.miniMessage().deserialize(value);
   }

@@ -4,6 +4,7 @@ import java.util.Objects;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
+/** represents an item stack location within a shulker box */
 @NullMarked
 final class ShulkerItemStack {
   final int playerSlot;

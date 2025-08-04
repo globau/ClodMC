@@ -4,18 +4,21 @@ import java.util.Objects;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
+/** immutable 3d integer vector for coordinates */
 @NullMarked
 public final class Vector3i {
   public final int x;
   public final int y;
   public final int z;
 
+  // create vector with x, y, z coordinates
   public Vector3i(int x, int y, int z) {
     this.x = x;
     this.y = y;
     this.z = z;
   }
 
+  // check equality based on coordinates
   @Override
   public boolean equals(@Nullable Object obj) {
     if (obj == this) {
@@ -28,11 +31,13 @@ public final class Vector3i {
     return this.x == that.x && this.y == that.y && this.z == that.z;
   }
 
+  // generate hash code from coordinates
   @Override
   public int hashCode() {
     return Objects.hash(this.x, this.y, this.z);
   }
 
+  // format as vector string representation
   @Override
   public String toString() {
     return "Vector3i[x=%d, y=%d, z=%d]".formatted(this.x, this.y, this.z);

@@ -25,6 +25,7 @@ import org.bukkit.World;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
+/** displays gateway anchors as markers on bluemap */
 @NullMarked
 public class BlueMapGateways extends Addon {
   @Nullable static BlueMapGateways instance = null;
@@ -33,6 +34,7 @@ public class BlueMapGateways extends Addon {
 
   private final Map<World, MarkerSet> markerSets = new HashMap<>(3);
 
+  // initialises bluemap integration for gateway markers
   public BlueMapGateways(BlueMapAPI api) {
     super(api);
     instance = this;
@@ -56,6 +58,7 @@ public class BlueMapGateways extends Addon {
     }
   }
 
+  // updates gateway markers on bluemap
   @Override
   public void update() {
     for (MarkerSet markerSet : this.markerSets.values()) {

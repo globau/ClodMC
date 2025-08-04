@@ -14,6 +14,7 @@ import org.bukkit.entity.Player;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
+/** utilities for player management and bedrock client detection */
 @NullMarked
 public class Players {
   // Attribute.BLOCK_INTERACTION_RANGE + 1
@@ -21,10 +22,12 @@ public class Players {
 
   private static volatile Map<String, UUID> whitelisted = new HashMap<>();
 
+  // get current whitelist mapping name to uuid
   public static Map<String, UUID> getWhitelisted() {
     return whitelisted;
   }
 
+  // refresh whitelist from player data files
   public static void updateWhitelisted() {
     Schedule.asynchronously(
         () -> {
@@ -47,10 +50,12 @@ public class Players {
         });
   }
 
+  // check if player name is whitelisted
   public static boolean isWhitelisted(String name) {
     return whitelisted.keySet().stream().anyMatch((String p) -> p.equalsIgnoreCase(name));
   }
 
+  // get uuid for whitelisted player name
   public static @Nullable UUID getWhitelistedUUID(String name) {
     return whitelisted.entrySet().stream()
         .filter((Map.Entry<String, UUID> entry) -> entry.getKey().equalsIgnoreCase(name))
@@ -59,6 +64,7 @@ public class Players {
         .orElse(null);
   }
 
+  // check if player is using bedrock client
   public static boolean isBedrock(Player player) {
     return ClodMC.instance.isGeyserLoaded() && Bedrock.isBedrockUUID(player.getUniqueId());
   }

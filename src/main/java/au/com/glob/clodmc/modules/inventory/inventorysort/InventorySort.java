@@ -39,6 +39,7 @@ public class InventorySort implements Listener, Module {
     super();
   }
 
+  // load material sorting order from embedded resource file
   @Override
   public void loadConfig() {
     List<String> alerts = new ArrayList<>(0);
@@ -114,6 +115,7 @@ public class InventorySort implements Listener, Module {
     }
   }
 
+  // sort inventory when shift+right-click on inventory slot
   @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
   public void onInventoryClick(InventoryClickEvent event) {
     if (!(event.getWhoClicked() instanceof Player

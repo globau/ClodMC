@@ -110,6 +110,7 @@ public class Gateways implements Module, Listener {
           Objects.requireNonNull(Colours.of(Material.BLACK_WOOL)),
           Objects.requireNonNull(Colours.of(Material.BLACK_WOOL)));
 
+  // initialise gateway system with recipes and commands
   public Gateways() {
     instance = this;
 
@@ -135,6 +136,7 @@ public class Gateways implements Module, Listener {
             });
   }
 
+  // load gateway configuration from yaml file
   @Override
   public void loadConfig() {
     if (!ConfigUtil.sanityChecked) {
@@ -173,6 +175,7 @@ public class Gateways implements Module, Listener {
     }
   }
 
+  // save gateway configuration to yaml file
   private void save() {
     YamlConfiguration config = new YamlConfiguration();
     config.set("anchors", new ArrayList<>(this.instances.values()));
@@ -186,6 +189,7 @@ public class Gateways implements Module, Listener {
     }
   }
 
+  // set anchor item metadata during crafting
   @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
   public void onPrepareItemCraft(PrepareItemCraftEvent event) {
     ItemStack item = event.getInventory().getResult();
@@ -213,6 +217,7 @@ public class Gateways implements Module, Listener {
     event.getInventory().setResult(item);
   }
 
+  // clean up extra metadata after crafting
   @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
   public void onCraftItem(CraftItemEvent event) {
     ItemStack item = event.getCurrentItem();
@@ -222,6 +227,7 @@ public class Gateways implements Module, Listener {
     }
   }
 
+  // refresh anchor item metadata in anvil
   @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
   public void onPrepareAnvil(PrepareAnvilEvent event) {
     ItemStack item = event.getResult();
@@ -230,6 +236,7 @@ public class Gateways implements Module, Listener {
     }
   }
 
+  // handle anchor block placement and network connections
   @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
   public void onBlockPlace(BlockPlaceEvent event) {
     // prevent placing blocks in the 2 blocks above an anchorBlock
@@ -290,6 +297,7 @@ public class Gateways implements Module, Listener {
     this.save();
   }
 
+  // prevent falling blocks from interfering with gateways
   @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
   public void onEntityChangeBlock(EntityChangeBlockEvent event) {
     // if a falling entity turns into a block inside the gateway, break the block
@@ -303,6 +311,7 @@ public class Gateways implements Module, Listener {
     }
   }
 
+  // handle anchor block removal and drop anchor item
   @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
   public void onBlockBreak(BlockBreakEvent event) {
     BlockPos blockPos = BlockPos.of(event.getBlock().getLocation());
@@ -332,6 +341,7 @@ public class Gateways implements Module, Listener {
     anchorBlock.blockPos.world.dropItem(anchorBlock.blockPos.asLocation(), anchorItem);
   }
 
+  // handle player movement and gateway interactions
   @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
   public void onPlayerMove(PlayerMoveEvent event) {
     Player player = event.getPlayer();
@@ -428,16 +438,19 @@ public class Gateways implements Module, Listener {
             });
   }
 
+  // update nearby anchor visuals after teleportation
   @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
   public void onPlayerTeleport(PlayerTeleportEvent event) {
     this.updateNearbyAnchors(event.getPlayer(), event.getTo());
   }
 
+  // update nearby anchor visuals after respawn
   @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
   public void onPlayerRespawn(PlayerRespawnEvent event) {
     this.updateNearbyAnchors(event.getPlayer(), event.getRespawnLocation());
   }
 
+  // setup gateway visuals and recipes for joining player
   @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
   public void onPlayerJoin(PlayerJoinEvent event) {
     Player player = event.getPlayer();
@@ -456,6 +469,7 @@ public class Gateways implements Module, Listener {
     }
   }
 
+  // clean up player data when they quit
   @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
   public void onPlayerQuit(PlayerQuitEvent event) {
     Player player = event.getPlayer();
@@ -467,6 +481,7 @@ public class Gateways implements Module, Listener {
     }
   }
 
+  // prevent charging respawn anchors used as gateways
   @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
   public void onPlayerInteract(PlayerInteractEvent event) {
     if (event.getAction() != Action.RIGHT_CLICK_BLOCK || event.getClickedBlock() == null) {
@@ -479,20 +494,24 @@ public class Gateways implements Module, Listener {
     event.setCancelled(anchorBlock != null);
   }
 
+  // update visual effects for all anchors near player location
   public void updateNearbyAnchors(Player player, Location location) {
     for (AnchorBlock anchorBlock : this.instances.values()) {
       anchorBlock.visuals.updateNearbyPlayer(player, location);
     }
   }
 
+  // update visual effects for all anchors near player
   public void updateNearbyAnchors(Player player) {
     this.updateNearbyAnchors(player, player.getLocation());
   }
 
+  // get all active anchor blocks for bluemap integration
   public Collection<AnchorBlock> getAnchorBlocks() {
     return this.instances.values();
   }
 
+  // find safe random teleport location for new players
   private @Nullable Location randomTeleportLocation(AnchorBlock anchorBlock, Player player) {
     // only new players can use a random gateway
     if (!player.isOp()) {

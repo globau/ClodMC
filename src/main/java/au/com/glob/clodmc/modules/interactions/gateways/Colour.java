@@ -9,6 +9,7 @@ import org.bukkit.Material;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
+/** represents a gateway colour with material and display properties */
 @NullMarked
 final class Colour {
   final Material material;
@@ -16,6 +17,7 @@ final class Colour {
   final int index;
   final Color color;
 
+  // creates a colour with material, name, index and colour
   Colour(Material material, String name, int index, Color color) {
     this.material = material;
     this.name = name;
@@ -28,10 +30,12 @@ final class Colour {
     return this.name;
   }
 
+  // gets formatted display name for ui
   String getDisplayName() {
     return StringUtil.toTitleCase(this.name.replace('_', ' '));
   }
 
+  // gets text component for chat display
   TextComponent getText() {
     return Component.text(this.getDisplayName());
   }

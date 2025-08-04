@@ -3,6 +3,7 @@ package au.com.glob.clodmc.util;
 import java.util.List;
 import org.jspecify.annotations.NullMarked;
 
+/** exception for configuration validation errors */
 @NullMarked
 public class InvalidConfigException extends Exception {
   private final List<String> errors;
@@ -16,6 +17,7 @@ public class InvalidConfigException extends Exception {
     return String.join("\n", this.errors);
   }
 
+  // log all validation errors to the server log
   public void logErrors() {
     for (String line : this.errors) {
       Logger.error(line);

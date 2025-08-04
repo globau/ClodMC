@@ -11,6 +11,7 @@ import org.bukkit.Chunk;
 import org.bukkit.World;
 import org.jspecify.annotations.NullMarked;
 
+/** sqlite database for storing heatmap chunk visit counts */
 @NullMarked
 class DB {
   final Connection conn;
@@ -40,6 +41,7 @@ class DB {
     }
   }
 
+  // close database connection
   void close() {
     try {
       this.conn.close();
@@ -48,6 +50,7 @@ class DB {
     }
   }
 
+  // increment visit count for a chunk
   void incChunk(Chunk chunk) {
     try {
       this.insertStatement.setString(1, chunk.getWorld().getName());
@@ -59,6 +62,7 @@ class DB {
     }
   }
 
+  // get highest visit count for any chunk in world
   int getMaxCount(World world) {
     try (PreparedStatement s =
         this.conn.prepareStatement("SELECT MAX(`count`) FROM heatmap WHERE world = ?")) {
@@ -70,6 +74,7 @@ class DB {
     }
   }
 
+  // count chunks with at least minCount visits
   int getMarkerCount(World world, int minCount) {
     try (PreparedStatement s =
         this.conn.prepareStatement("SELECT COUNT(*) FROM heatmap WHERE world = ? AND count >= ?")) {

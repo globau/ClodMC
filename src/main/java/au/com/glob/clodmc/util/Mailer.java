@@ -14,10 +14,12 @@ public class Mailer {
 
   private Mailer() {}
 
+  // send email to admin with subject as body
   public static void emailAdmin(String subject) {
     emailAdmin(subject, subject);
   }
 
+  // send email to admin asynchronously
   public static void emailAdmin(String subject, String body) {
     Schedule.asynchronously(
         () -> {
@@ -31,6 +33,7 @@ public class Mailer {
         });
   }
 
+  // send email via smtp protocol
   public static void send(String recipient, String subject, String body) throws MailerException {
     try {
       try (CommandServer smtp = new CommandServer(HOSTNAME)) {

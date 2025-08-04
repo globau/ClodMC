@@ -11,10 +11,12 @@ public class TimeUtil {
   private static final ZoneId LOCAL_TZ = ZoneId.of("Australia/Perth");
   private static final ZoneId UTC = ZoneId.of("UTC");
 
+  // get current local time in australia/perth timezone
   public static LocalDateTime localNow() {
     return LocalDateTime.now(LOCAL_TZ);
   }
 
+  // get current utc time
   public static ZonedDateTime utcNow() {
     return ZonedDateTime.now(UTC);
   }

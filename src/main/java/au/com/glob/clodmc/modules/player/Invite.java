@@ -167,6 +167,7 @@ public class Invite implements Module {
             });
   }
 
+  // check if string is a valid uuid format
   private static boolean isValidUUID(@Nullable String value) {
     if (value == null) {
       return false;
@@ -179,6 +180,7 @@ public class Invite implements Module {
     }
   }
 
+  // lookup player uuid from mcprofile.io api
   private @Nullable UUID lookupUUID(ClientType clientType, String name) {
     assert this.apiKey != null;
     String url =
@@ -197,6 +199,7 @@ public class Invite implements Module {
     return response.has(field) ? UUID.fromString(response.get(field).getAsString()) : null;
   }
 
+  // check if uuid is already in whitelist.json
   private boolean isWhitelisted(UUID uuid) {
     String uuidString = uuid.toString();
     try {
