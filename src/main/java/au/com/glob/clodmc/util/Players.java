@@ -3,13 +3,21 @@ package au.com.glob.clodmc.util;
 import au.com.glob.clodmc.ClodMC;
 import au.com.glob.clodmc.datafile.PlayerDataFile;
 import au.com.glob.clodmc.datafile.PlayerDataFiles;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import com.google.gson.JsonSyntaxException;
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
@@ -25,6 +33,27 @@ public class Players {
   // get current whitelist mapping name to uuid
   public static Map<String, UUID> getWhitelisted() {
     return whitelisted;
+  }
+
+  // check if uuid is already in whitelist.json
+  public static boolean isInWhitelistConfig(UUID uuid) {
+    String uuidString = uuid.toString();
+    try {
+      Path whitelistFile =
+          Path.of(
+              Bukkit.getServer().getWorldContainer().getCanonicalFile().getAbsolutePath(),
+              "whitelist.json");
+      String jsonContent = Files.readString(whitelistFile);
+      for (JsonElement jsonElement : JsonParser.parseString(jsonContent).getAsJsonArray()) {
+        JsonObject entry = jsonElement.getAsJsonObject();
+        if (uuidString.equalsIgnoreCase(entry.get("uuid").getAsString())) {
+          return true;
+        }
+      }
+    } catch (IOException | JsonSyntaxException e) {
+      Logger.exception(e);
+    }
+    return false;
   }
 
   // refresh whitelist from player data files
@@ -66,6 +95,6 @@ public class Players {
 
   // check if player is using bedrock client
   public static boolean isBedrock(Player player) {
-    return ClodMC.instance.isGeyserLoaded() && Bedrock.isBedrockUUID(player.getUniqueId());
+    return Bedrock.isGeyserLoaded() && Bedrock.isBedrockUUID(player.getUniqueId());
   }
 }

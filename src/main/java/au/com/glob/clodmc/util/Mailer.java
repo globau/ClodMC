@@ -9,7 +9,7 @@ import org.jspecify.annotations.NullMarked;
 public class Mailer {
   private static final String ADMIN_ADDR = "clod@glob.au";
   private static final String HOSTNAME = "in1-smtp.messagingengine.com";
-  private static final String SENDER_NAME = "Clod Minecraft Server";
+  private static final String SENDER_NAME = "Clod-MC Minecraft Server";
   private static final String SENDER_ADDR = "clod@glob.au";
 
   private Mailer() {}

@@ -9,13 +9,24 @@ import org.jspecify.annotations.NullMarked;
 /** utilities for detecting bedrock edition clients via geyser api */
 @NullMarked
 public class Bedrock {
+  private static boolean geyserLoaded;
+
+  static {
+    try {
+      GeyserApi.api();
+      geyserLoaded = true;
+    } catch (NoClassDefFoundError e) {
+      geyserLoaded = false;
+    }
+  }
+
+  // check if geyser plugin is available
+  public static boolean isGeyserLoaded() {
+    return geyserLoaded;
+  }
+
   // not using a weak reference as the player count is low, and the server restarts nightly
   private static final Map<UUID, Boolean> IS_BEDROCK_CACHE = new HashMap<>();
-
-  // test that geyser api is available
-  public static void apiTest() {
-    GeyserApi.api();
-  }
 
   // check if a player uuid is from a bedrock client (cached)
   public static boolean isBedrockUUID(UUID uuid) {

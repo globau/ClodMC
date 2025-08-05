@@ -16,16 +16,11 @@ import au.com.glob.clodmc.util.Logger;
 import au.com.glob.clodmc.util.Mailer;
 import au.com.glob.clodmc.util.Players;
 import au.com.glob.clodmc.util.Schedule;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-import com.google.gson.JsonSyntaxException;
 import java.io.File;
 import java.io.IOException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -78,14 +73,17 @@ public class Invite implements Module {
                 long minutesPlayed = Math.round(ticks / 20.0 / 60.0);
                 if (minutesPlayed < MIN_PLAY_TIME) {
                   throw new CommandError(
-                      "You have not played on Clod long enough to invite others");
+                      "You have not played on Clod-MC long enough to invite others");
                 }
               }
 
-              // don't allow adding by uuid; this ensure we don't have player name conflicts
+              // don't allow adding by uuid; this helps ensure we don't have player name conflicts
               // as we're running floodgate without a prefix
-              if (isValidUUID(name.toLowerCase(Locale.ENGLISH))) {
+              try {
+                UUID.fromString(name.toLowerCase(Locale.ENGLISH));
                 throw new CommandError("Invalid player name");
+              } catch (IllegalArgumentException e) {
+                // ignore
               }
 
               Schedule.asynchronously(
@@ -101,7 +99,7 @@ public class Invite implements Module {
                       }
 
                       // check whitelist by uuid
-                      if (this.isWhitelisted(uuid)) {
+                      if (Players.isInWhitelistConfig(uuid)) {
                         throw new CommandError("%s is already whitelisted".formatted(name));
                       }
 
@@ -167,19 +165,6 @@ public class Invite implements Module {
             });
   }
 
-  // check if string is a valid uuid format
-  private static boolean isValidUUID(@Nullable String value) {
-    if (value == null) {
-      return false;
-    }
-    try {
-      UUID.fromString(value);
-      return true;
-    } catch (IllegalArgumentException e) {
-      return false;
-    }
-  }
-
   // lookup player uuid from mcprofile.io api
   private @Nullable UUID lookupUUID(ClientType clientType, String name) {
     assert this.apiKey != null;
@@ -197,26 +182,5 @@ public class Invite implements Module {
 
     String field = clientType == ClientType.JAVA ? "uuid" : "floodgateuid";
     return response.has(field) ? UUID.fromString(response.get(field).getAsString()) : null;
-  }
-
-  // check if uuid is already in whitelist.json
-  private boolean isWhitelisted(UUID uuid) {
-    String uuidString = uuid.toString();
-    try {
-      Path whitelistFile =
-          Path.of(
-              Bukkit.getServer().getWorldContainer().getCanonicalFile().getAbsolutePath(),
-              "whitelist.json");
-      String jsonContent = Files.readString(whitelistFile);
-      for (JsonElement jsonElement : JsonParser.parseString(jsonContent).getAsJsonArray()) {
-        JsonObject entry = jsonElement.getAsJsonObject();
-        if (uuidString.equalsIgnoreCase(entry.get("uuid").getAsString())) {
-          return true;
-        }
-      }
-    } catch (IOException | JsonSyntaxException e) {
-      Logger.exception(e);
-    }
-    return false;
   }
 }

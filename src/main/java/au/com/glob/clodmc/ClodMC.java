@@ -2,7 +2,6 @@ package au.com.glob.clodmc;
 
 import au.com.glob.clodmc.modules.Module;
 import au.com.glob.clodmc.modules.ModuleRegistry;
-import au.com.glob.clodmc.util.Bedrock;
 import au.com.glob.clodmc.util.ConfigUtil;
 import au.com.glob.clodmc.util.InvalidConfigException;
 import au.com.glob.clodmc.util.Logger;
@@ -24,7 +23,6 @@ public final class ClodMC extends JavaPlugin implements Listener {
   public static ClodMC instance;
 
   private final ModuleRegistry moduleRegistry = new ModuleRegistry();
-  private boolean geyserLoaded;
 
   // initialise plugin instance
   public ClodMC() {
@@ -63,16 +61,9 @@ public final class ClodMC extends JavaPlugin implements Listener {
     }
   }
 
-  // test geyser availability and update player list
+  // signal server startup to production harness
   @EventHandler
   public void onServerLoad(ServerLoadEvent event) {
-    try {
-      Bedrock.apiTest();
-      this.geyserLoaded = true;
-    } catch (NoClassDefFoundError e) {
-      this.geyserLoaded = false;
-    }
-    Players.updateWhitelisted();
     Logger.info("clod-mc started");
   }
 
@@ -80,10 +71,5 @@ public final class ClodMC extends JavaPlugin implements Listener {
   @EventHandler
   public void onPlayerJoin(PlayerJoinEvent event) {
     Players.updateWhitelisted();
-  }
-
-  // check if geyser plugin is available
-  public boolean isGeyserLoaded() {
-    return this.geyserLoaded;
   }
 }

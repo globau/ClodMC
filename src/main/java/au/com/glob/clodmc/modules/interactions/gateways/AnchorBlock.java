@@ -1,12 +1,12 @@
 package au.com.glob.clodmc.modules.interactions.gateways;
 
 import au.com.glob.clodmc.util.BlockPos;
+import au.com.glob.clodmc.util.LocationUtil;
 import java.util.HashMap;
 import java.util.Map;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
-import org.bukkit.block.Block;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.configuration.serialization.SerializableAs;
 import org.bukkit.entity.Player;
@@ -89,32 +89,10 @@ public class AnchorBlock implements ConfigurationSerializable {
     this.connectedTo = null;
   }
 
-  // calculates location the player is facing from given location
-  private Location facingLocation(Location location) {
-    double yawRadians = Math.toRadians(location.getYaw());
-    double facingX = location.getX() - Math.sin(yawRadians);
-    double facingZ = location.getZ() + Math.cos(yawRadians);
-    return new Location(location.getWorld(), facingX, location.getY(), facingZ);
-  }
-
-  // gets the block the player is facing from given location
-  private Block facingBlock(Location location) {
-    return this.facingLocation(location).getBlock();
-  }
-
   // checks if player is not facing an anchor block
   private boolean notFacingAnchor(Location location) {
-    return !Gateways.instance.instances.containsKey(BlockPos.of(this.facingLocation(location)));
-  }
-
-  // checks if player is facing an air block
-  private boolean isFacingAir(Location location) {
-    return this.facingBlock(location).isEmpty();
-  }
-
-  // checks if player is facing a solid block
-  private boolean isFacingSolid(Location location) {
-    return this.facingBlock(location).isSolid();
+    return !Gateways.instance.instances.containsKey(
+        BlockPos.of(LocationUtil.facingLocation(location)));
   }
 
   // calculates optimal teleport location for player considering rotation and safety
@@ -141,8 +119,8 @@ public class AnchorBlock implements ConfigurationSerializable {
       blockLoc.setYaw(yaw);
       bottomLoc.setYaw(yaw);
       topLoc.setYaw(yaw);
-      if (this.isFacingAir(bottomLoc)
-          && this.isFacingAir(topLoc)
+      if (LocationUtil.isFacingAir(bottomLoc)
+          && LocationUtil.isFacingAir(topLoc)
           && this.notFacingAnchor(blockLoc)) {
         return bottomLoc;
       }
@@ -153,8 +131,8 @@ public class AnchorBlock implements ConfigurationSerializable {
       blockLoc.setYaw(yaw);
       bottomLoc.setYaw(yaw);
       topLoc.setYaw(yaw);
-      if (!this.isFacingSolid(bottomLoc)
-          && !this.isFacingSolid(topLoc)
+      if (!LocationUtil.isFacingSolid(bottomLoc)
+          && !LocationUtil.isFacingSolid(topLoc)
           && this.notFacingAnchor(blockLoc)) {
         return bottomLoc;
       }
@@ -165,7 +143,7 @@ public class AnchorBlock implements ConfigurationSerializable {
       blockLoc.setYaw(yaw);
       bottomLoc.setYaw(yaw);
       topLoc.setYaw(yaw);
-      if (!this.isFacingAir(bottomLoc) && !this.isFacingAir(topLoc)) {
+      if (!LocationUtil.isFacingAir(bottomLoc) && !LocationUtil.isFacingAir(topLoc)) {
         return bottomLoc;
       }
     }
@@ -175,7 +153,7 @@ public class AnchorBlock implements ConfigurationSerializable {
       blockLoc.setYaw(yaw);
       bottomLoc.setYaw(yaw);
       topLoc.setYaw(yaw);
-      if (!this.isFacingSolid(bottomLoc) && !this.isFacingSolid(topLoc)) {
+      if (!LocationUtil.isFacingSolid(bottomLoc) && !LocationUtil.isFacingSolid(topLoc)) {
         return bottomLoc;
       }
     }
