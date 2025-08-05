@@ -10,10 +10,8 @@ import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -22,7 +20,8 @@ import java.util.stream.Stream;
 /** manages vendoring of third-party dependencies into the codebase */
 @SuppressWarnings("NullabilityAnnotations")
 public class Vendor {
-  private static final Path PROPERTIES_FILE = Path.of("src/vendored/vendored.properties");
+  private static final Path VENDORED_PATH = Path.of("src/vendored");
+  private static final String VENDORED_FILENAME = "vendored.properties";
 
   // execute command in specified directory
   private static void runIn(Path path, String... command) throws IOException, InterruptedException {
@@ -62,93 +61,42 @@ public class Vendor {
     return values.stream().sorted().collect(Collectors.joining(","));
   }
 
-  private record LibraryConfig(
-      String name,
-      String repo,
-      String commit,
-      String path,
-      List<String> include,
-      Set<String> exclude) {
-    LibraryConfig(
-        String name, String repo, String commit, String path, String include, String exclude) {
-      this(
-          name,
-          repo,
-          commit,
-          path,
-          List.of(include.split(",", -1)),
-          exclude == null ? Set.of() : Set.of(exclude.split(",", -1)));
-    }
-  }
+  private static class LibraryConfig {
+    private final String name;
+    String repo;
+    String commit;
+    String path;
+    List<String> include;
+    Set<String> exclude;
 
-  private static class Config {
-    private final Properties props;
-    private final Map<String, LibraryConfig> configs = new HashMap<>();
-
-    // load vendored library configuration from properties file
-    Config() throws IOException {
-      // load file
-      this.props = new Properties();
-      try (InputStream in = Files.newInputStream(PROPERTIES_FILE)) {
-        this.props.load(in);
+    LibraryConfig(Path path) throws IOException {
+      Properties props = new Properties();
+      try (InputStream in = Files.newInputStream(path.resolve(VENDORED_FILENAME))) {
+        props.load(in);
       }
-
-      // load config
-      for (String key : this.props.stringPropertyNames()) {
-        int dot = key.indexOf('.');
-        if (dot == -1) {
-          continue;
-        }
-        String name = key.substring(0, dot);
-        this.configs.put(
-            name,
-            new LibraryConfig(
-                name,
-                this.props.getProperty("%s.repo".formatted(name)),
-                this.props.getProperty("%s.commit".formatted(name)),
-                this.props.getProperty("%s.path".formatted(name)),
-                this.props.getProperty("%s.include".formatted(name)),
-                this.props.getProperty("%s.exclude".formatted(name))));
-      }
-    }
-
-    // return set of configured library names
-    Set<String> libraryNames() {
-      return this.configs.keySet();
+      this.name = path.getFileName().toString();
+      this.repo = props.getProperty("repo");
+      this.commit = props.getProperty("commit");
+      this.path = props.getProperty("path");
+      this.include = List.of(props.getProperty("include").split(",", -1));
+      this.exclude =
+          props.getProperty("exclude") == null
+              ? Set.of()
+              : Set.of(props.getProperty("exclude").split(",", -1));
     }
 
     // write configuration back to properties file
-    private void write() throws IOException {
-      List<LibraryConfig> sortedConfigs =
-          this.configs.entrySet().stream()
-              .sorted(Map.Entry.comparingByKey())
-              .map(Map.Entry::getValue)
-              .toList();
-
+    void write() throws IOException {
       List<String> lines = new ArrayList<>();
-      lines.add("# use `scripts/vendor` to update");
-      for (LibraryConfig lib : sortedConfigs) {
-        lines.add("#");
-        lines.add("%s.repo=%s".formatted(lib.name, lib.repo));
-        lines.add("%s.path=%s".formatted(lib.name, lib.path));
-        lines.add("%s.commit=%s".formatted(lib.name, lib.commit));
-        lines.add("%s.include=%s".formatted(lib.name, join(lib.include)));
-        if (!lib.exclude.isEmpty()) {
-          lines.add("%s.exclude=%s".formatted(lib.name, join(lib.exclude)));
-        }
+      lines.add("# use `scripts/vendor %s` to update".formatted(this.name));
+      lines.add("repo=%s".formatted(this.repo));
+      lines.add("path=%s".formatted(this.path));
+      lines.add("commit=%s".formatted(this.commit));
+      lines.add("include=%s".formatted(join(this.include)));
+      if (!this.exclude.isEmpty()) {
+        lines.add("exclude=%s".formatted(join(this.exclude)));
       }
-      Files.write(PROPERTIES_FILE, lines);
-    }
-
-    // get library configuration by name
-    LibraryConfig get(String name) {
-      return this.configs.get(name);
-    }
-
-    // set property value and save configuration
-    void set(String name, String value) throws IOException {
-      this.props.setProperty(name, value);
-      this.write();
+      Files.write(VENDORED_PATH.resolve(this.name).resolve(VENDORED_FILENAME), lines);
     }
   }
 
@@ -162,13 +110,33 @@ public class Vendor {
       }
       String libraryName = args[0];
 
-      // load config
-      Config config = new Config();
-      LibraryConfig lib = config.get(libraryName);
+      // find vendored prop files
+      List<Path> paths;
+      try (Stream<Path> stream = Files.list(VENDORED_PATH)) {
+        paths =
+            stream
+                .filter(Files::isDirectory)
+                .filter((Path p) -> Files.exists(p.resolve(VENDORED_FILENAME)))
+                .sorted(Comparator.naturalOrder())
+                .toList();
+      }
+
+      // load
+      LibraryConfig lib = null;
+      for (Path path : paths) {
+        if (path.getFileName().toString().equals(libraryName)) {
+          lib = new LibraryConfig(path);
+          break;
+        }
+      }
       if (lib == null) {
         throw new RuntimeException(
             "unknown library: %s\navailable libraries: %s"
-                .formatted(libraryName, config.libraryNames()));
+                .formatted(
+                    libraryName,
+                    paths.stream()
+                        .map((p) -> p.getFileName().toString())
+                        .collect(Collectors.joining(" "))));
       }
 
       // vendor
@@ -189,15 +157,21 @@ public class Vendor {
         System.exit(1);
       }
 
+      // check for updates
+      if (capture(srcPath, "git", "rev-parse", "HEAD").trim().equals(lib.commit)) {
+        throw new RuntimeException("'%s' is already up to date".formatted(lib.name));
+      }
+
       // build list of files to copy
       List<FileCopy> copyFilepaths = new ArrayList<>();
       for (String srcFilename : lib.include) {
         if (srcFilename.endsWith("/")) {
           Path path = srcPath.resolve(srcFilename.substring(0, srcFilename.length() - 1));
           try (Stream<Path> files = Files.walk(path)) {
+            Set<String> exclude = lib.exclude;
             files
                 .filter(Files::isRegularFile)
-                .filter((Path fp) -> !lib.exclude.contains(fp.getFileName().toString()))
+                .filter((Path fp) -> !exclude.contains(fp.getFileName().toString()))
                 .forEach(
                     (Path srcFilepath) -> {
                       Path dstFilepath = dstPath.resolve(path.relativize(srcFilepath));
@@ -274,7 +248,8 @@ public class Vendor {
 
       // update commit .properties
       String sha = capture(srcPath, "git", "rev-parse", "HEAD").trim();
-      config.set("%s.commit".formatted(lib.name), sha);
+      lib.commit = sha;
+      lib.write();
 
       // test build
       run("make", "clean", "test", "build");
