@@ -21,13 +21,9 @@ public class CheckUtils {
   }
 
   public static boolean isRelativeTo(String filename, String relativePath) {
-    if (!relativePath.startsWith("/")) {
-      relativePath = "/%s".formatted(relativePath);
-    }
     if (!relativePath.endsWith("/")) {
       relativePath = "%s/".formatted(relativePath);
     }
-
     return getRelativeFilename(filename).startsWith(relativePath);
   }
 
