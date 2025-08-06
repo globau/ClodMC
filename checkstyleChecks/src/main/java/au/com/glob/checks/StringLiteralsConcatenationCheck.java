@@ -3,6 +3,7 @@ package au.com.glob.checks;
 /*
  * SPDX-FileCopyrightText: Copyright (c) 2011-2025 Yegor Bugayenko
  * SPDX-License-Identifier: MIT
+ * https://github.com/yegor256/qulice/
  */
 
 import com.puppycrawl.tools.checkstyle.api.AbstractCheck;
