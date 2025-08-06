@@ -28,25 +28,6 @@ public class CheckUtils {
     return getRelativeFilename(filename).startsWith(relativePath);
   }
 
-  static @Nullable DetailAST getAnnotation(DetailAST methodDef, String name) {
-    DetailAST modifiers = methodDef.findFirstToken(TokenTypes.MODIFIERS);
-    if (modifiers == null) {
-      return null;
-    }
-
-    DetailAST annotation = modifiers.findFirstToken(TokenTypes.ANNOTATION);
-    while (annotation != null) {
-      DetailAST annotationName = annotation.findFirstToken(TokenTypes.IDENT);
-      if (annotationName != null && name.equals(annotationName.getText())) {
-        return annotation;
-      }
-      do {
-        annotation = annotation.getNextSibling();
-      } while (annotation != null && annotation.getType() != TokenTypes.ANNOTATION);
-    }
-    return null;
-  }
-
   static @Nullable String getName(DetailAST classDef) {
     DetailAST nameNode = classDef.findFirstToken(TokenTypes.IDENT);
     return nameNode != null ? nameNode.getText() : null;

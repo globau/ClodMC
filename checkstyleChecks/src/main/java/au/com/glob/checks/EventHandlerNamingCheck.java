@@ -3,6 +3,7 @@ package au.com.glob.checks;
 import com.puppycrawl.tools.checkstyle.api.AbstractCheck;
 import com.puppycrawl.tools.checkstyle.api.DetailAST;
 import com.puppycrawl.tools.checkstyle.api.TokenTypes;
+import com.puppycrawl.tools.checkstyle.utils.AnnotationUtil;
 import org.jspecify.annotations.NullMarked;
 
 /** checkstyle check that enforces event handler naming conventions. */
@@ -26,7 +27,7 @@ public class EventHandlerNamingCheck extends AbstractCheck {
 
   @Override
   public void visitToken(DetailAST ast) {
-    if (CheckUtils.getAnnotation(ast, "EventHandler") == null) {
+    if (!AnnotationUtil.containsAnnotation(ast, "EventHandler")) {
       return;
     }
 

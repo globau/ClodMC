@@ -3,6 +3,7 @@ package au.com.glob.checks;
 import com.puppycrawl.tools.checkstyle.api.AbstractCheck;
 import com.puppycrawl.tools.checkstyle.api.DetailAST;
 import com.puppycrawl.tools.checkstyle.api.TokenTypes;
+import com.puppycrawl.tools.checkstyle.utils.AnnotationUtil;
 import org.jspecify.annotations.NullMarked;
 
 /**
@@ -37,7 +38,7 @@ public class NullMarkedCheck extends AbstractCheck {
     // check if this is a top-level type declaration
     if (CheckUtils.isTopLevelDeclaration(ast)) {
       // check if the file has @NullMarked annotation
-      if (CheckUtils.getAnnotation(ast, "NullMarked") == null) {
+      if (!AnnotationUtil.containsAnnotation(ast, "NullMarked")) {
         this.log(ast, "file with top-level type declarations is missing @NullMarked annotation");
       }
     }
