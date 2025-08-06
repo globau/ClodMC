@@ -1,7 +1,6 @@
 package au.com.glob.checks;
 
 import com.puppycrawl.tools.checkstyle.api.AbstractFileSetCheck;
-import com.puppycrawl.tools.checkstyle.api.CheckstyleException;
 import com.puppycrawl.tools.checkstyle.api.FileText;
 import java.io.File;
 import java.util.regex.Matcher;
@@ -24,7 +23,7 @@ public class ApiVersionCheck extends AbstractFileSetCheck {
   private @Nullable String pluginVersion;
 
   @Override
-  protected void processFiltered(File file, FileText fileText) throws CheckstyleException {
+  protected void processFiltered(File file, FileText fileText) {
     String fileName = file.getName();
 
     if ("build.gradle.kts".equals(fileName)) {
@@ -35,7 +34,7 @@ public class ApiVersionCheck extends AbstractFileSetCheck {
     }
   }
 
-  private void processBuildFile(File file, FileText fileText) throws CheckstyleException {
+  private void processBuildFile(File file, FileText fileText) {
     for (int i = 0; i < fileText.size(); i++) {
       String line = fileText.get(i);
       Matcher matcher = BUILD_PATTERN.matcher(line);
@@ -52,7 +51,7 @@ public class ApiVersionCheck extends AbstractFileSetCheck {
     this.checkVersions();
   }
 
-  private void processPluginFile(File file, FileText fileText) throws CheckstyleException {
+  private void processPluginFile(File file, FileText fileText) {
     for (int i = 0; i < fileText.size(); i++) {
       String line = fileText.get(i);
       Matcher matcher = PLUGIN_PATTERN.matcher(line);

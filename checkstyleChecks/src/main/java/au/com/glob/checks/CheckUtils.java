@@ -155,18 +155,4 @@ public class CheckUtils {
 
     return false;
   }
-
-  public static boolean isInnerClass(DetailAST classAst) {
-    DetailAST parent = classAst.getParent();
-    while (parent != null) {
-      if (parent.getType() == TokenTypes.CLASS_DEF
-          || parent.getType() == TokenTypes.INTERFACE_DEF
-          || parent.getType() == TokenTypes.ENUM_DEF
-          || parent.getType() == TokenTypes.RECORD_DEF) {
-        return true;
-      }
-      parent = parent.getParent();
-    }
-    return false;
-  }
 }
