@@ -33,7 +33,7 @@ public class Homes implements Listener, Module {
             (Player player, @Nullable String name) -> {
               name = name == null ? DEFAULT_NAME : name;
 
-              Map<String, Location> homes = this.getHomes(player);
+              Map<String, Location> homes = getHomes(player);
               if (homes.isEmpty() || !homes.containsKey(name)) {
                 throw new CommandError(
                     name.equals(DEFAULT_NAME)
@@ -45,13 +45,13 @@ public class Homes implements Listener, Module {
               TeleportUtil.teleport(
                   player, location, name.equals(DEFAULT_NAME) ? "home" : "to '%s'".formatted(name));
             })
-        .completor(this::completeHomes);
+        .completor(Homes::completeHomes);
 
     CommandBuilder.build("homes")
         .description("List homes")
         .executor(
             (Player player) -> {
-              Map<String, Location> homes = this.getHomes(player);
+              Map<String, Location> homes = getHomes(player);
 
               if (homes.isEmpty()) {
                 Chat.warning(player, "No homes");
@@ -71,7 +71,7 @@ public class Homes implements Listener, Module {
             (Player player, @Nullable String name) -> {
               name = name == null ? DEFAULT_NAME : name;
 
-              Map<String, Location> homes = this.getHomes(player);
+              Map<String, Location> homes = getHomes(player);
               boolean existing = homes.containsKey(name);
 
               if (!existing && homes.size() >= MAX_HOMES) {
@@ -86,7 +86,7 @@ public class Homes implements Listener, Module {
               }
 
               homes.put(name, location);
-              this.setHomes(player, homes);
+              setHomes(player, homes);
 
               if (name.equals(DEFAULT_NAME)) {
                 Chat.info(
@@ -104,7 +104,7 @@ public class Homes implements Listener, Module {
             (Player player, @Nullable String name) -> {
               name = name == null ? DEFAULT_NAME : name;
 
-              Map<String, Location> homes = this.getHomes(player);
+              Map<String, Location> homes = getHomes(player);
               if (homes.isEmpty() || !homes.containsKey(name)) {
                 throw new CommandError(
                     name.equals(DEFAULT_NAME)
@@ -113,7 +113,7 @@ public class Homes implements Listener, Module {
               }
 
               homes.remove(name);
-              this.setHomes(player, homes);
+              setHomes(player, homes);
 
               if (name.equals(DEFAULT_NAME)) {
                 Chat.info(player, "Deleted home");
@@ -121,16 +121,16 @@ public class Homes implements Listener, Module {
                 Chat.info(player, "Deleted home '%s'".formatted(name));
               }
             })
-        .completor(this::completeHomes);
+        .completor(Homes::completeHomes);
   }
 
   // tab completion for home names
-  private List<String> completeHomes(Player player, List<String> args) {
+  private static List<String> completeHomes(Player player, List<String> args) {
     if (args.isEmpty()) {
       return List.of();
     }
 
-    Map<String, Location> homes = this.getHomes(player);
+    Map<String, Location> homes = getHomes(player);
     return homes.keySet().stream()
         .filter((String name) -> name.startsWith(args.getFirst()))
         .sorted(String::compareToIgnoreCase)
@@ -138,7 +138,7 @@ public class Homes implements Listener, Module {
   }
 
   // retrieve all homes for a player from data file
-  private Map<String, Location> getHomes(Player player) {
+  private static Map<String, Location> getHomes(Player player) {
     PlayerDataFile dataFile = PlayerDataFiles.of(player);
 
     ConfigurationSection section = dataFile.getConfigurationSection("homes");
@@ -155,7 +155,7 @@ public class Homes implements Listener, Module {
   }
 
   // save all homes for a player to data file
-  private void setHomes(Player player, Map<String, Location> homes) {
+  private static void setHomes(Player player, Map<String, Location> homes) {
     PlayerDataFile dataFile = PlayerDataFiles.of(player);
     ConfigurationSection section = dataFile.getConfigurationSection("homes");
     if (section != null) {

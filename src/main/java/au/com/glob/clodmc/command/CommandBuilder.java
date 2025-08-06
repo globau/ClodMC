@@ -167,26 +167,26 @@ public class CommandBuilder {
                 case ExecutorP executorP -> executorP.accept(that.toPlayer(sender));
                 case ExecutorE executorE -> executorE.accept(new EitherCommandSender(sender));
                 case ExecutorEP executorEP ->
-                    executorEP.accept(new EitherCommandSender(sender), that.toPlayer(args, 0));
+                    executorEP.accept(new EitherCommandSender(sender), argToPlayer(args, 0));
                 case ExecutorEPS executorEPS ->
                     executorEPS.accept(
                         new EitherCommandSender(sender),
-                        that.toPlayer(args, 0),
-                        that.toString(args, 1));
+                        argToPlayer(args, 0),
+                        argToString(args, 1));
                 case ExecutorES executorES ->
-                    executorES.accept(new EitherCommandSender(sender), that.toString(args, 0));
+                    executorES.accept(new EitherCommandSender(sender), argToString(args, 0));
                 case ExecutorPS executorPS ->
-                    executorPS.accept(that.toPlayer(sender), that.toString(args, 0));
+                    executorPS.accept(that.toPlayer(sender), argToString(args, 0));
                 case ExecutorESS executorESS ->
                     executorESS.accept(
                         new EitherCommandSender(sender),
-                        that.toString(args, 0),
-                        that.toString(args, 1));
+                        argToString(args, 0),
+                        argToString(args, 1));
                 case ExecutorESP executorESP ->
                     executorESP.accept(
                         new EitherCommandSender(sender),
-                        that.toString(args, 0),
-                        that.toPlayer(args, 1));
+                        argToString(args, 0),
+                        argToPlayer(args, 1));
                 default -> throw new RuntimeException("executor not handled");
               }
             } catch (CommandUsageError e) {
@@ -237,7 +237,7 @@ public class CommandBuilder {
   }
 
   // parse player argument from command args
-  private @Nullable Player toPlayer(String[] args, int index) {
+  private static @Nullable Player argToPlayer(String[] args, int index) {
     if (args.length - 1 < index || args[index].isEmpty()) {
       return null;
     }
@@ -249,7 +249,7 @@ public class CommandBuilder {
   }
 
   // parse string argument from command args
-  private @Nullable String toString(String[] args, int index) {
+  private static @Nullable String argToString(String[] args, int index) {
     if (args.length - 1 < index || args[index].isEmpty()) {
       return null;
     }

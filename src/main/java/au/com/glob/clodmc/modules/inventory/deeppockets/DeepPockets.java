@@ -78,7 +78,7 @@ public class DeepPockets implements Module, Listener {
 
     // no matches
     if (shulkerItemStacks.isEmpty()) {
-      this.playFailureSound(player);
+      playFailureSound(player);
       return;
     }
 
@@ -108,7 +108,7 @@ public class DeepPockets implements Module, Listener {
 
       // full inventory; failure
       if (emptySlot == -1) {
-        this.playFailureSound(player);
+        playFailureSound(player);
         return;
       }
 
@@ -139,7 +139,7 @@ public class DeepPockets implements Module, Listener {
     event.setCancelled(true);
   }
 
-  private void playFailureSound(Player player) {
+  private static void playFailureSound(Player player) {
     player.playSound(player, Sound.BLOCK_NOTE_BLOCK_IRON_XYLOPHONE, 0.5f, 0.5f);
   }
 }

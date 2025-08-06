@@ -27,9 +27,6 @@ import org.jspecify.annotations.NullMarked;
 /** Automatic and manual afk; players are visibly afk in the tab-list */
 @NullMarked
 public class AFK implements Listener, Module {
-  @SuppressWarnings({"NotNullFieldNotInitialized", "NullAway.Init"})
-  public static AFK instance;
-
   private static final int IDLE_TIME = 300; // seconds
   private static final int CHECK_INTERVAL = 5; // seconds
 
@@ -37,8 +34,6 @@ public class AFK implements Listener, Module {
 
   // initialise afk system with commands and scoreboard team
   public AFK() {
-    instance = this;
-
     CommandBuilder.build("afk")
         .description("Toggle AFK status")
         .executor(
@@ -50,12 +45,12 @@ public class AFK implements Listener, Module {
             });
 
     // ensure afk team exists and is empty on startup
-    Team afkTeam = this.getAfkTeam();
+    Team afkTeam = getAfkTeam();
     afkTeam.removeEntries(afkTeam.getEntries());
   }
 
   // get or create afk scoreboard team
-  Team getAfkTeam() {
+  static Team getAfkTeam() {
     Scoreboard scoreboard = Bukkit.getScoreboardManager().getMainScoreboard();
     Team team = scoreboard.getTeam("AFK");
     if (team == null) {

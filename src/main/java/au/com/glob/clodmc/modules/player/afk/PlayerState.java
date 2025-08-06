@@ -39,7 +39,7 @@ final class PlayerState {
   // set player as afk
   public void setAway(boolean announce) {
     this.isAway = true;
-    AFK.instance.getAfkTeam().addEntry(this.player.getName());
+    AFK.getAfkTeam().addEntry(this.player.getName());
     if (announce) {
       this.announce();
     }
@@ -48,7 +48,7 @@ final class PlayerState {
   // set player as no longer afk
   public void setBack(boolean announce) {
     this.isAway = false;
-    AFK.instance.getAfkTeam().removeEntry(this.player.getName());
+    AFK.getAfkTeam().removeEntry(this.player.getName());
     if (announce) {
       this.announce();
     }

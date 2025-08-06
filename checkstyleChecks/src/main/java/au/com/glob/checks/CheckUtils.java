@@ -4,6 +4,7 @@ import com.puppycrawl.tools.checkstyle.api.DetailAST;
 import com.puppycrawl.tools.checkstyle.api.TokenTypes;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.stream.Stream;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
@@ -11,7 +12,7 @@ import org.jspecify.annotations.Nullable;
 public class CheckUtils {
   private CheckUtils() {}
 
-  public static String getRelativeFilename(String filename) {
+  static String getRelativeFilename(String filename) {
     Path path = Paths.get(filename).getParent();
     while (!path.getFileName().toString().equals("src")) {
       path = path.getParent();
@@ -20,14 +21,14 @@ public class CheckUtils {
     return filename.startsWith(rootPath) ? filename.substring(rootPath.length()) : filename;
   }
 
-  public static boolean isRelativeTo(String filename, String relativePath) {
+  static boolean isRelativeTo(String filename, String relativePath) {
     if (!relativePath.endsWith("/")) {
       relativePath = "%s/".formatted(relativePath);
     }
     return getRelativeFilename(filename).startsWith(relativePath);
   }
 
-  public static @Nullable DetailAST getAnnotation(DetailAST methodDef, String name) {
+  static @Nullable DetailAST getAnnotation(DetailAST methodDef, String name) {
     DetailAST modifiers = methodDef.findFirstToken(TokenTypes.MODIFIERS);
     if (modifiers == null) {
       return null;
@@ -46,12 +47,12 @@ public class CheckUtils {
     return null;
   }
 
-  public static @Nullable String getName(DetailAST classDef) {
+  static @Nullable String getName(DetailAST classDef) {
     DetailAST nameNode = classDef.findFirstToken(TokenTypes.IDENT);
     return nameNode != null ? nameNode.getText() : null;
   }
 
-  public static @Nullable String getParameterType(DetailAST paramDef) {
+  static @Nullable String getParameterType(DetailAST paramDef) {
     DetailAST typeNode = paramDef.findFirstToken(TokenTypes.TYPE);
     if (typeNode == null) {
       return null;
@@ -72,12 +73,12 @@ public class CheckUtils {
     return null;
   }
 
-  public static String getTypeName(DetailAST ast) {
+  static String getTypeName(DetailAST ast) {
     DetailAST nameNode = ast.findFirstToken(TokenTypes.IDENT);
     return nameNode != null ? nameNode.getText() : "unknown";
   }
 
-  public static String getTypeKind(int tokenType) {
+  static String getTypeKind(int tokenType) {
     return switch (tokenType) {
       case TokenTypes.CLASS_DEF -> "Class";
       case TokenTypes.INTERFACE_DEF -> "Interface";
@@ -106,7 +107,7 @@ public class CheckUtils {
     }
   }
 
-  public static boolean isTopLevelDeclaration(DetailAST ast) {
+  static boolean isTopLevelDeclaration(DetailAST ast) {
     // check if this is a type declaration
     int tokenType = ast.getType();
     if (tokenType != TokenTypes.CLASS_DEF
@@ -132,7 +133,7 @@ public class CheckUtils {
     return true;
   }
 
-  public static boolean classImplements(DetailAST classDef, String name) {
+  static boolean classImplements(DetailAST classDef, String name) {
     DetailAST implementsClause = classDef.findFirstToken(TokenTypes.IMPLEMENTS_CLAUSE);
     if (implementsClause == null) {
       return false;
@@ -154,5 +155,25 @@ public class CheckUtils {
     }
 
     return false;
+  }
+
+  static boolean branchContains(DetailAST node, int type) {
+    return node.getType() == type || children(node).anyMatch(child -> branchContains(child, type));
+  }
+
+  private static Stream<DetailAST> children(DetailAST node) {
+    Stream.Builder<DetailAST> builder = Stream.builder();
+    DetailAST child = node.getFirstChild();
+    while (child != null) {
+      builder.accept(child);
+      child = child.getNextSibling();
+    }
+    return builder.build();
+  }
+
+  static boolean isInAbstractOrNativeMethod(DetailAST method) {
+    DetailAST modifiers = method.findFirstToken(TokenTypes.MODIFIERS);
+    return CheckUtils.branchContains(modifiers, TokenTypes.ABSTRACT)
+        || CheckUtils.branchContains(modifiers, TokenTypes.LITERAL_NATIVE);
   }
 }

@@ -41,9 +41,9 @@ public class ExplodingCreepers implements Module, Listener {
               .flicker(random.nextBoolean())
               .trail(random.nextBoolean())
               .with(FireworkEffect.Type.BURST)
-              .withColor(this.getRandomColour(random));
+              .withColor(getRandomColour(random));
       if (random.nextBoolean()) {
-        builder.withFade(this.getRandomColour(random));
+        builder.withFade(getRandomColour(random));
       }
       meta.addEffect(builder.build());
     }
@@ -53,7 +53,7 @@ public class ExplodingCreepers implements Module, Listener {
     event.setCancelled(true);
   }
 
-  private Color getRandomColour(Random random) {
+  private static Color getRandomColour(Random random) {
     return Color.fromRGB(random.nextInt(256), random.nextInt(256), random.nextInt(256));
   }
 }

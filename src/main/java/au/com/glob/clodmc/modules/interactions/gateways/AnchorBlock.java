@@ -90,7 +90,7 @@ public class AnchorBlock implements ConfigurationSerializable {
   }
 
   // checks if player is not facing an anchor block
-  private boolean notFacingAnchor(Location location) {
+  private static boolean notFacingAnchor(Location location) {
     return !Gateways.instance.instances.containsKey(
         BlockPos.of(LocationUtil.facingLocation(location)));
   }
@@ -121,7 +121,7 @@ public class AnchorBlock implements ConfigurationSerializable {
       topLoc.setYaw(yaw);
       if (LocationUtil.isFacingAir(bottomLoc)
           && LocationUtil.isFacingAir(topLoc)
-          && this.notFacingAnchor(blockLoc)) {
+          && notFacingAnchor(blockLoc)) {
         return bottomLoc;
       }
     }
@@ -133,7 +133,7 @@ public class AnchorBlock implements ConfigurationSerializable {
       topLoc.setYaw(yaw);
       if (!LocationUtil.isFacingSolid(bottomLoc)
           && !LocationUtil.isFacingSolid(topLoc)
-          && this.notFacingAnchor(blockLoc)) {
+          && notFacingAnchor(blockLoc)) {
         return bottomLoc;
       }
     }

@@ -91,12 +91,12 @@ public class InventoryRestore implements Module, Listener {
               }
 
               PlayerDataFile dataFile = PlayerDataFiles.of(uuid);
-              dataFile.set("restore_inv", this.getBackupName(backupFile));
+              dataFile.set("restore_inv", getBackupName(backupFile));
               dataFile.save();
 
               try {
                 LocalDateTime date =
-                    LocalDateTime.parse(this.getBackupName(backupFile), SHORT_DATETIME_FORMAT);
+                    LocalDateTime.parse(getBackupName(backupFile), SHORT_DATETIME_FORMAT);
                 Chat.info(
                     sender,
                     "Inventory for %s will be restored from %s next time they log in"
@@ -170,7 +170,7 @@ public class InventoryRestore implements Module, Listener {
     dataFile.save();
 
     String message =
-        "saved %s inventory as %s".formatted(player.getName(), this.getBackupName(backupFile));
+        "saved %s inventory as %s".formatted(player.getName(), getBackupName(backupFile));
     Logger.info(message);
     if (notify) {
       Chat.info(player, message);
@@ -219,7 +219,7 @@ public class InventoryRestore implements Module, Listener {
                 }
 
                 LocalDateTime date =
-                    LocalDateTime.parse(this.getBackupName(backupFile), SHORT_DATETIME_FORMAT);
+                    LocalDateTime.parse(getBackupName(backupFile), SHORT_DATETIME_FORMAT);
                 if (sender == null) {
                   Chat.info(
                       player,
@@ -251,10 +251,10 @@ public class InventoryRestore implements Module, Listener {
   }
 
   private List<String> getBackupNames(UUID uuid) {
-    return this.getBackupFiles(uuid).stream().map(this::getBackupName).toList();
+    return this.getBackupFiles(uuid).stream().map(InventoryRestore::getBackupName).toList();
   }
 
-  private String getBackupName(File file) {
+  private static String getBackupName(File file) {
     return file.getName().substring(PREFIX_LEN, file.getName().length() - SUFFIX_LEN);
   }
 
@@ -266,7 +266,7 @@ public class InventoryRestore implements Module, Listener {
     return name == null
         ? backups.getFirst()
         : backups.stream()
-            .filter((File file) -> this.getBackupName(file).equals(name))
+            .filter((File file) -> getBackupName(file).equals(name))
             .max(Comparator.comparingLong(File::lastModified))
             .orElse(null);
   }

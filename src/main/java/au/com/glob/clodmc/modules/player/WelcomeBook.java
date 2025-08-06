@@ -174,7 +174,7 @@ public class WelcomeBook implements Module, Listener {
               if (player == null) {
                 throw new CommandUsageError();
               }
-              this.giveWelcomeBook(player, sender);
+              giveWelcomeBook(player, sender);
             })
         .completor(
             (CommandSender sender, List<String> args) ->
@@ -209,12 +209,12 @@ public class WelcomeBook implements Module, Listener {
   @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
   public void onPlayerJoin(PlayerJoinEvent event) {
     if (!event.getPlayer().hasPlayedBefore()) {
-      Schedule.delayed(5, () -> WelcomeBook.this.giveWelcomeBook(event.getPlayer(), null));
+      Schedule.delayed(5, () -> giveWelcomeBook(event.getPlayer(), null));
     }
   }
 
   // create and give welcome book to player
-  private void giveWelcomeBook(Player recipient, @Nullable CommandSender sender) {
+  private static void giveWelcomeBook(Player recipient, @Nullable CommandSender sender) {
     ItemStack bookItem = new ItemStack(Material.WRITTEN_BOOK);
     BookMeta bookMeta = (BookMeta) bookItem.getItemMeta();
 

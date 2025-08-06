@@ -31,7 +31,7 @@ public class OfflineMessages implements Module, Listener {
   }
 
   // handle a whisper message intended for an offline player
-  private boolean handleOfflineMsg(Sender sender, String recipient, String message) {
+  private static boolean handleOfflineMsg(Sender sender, String recipient, String message) {
     // most messages will be directed at online players, check that first
     Player player = Bukkit.getPlayerExact(recipient);
     if (player != null && player.isOnline()) {
@@ -46,7 +46,7 @@ public class OfflineMessages implements Module, Listener {
       return false;
     }
 
-    List<Message> messages = this.loadMessages(dataFile.getList("messages"));
+    List<Message> messages = loadMessages(dataFile.getList("messages"));
     if (messages.size() >= 10) {
       sender.error("%s's mailbox is full".formatted(recipient));
       return false;
@@ -61,12 +61,12 @@ public class OfflineMessages implements Module, Listener {
   }
 
   // load offline messages for a player from their data file
-  private List<Message> loadMessages(Player player) {
-    return this.loadMessages(PlayerDataFiles.of(player).getList("messages"));
+  private static List<Message> loadMessages(Player player) {
+    return loadMessages(PlayerDataFiles.of(player).getList("messages"));
   }
 
   // convert config list to message objects
-  private List<Message> loadMessages(@Nullable List<?> configValue) {
+  private static List<Message> loadMessages(@Nullable List<?> configValue) {
     List<Message> messages = new ArrayList<>();
     if (configValue != null) {
       for (Object obj : configValue) {
@@ -83,7 +83,7 @@ public class OfflineMessages implements Module, Listener {
   public void onPlayerCommandPreprocess(PlayerCommandPreprocessEvent event) {
     Matcher matcher = this.msgPattern.matcher(event.getMessage());
     if (matcher.matches()
-        && this.handleOfflineMsg(
+        && handleOfflineMsg(
             new Sender(event.getPlayer(), event.getPlayer().getName()),
             matcher.group(1),
             matcher.group(2))) {
@@ -96,7 +96,7 @@ public class OfflineMessages implements Module, Listener {
   public void onServerCommand(ServerCommandEvent event) {
     Matcher matcher = this.msgPattern.matcher(event.getCommand());
     if (matcher.matches()
-        && this.handleOfflineMsg(
+        && handleOfflineMsg(
             new Sender(Bukkit.getConsoleSender(), "[server]"),
             matcher.group(1),
             matcher.group(2))) {
@@ -108,7 +108,7 @@ public class OfflineMessages implements Module, Listener {
   @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
   public void onPlayerJoin(PlayerJoinEvent event) {
     Player player = event.getPlayer();
-    List<Message> messages = this.loadMessages(player);
+    List<Message> messages = loadMessages(player);
     if (messages.isEmpty()) {
       return;
     }
