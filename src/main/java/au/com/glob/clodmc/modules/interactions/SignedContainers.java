@@ -46,8 +46,9 @@ public class SignedContainers implements Module, Listener {
         event.setCancelled(true);
         Player player = event.getPlayer();
 
-        // remove wax with an axe for parity with copper
-        if (event.getHand() != null
+        // remove wax with an axe while sneaking for parity with copper chests
+        if (player.isSneaking()
+            && event.getHand() != null
             && Tag.ITEMS_AXES.isTagged(player.getInventory().getItem(event.getHand()).getType())) {
 
           sign.setWaxed(false);
