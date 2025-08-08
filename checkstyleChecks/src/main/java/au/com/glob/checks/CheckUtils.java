@@ -13,12 +13,15 @@ public class CheckUtils {
   private CheckUtils() {}
 
   static String getRelativeFilename(String filename) {
-    Path path = Paths.get(filename).getParent();
-    while (!path.getFileName().toString().equals("src")) {
-      path = path.getParent();
+    Path absolutePath = Paths.get(filename);
+    Path current = absolutePath.getParent();
+    while (current != null) {
+      if (current.resolve("build.gradle.kts").toFile().exists()) {
+        return current.relativize(absolutePath).toString();
+      }
+      current = current.getParent();
     }
-    String rootPath = "%s/".formatted(path.getParent().toString());
-    return filename.startsWith(rootPath) ? filename.substring(rootPath.length()) : filename;
+    return absolutePath.getFileName().toString();
   }
 
   static boolean isRelativeTo(String filename, String relativePath) {

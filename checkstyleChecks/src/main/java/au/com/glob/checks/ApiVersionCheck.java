@@ -9,14 +9,13 @@ import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
 /**
- * checkstyle check that ensures paper-api version in build.gradle.kts matches api-version in
+ * checkstyle check that ensures paper-api version in libs.versions.toml matches api-version in
  * paper-plugin.yml.
  */
 @NullMarked
 public class ApiVersionCheck extends AbstractFileSetCheck {
 
-  private static final Pattern BUILD_PATTERN =
-      Pattern.compile("^\\s*compileOnly\\(\"io\\.papermc\\.paper:paper-api:([^-]+)");
+  private static final Pattern BUILD_PATTERN = Pattern.compile("^paper\\s*=\\s*\"([^-]+)");
   private static final Pattern PLUGIN_PATTERN = Pattern.compile("api-version:(.+)$");
 
   private @Nullable String buildVersion;
@@ -24,12 +23,10 @@ public class ApiVersionCheck extends AbstractFileSetCheck {
 
   @Override
   protected void processFiltered(File file, FileText fileText) {
-    String fileName = file.getName();
-
-    if ("build.gradle.kts".equals(fileName)) {
+    String relativeFilename = CheckUtils.getRelativeFilename(file.getAbsolutePath());
+    if (relativeFilename.equals("gradle/libs.versions.toml")) {
       this.processBuildFile(file, fileText);
-    } else if ("paper-plugin.yml".equals(fileName)
-        && file.getPath().contains("src/main/resources")) {
+    } else if (relativeFilename.equals("src/main/resources/paper-plugin.yml")) {
       this.processPluginFile(file, fileText);
     }
   }

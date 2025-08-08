@@ -3,9 +3,9 @@ import java.io.BufferedReader
 
 plugins {
     id("java-library")
-    id("com.diffplug.spotless") version "7.2.1"
+    alias(libs.plugins.spotless)
     id("checkstyle")
-    id("net.ltgt.errorprone") version "4.2.0"
+    alias(libs.plugins.errorprone)
 }
 
 repositories {
@@ -17,12 +17,12 @@ repositories {
 }
 
 dependencies {
-    compileOnly("io.papermc.paper:paper-api:1.21.8-R0.1-SNAPSHOT")
-    compileOnly("com.github.GriefPrevention:GriefPrevention:16.18.4")
-    compileOnly("org.geysermc.geyser:api:2.8.2-SNAPSHOT")
-    compileOnly("de.bluecolored.bluemap:BlueMapAPI:2.7.2")
-    errorprone("com.google.errorprone:error_prone_core:2.41.0")
-    api("org.jspecify:jspecify:1.0.0")
+    compileOnly(libs.paper.api)
+    compileOnly(libs.griefprevention)
+    compileOnly(libs.geyser.api)
+    compileOnly(libs.bluemap.api)
+    errorprone(libs.errorprone)
+    api(libs.jspecify)
     checkstyle(project(":checkstyleChecks"))
 }
 
@@ -48,13 +48,14 @@ tasks.withType<JavaCompile>().configureEach {
 }
 
 checkstyle {
-    toolVersion = "10.26.1"
+    toolVersion = libs.versions.checkstyle.get()
     maxWarnings = 0
 }
 
 tasks.checkstyleMain {
     source += fileTree("src/main/resources") { include("**/*.yml") }
     source += fileTree(".") { include("build.gradle.kts") }
+    source += fileTree("gradle") { include("libs.versions.toml") }
 }
 
 allprojects {
@@ -62,7 +63,11 @@ allprojects {
 
     spotless {
         java {
-            googleJavaFormat("1.28.0").reflowLongStrings().skipJavadocFormatting()
+            googleJavaFormat(
+                libs.versions.google.java.format
+                    .get(),
+            ).reflowLongStrings()
+                .skipJavadocFormatting()
             formatAnnotations()
         }
         kotlin {
