@@ -5,6 +5,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
+import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
@@ -12,8 +13,28 @@ import java.util.stream.Stream;
 /** outputs the java home */
 @SuppressWarnings("NullabilityAnnotations")
 public class JavaHome {
-  private static final int JDK_VERSION = 21;
-  private static final Path CACHE_FILE = Path.of("build/java_home");
+  private static final String JDK_VERSION = readJavaVersion();
+  private static final Path CACHE_FILE = Path.of("build", "java_home-%s".formatted(JDK_VERSION));
+
+  // read java version from gradle.properties
+  private static String readJavaVersion() {
+    Properties props = new Properties();
+    try {
+      props.load(Files.newBufferedReader(Path.of("gradle.properties")));
+    } catch (IOException e) {
+      throw new RuntimeException(e);
+    }
+    String javaVersion = props.getProperty("javaVersion");
+    if (javaVersion == null) {
+      throw new RuntimeException("javaVersion not found in gradle.properties");
+    }
+    try {
+      Integer.parseInt(javaVersion);
+    } catch (NumberFormatException e) {
+      throw new RuntimeException("malformed javaVersion in gradle.properties");
+    }
+    return javaVersion;
+  }
 
   // execute command and return stdout output
   private static String capture(String... command) throws IOException, InterruptedException {
@@ -51,7 +72,7 @@ public class JavaHome {
     }
   }
 
-  // find and output java 21 home directory
+  // find and output java home directory
   public static void main(String[] args) {
     try {
       String cached = readCached();
@@ -63,8 +84,8 @@ public class JavaHome {
       // check the running java version
       Matcher matcher = Pattern.compile("^(\\d+)\\.").matcher(System.getProperty("java.version"));
       if (matcher.find()) {
-        int version = Integer.parseInt(matcher.group(1));
-        if (version == JDK_VERSION) {
+        String version = matcher.group(1);
+        if (version.equals(JDK_VERSION)) {
           String javaHome = System.getProperty("java.home");
           writeCached(javaHome);
           System.out.println(javaHome);
@@ -89,8 +110,8 @@ public class JavaHome {
               String versionOutput = capture(javaFilename, "--version");
               Matcher matcher1 = Pattern.compile("^\\S+ (\\d+)\\.").matcher(versionOutput);
               if (matcher1.find()) {
-                int version = Integer.parseInt(matcher1.group(1));
-                if (version == JDK_VERSION) {
+                String version = matcher1.group(1);
+                if (version.equals(JDK_VERSION)) {
                   writeCached(javaHome);
                   System.out.println(javaHome);
                   return;
@@ -101,7 +122,7 @@ public class JavaHome {
         }
       }
 
-      throw new RuntimeException("failed to find Java %d".formatted(JDK_VERSION));
+      throw new RuntimeException("failed to find Java %s".formatted(JDK_VERSION));
     } catch (Exception e) {
       System.err.println(e.getMessage());
       System.exit(1);
