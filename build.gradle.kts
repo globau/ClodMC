@@ -38,7 +38,11 @@ version =
         .use(BufferedReader::readText)
         .trim()
 
-java { toolchain { languageVersion.set(JavaLanguageVersion.of(21)) } }
+java {
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(property("javaVersion").toString().toInt()))
+    }
+}
 
 tasks.withType<JavaCompile>().configureEach {
     options.encoding = "UTF-8"
@@ -58,9 +62,10 @@ tasks.withType<Checkstyle>().configureEach {
 }
 
 tasks.checkstyleMain {
-    source += fileTree("src/main/resources") { include("**/*.yml") }
-    source += fileTree(".") { include("build.gradle.kts") }
+    source += fileTree(".") { include("build.gradle.kts", "gradle.properties") }
+    source += fileTree(".github/workflows") { include("**/*.yml") }
     source += fileTree("gradle") { include("libs.versions.toml") }
+    source += fileTree("src/main/resources") { include("**/*.yml") }
 }
 
 allprojects {

@@ -401,4 +401,5 @@
     <!-- glob: custom non-ast checks -->
     <module name="au.com.glob.checks.ApiVersionCheck" />
     <module name="au.com.glob.checks.FilePermissionsCheck" />
+    <module name="au.com.glob.checks.GitHubWorkflowJavaVersionCheck" />
 </module>

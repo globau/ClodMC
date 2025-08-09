@@ -9,6 +9,10 @@ dependencies {
     api(libs.jspecify)
 }
 
-java { toolchain { languageVersion.set(JavaLanguageVersion.of(21)) } }
+java {
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(property("javaVersion").toString().toInt()))
+    }
+}
 
 tasks.withType<JavaCompile>().configureEach { options.encoding = "UTF-8" }
