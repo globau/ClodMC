@@ -52,6 +52,11 @@ checkstyle {
     maxWarnings = 0
 }
 
+tasks.withType<Checkstyle>().configureEach {
+    configProperties = configProperties ?: mutableMapOf()
+    configProperties!!["basedir"] = projectDir.absolutePath
+}
+
 tasks.checkstyleMain {
     source += fileTree("src/main/resources") { include("**/*.yml") }
     source += fileTree(".") { include("build.gradle.kts") }

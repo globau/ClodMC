@@ -5,10 +5,10 @@
         "http://www.puppycrawl.com/dtds/suppressions_1_1.dtd">
 
 <suppressions>
-    <suppress files="/src/main/java/vendored/" checks=".*" />
-    <suppress files="/src/main/java/au/com/glob/clodmc/build/" id="SystemOut" />
-    <suppress files="/src/main/java/au/com/glob/clodmc/build/"
+    <suppress files="src/main/java/vendored/" checks=".*" />
+    <suppress files="src/main/java/au/com/glob/clodmc/build/" id="SystemOut" />
+    <suppress files="src/main/java/au/com/glob/clodmc/build/"
         checks="NoInnerTypesCheck" />
-    <suppress files="/src/main/java/au/com/glob/clodmc/build/"
+    <suppress files="src/main/java/au/com/glob/clodmc/build/"
         checks="NullMarkedCheck" />
 </suppressions>
