@@ -23,10 +23,10 @@ public class GitHubWorkflowJavaVersionCheck extends AbstractFileSetCheck {
 
   @Override
   protected void processFiltered(File file, FileText fileText) {
-    String relativeFilename = CheckUtils.getRelativeFilename(file.getAbsolutePath());
+    String relativeFilename = CheckUtils.getRelativeFilename(file);
     if (relativeFilename.equals("gradle.properties")) {
       this.processGradlePropertiesFile(file);
-    } else if (CheckUtils.isRelativeTo(file.getAbsolutePath(), ".github/workflows")
+    } else if (CheckUtils.isRelativeTo(file, ".github/workflows")
         && relativeFilename.endsWith(".yml")) {
       this.processWorkflowFile(file);
     }
@@ -38,11 +38,17 @@ public class GitHubWorkflowJavaVersionCheck extends AbstractFileSetCheck {
       properties.load(in);
       this.gradleJavaVersion = properties.getProperty("javaVersion");
     } catch (IOException e) {
-      this.log(0, "failed to read java version from %s: %s".formatted(file.getPath(), e));
+      this.log(
+          0,
+          "failed to read java version from %s: %s"
+              .formatted(CheckUtils.getRelativeFilename(file), e));
     }
 
     if (this.gradleJavaVersion == null) {
-      this.log(0, "failed to find javaVersion property in %s".formatted(file.getPath()));
+      this.log(
+          0,
+          "failed to find javaVersion property in %s"
+              .formatted(CheckUtils.getRelativeFilename(file)));
     }
   }
 
@@ -89,7 +95,10 @@ public class GitHubWorkflowJavaVersionCheck extends AbstractFileSetCheck {
               this.log(
                   0,
                   "workflow java version '%s' in %s does not match gradle.properties version '%s'"
-                      .formatted(workflowJavaVersion, file.getPath(), this.gradleJavaVersion));
+                      .formatted(
+                          workflowJavaVersion,
+                          CheckUtils.getRelativeFilename(file),
+                          this.gradleJavaVersion));
             }
           }
         }
@@ -97,7 +106,9 @@ public class GitHubWorkflowJavaVersionCheck extends AbstractFileSetCheck {
     } catch (IOException e) {
       this.log(0, "failed to read workflow from %s: %s".formatted(file.getPath(), e));
     } catch (ClassCastException e) {
-      this.log(0, "unexpected yaml structure in %s: %s".formatted(file.getPath(), e));
+      this.log(
+          0,
+          "unexpected yaml structure in %s: %s".formatted(CheckUtils.getRelativeFilename(file), e));
     }
   }
 }

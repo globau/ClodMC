@@ -26,7 +26,7 @@ public class ApiVersionCheck extends AbstractFileSetCheck {
 
   @Override
   protected void processFiltered(File file, FileText fileText) {
-    String relativeFilename = CheckUtils.getRelativeFilename(file.getAbsolutePath());
+    String relativeFilename = CheckUtils.getRelativeFilename(file);
     if (relativeFilename.equals("gradle/libs.versions.toml")) {
       this.processVersionsFile(file);
     } else if (relativeFilename.equals("src/main/resources/paper-plugin.yml")) {
@@ -40,7 +40,10 @@ public class ApiVersionCheck extends AbstractFileSetCheck {
       this.buildVersion = ((String) table.get("versions.paper"));
       this.buildVersion = this.buildVersion.replaceFirst("-R0\\.1-SNAPSHOT$", "");
     } catch (IOException e) {
-      this.log(0, "failed to read paper-api version from %s: %s".formatted(file.getPath(), e));
+      this.log(
+          0,
+          "failed to read paper-api version from %s: %s"
+              .formatted(CheckUtils.getRelativeFilename(file), e));
     }
 
     if (this.buildVersion == null) {
@@ -56,11 +59,15 @@ public class ApiVersionCheck extends AbstractFileSetCheck {
       Map<String, Object> obj = yaml.load(in);
       this.pluginVersion = (String) obj.get("api-version");
     } catch (IOException e) {
-      this.log(0, "failed to read api-version version from %s: %s".formatted(file.getPath(), e));
+      this.log(
+          0,
+          "failed to read api-version version from %s: %s"
+              .formatted(CheckUtils.getRelativeFilename(file), e));
     }
 
     if (this.pluginVersion == null) {
-      this.log(0, "failed to find api-version in %s".formatted(file.getPath()));
+      this.log(
+          0, "failed to find api-version in %s".formatted(CheckUtils.getRelativeFilename(file)));
     }
 
     this.checkVersions();

@@ -2,6 +2,7 @@ package au.com.glob.checks;
 
 import com.puppycrawl.tools.checkstyle.api.DetailAST;
 import com.puppycrawl.tools.checkstyle.api.TokenTypes;
+import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.stream.Stream;
@@ -12,8 +13,8 @@ import org.jspecify.annotations.Nullable;
 public class CheckUtils {
   private CheckUtils() {}
 
-  static String getRelativeFilename(String filename) {
-    Path absolutePath = Paths.get(filename);
+  static String getRelativeFilename(File file) {
+    Path absolutePath = Paths.get(file.getAbsolutePath());
     Path current = absolutePath.getParent();
     while (current != null) {
       if (current.resolve("build.gradle.kts").toFile().exists()) {
@@ -24,11 +25,19 @@ public class CheckUtils {
     return absolutePath.getFileName().toString();
   }
 
-  static boolean isRelativeTo(String filename, String relativePath) {
+  static String getRelativeFilename(String filename) {
+    return getRelativeFilename(new File(filename));
+  }
+
+  static boolean isRelativeTo(File file, String relativePath) {
     if (!relativePath.endsWith("/")) {
       relativePath = "%s/".formatted(relativePath);
     }
-    return getRelativeFilename(filename).startsWith(relativePath);
+    return getRelativeFilename(file).startsWith(relativePath);
+  }
+
+  static boolean isRelativeTo(String filename, String relativePath) {
+    return isRelativeTo(new File(filename), relativePath);
   }
 
   static @Nullable String getName(DetailAST classDef) {
