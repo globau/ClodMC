@@ -1,3 +1,4 @@
 #!/bin/sh
+# manages vendoring of third-party dependencies into the codebase
 cd "`git rev-parse --show-toplevel`"
 sh scripts/run-build-script Vendor $*

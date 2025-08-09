@@ -1,3 +1,4 @@
 #!/bin/sh
+# outputs the java home for the correct version (as per gradle.properties)
 cd "`git rev-parse --show-toplevel`"
 sh scripts/run-build-script JavaHome $*

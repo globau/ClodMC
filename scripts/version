@@ -1,3 +1,4 @@
 #!/bin/sh
+# outputs a version number derived from the latest commit's timestamp
 cd "`git rev-parse --show-toplevel`"
 sh scripts/run-build-script Version $*

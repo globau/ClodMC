@@ -10,7 +10,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
-/** outputs the java home */
+/** outputs the java home for the correct version (as per gradle.properties) */
 @SuppressWarnings("NullabilityAnnotations")
 public class JavaHome {
   private static final String JDK_VERSION = readJavaVersion();
