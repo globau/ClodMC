@@ -1,12 +1,19 @@
 package au.com.glob.checks;
 
+import com.github.jezza.Toml;
+import com.github.jezza.TomlTable;
 import com.puppycrawl.tools.checkstyle.api.AbstractFileSetCheck;
 import com.puppycrawl.tools.checkstyle.api.FileText;
 import java.io.File;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.Reader;
+import java.nio.file.Files;
+import java.util.Map;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
+import org.yaml.snakeyaml.Yaml;
 
 /**
  * checkstyle check that ensures paper-api version in libs.versions.toml matches api-version in
@@ -14,10 +21,6 @@ import org.jspecify.annotations.Nullable;
  */
 @NullMarked
 public class ApiVersionCheck extends AbstractFileSetCheck {
-
-  private static final Pattern BUILD_PATTERN = Pattern.compile("^paper\\s*=\\s*\"([^-]+)");
-  private static final Pattern PLUGIN_PATTERN = Pattern.compile("api-version:(.+)$");
-
   private @Nullable String buildVersion;
   private @Nullable String pluginVersion;
 
@@ -25,20 +28,19 @@ public class ApiVersionCheck extends AbstractFileSetCheck {
   protected void processFiltered(File file, FileText fileText) {
     String relativeFilename = CheckUtils.getRelativeFilename(file.getAbsolutePath());
     if (relativeFilename.equals("gradle/libs.versions.toml")) {
-      this.processBuildFile(file, fileText);
+      this.processVersionsFile(file);
     } else if (relativeFilename.equals("src/main/resources/paper-plugin.yml")) {
       this.processPluginFile(file, fileText);
     }
   }
 
-  private void processBuildFile(File file, FileText fileText) {
-    for (int i = 0; i < fileText.size(); i++) {
-      String line = fileText.get(i);
-      Matcher matcher = BUILD_PATTERN.matcher(line);
-      if (matcher.find()) {
-        this.buildVersion = matcher.group(1);
-        break;
-      }
+  private void processVersionsFile(File file) {
+    try (Reader reader = Files.newBufferedReader(file.toPath())) {
+      TomlTable table = Toml.from(reader);
+      this.buildVersion = ((String) table.get("versions.paper"));
+      this.buildVersion = this.buildVersion.replaceFirst("-R0\\.1-SNAPSHOT$", "");
+    } catch (IOException e) {
+      this.log(0, "failed to read paper-api version from %s: %s".formatted(file.getPath(), e));
     }
 
     if (this.buildVersion == null) {
@@ -49,13 +51,12 @@ public class ApiVersionCheck extends AbstractFileSetCheck {
   }
 
   private void processPluginFile(File file, FileText fileText) {
-    for (int i = 0; i < fileText.size(); i++) {
-      String line = fileText.get(i);
-      Matcher matcher = PLUGIN_PATTERN.matcher(line);
-      if (matcher.find()) {
-        this.pluginVersion = matcher.group(1).strip().replaceAll("[\"']", "");
-        break;
-      }
+    Yaml yaml = new Yaml();
+    try (InputStream in = new FileInputStream(file)) {
+      Map<String, Object> obj = yaml.load(in);
+      this.pluginVersion = (String) obj.get("api-version");
+    } catch (IOException e) {
+      this.log(0, "failed to read api-version version from %s: %s".formatted(file.getPath(), e));
     }
 
     if (this.pluginVersion == null) {

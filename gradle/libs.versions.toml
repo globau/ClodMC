@@ -8,7 +8,9 @@ google-java-format = "1.28.0" # https://github.com/google/google-java-format/rel
 griefprevention = "16.18.4" # https://github.com/GriefPrevention/GriefPrevention/releases
 jspecify = "1.0.0" # https://jspecify.dev/docs/using/
 paper = "1.21.8-R0.1-SNAPSHOT" # https://jd.papermc.io/paper/
+snakeyaml = "2.4" # https://central.sonatype.com/artifact/org.yaml/snakeyaml
 spotless = "7.2.1" #  https://plugins.gradle.org/plugin/com.diffplug.spotless
+toml = "1.2" # https://central.sonatype.com/artifact/com.github.jezza/toml
 
 [plugins]
 errorprone = { id = "net.ltgt.errorprone", version.ref = "errorprone-gradle" }
@@ -16,8 +18,11 @@ spotless = { id = "com.diffplug.spotless", version.ref = "spotless" }
 
 [libraries]
 bluemap-api = { module = "de.bluecolored.bluemap:BlueMapAPI", version.ref = "bluemap" }
+checkstyle = { module = "com.puppycrawl.tools:checkstyle", version.ref = "checkstyle" }
 errorprone = { module = "com.google.errorprone:error_prone_core", version.ref = "errorprone" }
 geyser-api = { module = "org.geysermc.geyser:api", version.ref = "geyser" }
 griefprevention = { module = "com.github.GriefPrevention:GriefPrevention", version.ref = "griefprevention" }
 jspecify = { module = "org.jspecify:jspecify", version.ref = "jspecify" }
 paper-api = { module = "io.papermc.paper:paper-api", version.ref = "paper" }
+snakeyaml = { module = "org.yaml:snakeyaml", version.ref = "snakeyaml" }
+toml = { module = "com.github.jezza:toml", version.ref = "toml" }

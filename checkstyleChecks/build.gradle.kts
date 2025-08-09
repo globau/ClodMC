@@ -3,8 +3,10 @@ plugins { id("java-library") }
 repositories { mavenCentral() }
 
 dependencies {
-    implementation("com.puppycrawl.tools:checkstyle:10.26.1")
-    api("org.jspecify:jspecify:1.0.0")
+    implementation(libs.checkstyle)
+    implementation(libs.snakeyaml)
+    implementation(libs.toml)
+    api(libs.jspecify)
 }
 
 java { toolchain { languageVersion.set(JavaLanguageVersion.of(21)) } }
