@@ -81,6 +81,16 @@ public class AFK implements Listener, Module {
         });
   }
 
+  // returns if the specified player is afk or not
+  public boolean isAway(Player player) {
+    for (PlayerState playerState : this.playerStates.values()) {
+      if (playerState.player == player) {
+        return playerState.isAway;
+      }
+    }
+    return false;
+  }
+
   // events
 
   // handle player activity to update afk status

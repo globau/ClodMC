@@ -61,6 +61,16 @@ public final class ClodMC extends JavaPlugin implements Listener {
     }
   }
 
+  // return the instance of the specified module
+  public static <T extends Module> T getModule(Class<T> moduleClass) {
+    T module = instance.moduleRegistry.get(moduleClass);
+    if (module == null) {
+      throw new RuntimeException(
+          "%s is not a registered module".formatted(moduleClass.getSimpleName()));
+    }
+    return module;
+  }
+
   // signal server startup to production harness
   @EventHandler
   public void onServerLoad(ServerLoadEvent event) {
