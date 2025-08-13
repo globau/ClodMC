@@ -144,7 +144,7 @@ public class BlueMapHeatMap extends Addon {
             ShapeMarker marker =
                 ShapeMarker.builder()
                     .shape(cheese.getShape(), world.getMaxHeight() + 2)
-                    .label(String.valueOf(chunkLists.get(i).size()))
+                    .label("")
                     .lineColor(colour)
                     .fillColor(colour)
                     .build();
