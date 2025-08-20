@@ -1,21 +1,26 @@
+# compile and run src/main/java/au/com/glob/clodmc/build scripts
+
+set -e
+SRC="src/main/java/au/com/glob/clodmc/build"
+OUT="build/classes/au/com/glob/clodmc/build"
+
 CLASS=$1
-if [ -z "$CLASS" ]; then
+shift
+[ -z "$CLASS" ] && exit 1
+if [ ! -e "$SRC/$CLASS.java" ]; then
+    echo "file not found: $SRC/$CLASS.java"
     exit 1
 fi
-shift
-
-SRC="src/main/java/au/com/glob/clodmc/build/$CLASS.java"
-OUT="build/classes/au/com/glob/clodmc/build"
 CLS="$OUT/$CLASS.class"
 
-if [ ! -e "$SRC" ]; then
-    echo "file not found: $SRC"
-    exit 1
+
+if [ ! -f "$CLS" ]; then
+    BUILD=true
+else
+    NEWER=$(find "$SRC" -name "*.java" -newer "$CLS" 2>/dev/null | head -n 1)
+    [ -n "$NEWER" ] && BUILD=true
 fi
 
 mkdir -p "$OUT"
-if [ ! -f "$CLS" ] || [ "$SRC" -nt "$CLS" ]; then
-    javac -d build/classes "$SRC"
-fi
-
+[ -n "$BUILD" ] && javac -cp src/main/java -d build/classes "$SRC/$CLASS.java"
 java -cp build/classes au.com.glob.clodmc.build.$CLASS $*
