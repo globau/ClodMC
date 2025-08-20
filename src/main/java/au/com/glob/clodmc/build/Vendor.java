@@ -207,6 +207,13 @@ public class Vendor {
           // format after patches
           Util.run("./gradlew", ":spotlessApply");
 
+          // check for changes
+          String modified = Util.capture("git", "status", "--porcelain", dstPath.toString());
+          if (modified.trim().isEmpty()) {
+            System.out.printf("%n%s is already up to date%n", lib.name);
+            return;
+          }
+
           // update commit .properties
           String sha = Util.capture(srcPath, "git", "rev-parse", "HEAD").trim();
           lib.commit = sha;
@@ -215,7 +222,7 @@ public class Vendor {
           // test build
           Util.run("make", "clean", "test", "build");
 
-          System.out.printf("\n%s updated to %s%n", lib.name, sha);
+          System.out.printf("%n%s updated to %s%n", lib.name, sha);
         });
   }
 }
