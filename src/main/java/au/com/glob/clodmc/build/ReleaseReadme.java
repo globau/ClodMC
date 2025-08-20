@@ -55,7 +55,7 @@ public class ReleaseReadme {
                 break;
               }
               if (!tag.equals(lastTag)) {
-                System.out.printf("\n#### %s%n", tag);
+                System.out.printf("%n#### %s%n", tag);
                 lastTag = tag;
               }
             }
