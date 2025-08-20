@@ -5,7 +5,6 @@ import java.nio.charset.StandardCharsets;
 import java.time.Instant;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
-import java.time.format.DateTimeFormatter;
 
 /** outputs a version number derived from the latest commit's timestamp */
 @SuppressWarnings("NullabilityAnnotations")
@@ -32,8 +31,10 @@ public class Version {
       OffsetDateTime datetime = Instant.ofEpochSecond(timestamp).atOffset(ZoneOffset.ofHours(8));
 
       // format as version string (date+hh:mm pretending to be a version string)
-      String version = datetime.format(DateTimeFormatter.ofPattern("yy.MMdd.HHmm"));
-      System.out.println(version);
+      int year = datetime.getYear() % 100;
+      int monthDay = datetime.getMonthValue() * 100 + datetime.getDayOfMonth();
+      int hourMin = datetime.getHour() * 100 + datetime.getMinute();
+      System.out.printf("%d.%d.%d%n", year, monthDay, hourMin);
     } catch (Exception e) {
       System.err.println(e.getMessage());
       System.exit(1);
