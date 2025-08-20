@@ -41,7 +41,7 @@ public class FastLeafDecay implements Listener, Module {
   }
 
   // schedule neighbouring leaves to decay after a delay
-  private void onBlockRemove(final Block oldBlock, long delay) {
+  public void onBlockRemove(final Block oldBlock, long delay) {
     // block broken must be either a log of leaf
     if (!Tag.LOGS.isTagged(oldBlock.getType()) && !Tag.LEAVES.isTagged(oldBlock.getType())) {
       return;
