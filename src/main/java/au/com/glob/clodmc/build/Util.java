@@ -56,7 +56,12 @@ public class Util {
   }
 
   // join collection values into sorted comma-separated string
+  static String join(Collection<String> values, String delimiter) {
+    return values.stream().sorted().collect(Collectors.joining(delimiter));
+  }
+
+  // join collection values into sorted comma-separated string
   static String join(Collection<String> values) {
-    return values.stream().sorted().collect(Collectors.joining(","));
+    return join(values, ",");
   }
 }

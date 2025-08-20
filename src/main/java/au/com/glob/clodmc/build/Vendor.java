@@ -12,7 +12,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Properties;
 import java.util.Set;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /** manages vendoring of third-party dependencies into the codebase */
@@ -66,25 +65,28 @@ public class Vendor {
   public static void main(String[] args) {
     Util.mainWrapper(
         () -> {
-          if (args.length != 1) {
-            throw new RuntimeException("usage: scripts/vendor <library-name>");
-          }
-          String libraryName = args[0];
-
           // find vendored prop files
-          List<Path> paths;
+          List<Path> librayPaths;
           try (Stream<Path> stream = Files.list(VENDORED_PATH)) {
-            paths =
+            librayPaths =
                 stream
                     .filter(Files::isDirectory)
                     .filter((Path p) -> Files.exists(p.resolve(VENDORED_FILENAME)))
                     .sorted(Comparator.naturalOrder())
                     .toList();
           }
+          List<String> libraryNames =
+              librayPaths.stream().map((p) -> p.getFileName().toString()).toList();
+
+          if (args.length != 1) {
+            throw new RuntimeException(
+                "usage: scripts/vendor { %s }".formatted(Util.join(libraryNames, " | ")));
+          }
+          String libraryName = args[0];
 
           // load
           LibraryConfig lib = null;
-          for (Path path : paths) {
+          for (Path path : librayPaths) {
             if (path.getFileName().toString().equals(libraryName)) {
               lib = new LibraryConfig(path);
               break;
@@ -93,11 +95,7 @@ public class Vendor {
           if (lib == null) {
             throw new RuntimeException(
                 "unknown library: %s\navailable libraries: %s"
-                    .formatted(
-                        libraryName,
-                        paths.stream()
-                            .map((p) -> p.getFileName().toString())
-                            .collect(Collectors.joining(" "))));
+                    .formatted(libraryName, Util.join(libraryNames, " ")));
           }
 
           // vendor
