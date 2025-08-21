@@ -118,7 +118,7 @@ public class Gateways implements Module, Listener {
     Bukkit.addRecipe(AnchorItem.getRecipe());
 
     CommandBuilder.build("gateways")
-        .description("List gateway in use")
+        .description("List gateways in use")
         .executor(
             (EitherCommandSender sender) -> {
               if (this.instances.isEmpty()) {
