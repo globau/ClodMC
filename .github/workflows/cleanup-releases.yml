@@ -16,7 +16,7 @@ permissions:
 jobs:
   cleanup:
     runs-on: ubuntu-latest
-    if: ${{ github.event_name == "workflow_dispatch" || github.event.workflow_run.conclusion == "success" }}
+    if: ${{ github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success' }}
     steps:
       - name: checkout
         uses: actions/checkout@v4
@@ -26,7 +26,7 @@ jobs:
       - name: cleanup old releases
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          DRY_RUN: ${{ github.event.inputs.dry_run || (github.event_name == "workflow_dispatch" && "true") || "false" }}
+          DRY_RUN: ${{ github.event.inputs.dry_run || (github.event_name == 'workflow_dispatch' && 'true') || 'false' }}
         run: |
           # list releases (beyond the first three)
           tags_to_delete=$(gh release list --limit 200 --json name,tagName,createdAt --template '{{range .}}{{.tagName}}{{"\n"}}{{end}}' | sed -n '4,$p')
