@@ -13,15 +13,14 @@ import org.jspecify.annotations.Nullable;
 /** tcp socket wrapper for command-response protocols like smtp */
 @NullMarked
 public class CommandServer implements Closeable {
-  private static final int SMTP_PORT = 25;
   private static final int SOCKET_TIMEOUT_MS = 5000;
 
   private final Socket socket;
   private final BufferedReader inStream;
   private final DataOutputStream outStream;
 
-  CommandServer(String hostname) throws IOException {
-    this.socket = new Socket(hostname, SMTP_PORT);
+  CommandServer(String hostname, int port) throws IOException {
+    this.socket = new Socket(hostname, port);
     this.socket.setSoTimeout(SOCKET_TIMEOUT_MS);
     this.inStream =
         new BufferedReader(

@@ -9,6 +9,7 @@ import org.jspecify.annotations.NullMarked;
 public class Mailer {
   private static final String ADMIN_ADDR = "clod@glob.au";
   private static final String HOSTNAME = "in1-smtp.messagingengine.com";
+  private static final int SMTP_PORT = 25;
   private static final String SENDER_NAME = "Clod-MC Minecraft Server";
   private static final String SENDER_ADDR = "clod@glob.au";
 
@@ -36,7 +37,7 @@ public class Mailer {
   // send email via smtp protocol
   public static void send(String recipient, String subject, String body) throws MailerException {
     try {
-      try (CommandServer smtp = new CommandServer(HOSTNAME)) {
+      try (CommandServer smtp = new CommandServer(HOSTNAME, SMTP_PORT)) {
         smtp.waitFor("220 ");
         smtp.sendAndWait("HELO glob.au", "250 ");
         smtp.sendAndWait("MAIL FROM: %s".formatted(SENDER_ADDR), "250 ");
