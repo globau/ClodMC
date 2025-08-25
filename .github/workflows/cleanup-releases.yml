@@ -1,0 +1,46 @@
+name: cleanup old releases
+on:
+  workflow_run:
+    workflows: ["release"]
+    types:
+      - completed
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'dry run (do not actually delete releases)'
+        required: false
+        default: 'true'
+        type: boolean
+permissions:
+  contents: write
+jobs:
+  cleanup:
+    runs-on: ubuntu-latest
+    if: ${{ github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success' }}
+    steps:
+      - name: cleanup old releases
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          DRY_RUN: ${{ github.event.inputs.dry_run || (github.event_name == 'workflow_dispatch' && 'true') || 'false' }}
+        run: |
+          # list releases (beyond the first three)
+          tags_to_delete=$(gh release list --limit 200 --json name,tagName,createdAt --template '{{range .}}{{.tagName}}{{"\n"}}{{end}}' | sed -n '4,$p')
+
+          if [ -z "$tags_to_delete" ]; then
+            echo "no old releases to delete"
+          else
+            echo "releases to delete:"
+            echo "$tags_to_delete"
+
+            # delete each release
+            echo "$tags_to_delete" | while read tag; do
+              if [ -n "$tag" ]; then
+                if [ "$DRY_RUN" != "true" ]; then
+                  echo "deleting release $tag"
+                  gh release delete "$tag"
+                else
+                  echo "dry run: would delete release $tag"
+                fi
+              fi
+            done
+          fi
