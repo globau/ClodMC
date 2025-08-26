@@ -1,9 +1,7 @@
 package au.com.glob.clodmc.modules.interactions.gateways;
 
 import au.com.glob.clodmc.util.Schedule;
-import com.destroystokyo.paper.ParticleBuilder;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import org.bukkit.Bukkit;
@@ -196,9 +194,8 @@ public class Visuals {
   }
 
   // spawns particle effects for java edition players
-  private void spawnJavaParticles(Collection<Player> players, boolean isActive) {
+  private void spawnJavaParticles(List<Player> players, boolean isActive) {
     World world = this.blockLocation.getWorld();
-    Location particleLoc = new Location(world, 0, 0, 0);
 
     double baseRotation =
         world.getGameTime() * (isActive ? EFFECT_SPEED_ACTIVE : EFFECT_SPEED_INACTIVE);
@@ -211,42 +208,52 @@ public class Visuals {
     int ringsPerSection = bottomRingColours.length;
 
     for (int ring = 0; ring < ringsPerSection; ring++) {
-      double ringRotation = baseRotation + this.ringRotationOffsets[ring];
-      Color bottomSectionColour = bottomRingColours[ring];
-      Color topSectionColour = topRingColours[ring];
-
       for (int i = 0; i < EFFECT_PARTICLES; i++) {
-        double angle = ringRotation + (i * ANGLE_STEP);
+        double angle = baseRotation + this.ringRotationOffsets[ring] + (i * ANGLE_STEP);
         double cosAngle = Math.cos(angle);
         double sinAngle = Math.sin(angle);
 
-        particleLoc.setX(this.bottomLocation.getX() + EFFECT_RADIUS * cosAngle);
-        particleLoc.setY(bottomRingY[ring]);
-        particleLoc.setZ(this.bottomLocation.getZ() + EFFECT_RADIUS * sinAngle);
-        new ParticleBuilder(Particle.TRAIL)
-            .data(
-                new Particle.Trail(
-                    particleLoc,
-                    bottomSectionColour,
-                    isActive ? EFFECT_PARTICLES_TRAIL_ACTIVE : EFFECT_PARTICLES_TRAIL_INACTIVE))
-            .location(particleLoc)
-            .receivers(players)
-            .count(1)
-            .spawn();
+        // bottom particle
+        double bottomX = this.bottomLocation.getX() + EFFECT_RADIUS * cosAngle;
+        double bottomZ = this.bottomLocation.getZ() + EFFECT_RADIUS * sinAngle;
+        world.spawnParticle(
+            Particle.TRAIL,
+            players,
+            null,
+            bottomX,
+            bottomRingY[ring],
+            bottomZ,
+            1,
+            0.0,
+            0.0,
+            0.0,
+            1,
+            new Particle.Trail(
+                new Location(world, bottomX, bottomRingY[ring], bottomZ),
+                bottomRingColours[ring],
+                isActive ? EFFECT_PARTICLES_TRAIL_ACTIVE : EFFECT_PARTICLES_TRAIL_INACTIVE),
+            false);
 
-        particleLoc.setX(this.topLocation.getX() + EFFECT_RADIUS * cosAngle);
-        particleLoc.setY(topRingY[ring]);
-        particleLoc.setZ(this.topLocation.getZ() + EFFECT_RADIUS * sinAngle);
-        new ParticleBuilder(Particle.TRAIL)
-            .data(
-                new Particle.Trail(
-                    particleLoc,
-                    topSectionColour,
-                    isActive ? EFFECT_PARTICLES_TRAIL_ACTIVE : EFFECT_PARTICLES_TRAIL_INACTIVE))
-            .location(particleLoc)
-            .receivers(players)
-            .count(1)
-            .spawn();
+        // top particle
+        double topX = this.topLocation.getX() + EFFECT_RADIUS * cosAngle;
+        double topZ = this.topLocation.getZ() + EFFECT_RADIUS * sinAngle;
+        world.spawnParticle(
+            Particle.TRAIL,
+            players,
+            null,
+            topX,
+            topRingY[ring],
+            topZ,
+            1,
+            0.0,
+            0.0,
+            0.0,
+            1,
+            new Particle.Trail(
+                new Location(world, topX, topRingY[ring], topZ),
+                topRingColours[ring],
+                isActive ? EFFECT_PARTICLES_TRAIL_ACTIVE : EFFECT_PARTICLES_TRAIL_INACTIVE),
+            false);
       }
     }
   }
@@ -277,18 +284,35 @@ public class Visuals {
 
   // spawns simplified particle effects for bedrock players
   private void spawnBedrockParticles(List<Player> players) {
-    new ParticleBuilder(Particle.DUST)
-        .data(new Particle.DustOptions(this.topColour.color, 1))
-        .location(this.topLocation)
-        .receivers(players)
-        .count(1)
-        .spawn();
-    new ParticleBuilder(Particle.DUST)
-        .data(new Particle.DustOptions(this.bottomColour.color, 1))
-        .location(this.bottomLocation)
-        .receivers(players)
-        .count(1)
-        .spawn();
+    World world = this.blockLocation.getWorld();
+    world.spawnParticle(
+        Particle.DUST,
+        players,
+        null,
+        this.topLocation.getX(),
+        this.topLocation.getY(),
+        this.topLocation.getZ(),
+        1,
+        0.0,
+        0.0,
+        0.0,
+        1,
+        new Particle.DustOptions(this.topColour.color, 1),
+        false);
+    world.spawnParticle(
+        Particle.DUST,
+        players,
+        null,
+        this.bottomLocation.getX(),
+        this.bottomLocation.getY(),
+        this.bottomLocation.getZ(),
+        1,
+        0.0,
+        0.0,
+        0.0,
+        1,
+        new Particle.DustOptions(this.bottomColour.color, 1),
+        false);
   }
 
   // updates light blocks above anchor for visual effects
