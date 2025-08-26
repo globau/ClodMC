@@ -48,7 +48,7 @@ public class BlueMapGateways extends Addon {
         Objects.requireNonNull(svgStream).transferTo(out);
       }
     } catch (IOException e) {
-      Logger.error("failed to create %s: %s".formatted(gatewayFilePath, e));
+      Logger.error("failed to create %s".formatted(gatewayFilePath), e);
     }
 
     // create markers

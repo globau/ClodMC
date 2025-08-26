@@ -71,7 +71,7 @@ public class InventorySort implements Listener, Module {
         orderedMaterials.add(parts[1]);
       }
     } catch (IOException e) {
-      Logger.error("inventory_order.txt: %s".formatted(e.getMessage()));
+      Logger.exception(e);
       return;
     }
 

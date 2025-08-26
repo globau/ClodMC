@@ -46,7 +46,7 @@ class DB {
     try {
       this.conn.close();
     } catch (SQLException e) {
-      Logger.error("heatmap.sqlite#close: %s".formatted(e.getMessage()));
+      Logger.exception(e);
     }
   }
 
@@ -58,7 +58,7 @@ class DB {
       this.insertStatement.setInt(3, chunk.getZ());
       this.insertStatement.execute();
     } catch (SQLException e) {
-      Logger.error("heatmap.sqlite#incChunk: %s".formatted(e.getMessage()));
+      Logger.exception(e);
     }
   }
 
@@ -69,7 +69,7 @@ class DB {
       s.setString(1, world.getName());
       return s.executeQuery().getInt(1);
     } catch (SQLException e) {
-      Logger.error("heatmap.sqlite#getMaxCount: %s".formatted(e.getMessage()));
+      Logger.exception(e);
       return 0;
     }
   }
@@ -82,7 +82,7 @@ class DB {
       s.setInt(2, minCount);
       return s.executeQuery().getInt(1);
     } catch (SQLException e) {
-      Logger.error("heatmap.sqlite#getMarkerCount: %s".formatted(e.getMessage()));
+      Logger.exception(e);
       return 0;
     }
   }

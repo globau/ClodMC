@@ -201,7 +201,7 @@ public class WelcomeBook implements Module, Listener {
       File jsonFile = new File(ClodMC.instance.getDataFolder(), "welcome-book.json");
       Files.writeString(jsonFile.toPath(), prettyJson);
     } catch (IOException e) {
-      Logger.error("failed to write welcome-book.json: %s".formatted(e));
+      Logger.error("failed to write welcome-book.json", e);
     }
   }
 

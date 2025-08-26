@@ -56,7 +56,7 @@ public class HeatMapRows implements Iterable<HeatMapRow>, AutoCloseable {
         }
       };
     } catch (SQLException e) {
-      Logger.error("heatmaprows: %s".formatted(e.getMessage()));
+      Logger.exception(e);
       throw new NoSuchElementException();
     }
   }

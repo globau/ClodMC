@@ -22,6 +22,10 @@ public final class Logger {
     ClodMC.instance.getLogger().severe(message);
   }
 
+  public static void error(String message, Exception e) {
+    ClodMC.instance.getLogger().severe("%s: %s".formatted(message, e.getMessage()));
+  }
+
   // log exception with stack trace
   public static void exception(Throwable exception) {
     ClodMC.instance

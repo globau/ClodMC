@@ -185,7 +185,7 @@ public class Gateways implements Module, Listener {
         BlueMapGateways.instance.update();
       }
     } catch (IOException e) {
-      Logger.error("%s: save failed: %s".formatted(this.configFile, e));
+      Logger.error("failed to write %s".formatted(this.configFile), e);
     }
   }
 
