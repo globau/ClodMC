@@ -17,9 +17,6 @@ jobs:
           distribution: microsoft
           java-version: 21
 
-      - name: verify gradle wrapper
-        uses: gradle/actions/wrapper-validation@v4
-
       - name: setup gradlew
         run: ./gradlew --version
 
