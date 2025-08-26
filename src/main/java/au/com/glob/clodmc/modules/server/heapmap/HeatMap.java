@@ -19,8 +19,6 @@ public class HeatMap implements Module, Listener {
   private @Nullable AFK afk;
 
   public HeatMap() {
-    DB db = new DB();
-
     Schedule.periodically(
         20 * 60,
         20 * 60,
@@ -39,9 +37,12 @@ public class HeatMap implements Module, Listener {
             }
           }
 
-          for (Chunk chunk : inhabitedChunks) {
-            db.incChunk(chunk);
-          }
+          Schedule.asynchronously(
+              () -> {
+                try (DB db = new DB()) {
+                  db.incChunks(inhabitedChunks);
+                }
+              });
         });
   }
 

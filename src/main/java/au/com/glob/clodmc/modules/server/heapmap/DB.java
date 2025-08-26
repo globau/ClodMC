@@ -7,13 +7,14 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.Set;
 import org.bukkit.Chunk;
 import org.bukkit.World;
 import org.jspecify.annotations.NullMarked;
 
 /** sqlite database for storing heatmap chunk visit counts */
 @NullMarked
-class DB {
+class DB implements AutoCloseable {
   final Connection conn;
   private final PreparedStatement insertStatement;
 
@@ -42,7 +43,8 @@ class DB {
   }
 
   // close database connection
-  void close() {
+  @Override
+  public void close() {
     try {
       this.conn.close();
     } catch (SQLException e) {
@@ -50,15 +52,30 @@ class DB {
     }
   }
 
-  // increment visit count for a chunk
-  void incChunk(Chunk chunk) {
+  // increment visit count for a list of chunks
+  void incChunks(Set<Chunk> chunks) {
     try {
-      this.insertStatement.setString(1, chunk.getWorld().getName());
-      this.insertStatement.setInt(2, chunk.getX());
-      this.insertStatement.setInt(3, chunk.getZ());
-      this.insertStatement.execute();
+      this.conn.setAutoCommit(false);
+      for (Chunk chunk : chunks) {
+        this.insertStatement.setString(1, chunk.getWorld().getName());
+        this.insertStatement.setInt(2, chunk.getX());
+        this.insertStatement.setInt(3, chunk.getZ());
+        this.insertStatement.execute();
+      }
+      this.conn.commit();
     } catch (SQLException e) {
+      try {
+        this.conn.rollback();
+      } catch (SQLException rollbackException) {
+        Logger.exception(rollbackException);
+      }
       Logger.exception(e);
+    } finally {
+      try {
+        this.conn.setAutoCommit(true);
+      } catch (SQLException e) {
+        Logger.exception(e);
+      }
     }
   }
 

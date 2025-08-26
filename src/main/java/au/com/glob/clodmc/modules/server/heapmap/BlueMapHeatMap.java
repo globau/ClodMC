@@ -69,8 +69,7 @@ public class BlueMapHeatMap extends Addon {
 
   // build heatmap markers for all worlds
   private void buildMarkers() {
-    DB db = new DB();
-    try {
+    try (DB db = new DB()) {
       for (World world : Bukkit.getWorlds()) {
         // determine min and max heatmap values
         int minCount = 0;
@@ -165,8 +164,6 @@ public class BlueMapHeatMap extends Addon {
                   }
                 });
       }
-    } finally {
-      db.close();
     }
   }
 }
