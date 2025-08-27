@@ -1,5 +1,7 @@
 package au.com.glob.clodmc.modules.player.offlinemessages;
 
+import au.com.glob.clodmc.annotations.Audience;
+import au.com.glob.clodmc.annotations.Doc;
 import au.com.glob.clodmc.datafile.PlayerDataFile;
 import au.com.glob.clodmc.datafile.PlayerDataFiles;
 import au.com.glob.clodmc.modules.Module;
@@ -21,7 +23,10 @@ import org.bukkit.event.server.ServerCommandEvent;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
-/** Queue and deliver whispers sent to offline players */
+@Doc(
+    audience = Audience.PLAYER,
+    title = "Offline Messages",
+    description = "Queue and deliver whispers sent to offline players")
 @NullMarked
 public class OfflineMessages implements Module, Listener {
   final Pattern msgPattern = Pattern.compile("^/?msg\\s+(\\S+)\\s+(.+)$");

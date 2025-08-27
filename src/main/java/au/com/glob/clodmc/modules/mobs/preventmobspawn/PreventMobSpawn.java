@@ -1,5 +1,7 @@
 package au.com.glob.clodmc.modules.mobs.preventmobspawn;
 
+import au.com.glob.clodmc.annotations.Audience;
+import au.com.glob.clodmc.annotations.Doc;
 import au.com.glob.clodmc.modules.Module;
 import java.util.ArrayList;
 import java.util.List;
@@ -12,7 +14,10 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.jspecify.annotations.NullMarked;
 
-/** Prevents enemy mobs from spawning within areas claimed by admin (eg. spawn island) */
+@Doc(
+    audience = Audience.SERVER,
+    title = "Prevent Mob Spawning",
+    description = "Prevents enemy mobs from spawning within areas claimed by admin")
 @NullMarked
 public class PreventMobSpawn implements Listener, Module {
   private final List<AdminClaim> adminClaims = new ArrayList<>(1);

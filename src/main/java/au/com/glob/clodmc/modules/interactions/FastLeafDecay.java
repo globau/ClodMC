@@ -2,6 +2,8 @@ package au.com.glob.clodmc.modules.interactions;
 
 // from https://github.com/StarTux/FastLeafDecay
 
+import au.com.glob.clodmc.annotations.Audience;
+import au.com.glob.clodmc.annotations.Doc;
 import au.com.glob.clodmc.modules.Module;
 import au.com.glob.clodmc.util.Schedule;
 import java.util.ArrayList;
@@ -22,7 +24,10 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.LeavesDecayEvent;
 import org.jspecify.annotations.NullMarked;
 
-/** Nearly instant decaying of leafs */
+@Doc(
+    audience = Audience.SERVER,
+    title = "Fast Leaf Decay",
+    description = "Nearly instant decaying of leafs")
 @NullMarked
 public class FastLeafDecay implements Listener, Module {
   private final List<Block> scheduledBlocks = new ArrayList<>();

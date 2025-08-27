@@ -1,5 +1,7 @@
 package au.com.glob.clodmc.modules.mobs;
 
+import au.com.glob.clodmc.annotations.Audience;
+import au.com.glob.clodmc.annotations.Doc;
 import au.com.glob.clodmc.modules.Module;
 import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
@@ -9,7 +11,10 @@ import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.inventory.ItemStack;
 import org.jspecify.annotations.NullMarked;
 
-/** Improve the drop rates of selected entities */
+@Doc(
+    audience = Audience.SERVER,
+    title = "Better Drops",
+    description = "Improve the drop rates of selected entities")
 @NullMarked
 public class BetterDrops implements Listener, Module {
   @SuppressWarnings("MissingCasesInEnumSwitch")

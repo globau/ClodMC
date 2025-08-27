@@ -1,5 +1,7 @@
 package au.com.glob.clodmc.modules.interactions.namedstorage;
 
+import au.com.glob.clodmc.annotations.Audience;
+import au.com.glob.clodmc.annotations.Doc;
 import au.com.glob.clodmc.modules.Module;
 import au.com.glob.clodmc.util.Players;
 import au.com.glob.clodmc.util.StringUtil;
@@ -17,7 +19,10 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.jspecify.annotations.NullMarked;
 
-/** If a container has been named in an anvil, show that name when looking at it */
+@Doc(
+    audience = Audience.PLAYER,
+    title = "Named Storage",
+    description = "If a container has been named in an anvil, show that name when looking at it")
 @NullMarked
 public class NamedStorage implements Module, Listener {
   private final WeakHashMap<UUID, ViewDirection> lastView = new WeakHashMap<>();

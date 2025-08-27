@@ -1,5 +1,7 @@
 package au.com.glob.clodmc.modules.inventory.deeppockets;
 
+import au.com.glob.clodmc.annotations.Audience;
+import au.com.glob.clodmc.annotations.Doc;
 import au.com.glob.clodmc.modules.Module;
 import au.com.glob.clodmc.util.Players;
 import io.papermc.paper.event.player.PlayerPickItemEvent;
@@ -26,7 +28,10 @@ import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.BlockStateMeta;
 import org.jspecify.annotations.NullMarked;
 
-/** When picking blocks, look inside held shulker boxes too */
+@Doc(
+    audience = Audience.PLAYER,
+    title = "Deep Pockets",
+    description = "When picking blocks, look inside held shulker boxes too")
 @NullMarked
 public class DeepPockets implements Module, Listener {
 

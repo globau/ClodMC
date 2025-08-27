@@ -1,0 +1,4 @@
+#!/bin/sh
+# generate README.md
+cd "`git rev-parse --show-toplevel`"
+sh scripts/run-build-script GenerateReadme $*

@@ -1,5 +1,7 @@
 package au.com.glob.clodmc.modules.crafting;
 
+import au.com.glob.clodmc.annotations.Audience;
+import au.com.glob.clodmc.annotations.Doc;
 import au.com.glob.clodmc.modules.Module;
 import au.com.glob.clodmc.util.Schedule;
 import org.bukkit.Bukkit;
@@ -16,7 +18,10 @@ import org.bukkit.inventory.RecipeChoice;
 import org.bukkit.inventory.ShapelessRecipe;
 import org.jspecify.annotations.NullMarked;
 
-/** Adds a crafting recipe for Spore Blossoms */
+@Doc(
+    audience = Audience.PLAYER,
+    title = "Spore Blossom Crafting",
+    description = "Adds a crafting recipe for Spore Blossoms")
 @NullMarked
 public class SporeBlossom implements Module, Listener {
   private final ShapelessRecipe recipe;

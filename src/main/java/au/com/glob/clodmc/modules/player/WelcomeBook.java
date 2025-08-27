@@ -1,6 +1,8 @@
 package au.com.glob.clodmc.modules.player;
 
 import au.com.glob.clodmc.ClodMC;
+import au.com.glob.clodmc.annotations.Audience;
+import au.com.glob.clodmc.annotations.Doc;
 import au.com.glob.clodmc.command.CommandBuilder;
 import au.com.glob.clodmc.command.CommandUsageError;
 import au.com.glob.clodmc.command.EitherCommandSender;
@@ -34,7 +36,10 @@ import org.bukkit.inventory.meta.BookMeta;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
-/** Give players the Welcome Book, with rules and customisations */
+@Doc(
+    audience = Audience.ADMIN,
+    title = "Welcome Book",
+    description = "Give players the Welcome Book")
 @NullMarked
 public class WelcomeBook implements Module, Listener {
   private static final String TITLE = "Welcome to Clod-MC";

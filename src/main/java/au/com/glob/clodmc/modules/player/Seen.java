@@ -1,5 +1,7 @@
 package au.com.glob.clodmc.modules.player;
 
+import au.com.glob.clodmc.annotations.Audience;
+import au.com.glob.clodmc.annotations.Doc;
 import au.com.glob.clodmc.command.CommandBuilder;
 import au.com.glob.clodmc.command.CommandUsageError;
 import au.com.glob.clodmc.command.EitherCommandSender;
@@ -21,7 +23,10 @@ import org.bukkit.event.Listener;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
-/** /seen command; show how long it's been since the server last saw the player */
+@Doc(
+    audience = Audience.PLAYER,
+    title = "Seen",
+    description = "Show how long it's been since the server last saw the player")
 @NullMarked
 public class Seen implements Module, Listener {
   public Seen() {

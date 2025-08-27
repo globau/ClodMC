@@ -1,5 +1,7 @@
 package au.com.glob.clodmc.modules.player;
 
+import au.com.glob.clodmc.annotations.Audience;
+import au.com.glob.clodmc.annotations.Doc;
 import au.com.glob.clodmc.datafile.PlayerDataFile;
 import au.com.glob.clodmc.datafile.PlayerDataFiles;
 import au.com.glob.clodmc.modules.Module;
@@ -12,7 +14,10 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.jspecify.annotations.NullMarked;
 
-/** Collect data about players */
+@Doc(
+    audience = Audience.SERVER,
+    title = "Player Tracker",
+    description = "Collect data about players (eg. login/logout times)")
 @NullMarked
 public class PlayerTracker implements Module, Listener {
   // update player data on join

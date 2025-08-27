@@ -1,5 +1,7 @@
 package au.com.glob.clodmc.modules.server;
 
+import au.com.glob.clodmc.annotations.Audience;
+import au.com.glob.clodmc.annotations.Doc;
 import au.com.glob.clodmc.modules.Module;
 import au.com.glob.clodmc.util.StringUtil;
 import java.net.URI;
@@ -10,7 +12,10 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerLinksSendEvent;
 import org.jspecify.annotations.NullMarked;
 
-/** Set server links in MC client pause screen */
+@Doc(
+    audience = Audience.ADMIN,
+    title = "Server Links",
+    description = "Set server links in Minecraft client pause screen")
 @SuppressWarnings("UnstableApiUsage")
 @NullMarked
 public class ClodServerLinks implements Module, Listener {

@@ -1,5 +1,7 @@
 package au.com.glob.clodmc.modules.player;
 
+import au.com.glob.clodmc.annotations.Audience;
+import au.com.glob.clodmc.annotations.Doc;
 import au.com.glob.clodmc.modules.Module;
 import au.com.glob.clodmc.util.Chat;
 import au.com.glob.clodmc.util.Schedule;
@@ -11,7 +13,11 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.jspecify.annotations.NullMarked;
 
-/** Collect startup alerts and send them to the first operator that logs in */
+@Doc(
+    audience = Audience.ADMIN,
+    title = "Operator Alerts",
+    description = "Collect startup alerts and send them to the first operator that logs in",
+    hidden = true)
 @NullMarked
 public class OpAlerts implements Module, Listener {
   @SuppressWarnings({"NotNullFieldNotInitialized", "NullAway.Init"})

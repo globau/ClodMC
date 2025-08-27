@@ -1,6 +1,8 @@
 package au.com.glob.clodmc.modules.inventory;
 
 import au.com.glob.clodmc.ClodMC;
+import au.com.glob.clodmc.annotations.Audience;
+import au.com.glob.clodmc.annotations.Doc;
 import au.com.glob.clodmc.command.CommandBuilder;
 import au.com.glob.clodmc.modules.Module;
 import au.com.glob.clodmc.util.Chat;
@@ -18,7 +20,10 @@ import org.bukkit.inventory.ItemStack;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
-/** Swap between player and admin inventories */
+@Doc(
+    audience = Audience.ADMIN,
+    title = "Admin Inventory",
+    description = "Swap between player and admin inventories")
 @NullMarked
 public class AdminInv implements Module, Listener {
   private final Map<UUID, @Nullable ItemStack[]> playerInventories = new HashMap<>();

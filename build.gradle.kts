@@ -1,5 +1,6 @@
 import net.ltgt.gradle.errorprone.errorprone
 import java.io.BufferedReader
+import java.io.ByteArrayOutputStream
 
 plugins {
     id("java-library")
@@ -137,6 +138,16 @@ tasks.processResources {
     filteringCharset = "UTF-8"
     filesMatching("paper-plugin.yml") { expand(props) }
 }
+
+tasks.register<Exec>("generateReadme") {
+    description = "Generate README.md using scripts/generate-readme"
+    group = "documentation"
+    commandLine("./scripts/generate-readme")
+    standardOutput = ByteArrayOutputStream()
+    doLast { file("README.md").writeText(standardOutput.toString()) }
+}
+
+tasks.named("build") { finalizedBy("generateReadme") }
 
 if (file("local.gradle.kts").exists()) {
     apply(from = "local.gradle.kts")

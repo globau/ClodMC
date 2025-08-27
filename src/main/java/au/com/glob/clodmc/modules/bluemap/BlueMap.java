@@ -1,5 +1,7 @@
 package au.com.glob.clodmc.modules.bluemap;
 
+import au.com.glob.clodmc.annotations.Audience;
+import au.com.glob.clodmc.annotations.Doc;
 import au.com.glob.clodmc.modules.Module;
 import au.com.glob.clodmc.modules.interactions.gateways.BlueMapGateways;
 import au.com.glob.clodmc.modules.server.heapmap.BlueMapHeatMap;
@@ -13,7 +15,10 @@ import org.bukkit.event.Listener;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
-/** Bridge between ClodMC modules and BlueMap */
+@Doc(
+    audience = Audience.SERVER,
+    title = "BlueMap Integration",
+    description = "Bridge between ClodMC modules and BlueMap")
 @NullMarked
 public class BlueMap implements Module, Listener {
   private final List<Addon> addons = new ArrayList<>(4);

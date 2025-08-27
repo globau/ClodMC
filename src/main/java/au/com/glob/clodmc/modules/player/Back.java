@@ -1,5 +1,7 @@
 package au.com.glob.clodmc.modules.player;
 
+import au.com.glob.clodmc.annotations.Audience;
+import au.com.glob.clodmc.annotations.Doc;
 import au.com.glob.clodmc.command.CommandBuilder;
 import au.com.glob.clodmc.command.CommandError;
 import au.com.glob.clodmc.datafile.PlayerDataFile;
@@ -14,7 +16,10 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.jspecify.annotations.NullMarked;
 
-/** /back command to return to where you last teleported from */
+@Doc(
+    audience = Audience.PLAYER,
+    title = "Back",
+    description = "/back command to return to where you last teleported from")
 @NullMarked
 public class Back implements Module, Listener {
   public Back() {

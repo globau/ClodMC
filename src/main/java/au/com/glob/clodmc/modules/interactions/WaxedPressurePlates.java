@@ -1,6 +1,8 @@
 package au.com.glob.clodmc.modules.interactions;
 
 import au.com.glob.clodmc.ClodMC;
+import au.com.glob.clodmc.annotations.Audience;
+import au.com.glob.clodmc.annotations.Doc;
 import au.com.glob.clodmc.modules.Module;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -22,7 +24,10 @@ import org.bukkit.persistence.PersistentDataType;
 import org.jspecify.annotations.NullMarked;
 import vendored.com.jeff_media.customblockdata.CustomBlockData;
 
-/** Allow waxing a pressure plate to prevent it activating */
+@Doc(
+    audience = Audience.PLAYER,
+    title = "Waxed Pressure Plates",
+    description = "Allow waxing a pressure plate to prevent it activating")
 @NullMarked
 public class WaxedPressurePlates implements Module, Listener {
   private static final NamespacedKey WAXED_KEY = new NamespacedKey("clod-mc", "waxed");

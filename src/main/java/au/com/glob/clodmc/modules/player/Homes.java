@@ -1,5 +1,7 @@
 package au.com.glob.clodmc.modules.player;
 
+import au.com.glob.clodmc.annotations.Audience;
+import au.com.glob.clodmc.annotations.Doc;
 import au.com.glob.clodmc.command.CommandBuilder;
 import au.com.glob.clodmc.command.CommandError;
 import au.com.glob.clodmc.datafile.PlayerDataFile;
@@ -19,7 +21,10 @@ import org.bukkit.event.Listener;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
-/** Set limited number of named teleport locations */
+@Doc(
+    audience = Audience.PLAYER,
+    title = "Homes",
+    description = "Set limited number of named teleport locations")
 @NullMarked
 public class Homes implements Listener, Module {
   private static final int MAX_HOMES = 3;

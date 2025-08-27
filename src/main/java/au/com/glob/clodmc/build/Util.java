@@ -1,9 +1,17 @@
 package au.com.glob.clodmc.build;
 
+import com.sun.source.tree.AnnotationTree;
+import com.sun.source.tree.AssignmentTree;
+import com.sun.source.tree.ExpressionTree;
+import com.sun.source.tree.IdentifierTree;
+import com.sun.source.tree.LiteralTree;
+import com.sun.source.tree.MemberSelectTree;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @SuppressWarnings("NullabilityAnnotations")
@@ -63,5 +71,26 @@ public class Util {
   // join collection values into sorted comma-separated string
   static String join(Collection<String> values) {
     return join(values, ",");
+  }
+
+  // extract field values from annotation tree into map
+  static Map<String, Object> extractAnnotationFields(AnnotationTree annotation) {
+    Map<String, Object> fields = new HashMap<>();
+    for (ExpressionTree argument : annotation.getArguments()) {
+      if (argument instanceof AssignmentTree assignment) {
+        String fieldName = assignment.getVariable().toString();
+        Object value;
+        ExpressionTree expression = assignment.getExpression();
+        value =
+            switch (expression) {
+              case LiteralTree literalTree -> literalTree.getValue();
+              case MemberSelectTree memberSelect -> memberSelect.getIdentifier().toString();
+              case IdentifierTree identifierTree -> identifierTree.getName().toString();
+              default -> expression.toString();
+            };
+        fields.put(fieldName, value);
+      }
+    }
+    return fields;
   }
 }

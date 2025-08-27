@@ -1,5 +1,7 @@
 package au.com.glob.clodmc.modules.server;
 
+import au.com.glob.clodmc.annotations.Audience;
+import au.com.glob.clodmc.annotations.Doc;
 import au.com.glob.clodmc.command.CommandBuilder;
 import au.com.glob.clodmc.command.EitherCommandSender;
 import au.com.glob.clodmc.modules.Module;
@@ -8,7 +10,10 @@ import java.util.StringJoiner;
 import org.bukkit.Bukkit;
 import org.jspecify.annotations.NullMarked;
 
-/** /tps for all players */
+@Doc(
+    audience = Audience.PLAYER,
+    title = "Server Status",
+    description = "Add simple server status/health command")
 @NullMarked
 public class ServerStatus implements Module {
   public ServerStatus() {

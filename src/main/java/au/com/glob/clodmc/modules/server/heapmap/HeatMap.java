@@ -1,6 +1,8 @@
 package au.com.glob.clodmc.modules.server.heapmap;
 
 import au.com.glob.clodmc.ClodMC;
+import au.com.glob.clodmc.annotations.Audience;
+import au.com.glob.clodmc.annotations.Doc;
 import au.com.glob.clodmc.modules.Module;
 import au.com.glob.clodmc.modules.player.afk.AFK;
 import au.com.glob.clodmc.util.Schedule;
@@ -13,7 +15,10 @@ import org.bukkit.event.Listener;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
-/** Track minutes a chunk is occupied by at least one player */
+@Doc(
+    audience = Audience.SERVER,
+    title = "Heat Map",
+    description = "Track minutes a chunk is occupied by at least one player")
 @NullMarked
 public class HeatMap implements Module, Listener {
   private @Nullable AFK afk;

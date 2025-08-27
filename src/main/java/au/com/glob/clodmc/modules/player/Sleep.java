@@ -1,6 +1,8 @@
 package au.com.glob.clodmc.modules.player;
 
 import au.com.glob.clodmc.ClodMC;
+import au.com.glob.clodmc.annotations.Audience;
+import au.com.glob.clodmc.annotations.Doc;
 import au.com.glob.clodmc.modules.Module;
 import au.com.glob.clodmc.util.Chat;
 import au.com.glob.clodmc.util.StringUtil;
@@ -16,7 +18,10 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.world.TimeSkipEvent;
 import org.jspecify.annotations.NullMarked;
 
-/** Tell players who slept and skipped the night */
+@Doc(
+    audience = Audience.PLAYER,
+    title = "Sleep",
+    description = "Tell players who slept and skipped the night")
 @NullMarked
 public class Sleep implements Listener, Module {
   @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)

@@ -1,5 +1,7 @@
 package au.com.glob.clodmc.modules.player.afk;
 
+import au.com.glob.clodmc.annotations.Audience;
+import au.com.glob.clodmc.annotations.Doc;
 import au.com.glob.clodmc.command.CommandBuilder;
 import au.com.glob.clodmc.modules.Module;
 import au.com.glob.clodmc.util.Schedule;
@@ -24,7 +26,10 @@ import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
 import org.jspecify.annotations.NullMarked;
 
-/** Automatic and manual afk; players are visibly afk in the tab-list */
+@Doc(
+    audience = Audience.PLAYER,
+    title = "Away From Keyboard",
+    description = "Automatic and manual AFK; players are visibly AFK in the tab-list")
 @NullMarked
 public class AFK implements Listener, Module {
   private static final int IDLE_TIME = 300; // seconds

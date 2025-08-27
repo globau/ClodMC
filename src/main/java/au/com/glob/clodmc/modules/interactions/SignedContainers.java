@@ -1,5 +1,7 @@
 package au.com.glob.clodmc.modules.interactions;
 
+import au.com.glob.clodmc.annotations.Audience;
+import au.com.glob.clodmc.annotations.Doc;
 import au.com.glob.clodmc.modules.Module;
 import org.bukkit.Location;
 import org.bukkit.Particle;
@@ -20,7 +22,10 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.jspecify.annotations.NullMarked;
 
-/** When right-clicking on a waxed sign attached to a chest, open the chest instead of noop */
+@Doc(
+    audience = Audience.PLAYER,
+    title = "Click-Through Waxed Signs",
+    description = "When right-clicking on a waxed sign attached to a chest, open the chest")
 @NullMarked
 public class SignedContainers implements Module, Listener {
   @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)

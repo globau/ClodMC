@@ -1,6 +1,8 @@
 package au.com.glob.clodmc.modules.interactions;
 
 import au.com.glob.clodmc.ClodMC;
+import au.com.glob.clodmc.annotations.Audience;
+import au.com.glob.clodmc.annotations.Doc;
 import au.com.glob.clodmc.modules.BootstrapContextHelper;
 import au.com.glob.clodmc.modules.Module;
 import au.com.glob.clodmc.util.Schedule;
@@ -41,7 +43,10 @@ import org.bukkit.inventory.meta.Damageable;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
-/** Mine connected blocks with one action */
+@Doc(
+    audience = Audience.PLAYER,
+    title = "VeinMiner Enchantment",
+    description = "Mine connected blocks with one action when shift+mining")
 @NullMarked
 public class VeinMiner implements Module, Listener {
   public static final String REQUIRED_PLUGIN = "GriefPrevention";

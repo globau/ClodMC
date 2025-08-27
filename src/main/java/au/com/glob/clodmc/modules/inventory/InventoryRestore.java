@@ -1,6 +1,8 @@
 package au.com.glob.clodmc.modules.inventory;
 
 import au.com.glob.clodmc.ClodMC;
+import au.com.glob.clodmc.annotations.Audience;
+import au.com.glob.clodmc.annotations.Doc;
 import au.com.glob.clodmc.command.CommandBuilder;
 import au.com.glob.clodmc.command.CommandError;
 import au.com.glob.clodmc.command.CommandUsageError;
@@ -38,7 +40,10 @@ import org.bukkit.inventory.PlayerInventory;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
-/** Automatic inventory backup, allowing OPs to /restore_inv */
+@Doc(
+    audience = Audience.ADMIN,
+    title = "Inventory Restore",
+    description = "Automatic inventory backup, allowing admins to restore")
 @NullMarked
 public class InventoryRestore implements Module, Listener {
   private static final DateTimeFormatter SHORT_DATETIME_FORMAT =

@@ -1,5 +1,7 @@
 package au.com.glob.clodmc.modules.interactions;
 
+import au.com.glob.clodmc.annotations.Audience;
+import au.com.glob.clodmc.annotations.Doc;
 import au.com.glob.clodmc.modules.Module;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -21,9 +23,11 @@ import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import org.jspecify.annotations.NullMarked;
 
-/**
- * Allow waxing an item-frame to prevent item rotation/removal and allow click-through to containers
- */
+@Doc(
+    audience = Audience.PLAYER,
+    title = "Waxed Item Frames",
+    description =
+        "Allow waxing an item-frame to prevent item rotation/removal and allow chest click-through")
 @NullMarked
 public class WaxedItemFrames implements Module, Listener {
   private static final NamespacedKey WAXED_KEY = new NamespacedKey("clod-mc", "waxed");

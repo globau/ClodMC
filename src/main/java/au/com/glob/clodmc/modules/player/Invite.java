@@ -1,6 +1,8 @@
 package au.com.glob.clodmc.modules.player;
 
 import au.com.glob.clodmc.ClodMC;
+import au.com.glob.clodmc.annotations.Audience;
+import au.com.glob.clodmc.annotations.Doc;
 import au.com.glob.clodmc.command.CommandBuilder;
 import au.com.glob.clodmc.command.CommandError;
 import au.com.glob.clodmc.command.CommandUsageError;
@@ -34,7 +36,10 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
-/** Allows players with enough playtime on the server to add others to the whitelist */
+@Doc(
+    audience = Audience.PLAYER,
+    title = "Invite",
+    description = "Allows players with enough playtime to add others to the whitelist")
 @NullMarked
 public class Invite implements Module {
   private static final int MIN_PLAY_TIME = 240; // minutes

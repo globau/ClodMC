@@ -1,6 +1,8 @@
 package au.com.glob.clodmc.modules.inventory.inventorysort;
 
 import au.com.glob.clodmc.ClodMC;
+import au.com.glob.clodmc.annotations.Audience;
+import au.com.glob.clodmc.annotations.Doc;
 import au.com.glob.clodmc.modules.Module;
 import au.com.glob.clodmc.modules.player.OpAlerts;
 import au.com.glob.clodmc.util.Logger;
@@ -30,7 +32,10 @@ import org.bukkit.inventory.ItemStack;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
-/** Sort containers by shift+right-clicking in the inventory screen */
+@Doc(
+    audience = Audience.PLAYER,
+    title = "Inventory Sorting",
+    description = "Sort containers by shift+right-clicking in the inventory screen")
 @NullMarked
 public class InventorySort implements Listener, Module {
   static final Map<String, Integer> materialOrder = new HashMap<>(1477);

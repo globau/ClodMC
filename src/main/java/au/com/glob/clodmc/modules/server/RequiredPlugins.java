@@ -1,5 +1,7 @@
 package au.com.glob.clodmc.modules.server;
 
+import au.com.glob.clodmc.annotations.Audience;
+import au.com.glob.clodmc.annotations.Doc;
 import au.com.glob.clodmc.modules.Module;
 import au.com.glob.clodmc.modules.player.OpAlerts;
 import au.com.glob.clodmc.util.Logger;
@@ -17,7 +19,10 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.server.ServerLoadEvent;
 import org.jspecify.annotations.NullMarked;
 
-/** Don't allow non-op players to connect unless all required plugins are loaded */
+@Doc(
+    audience = Audience.ADMIN,
+    title = "Required Plugins",
+    description = "Don't allow non-op players to connect unless all required plugins are loaded")
 @NullMarked
 public class RequiredPlugins implements Listener, Module {
   private static final List<String> REQUIRED = List.of("GriefPrevention");

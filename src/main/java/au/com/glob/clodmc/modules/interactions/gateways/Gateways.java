@@ -1,6 +1,8 @@
 package au.com.glob.clodmc.modules.interactions.gateways;
 
 import au.com.glob.clodmc.ClodMC;
+import au.com.glob.clodmc.annotations.Audience;
+import au.com.glob.clodmc.annotations.Doc;
 import au.com.glob.clodmc.command.CommandBuilder;
 import au.com.glob.clodmc.command.EitherCommandSender;
 import au.com.glob.clodmc.datafile.PlayerDataFile;
@@ -90,6 +92,10 @@ import org.jspecify.annotations.Nullable;
  * <p>Data persistence managed through gateways.yml with automatic saving and loading. Includes
  * admin commands for listing active gateways and debugging.
  */
+@Doc(
+    audience = Audience.PLAYER,
+    title = "Point-to-Point Gateways",
+    description = "Player-built point-to-point teleportation system using coloured wool anchors")
 @NullMarked
 public class Gateways implements Module, Listener {
   @SuppressWarnings({"NotNullFieldNotInitialized", "NullAway.Init"})

@@ -1,5 +1,7 @@
 package au.com.glob.clodmc.modules.player;
 
+import au.com.glob.clodmc.annotations.Audience;
+import au.com.glob.clodmc.annotations.Doc;
 import au.com.glob.clodmc.modules.Module;
 import au.com.glob.clodmc.util.Logger;
 import au.com.glob.clodmc.util.StringUtil;
@@ -10,7 +12,10 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.jspecify.annotations.NullMarked;
 
-/** log player death location */
+@Doc(
+    audience = Audience.ADMIN,
+    title = "Death Log",
+    description = "Log player's death location in server log")
 @NullMarked
 public class DeathLog implements Module, Listener {
   @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)

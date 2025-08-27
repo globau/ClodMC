@@ -1,5 +1,7 @@
 package au.com.glob.clodmc.modules.player;
 
+import au.com.glob.clodmc.annotations.Audience;
+import au.com.glob.clodmc.annotations.Doc;
 import au.com.glob.clodmc.command.CommandBuilder;
 import au.com.glob.clodmc.command.CommandError;
 import au.com.glob.clodmc.command.CommandUsageError;
@@ -15,7 +17,11 @@ import org.bukkit.entity.Player;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
-/** /gamemode that doesn't announce */
+@Doc(
+    audience = Audience.ADMIN,
+    title = "Custom /gamemode Command",
+    description = "/gamemode that doesn't announce",
+    hidden = true)
 @NullMarked
 public class GameMode implements Module {
   private static final List<String> MODES = List.of("survival", "creative", "spectator");
