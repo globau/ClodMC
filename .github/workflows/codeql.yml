@@ -1,4 +1,4 @@
-name: "CodeQL Advanced"
+name: codeql
 
 on:
   push:
@@ -7,8 +7,8 @@ on:
     - cron: '35 10 * * 0'
 
 jobs:
-  analyze:
-    name: Analyze (${{ matrix.language }})
+  analyse:
+    name: Analyse (${{ matrix.language }})
     runs-on: ubuntu-latest
 
     permissions:
@@ -41,7 +41,7 @@ jobs:
       if: matrix.build-mode == 'manual'
       run: ./gradlew --version
 
-    - name: Initialize CodeQL
+    - name: Initialise CodeQL
       uses: github/codeql-action/init@v3
       with:
         languages: ${{ matrix.language }}
