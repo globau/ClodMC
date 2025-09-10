@@ -8,6 +8,7 @@ import au.com.glob.clodmc.command.EitherCommandSender;
 import au.com.glob.clodmc.datafile.PlayerDataFile;
 import au.com.glob.clodmc.datafile.PlayerDataFiles;
 import au.com.glob.clodmc.modules.Module;
+import au.com.glob.clodmc.util.ActionBar;
 import au.com.glob.clodmc.util.BlockPos;
 import au.com.glob.clodmc.util.Chat;
 import au.com.glob.clodmc.util.ConfigUtil;
@@ -366,7 +367,7 @@ public class Gateways implements Module, Listener {
     if (targetBlock != null) {
       AnchorBlock anchorBlock = this.instances.get(BlockPos.of(targetBlock.getLocation()));
       if (anchorBlock != null) {
-        player.sendActionBar(StringUtil.asComponent(anchorBlock.getInformation()));
+        ActionBar.plain(player, anchorBlock.getInformation());
       }
     }
 
@@ -404,7 +405,7 @@ public class Gateways implements Module, Listener {
 
       AnchorBlock connectedTo = anchorBlock.connectedTo;
       if (connectedTo == null) {
-        player.sendActionBar(StringUtil.asComponent(anchorBlock.getInformation()));
+        ActionBar.plain(player, anchorBlock.getInformation());
         return;
       }
 

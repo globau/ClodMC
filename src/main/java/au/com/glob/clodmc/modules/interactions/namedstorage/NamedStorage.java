@@ -3,8 +3,8 @@ package au.com.glob.clodmc.modules.interactions.namedstorage;
 import au.com.glob.clodmc.annotations.Audience;
 import au.com.glob.clodmc.annotations.Doc;
 import au.com.glob.clodmc.modules.Module;
+import au.com.glob.clodmc.util.ActionBar;
 import au.com.glob.clodmc.util.Players;
-import au.com.glob.clodmc.util.StringUtil;
 import java.util.UUID;
 import java.util.WeakHashMap;
 import net.kyori.adventure.text.Component;
@@ -50,8 +50,7 @@ public class NamedStorage implements Module, Listener {
     if (blockState instanceof Container container) {
       Component name = container.customName();
       if (name != null) {
-        player.sendActionBar(
-            StringUtil.asComponent("<yellow>%s".formatted(StringUtil.asText(name))));
+        ActionBar.info(player, name);
       }
     }
   }
