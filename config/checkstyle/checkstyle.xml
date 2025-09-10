@@ -388,6 +388,7 @@
         </module>
         <!-- glob: custom checks -->
         <module name="au.com.glob.checks.EventHandlerNamingCheck" />
+        <module name="au.com.glob.checks.MainMethodOrderCheck" />
         <module name="au.com.glob.checks.ModuleDocAnnotationCheck" />
         <module name="au.com.glob.checks.MonitorEventHandlerCheck" />
         <module name="au.com.glob.checks.NoDirectMessageSendingCheck" />

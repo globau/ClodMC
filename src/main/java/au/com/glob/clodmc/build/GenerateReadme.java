@@ -25,35 +25,6 @@ import javax.tools.ToolProvider;
 /** generates README.md from @Doc annotations and src/doc/README.md */
 @SuppressWarnings("NullabilityAnnotations")
 public class GenerateReadme {
-  public static void main(String[] args) {
-    Util.mainWrapper(
-        () -> {
-          List<Path> javaFiles = new ArrayList<>();
-          try (Stream<Path> paths = Files.walk(Path.of("src/main/java"))) {
-            paths.filter((Path path) -> path.toString().endsWith(".java")).forEach(javaFiles::add);
-          }
-
-          JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
-          try (StandardJavaFileManager fileManager =
-              compiler.getStandardFileManager(null, null, null)) {
-
-            Iterable<? extends JavaFileObject> compilationUnits =
-                fileManager.getJavaFileObjectsFromPaths(javaFiles);
-
-            JavacTask javacTask =
-                (JavacTask) compiler.getTask(null, fileManager, null, null, null, compilationUnits);
-            Iterable<? extends CompilationUnitTree> trees = javacTask.parse();
-
-            DocAnnotationScanner scanner = new DocAnnotationScanner();
-            for (CompilationUnitTree tree : trees) {
-              scanner.scan(tree, null);
-            }
-
-            generateReadme(scanner.getModules());
-          }
-        });
-  }
-
   private static void generateReadme(List<ModuleInfo> modules) throws Exception {
     String template = Files.readString(Path.of("src/doc/README.md"));
 
@@ -261,4 +232,33 @@ public class GenerateReadme {
       boolean hidden,
       List<CommandInfo> commands,
       String sourcePath) {}
+
+  public static void main(String[] args) {
+    Util.mainWrapper(
+        () -> {
+          List<Path> javaFiles = new ArrayList<>();
+          try (Stream<Path> paths = Files.walk(Path.of("src/main/java"))) {
+            paths.filter((Path path) -> path.toString().endsWith(".java")).forEach(javaFiles::add);
+          }
+
+          JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
+          try (StandardJavaFileManager fileManager =
+              compiler.getStandardFileManager(null, null, null)) {
+
+            Iterable<? extends JavaFileObject> compilationUnits =
+                fileManager.getJavaFileObjectsFromPaths(javaFiles);
+
+            JavacTask javacTask =
+                (JavacTask) compiler.getTask(null, fileManager, null, null, null, compilationUnits);
+            Iterable<? extends CompilationUnitTree> trees = javacTask.parse();
+
+            DocAnnotationScanner scanner = new DocAnnotationScanner();
+            for (CompilationUnitTree tree : trees) {
+              scanner.scan(tree, null);
+            }
+
+            generateReadme(scanner.getModules());
+          }
+        });
+  }
 }
