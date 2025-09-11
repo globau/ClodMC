@@ -93,15 +93,13 @@ public class BlueMapHeatMap extends Addon {
         }
 
         // read chunks, grouped by colour
-        try (HeatMapRows heatMapRows = new HeatMapRows(db, world, minCount)) {
-          for (HeatMapRow row : heatMapRows) {
-            int index =
-                (int)
-                    Math.floor(
-                        (COLOURS.length - 1) * Math.log(row.count + 1) / Math.log(maxCount + 1));
-            chunkLists.get(index).add(new Vector2i(row.x, row.z));
+        try {
+          for (HeatMapChunk chunk : db.getChunks(world, minCount)) {
+            int index = chunk.index(COLOURS.length, maxCount);
+            chunkLists.get(index).add(new Vector2i(chunk.x, chunk.z));
           }
         } catch (SQLException e) {
+          Logger.exception(e);
           continue;
         }
 

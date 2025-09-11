@@ -6,7 +6,10 @@ import java.io.File;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 import org.bukkit.Chunk;
 import org.bukkit.World;
@@ -15,7 +18,7 @@ import org.jspecify.annotations.NullMarked;
 /** sqlite database for storing heatmap chunk visit counts */
 @NullMarked
 class DB implements AutoCloseable {
-  final Connection conn;
+  private final Connection conn;
   private final PreparedStatement insertStatement;
 
   DB() {
@@ -32,10 +35,9 @@ class DB implements AutoCloseable {
       this.insertStatement =
           this.conn.prepareStatement(
               """
-              INSERT INTO heatmap(world,x,z,count)
-              VALUES(?,?,?,1)
-              ON CONFLICT(world,x,z)
-                DO UPDATE SET count=count+1
+              INSERT INTO heatmap(world, x, z, count)
+              VALUES(?, ?, ?, 1)
+              ON CONFLICT(world, x, z) DO UPDATE SET count = count + 1
               """);
     } catch (SQLException e) {
       throw new RuntimeException(e);
@@ -82,7 +84,12 @@ class DB implements AutoCloseable {
   // get highest visit count for any chunk in world
   int getMaxCount(World world) {
     try (PreparedStatement s =
-        this.conn.prepareStatement("SELECT MAX(`count`) FROM heatmap WHERE world = ?")) {
+        this.conn.prepareStatement(
+            """
+              SELECT MAX(`count`)
+              FROM heatmap
+              WHERE world = ?
+            """)) {
       s.setString(1, world.getName());
       return s.executeQuery().getInt(1);
     } catch (SQLException e) {
@@ -94,13 +101,41 @@ class DB implements AutoCloseable {
   // count chunks with at least minCount visits
   int getMarkerCount(World world, int minCount) {
     try (PreparedStatement s =
-        this.conn.prepareStatement("SELECT COUNT(*) FROM heatmap WHERE world = ? AND count >= ?")) {
+        this.conn.prepareStatement(
+            """
+              SELECT COUNT(*)
+              FROM heatmap
+              WHERE world = ? AND count >= ?
+            """)) {
       s.setString(1, world.getName());
       s.setInt(2, minCount);
       return s.executeQuery().getInt(1);
     } catch (SQLException e) {
       Logger.exception(e);
       return 0;
+    }
+  }
+
+  // return all heatmap rows for the given world with at least minCount
+  List<HeatMapChunk> getChunks(World world, int minCount) throws SQLException {
+    try (PreparedStatement s =
+        this.conn.prepareStatement(
+            """
+              SELECT world, x, z, count
+              FROM heatmap
+              WHERE world = ? AND count >= ?
+            """)) {
+      s.setString(1, world.getName());
+      s.setInt(2, minCount);
+      ResultSet rs = s.executeQuery();
+
+      List<HeatMapChunk> rows = new ArrayList<>();
+      while (rs.next()) {
+        rows.add(
+            new HeatMapChunk(
+                rs.getString("world"), rs.getInt("x"), rs.getInt("z"), rs.getInt("count")));
+      }
+      return rows;
     }
   }
 }

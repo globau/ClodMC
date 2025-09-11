@@ -6,17 +6,22 @@ import org.jspecify.annotations.Nullable;
 
 /** represents a chunk with its visit count from the heatmap database */
 @NullMarked
-public final class HeatMapRow {
+public final class HeatMapChunk {
   private final String world;
   final int x;
   final int z;
   final int count;
 
-  HeatMapRow(String world, int x, int z, int count) {
+  HeatMapChunk(String world, int x, int z, int count) {
     this.world = world;
     this.x = x;
     this.z = z;
     this.count = count;
+  }
+
+  int index(int coloursLength, double maxCount) {
+    return (int)
+        Math.floor((coloursLength - 1) * Math.log(this.count + 1) / Math.log(maxCount + 1));
   }
 
   @Override
@@ -27,7 +32,7 @@ public final class HeatMapRow {
     if (obj == null || obj.getClass() != this.getClass()) {
       return false;
     }
-    HeatMapRow that = (HeatMapRow) obj;
+    HeatMapChunk that = (HeatMapChunk) obj;
     return Objects.equals(this.world, that.world) && this.x == that.x && this.z == that.z;
   }
 
