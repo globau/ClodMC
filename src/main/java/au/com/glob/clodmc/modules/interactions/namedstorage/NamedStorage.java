@@ -29,26 +29,26 @@ public class NamedStorage implements Module, Listener {
   private static final float MIN_ROTATION_CHANGE = 3.0f;
 
   @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-  public void onPlayerMove(PlayerMoveEvent event) {
-    Player player = event.getPlayer();
-    Location to = event.getTo();
+  public void onPlayerMove(final PlayerMoveEvent event) {
+    final Player player = event.getPlayer();
+    final Location to = event.getTo();
 
     // only raytrace if the player's pitch and/or yaw has changed significantly
-    ViewDirection currentView = new ViewDirection(to.getYaw(), to.getPitch());
-    ViewDirection lastView = this.lastView.get(player.getUniqueId());
+    final ViewDirection currentView = new ViewDirection(to.getYaw(), to.getPitch());
+    final ViewDirection lastView = this.lastView.get(player.getUniqueId());
     if (lastView != null && currentView.distanceTo(lastView) < MIN_ROTATION_CHANGE) {
       return;
     }
     this.lastView.put(player.getUniqueId(), currentView);
 
-    Block block = player.getTargetBlockExact(Players.INTERACTION_RANGE);
+    final Block block = player.getTargetBlockExact(Players.INTERACTION_RANGE);
     if (block == null) {
       return;
     }
-    BlockState blockState = block.getState();
+    final BlockState blockState = block.getState();
 
-    if (blockState instanceof Container container) {
-      Component name = container.customName();
+    if (blockState instanceof final Container container) {
+      final Component name = container.customName();
       if (name != null) {
         ActionBar.info(player, name);
       }

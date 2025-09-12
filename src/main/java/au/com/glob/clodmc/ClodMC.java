@@ -19,7 +19,7 @@ import vendored.com.jeff_media.customblockdata.CustomBlockData;
 /** main plugin class that handles lifecycle and module coordination */
 @NullMarked
 public final class ClodMC extends JavaPlugin implements Listener {
-  @SuppressWarnings({"NotNullFieldNotInitialized", "NullAway.Init"})
+  @SuppressWarnings({"NotNullFieldNotInitialized", "NullAway.Init", "StaticNonFinalField"})
   public static ClodMC instance;
 
   private final ModuleRegistry moduleRegistry = new ModuleRegistry();
@@ -33,7 +33,7 @@ public final class ClodMC extends JavaPlugin implements Listener {
   // create data folder if needed
   @Override
   public void onLoad() {
-    File dataFolder = this.getDataFolder();
+    final File dataFolder = this.getDataFolder();
     if (!dataFolder.exists() && !dataFolder.mkdirs()) {
       Logger.warning("failed to create %s".formatted(dataFolder));
     }
@@ -50,10 +50,10 @@ public final class ClodMC extends JavaPlugin implements Listener {
     try {
       ConfigUtil.sanityCheckConfigs();
 
-      for (Module module : this.moduleRegistry) {
+      for (final Module module : this.moduleRegistry) {
         module.loadConfig();
       }
-    } catch (InvalidConfigException e) {
+    } catch (final InvalidConfigException e) {
       e.logErrors();
       // disable plugins to prevent firing onServerLoad and similar events
       Bukkit.getPluginManager().disablePlugins();
@@ -62,8 +62,8 @@ public final class ClodMC extends JavaPlugin implements Listener {
   }
 
   // return the instance of the specified module
-  public static <T extends Module> T getModule(Class<T> moduleClass) {
-    T module = instance.moduleRegistry.get(moduleClass);
+  public static <T extends Module> T getModule(final Class<T> moduleClass) {
+    final T module = instance.moduleRegistry.get(moduleClass);
     if (module == null) {
       throw new RuntimeException(
           "%s is not a registered module".formatted(moduleClass.getSimpleName()));
@@ -73,13 +73,13 @@ public final class ClodMC extends JavaPlugin implements Listener {
 
   // signal server startup to production harness
   @EventHandler
-  public void onServerLoad(ServerLoadEvent event) {
+  public void onServerLoad(final ServerLoadEvent event) {
     Logger.info("clod-mc started");
   }
 
   // update whitelist when player joins
   @EventHandler
-  public void onPlayerJoin(PlayerJoinEvent event) {
+  public void onPlayerJoin(final PlayerJoinEvent event) {
     Players.updateWhitelisted();
   }
 }

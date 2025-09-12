@@ -14,7 +14,7 @@ import org.jspecify.annotations.Nullable;
 
 /** HTTP client helpers */
 @NullMarked
-public class HttpClient {
+public final class HttpClient {
   private HttpClient() {}
 
   private static final String USER_AGENT = "glob.au/clod-mc";
@@ -24,19 +24,20 @@ public class HttpClient {
   private static final Gson gson = new Gson();
 
   // perform get request and parse json response
-  public static HttpJsonResponse getJSON(String urlString, Map<String, String> headers) {
+  public static HttpJsonResponse getJSON(
+      final String urlString, final Map<String, String> headers) {
     return readJsonResponse(request(urlString, headers));
   }
 
   // create and configure http connection
   private static HttpURLConnection request(
-      String urlString, @Nullable Map<String, String> headers) {
-    HttpURLConnection connection;
+      final String urlString, @Nullable final Map<String, String> headers) {
+    final HttpURLConnection connection;
 
     try {
-      URL url = URI.create(urlString).toURL();
+      final URL url = URI.create(urlString).toURL();
       connection = (HttpURLConnection) url.openConnection();
-    } catch (Exception exception) {
+    } catch (final Exception exception) {
       throw new RuntimeException("Failed to create connection", exception);
     }
 
@@ -47,11 +48,11 @@ public class HttpClient {
       connection.setConnectTimeout(CONNECT_TIMEOUT_MS);
       connection.setReadTimeout(READ_TIMEOUT_MS);
       if (headers != null) {
-        for (Map.Entry<String, String> entry : headers.entrySet()) {
+        for (final Map.Entry<String, String> entry : headers.entrySet()) {
           connection.setRequestProperty(entry.getKey(), entry.getValue());
         }
       }
-    } catch (Exception exception) {
+    } catch (final Exception exception) {
       throw new RuntimeException("Failed to create request", exception);
     }
 
@@ -59,25 +60,25 @@ public class HttpClient {
   }
 
   // read and parse json from http response
-  private static HttpJsonResponse readJsonResponse(HttpURLConnection connection) {
-    InputStreamReader streamReader = createReader(connection);
+  private static HttpJsonResponse readJsonResponse(final HttpURLConnection connection) {
+    final InputStreamReader streamReader = createReader(connection);
     if (streamReader == null) {
       return new HttpJsonResponse(null);
     }
     try (streamReader) {
-      JsonObject response = gson.fromJson(streamReader, JsonObject.class);
+      final JsonObject response = gson.fromJson(streamReader, JsonObject.class);
       return new HttpJsonResponse(response);
-    } catch (Exception exception) {
+    } catch (final Exception exception) {
       throw new RuntimeException("Failed to read response", exception);
     }
   }
 
   // create stream reader from connection input or error stream
-  private static @Nullable InputStreamReader createReader(HttpURLConnection connection) {
+  private static @Nullable InputStreamReader createReader(final HttpURLConnection connection) {
     InputStream stream;
     try {
       stream = connection.getInputStream();
-    } catch (Exception exception) {
+    } catch (final Exception exception) {
       stream = connection.getErrorStream();
     }
     if (stream != null) {

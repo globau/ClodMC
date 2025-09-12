@@ -32,7 +32,7 @@ public class NoInnerTypesCheck extends AbstractCheck {
   }
 
   @Override
-  public void visitToken(DetailAST ast) {
+  public void visitToken(final DetailAST ast) {
     DetailAST parent = ast.getParent();
     while (parent != null) {
       if (parent.getType() == TokenTypes.CLASS_DEF
@@ -41,8 +41,8 @@ public class NoInnerTypesCheck extends AbstractCheck {
           || parent.getType() == TokenTypes.RECORD_DEF
           || parent.getType() == TokenTypes.ANNOTATION_DEF) {
 
-        String typeName = CheckUtils.getTypeName(ast);
-        String typeKind = CheckUtils.getTypeKind(ast.getType());
+        final String typeName = CheckUtils.getTypeName(ast);
+        final String typeKind = CheckUtils.getTypeKind(ast.getType());
 
         this.log(
             ast,

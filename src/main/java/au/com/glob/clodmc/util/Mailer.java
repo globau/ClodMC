@@ -6,7 +6,7 @@ import org.jspecify.annotations.NullMarked;
 
 /** email helpers */
 @NullMarked
-public class Mailer {
+public final class Mailer {
   private static final String ADMIN_ADDR = "clod@glob.au";
   private static final String HOSTNAME = "in1-smtp.messagingengine.com";
   private static final int SMTP_PORT = 25;
@@ -16,17 +16,17 @@ public class Mailer {
   private Mailer() {}
 
   // send email to admin with subject as body
-  public static void emailAdmin(String subject) {
+  public static void emailAdmin(final String subject) {
     emailAdmin(subject, subject);
   }
 
   // send email to admin asynchronously
-  public static void emailAdmin(String subject, String body) {
+  public static void emailAdmin(final String subject, final String body) {
     Schedule.asynchronously(
         () -> {
           try {
             send(ADMIN_ADDR, subject, body);
-          } catch (MailerException e) {
+          } catch (final MailerException e) {
             if (e.getMessage() != null) {
               Logger.warning(e.getMessage());
             }
@@ -35,9 +35,10 @@ public class Mailer {
   }
 
   // send email via smtp protocol
-  public static void send(String recipient, String subject, String body) throws MailerException {
+  public static void send(final String recipient, final String subject, final String body)
+      throws MailerException {
     try {
-      try (CommandServer smtp = new CommandServer(HOSTNAME, SMTP_PORT)) {
+      try (final CommandServer smtp = new CommandServer(HOSTNAME, SMTP_PORT)) {
         smtp.waitFor("220 ");
         smtp.sendAndWait("HELO glob.au", "250 ");
         smtp.sendAndWait("MAIL FROM: %s".formatted(SENDER_ADDR), "250 ");
@@ -54,7 +55,7 @@ public class Mailer {
         smtp.sendAndWait(".", "250 ");
         smtp.sendAndWait("QUIT", "221 ");
       }
-    } catch (IOException e) {
+    } catch (final IOException e) {
       throw new MailerException(e.getMessage());
     }
   }

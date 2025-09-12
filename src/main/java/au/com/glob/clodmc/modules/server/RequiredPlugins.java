@@ -31,9 +31,9 @@ public class RequiredPlugins implements Listener, Module {
 
   // check for required plugins on server load
   @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-  public void onServerLoad(ServerLoadEvent event) {
-    StringJoiner missing = new StringJoiner(" ");
-    for (String name : REQUIRED) {
+  public void onServerLoad(final ServerLoadEvent event) {
+    final StringJoiner missing = new StringJoiner(" ");
+    for (final String name : REQUIRED) {
       if (!Bukkit.getPluginManager().isPluginEnabled(name)) {
         missing.add(name);
       }
@@ -41,7 +41,7 @@ public class RequiredPlugins implements Listener, Module {
 
     this.preventLogin = missing.length() > 0;
     if (this.preventLogin) {
-      String alert = "Missing required plugin(s): %s".formatted(missing);
+      final String alert = "Missing required plugin(s): %s".formatted(missing);
       OpAlerts.addAlert(alert);
       Logger.error("\n***\n*** %s\n***".formatted(alert));
     }
@@ -50,15 +50,15 @@ public class RequiredPlugins implements Listener, Module {
   // prevent non-op login if required plugins missing
   @SuppressWarnings("UnstableApiUsage")
   @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-  public void onPlayerConnectionValidateLogin(PlayerConnectionValidateLoginEvent event) {
+  public void onPlayerConnectionValidateLogin(final PlayerConnectionValidateLoginEvent event) {
     if (!this.preventLogin) {
       return;
     }
 
-    if (event.getConnection() instanceof PlayerConfigurationConnection connection) {
-      UUID uuid = connection.getProfile().getId();
+    if (event.getConnection() instanceof final PlayerConfigurationConnection connection) {
+      final UUID uuid = connection.getProfile().getId();
       if (uuid != null) {
-        OfflinePlayer player = Bukkit.getServer().getOfflinePlayer(uuid);
+        final OfflinePlayer player = Bukkit.getServer().getOfflinePlayer(uuid);
         if (!player.isOp()) {
           event.kickMessage(StringUtil.asComponent("A required plugin is not loaded"));
         }

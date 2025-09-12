@@ -15,24 +15,26 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @SuppressWarnings("NullabilityAnnotations")
-public class Util {
+public final class Util {
   // 'static main()' wrapper for standardised exception handling
-  static void mainWrapper(ThrowingRunnable runner) {
+  static void mainWrapper(final ThrowingRunnable runner) {
     try {
       runner.run();
-    } catch (Exception e) {
+    } catch (final Exception e) {
       System.err.println(e.getMessage());
       System.exit(1);
     }
   }
 
   // execute command in specified directory and return stdout output
-  static String capture(Path path, String... command) throws IOException, InterruptedException {
-    ProcessBuilder pb = new ProcessBuilder(command);
-    Process process = pb.start();
+  static String capture(final Path path, final String... command)
+      throws IOException, InterruptedException {
+    final ProcessBuilder pb = new ProcessBuilder(command);
+    final Process process = pb.start();
     pb.directory(path.toFile());
-    String output = new String(process.getInputStream().readAllBytes(), StandardCharsets.UTF_8);
-    int exitCode = process.waitFor();
+    final String output =
+        new String(process.getInputStream().readAllBytes(), StandardCharsets.UTF_8);
+    final int exitCode = process.waitFor();
     if (exitCode != 0) {
       throw new RuntimeException(
           new String(process.getErrorStream().readAllBytes(), StandardCharsets.UTF_8));
@@ -41,17 +43,18 @@ public class Util {
   }
 
   // execute command in current directory and return stdout output
-  static String capture(String... command) throws IOException, InterruptedException {
+  static String capture(final String... command) throws IOException, InterruptedException {
     return capture(Path.of(System.getProperty("user.dir")), command);
   }
 
   // execute command in specified directory
-  static void runIn(Path path, String... command) throws IOException, InterruptedException {
-    ProcessBuilder pb = new ProcessBuilder(command);
+  static void runIn(final Path path, final String... command)
+      throws IOException, InterruptedException {
+    final ProcessBuilder pb = new ProcessBuilder(command);
     pb.directory(path.toFile());
     pb.inheritIO();
-    Process process = pb.start();
-    int exitCode = process.waitFor();
+    final Process process = pb.start();
+    final int exitCode = process.waitFor();
     if (exitCode != 0) {
       throw new RuntimeException(
           new String(process.getErrorStream().readAllBytes(), StandardCharsets.UTF_8));
@@ -59,33 +62,33 @@ public class Util {
   }
 
   // execute command in current directory
-  static void run(String... command) throws IOException, InterruptedException {
+  static void run(final String... command) throws IOException, InterruptedException {
     runIn(Path.of(System.getProperty("user.dir")), command);
   }
 
   // join collection values into sorted comma-separated string
-  static String join(Collection<String> values, String delimiter) {
+  static String join(final Collection<String> values, final String delimiter) {
     return values.stream().sorted().collect(Collectors.joining(delimiter));
   }
 
   // join collection values into sorted comma-separated string
-  static String join(Collection<String> values) {
+  static String join(final Collection<String> values) {
     return join(values, ",");
   }
 
   // extract field values from annotation tree into map
-  static Map<String, Object> extractAnnotationFields(AnnotationTree annotation) {
-    Map<String, Object> fields = new HashMap<>();
-    for (ExpressionTree argument : annotation.getArguments()) {
-      if (argument instanceof AssignmentTree assignment) {
-        String fieldName = assignment.getVariable().toString();
-        Object value;
-        ExpressionTree expression = assignment.getExpression();
+  static Map<String, Object> extractAnnotationFields(final AnnotationTree annotation) {
+    final Map<String, Object> fields = new HashMap<>();
+    for (final ExpressionTree argument : annotation.getArguments()) {
+      if (argument instanceof final AssignmentTree assignment) {
+        final String fieldName = assignment.getVariable().toString();
+        final Object value;
+        final ExpressionTree expression = assignment.getExpression();
         value =
             switch (expression) {
-              case LiteralTree literalTree -> literalTree.getValue();
-              case MemberSelectTree memberSelect -> memberSelect.getIdentifier().toString();
-              case IdentifierTree identifierTree -> identifierTree.getName().toString();
+              case final LiteralTree literalTree -> literalTree.getValue();
+              case final MemberSelectTree memberSelect -> memberSelect.getIdentifier().toString();
+              case final IdentifierTree identifierTree -> identifierTree.getName().toString();
               default -> expression.toString();
             };
         fields.put(fieldName, value);

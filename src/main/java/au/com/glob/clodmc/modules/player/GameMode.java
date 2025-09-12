@@ -32,7 +32,7 @@ public class GameMode implements Module {
         .description("Change player's Game Mode")
         .requiresOp()
         .executor(
-            (EitherCommandSender sender, @Nullable String mode, @Nullable Player target) -> {
+            (final EitherCommandSender sender, @Nullable String mode, @Nullable Player target) -> {
               if (sender.isPlayer() && !sender.isOp()) {
                 throw new CommandError("You cannot change your game mode");
               }
@@ -40,7 +40,7 @@ public class GameMode implements Module {
               if (mode == null) {
                 throw new CommandUsageError();
               }
-              org.bukkit.GameMode gameMode =
+              final org.bukkit.GameMode gameMode =
                   switch (mode) {
                     case "survival" -> org.bukkit.GameMode.SURVIVAL;
                     case "creative" -> org.bukkit.GameMode.CREATIVE;
@@ -67,7 +67,7 @@ public class GameMode implements Module {
               }
             })
         .completor(
-            (CommandSender sender, List<String> args) -> {
+            (final CommandSender sender, final List<String> args) -> {
               // no args
               if (args.isEmpty()) {
                 return MODES;

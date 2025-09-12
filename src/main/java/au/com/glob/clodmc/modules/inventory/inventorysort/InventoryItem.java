@@ -23,32 +23,32 @@ class InventoryItem implements Comparable<InventoryItem> {
   private final int amount;
   private final int damage;
 
-  InventoryItem(ItemStack itemStack) {
+  InventoryItem(final ItemStack itemStack) {
     this.itemStack = itemStack;
 
     // index into inventory_order.txt
-    Integer index = InventorySort.materialOrder.get(itemStack.getType().name());
+    final Integer index = InventorySort.materialOrder.get(itemStack.getType().name());
     this.materialIndex = Objects.requireNonNullElse(index, 0);
 
     // visible in-game name
     this.name = StringUtil.asText(itemStack);
 
-    ItemMeta meta = itemStack.getItemMeta();
+    final ItemMeta meta = itemStack.getItemMeta();
     if (meta != null) {
-      StringJoiner extraJoiner = new StringJoiner(".");
+      final StringJoiner extraJoiner = new StringJoiner(".");
 
       switch (meta) {
-        case EnchantmentStorageMeta enchantmentStorageMeta -> {
+        case final EnchantmentStorageMeta enchantmentStorageMeta -> {
           // enchantment storage (eg. book)
-          for (Map.Entry<Enchantment, Integer> entry :
+          for (final Map.Entry<Enchantment, Integer> entry :
               enchantmentStorageMeta.getStoredEnchants().entrySet()) {
             extraJoiner.add(StringUtil.asText(entry.getKey()));
             extraJoiner.add(String.valueOf(entry.getValue()));
           }
         }
-        case MusicInstrumentMeta musicInstrumentMeta -> {
+        case final MusicInstrumentMeta musicInstrumentMeta -> {
           // goat horns
-          MusicInstrument instrument = musicInstrumentMeta.getInstrument();
+          final MusicInstrument instrument = musicInstrumentMeta.getInstrument();
           if (instrument != null) {
             extraJoiner.add(StringUtil.asText(instrument));
           }
@@ -61,7 +61,8 @@ class InventoryItem implements Comparable<InventoryItem> {
       this.extra = extraJoiner.toString();
 
       // damage
-      this.damage = meta instanceof Damageable damageableMeta ? damageableMeta.getDamage() : 0;
+      this.damage =
+          meta instanceof final Damageable damageableMeta ? damageableMeta.getDamage() : 0;
     } else {
       this.extra = "";
       this.damage = 0;
@@ -73,7 +74,7 @@ class InventoryItem implements Comparable<InventoryItem> {
 
   @Override
   public String toString() {
-    StringJoiner joiner = new StringJoiner(":", "[", "]");
+    final StringJoiner joiner = new StringJoiner(":", "[", "]");
     joiner.add(String.valueOf(this.materialIndex));
     joiner.add(this.name);
     joiner.add(this.extra);
@@ -87,7 +88,7 @@ class InventoryItem implements Comparable<InventoryItem> {
   }
 
   @Override
-  public int compareTo(InventoryItem o) {
+  public int compareTo(final InventoryItem o) {
     int comp;
     // material
     comp = Integer.compare(this.materialIndex, o.materialIndex);

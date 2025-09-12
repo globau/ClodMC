@@ -43,7 +43,7 @@ public final class NonStaticMethodCheck extends AbstractCheck {
 
   private void checkClassMethod(final DetailAST method) {
     final DetailAST modifiers = method.findFirstToken(TokenTypes.MODIFIERS);
-    if (modifiers.findFirstToken(TokenTypes.LITERAL_STATIC) != null) {
+    if (modifiers == null || modifiers.findFirstToken(TokenTypes.LITERAL_STATIC) != null) {
       return;
     }
     if (!AnnotationUtil.containsAnnotation(method, "Override")

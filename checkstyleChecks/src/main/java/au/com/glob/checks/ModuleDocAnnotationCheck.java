@@ -26,7 +26,7 @@ public class ModuleDocAnnotationCheck extends AbstractCheck {
   }
 
   @Override
-  public void visitToken(DetailAST ast) {
+  public void visitToken(final DetailAST ast) {
     if (ast.getType() == TokenTypes.CLASS_DEF) {
       if (!CheckUtils.isRelativeTo(
           this.getFilePath(), "src/main/java/au/com/glob/clodmc/modules/")) {

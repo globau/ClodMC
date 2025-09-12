@@ -35,24 +35,25 @@ public class BlueMapGateways extends Addon {
   private final Map<World, MarkerSet> markerSets = new HashMap<>(3);
 
   // initialises bluemap integration for gateway markers
-  public BlueMapGateways(BlueMapAPI api) {
+  public BlueMapGateways(final BlueMapAPI api) {
     super(api);
     instance = this;
 
     // create svg
-    Path gatewayFilePath = api.getWebApp().getWebRoot().resolve("assets").resolve(MARKER_FILENAME);
+    final Path gatewayFilePath =
+        api.getWebApp().getWebRoot().resolve("assets").resolve(MARKER_FILENAME);
     try {
       Files.createDirectories(gatewayFilePath.getParent());
-      try (OutputStream out = Files.newOutputStream(gatewayFilePath)) {
-        InputStream svgStream = ClodMC.instance.getResource(MARKER_FILENAME);
+      try (final OutputStream out = Files.newOutputStream(gatewayFilePath)) {
+        final InputStream svgStream = ClodMC.instance.getResource(MARKER_FILENAME);
         Objects.requireNonNull(svgStream).transferTo(out);
       }
-    } catch (IOException e) {
+    } catch (final IOException e) {
       Logger.error("failed to create %s".formatted(gatewayFilePath), e);
     }
 
     // create markers
-    for (World world : Bukkit.getWorlds()) {
+    for (final World world : Bukkit.getWorlds()) {
       this.markerSets.put(
           world, MarkerSet.builder().label("Gateways").defaultHidden(false).build());
     }
@@ -61,12 +62,12 @@ public class BlueMapGateways extends Addon {
   // updates gateway markers on bluemap
   @Override
   public void update() {
-    for (MarkerSet markerSet : this.markerSets.values()) {
+    for (final MarkerSet markerSet : this.markerSets.values()) {
       markerSet.getMarkers().clear();
     }
 
-    Set<String> seenColours = new HashSet<>();
-    for (AnchorBlock anchorBlock : Gateways.instance.getAnchorBlocks()) {
+    final Set<String> seenColours = new HashSet<>();
+    for (final AnchorBlock anchorBlock : Gateways.instance.getAnchorBlocks()) {
       if (anchorBlock.name == null) {
         continue;
       }
@@ -93,13 +94,13 @@ public class BlueMapGateways extends Addon {
                   .build());
     }
 
-    for (Map.Entry<World, MarkerSet> entry : this.markerSets.entrySet()) {
-      String mapId = "gw-%s".formatted(entry.getKey().getName());
+    for (final Map.Entry<World, MarkerSet> entry : this.markerSets.entrySet()) {
+      final String mapId = "gw-%s".formatted(entry.getKey().getName());
       this.api
           .getWorld(entry.getKey())
           .ifPresent(
-              (BlueMapWorld world) -> {
-                for (BlueMapMap map : world.getMaps()) {
+              (final BlueMapWorld world) -> {
+                for (final BlueMapMap map : world.getMaps()) {
                   if (entry.getValue().getMarkers().isEmpty()) {
                     map.getMarkerSets().remove(mapId);
                   } else {

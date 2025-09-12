@@ -37,10 +37,10 @@ public class BlueMapGriefPrevention extends Addon implements Listener {
 
   private final Map<World, MarkerSet> markerSets = new HashMap<>(3);
 
-  public BlueMapGriefPrevention(BlueMapAPI api) {
+  public BlueMapGriefPrevention(final BlueMapAPI api) {
     super(api);
 
-    for (World world : Bukkit.getWorlds()) {
+    for (final World world : Bukkit.getWorlds()) {
       this.markerSets.put(world, MarkerSet.builder().label("Claims").defaultHidden(true).build());
     }
 
@@ -50,22 +50,22 @@ public class BlueMapGriefPrevention extends Addon implements Listener {
   // update claim markers on the bluemap
   @Override
   protected void update() {
-    for (MarkerSet markerSet : this.markerSets.values()) {
+    for (final MarkerSet markerSet : this.markerSets.values()) {
       markerSet.getMarkers().clear();
     }
 
-    for (Claim claim : GriefPrevention.instance.dataStore.getClaims()) {
+    for (final Claim claim : GriefPrevention.instance.dataStore.getClaims()) {
       if (!claim.inDataStore) {
         continue;
       }
 
-      World world = claim.getLesserBoundaryCorner().getWorld();
-      Location lesserCorner = claim.getLesserBoundaryCorner();
-      Location greaterCorner = claim.getGreaterBoundaryCorner();
+      final World world = claim.getLesserBoundaryCorner().getWorld();
+      final Location lesserCorner = claim.getLesserBoundaryCorner();
+      final Location greaterCorner = claim.getGreaterBoundaryCorner();
 
       // positions are in the north-west corner of the block
       // need to extend the south-east corner to cover the whole claim area
-      Shape shape =
+      final Shape shape =
           new Shape(
               new Vector2d(lesserCorner.getX(), lesserCorner.getZ()),
               new Vector2d(greaterCorner.getX() + 1, lesserCorner.getZ()),
@@ -91,12 +91,12 @@ public class BlueMapGriefPrevention extends Addon implements Listener {
                   .build());
     }
 
-    for (Map.Entry<World, MarkerSet> entry : this.markerSets.entrySet()) {
-      String mapId = "claim-%s".formatted(entry.getKey().getName());
+    for (final Map.Entry<World, MarkerSet> entry : this.markerSets.entrySet()) {
+      final String mapId = "claim-%s".formatted(entry.getKey().getName());
       api.getWorld(entry.getKey())
           .ifPresent(
-              (BlueMapWorld world) -> {
-                for (BlueMapMap map : world.getMaps()) {
+              (final BlueMapWorld world) -> {
+                for (final BlueMapMap map : world.getMaps()) {
                   if (entry.getValue().getMarkers().isEmpty()) {
                     map.getMarkerSets().remove(mapId);
                   } else {
@@ -109,31 +109,31 @@ public class BlueMapGriefPrevention extends Addon implements Listener {
 
   // refresh markers when a claim is created
   @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-  public void onClaimCreated(ClaimCreatedEvent event) {
+  public void onClaimCreated(final ClaimCreatedEvent event) {
     this.update();
   }
 
   // refresh markers when a claim is resized
   @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-  public void onClaimResize(ClaimResizeEvent event) {
+  public void onClaimResize(final ClaimResizeEvent event) {
     this.update();
   }
 
   // refresh markers when a claim is changed
   @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-  public void onClaimChange(ClaimChangeEvent event) {
+  public void onClaimChange(final ClaimChangeEvent event) {
     this.update();
   }
 
   // refresh markers when a claim is extended
   @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-  public void onClaimExtend(ClaimExtendEvent event) {
+  public void onClaimExtend(final ClaimExtendEvent event) {
     this.update();
   }
 
   // refresh markers when a claim is deleted
   @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-  public void onClaimDeleted(ClaimDeletedEvent event) {
+  public void onClaimDeleted(final ClaimDeletedEvent event) {
     this.update();
   }
 }

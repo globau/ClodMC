@@ -8,26 +8,26 @@ import org.jspecify.annotations.NullMarked;
 @NullMarked
 public final class Logger {
   // log info message
-  public static void info(String message) {
+  public static void info(final String message) {
     ClodMC.instance.getLogger().info(message);
   }
 
   // log warning message
-  public static void warning(String message) {
+  public static void warning(final String message) {
     ClodMC.instance.getLogger().warning(message);
   }
 
   // log error message
-  public static void error(String message) {
+  public static void error(final String message) {
     ClodMC.instance.getLogger().severe(message);
   }
 
-  public static void error(String message, Exception e) {
+  public static void error(final String message, final Exception e) {
     ClodMC.instance.getLogger().severe("%s: %s".formatted(message, e.getMessage()));
   }
 
   // log exception with stack trace
-  public static void exception(Throwable exception) {
+  public static void exception(final Throwable exception) {
     ClodMC.instance
         .getLogger()
         .log(

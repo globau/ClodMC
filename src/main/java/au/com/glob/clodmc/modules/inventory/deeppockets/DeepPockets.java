@@ -37,43 +37,43 @@ public class DeepPockets implements Module, Listener {
 
   // search shulker boxes when picking items from inventory
   @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-  public void onPlayerPickItem(PlayerPickItemEvent event) {
-    Player player = event.getPlayer();
+  public void onPlayerPickItem(final PlayerPickItemEvent event) {
+    final Player player = event.getPlayer();
 
     // nothing to do if the item is readily available, or the player isn't in survival mode
     if (event.getSourceSlot() != -1 || !player.getGameMode().equals(GameMode.SURVIVAL)) {
       return;
     }
 
-    PlayerInventory playerInventory = player.getInventory();
+    final PlayerInventory playerInventory = player.getInventory();
 
     // find block player is targeting
-    Block target = player.getTargetBlockExact(Players.INTERACTION_RANGE);
+    final Block target = player.getTargetBlockExact(Players.INTERACTION_RANGE);
     if (target == null) {
       return;
     }
 
     // find slots with shulkers of any colour
-    List<Integer> playerSlots = new ArrayList<>();
-    for (Material shulkerMaterial : Tag.SHULKER_BOXES.getValues()) {
-      HashMap<Integer, ? extends ItemStack> shulkers = playerInventory.all(shulkerMaterial);
+    final List<Integer> playerSlots = new ArrayList<>();
+    for (final Material shulkerMaterial : Tag.SHULKER_BOXES.getValues()) {
+      final HashMap<Integer, ? extends ItemStack> shulkers = playerInventory.all(shulkerMaterial);
       playerSlots.addAll(shulkers.keySet());
     }
     Collections.sort(playerSlots);
 
     // search for shulkers holding the target item
-    List<ShulkerItemStack> shulkerItemStacks = new ArrayList<>();
-    for (int playerSlot : playerSlots) {
+    final List<ShulkerItemStack> shulkerItemStacks = new ArrayList<>();
+    for (final int playerSlot : playerSlots) {
       // sanity check and cast
-      ItemStack playerItemStack = playerInventory.getItem(playerSlot);
+      final ItemStack playerItemStack = playerInventory.getItem(playerSlot);
       if (playerItemStack == null
-          || !(playerItemStack.getItemMeta() instanceof BlockStateMeta playerBlockStateMeta)
-          || !(playerBlockStateMeta.getBlockState() instanceof ShulkerBox shulker)) {
+          || !(playerItemStack.getItemMeta() instanceof final BlockStateMeta playerBlockStateMeta)
+          || !(playerBlockStateMeta.getBlockState() instanceof final ShulkerBox shulker)) {
         continue;
       }
 
       // find matching items inside shulker
-      Inventory shulkerInventory = shulker.getInventory();
+      final Inventory shulkerInventory = shulker.getInventory();
       shulkerInventory.all(target.getType()).entrySet().stream()
           .map(
               (Map.Entry<Integer, ? extends ItemStack> entry) ->
@@ -88,28 +88,28 @@ public class DeepPockets implements Module, Listener {
     }
 
     // find the largest stack across all shulkers
-    ShulkerItemStack largestShulkerStack =
+    final ShulkerItemStack largestShulkerStack =
         shulkerItemStacks.stream()
             .max(Comparator.comparingInt((ShulkerItemStack itemStack) -> itemStack.amount))
             .orElse(null);
     int playerSlot = largestShulkerStack.playerSlot;
-    int shulkerSlot = largestShulkerStack.shulkerSlot;
+    final int shulkerSlot = largestShulkerStack.shulkerSlot;
 
     // grab stacks
-    ItemStack playerItemStack = playerInventory.getItem(playerSlot);
-    BlockStateMeta playerBlockStateMeta =
+    final ItemStack playerItemStack = playerInventory.getItem(playerSlot);
+    final BlockStateMeta playerBlockStateMeta =
         (BlockStateMeta) Objects.requireNonNull(playerItemStack).getItemMeta();
-    ShulkerBox shulker = (ShulkerBox) playerBlockStateMeta.getBlockState();
-    ItemStack shulkerItemStack = shulker.getInventory().getItem(shulkerSlot);
+    final ShulkerBox shulker = (ShulkerBox) playerBlockStateMeta.getBlockState();
+    final ItemStack shulkerItemStack = shulker.getInventory().getItem(shulkerSlot);
 
     // get itemstack from target slot
-    int targetSlot = event.getTargetSlot();
+    final int targetSlot = event.getTargetSlot();
     ItemStack targetItemStack = playerInventory.getItem(targetSlot);
 
     // if the shulker is in the target slot, we need to move the shulker
     // to an empty slot
     if (playerSlot == targetSlot) {
-      int emptySlot = playerInventory.firstEmpty();
+      final int emptySlot = playerInventory.firstEmpty();
 
       // full inventory; failure
       if (emptySlot == -1) {
@@ -144,7 +144,7 @@ public class DeepPockets implements Module, Listener {
     event.setCancelled(true);
   }
 
-  private static void playFailureSound(Player player) {
+  private static void playFailureSound(final Player player) {
     player.playSound(player, Sound.BLOCK_NOTE_BLOCK_IRON_XYLOPHONE, 0.5f, 0.5f);
   }
 }

@@ -20,11 +20,11 @@ public class ServerStatus implements Module {
     CommandBuilder.build("server-status")
         .description("Shows server status")
         .executor(
-            (EitherCommandSender sender) -> {
-              double[] tps = Bukkit.getTPS();
-              StringJoiner values = new StringJoiner(", ");
-              for (double avg : tps) {
-                String colour;
+            (final EitherCommandSender sender) -> {
+              final double[] tps = Bukkit.getTPS();
+              final StringJoiner values = new StringJoiner(", ");
+              for (final double avg : tps) {
+                final String colour;
                 if (avg > 18.0) {
                   colour = "green";
                 } else if (avg > 16.0) {
@@ -32,7 +32,7 @@ public class ServerStatus implements Module {
                 } else {
                   colour = "red";
                 }
-                double value = Math.min(Math.round(avg * 100.0) / 100.0, 20.0);
+                final double value = Math.min(Math.round(avg * 100.0) / 100.0, 20.0);
                 values.add("<%s>%s</%s>".formatted(colour, value, colour));
               }
               Chat.plain(sender, "Ticks-per-second from last 1m, 5m, 15m: %s".formatted(values));

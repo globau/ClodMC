@@ -20,8 +20,8 @@ import org.jspecify.annotations.NullMarked;
 @NullMarked
 public class ClodServerLinks implements Module, Listener {
   @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-  public void onPlayerLinksSend(PlayerLinksSendEvent event) {
-    ServerLinks links = event.getLinks();
+  public void onPlayerLinksSend(final PlayerLinksSendEvent event) {
+    final ServerLinks links = event.getLinks();
     links.addLink(
         StringUtil.asComponent("<yellow>Real-time Map</yellow>"),
         URI.create("https://clod.glob.au/"));

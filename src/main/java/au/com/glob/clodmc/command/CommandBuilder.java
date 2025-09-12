@@ -37,7 +37,7 @@ import org.jspecify.annotations.Nullable;
  */
 @NullMarked
 @SuppressWarnings({"UnusedReturnValue", "SameParameterValue"})
-public class CommandBuilder {
+public final class CommandBuilder {
   private final String name;
   private @Nullable String usage;
   private @Nullable String description;
@@ -47,33 +47,33 @@ public class CommandBuilder {
 
   private static final List<CommandBuilder> builders = new ArrayList<>();
 
-  private CommandBuilder(String name) {
+  private CommandBuilder(final String name) {
     this.name = name;
   }
 
   // create new command builder with given name
-  public static CommandBuilder build(String name) {
-    CommandBuilder builder = new CommandBuilder(name);
+  public static CommandBuilder build(final String name) {
+    final CommandBuilder builder = new CommandBuilder(name);
     builders.add(builder);
     return builder;
   }
 
   // register all built commands with bukkit
   public static void registerBuilders() {
-    for (CommandBuilder builder : builders) {
+    for (final CommandBuilder builder : builders) {
       builder.register();
     }
     builders.clear();
   }
 
   // set command usage string
-  public CommandBuilder usage(String usage) {
+  public CommandBuilder usage(final String usage) {
     this.usage = usage;
     return this;
   }
 
   // set command description
-  public CommandBuilder description(String description) {
+  public CommandBuilder description(final String description) {
     this.description = description;
     return this;
   }
@@ -85,61 +85,61 @@ public class CommandBuilder {
   }
 
   // set executor for player-only commands
-  public CommandBuilder executor(ExecutorP executor) {
+  public CommandBuilder executor(final ExecutorP executor) {
     this.executor = executor;
     return this;
   }
 
   // set executor for player commands with string argument
-  public CommandBuilder executor(ExecutorPS executor) {
+  public CommandBuilder executor(final ExecutorPS executor) {
     this.executor = executor;
     return this;
   }
 
   // set executor for commands accepting any sender with string argument
-  public CommandBuilder executor(ExecutorES executor) {
+  public CommandBuilder executor(final ExecutorES executor) {
     this.executor = executor;
     return this;
   }
 
   // set executor for commands accepting any sender with two string arguments
-  public CommandBuilder executor(ExecutorESS executor) {
+  public CommandBuilder executor(final ExecutorESS executor) {
     this.executor = executor;
     return this;
   }
 
   // set executor for commands accepting any sender with player argument
-  public CommandBuilder executor(ExecutorEP executor) {
+  public CommandBuilder executor(final ExecutorEP executor) {
     this.executor = executor;
     return this;
   }
 
   // set executor for commands accepting any sender with player and string arguments
-  public CommandBuilder executor(ExecutorEPS executor) {
+  public CommandBuilder executor(final ExecutorEPS executor) {
     this.executor = executor;
     return this;
   }
 
   // set executor for commands accepting any sender with string and player arguments
-  public CommandBuilder executor(ExecutorESP executor) {
+  public CommandBuilder executor(final ExecutorESP executor) {
     this.executor = executor;
     return this;
   }
 
   // set executor for commands accepting any sender with no arguments
-  public CommandBuilder executor(ExecutorE executor) {
+  public CommandBuilder executor(final ExecutorE executor) {
     this.executor = executor;
     return this;
   }
 
   // set tab completion handler for player commands
-  public CommandBuilder completor(CompletorP completor) {
+  public CommandBuilder completor(final CompletorP completor) {
     this.completor = completor;
     return this;
   }
 
   // set tab completion handler for commands with sender
-  public CommandBuilder completor(CompletorS completor) {
+  public CommandBuilder completor(final CompletorS completor) {
     this.completor = completor;
     return this;
   }
@@ -154,47 +154,48 @@ public class CommandBuilder {
       this.usage = "/%s".formatted(this.name);
     }
 
-    Command command =
+    final Command command =
         new Command(this.name, this.description, this.usage, List.of()) {
           @Override
-          public boolean execute(CommandSender sender, String commandLabel, String[] args) {
-            CommandBuilder that = CommandBuilder.this;
+          public boolean execute(
+              final CommandSender sender, final String commandLabel, final String[] args) {
+            final CommandBuilder that = CommandBuilder.this;
             if (that.executor == null) {
               return false;
             }
             try {
               switch (that.executor) {
-                case ExecutorP executorP -> executorP.accept(that.toPlayer(sender));
-                case ExecutorE executorE -> executorE.accept(new EitherCommandSender(sender));
-                case ExecutorEP executorEP ->
+                case final ExecutorP executorP -> executorP.accept(that.toPlayer(sender));
+                case final ExecutorE executorE -> executorE.accept(new EitherCommandSender(sender));
+                case final ExecutorEP executorEP ->
                     executorEP.accept(new EitherCommandSender(sender), argToPlayer(args, 0));
-                case ExecutorEPS executorEPS ->
+                case final ExecutorEPS executorEPS ->
                     executorEPS.accept(
                         new EitherCommandSender(sender),
                         argToPlayer(args, 0),
                         argToString(args, 1));
-                case ExecutorES executorES ->
+                case final ExecutorES executorES ->
                     executorES.accept(new EitherCommandSender(sender), argToString(args, 0));
-                case ExecutorPS executorPS ->
+                case final ExecutorPS executorPS ->
                     executorPS.accept(that.toPlayer(sender), argToString(args, 0));
-                case ExecutorESS executorESS ->
+                case final ExecutorESS executorESS ->
                     executorESS.accept(
                         new EitherCommandSender(sender),
                         argToString(args, 0),
                         argToString(args, 1));
-                case ExecutorESP executorESP ->
+                case final ExecutorESP executorESP ->
                     executorESP.accept(
                         new EitherCommandSender(sender),
                         argToString(args, 0),
                         argToPlayer(args, 1));
                 default -> throw new RuntimeException("executor not handled");
               }
-            } catch (CommandUsageError e) {
+            } catch (final CommandUsageError e) {
               Chat.error(sender, "usage: %s".formatted(this.usageMessage));
-            } catch (CommandError e) {
+            } catch (final CommandError e) {
               Chat.error(sender, Objects.requireNonNullElse(e.getMessage(), "Internal Error"));
-            } catch (Throwable e) {
-              String message =
+            } catch (final Throwable e) {
+              final String message =
                   e.getMessage() == null ? e.getClass().getSimpleName() : e.getMessage();
               Chat.error(sender, "Internal command error: %s".formatted(message));
               Logger.exception(e);
@@ -203,17 +204,19 @@ public class CommandBuilder {
           }
 
           @Override
-          public List<String> tabComplete(CommandSender sender, String alias, String[] args)
+          public List<String> tabComplete(
+              final CommandSender sender, final String alias, final String[] args)
               throws IllegalArgumentException {
-            CommandBuilder that = CommandBuilder.this;
+            final CommandBuilder that = CommandBuilder.this;
             if (that.completor == null) {
               return List.of();
             }
 
-            List<String> argsList = new ArrayList<>(List.of(args));
+            final List<String> argsList = new ArrayList<>(List.of(args));
             return switch (that.completor) {
-              case CompletorP completorP -> completorP.accept(that.toPlayer(sender), argsList);
-              case CompletorS completorS -> completorS.accept(sender, argsList);
+              case final CompletorP completorP ->
+                  completorP.accept(that.toPlayer(sender), argsList);
+              case final CompletorS completorS -> completorS.accept(sender, argsList);
               default -> throw new RuntimeException("completor not handled");
             };
           }
@@ -226,8 +229,8 @@ public class CommandBuilder {
   }
 
   // convert command sender to player with permission checks
-  private Player toPlayer(CommandSender sender) throws CommandError {
-    if (!(sender instanceof Player player)) {
+  private Player toPlayer(final CommandSender sender) throws CommandError {
+    if (!(sender instanceof final Player player)) {
       throw new CommandError("This command can only be run by a player");
     }
     if (this.requiresOp && !player.isOp()) {
@@ -237,11 +240,11 @@ public class CommandBuilder {
   }
 
   // parse player argument from command args
-  private static @Nullable Player argToPlayer(String[] args, int index) {
+  private static @Nullable Player argToPlayer(final String[] args, final int index) {
     if (args.length - 1 < index || args[index].isEmpty()) {
       return null;
     }
-    Player player = Bukkit.getPlayerExact(args[index]);
+    final Player player = Bukkit.getPlayerExact(args[index]);
     if (player == null) {
       throw new CommandError("Unknown player: %s".formatted(args[index]));
     }
@@ -249,7 +252,7 @@ public class CommandBuilder {
   }
 
   // parse string argument from command args
-  private static @Nullable String argToString(String[] args, int index) {
+  private static @Nullable String argToString(final String[] args, final int index) {
     if (args.length - 1 < index || args[index].isEmpty()) {
       return null;
     }

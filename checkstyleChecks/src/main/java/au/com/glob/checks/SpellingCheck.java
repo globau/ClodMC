@@ -16,7 +16,7 @@ public class SpellingCheck extends AbstractCheck {
   private static final Map<String, String> US_TO_UK_SPELLINGS = createSpellingMap();
 
   private static Map<String, String> createSpellingMap() {
-    Map<String, String> wordMap = new HashMap<>();
+    final Map<String, String> wordMap = new HashMap<>();
     wordMap.put("color", "colour");
     wordMap.put("behavior", "behaviour");
     wordMap.put("organize", "organise");
@@ -81,23 +81,23 @@ public class SpellingCheck extends AbstractCheck {
   }
 
   @Override
-  public void visitToken(DetailAST ast) {
+  public void visitToken(final DetailAST ast) {
     if (!CheckUtils.isRelativeTo(this.getFilePath(), "src/main/java/au/com/glob/clodmc")) {
       return;
     }
 
-    String comment = ast.getText();
+    final String comment = ast.getText();
     if (comment == null || comment.trim().isEmpty()) {
       return;
     }
 
-    for (Map.Entry<String, String> entry : US_TO_UK_SPELLINGS.entrySet()) {
-      String badSpelling = entry.getKey();
-      String goodSpelling = entry.getValue();
+    for (final Map.Entry<String, String> entry : US_TO_UK_SPELLINGS.entrySet()) {
+      final String badSpelling = entry.getKey();
+      final String goodSpelling = entry.getValue();
 
-      Pattern pattern =
+      final Pattern pattern =
           Pattern.compile("\\b" + Pattern.quote(badSpelling) + "\\b", Pattern.CASE_INSENSITIVE);
-      Matcher matcher = pattern.matcher(comment);
+      final Matcher matcher = pattern.matcher(comment);
 
       if (matcher.find()) {
         this.log(ast, "use ''%s'' instead of ''%s''".formatted(goodSpelling, badSpelling));

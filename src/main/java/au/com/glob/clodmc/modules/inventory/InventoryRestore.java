@@ -68,7 +68,9 @@ public class InventoryRestore implements Module, Listener {
         .description("Restore player's inventory from automatic backups")
         .requiresOp()
         .executor(
-            (EitherCommandSender sender, @Nullable String playerName, @Nullable String backup) -> {
+            (final EitherCommandSender sender,
+                @Nullable final String playerName,
+                @Nullable final String backup) -> {
               if (playerName == null) {
                 if (!sender.isPlayer()) {
                   throw new CommandUsageError();
@@ -77,11 +79,11 @@ public class InventoryRestore implements Module, Listener {
                 return;
               }
 
-              UUID uuid = Players.getWhitelistedUUID(playerName);
+              final UUID uuid = Players.getWhitelistedUUID(playerName);
               if (uuid == null) {
                 throw new CommandError("Unknown player: %s".formatted(playerName));
               }
-              Player player = Bukkit.getPlayer(uuid);
+              final Player player = Bukkit.getPlayer(uuid);
               if (player != null) {
                 // player is online
                 this.restorePlayerInventory(sender, player, backup);
@@ -89,24 +91,24 @@ public class InventoryRestore implements Module, Listener {
               }
 
               // player is offline - set up to restore the next time they log in
-              File backupFile = this.getBackupFile(uuid, backup);
+              final File backupFile = this.getBackupFile(uuid, backup);
               if (backupFile == null) {
                 Chat.error(sender, "Failed to find backup file");
                 return;
               }
 
-              PlayerDataFile dataFile = PlayerDataFiles.of(uuid);
+              final PlayerDataFile dataFile = PlayerDataFiles.of(uuid);
               dataFile.set("restore_inv", getBackupName(backupFile));
               dataFile.save();
 
               try {
-                LocalDateTime date =
+                final LocalDateTime date =
                     LocalDateTime.parse(getBackupName(backupFile), SHORT_DATETIME_FORMAT);
                 Chat.info(
                     sender,
                     "Inventory for %s will be restored from %s next time they log in"
                         .formatted(dataFile.getPlayerName(), date.format(LONG_DATETIME_FORMAT)));
-              } catch (DateTimeParseException e) {
+              } catch (final DateTimeParseException e) {
                 Chat.info(
                     sender,
                     "Inventory for %s will be restored next time they log in"
@@ -114,7 +116,7 @@ public class InventoryRestore implements Module, Listener {
               }
             })
         .completor(
-            (CommandSender sender, List<String> args) -> {
+            (final CommandSender sender, final List<String> args) -> {
               if (args.size() == 1) {
                 // player name
                 return Players.getWhitelisted().keySet().stream()
@@ -126,7 +128,7 @@ public class InventoryRestore implements Module, Listener {
               }
               if (args.size() == 2) {
                 // backup name
-                UUID uuid = Players.getWhitelistedUUID(args.getFirst());
+                final UUID uuid = Players.getWhitelistedUUID(args.getFirst());
                 return uuid == null ? List.of() : this.getBackupNames(uuid);
               }
               return List.of();
@@ -135,15 +137,15 @@ public class InventoryRestore implements Module, Listener {
 
   // backup inventory when player dies
   @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-  public void onPlayerDeath(PlayerDeathEvent event) {
+  public void onPlayerDeath(final PlayerDeathEvent event) {
     this.backupPlayerInventory(event.getPlayer(), false);
   }
 
   // if requested restore inventory backup when player joins
   @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-  public void onPlayerJoin(PlayerJoinEvent event) {
-    PlayerDataFile dataFile = PlayerDataFiles.of(event.getPlayer());
-    String backupName = dataFile.getString("restore_inv");
+  public void onPlayerJoin(final PlayerJoinEvent event) {
+    final PlayerDataFile dataFile = PlayerDataFiles.of(event.getPlayer());
+    final String backupName = dataFile.getString("restore_inv");
     if (backupName != null) {
       this.restorePlayerInventory(null, event.getPlayer(), backupName);
       dataFile.remove("restore_inv");
@@ -153,28 +155,28 @@ public class InventoryRestore implements Module, Listener {
 
   // backup inventory when /clear is used
   @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-  public void onPlayerCommandPreprocess(PlayerCommandPreprocessEvent event) {
+  public void onPlayerCommandPreprocess(final PlayerCommandPreprocessEvent event) {
     if (event.getPlayer().isOp() && event.getMessage().equals("/clear")) {
       this.backupPlayerInventory(event.getPlayer(), true);
     }
   }
 
   // save player's current inventory to backup file
-  private void backupPlayerInventory(Player player, boolean notify) {
-    PlayerInventory inv = player.getInventory();
+  private void backupPlayerInventory(final Player player, final boolean notify) {
+    final PlayerInventory inv = player.getInventory();
     if (inv.isEmpty()) {
       return;
     }
 
     // save inv as array of slots
-    File backupFile = this.buildBackupFile(player.getUniqueId());
-    DataFile dataFile = new DataFile(backupFile);
+    final File backupFile = this.buildBackupFile(player.getUniqueId());
+    final DataFile dataFile = new DataFile(backupFile);
     for (int i = 0; i < inv.getSize(); i++) {
       dataFile.set("slot.%d".formatted(i), inv.getItem(i));
     }
     dataFile.save();
 
-    String message =
+    final String message =
         "saved %s inventory as %s".formatted(player.getName(), getBackupName(backupFile));
     Logger.info(message);
     if (notify) {
@@ -184,9 +186,9 @@ public class InventoryRestore implements Module, Listener {
     // delete excess backups
     Schedule.asynchronously(
         () -> {
-          List<File> backupFiles = this.getBackupFiles(player.getUniqueId());
+          final List<File> backupFiles = this.getBackupFiles(player.getUniqueId());
           while (backupFiles.size() > MAX_BACKUP_COUNT) {
-            File file = backupFiles.removeLast();
+            final File file = backupFiles.removeLast();
             if (!file.delete()) {
               Logger.error("failed to delete: %s".formatted(file));
             }
@@ -196,12 +198,14 @@ public class InventoryRestore implements Module, Listener {
 
   // restore player inventory from backup file
   private void restorePlayerInventory(
-      @Nullable EitherCommandSender sender, Player player, @Nullable String backupName) {
+      @Nullable final EitherCommandSender sender,
+      final Player player,
+      @Nullable final String backupName) {
     Schedule.asynchronously(
         () -> {
-          File backupFile = this.getBackupFile(player.getUniqueId(), backupName);
+          final File backupFile = this.getBackupFile(player.getUniqueId(), backupName);
           if (backupFile == null) {
-            String message =
+            final String message =
                 backupName == null
                     ? "Failed to find any inventory backups for %s".formatted(player.getName())
                     : "Failed to find inventory backup for %s named %s"
@@ -216,14 +220,14 @@ public class InventoryRestore implements Module, Listener {
 
           Schedule.onMainThread(
               () -> {
-                PlayerInventory inv = player.getInventory();
+                final PlayerInventory inv = player.getInventory();
 
-                DataFile dataFile = new DataFile(backupFile);
+                final DataFile dataFile = new DataFile(backupFile);
                 for (int i = 0; i < inv.getSize(); i++) {
                   inv.setItem(i, (ItemStack) dataFile.get("slot.%d".formatted(i)));
                 }
 
-                LocalDateTime date =
+                final LocalDateTime date =
                     LocalDateTime.parse(getBackupName(backupFile), SHORT_DATETIME_FORMAT);
                 if (sender == null) {
                   Chat.info(
@@ -240,9 +244,9 @@ public class InventoryRestore implements Module, Listener {
         });
   }
 
-  private List<File> getBackupFiles(UUID uuid) {
-    String prefix = "%s%s".formatted(uuid, SEPARATOR);
-    File[] files =
+  private List<File> getBackupFiles(final UUID uuid) {
+    final String prefix = "%s%s".formatted(uuid, SEPARATOR);
+    final File[] files =
         this.backupPath.listFiles(
             (File file) -> file.getName().startsWith(prefix) && file.getName().endsWith(SUFFIX));
 
@@ -255,16 +259,16 @@ public class InventoryRestore implements Module, Listener {
     return new ArrayList<>(Arrays.asList(files));
   }
 
-  private List<String> getBackupNames(UUID uuid) {
+  private List<String> getBackupNames(final UUID uuid) {
     return this.getBackupFiles(uuid).stream().map(InventoryRestore::getBackupName).toList();
   }
 
-  private static String getBackupName(File file) {
+  private static String getBackupName(final File file) {
     return file.getName().substring(PREFIX_LEN, file.getName().length() - SUFFIX_LEN);
   }
 
-  private @Nullable File getBackupFile(UUID uuid, @Nullable String name) {
-    List<File> backups = this.getBackupFiles(uuid);
+  private @Nullable File getBackupFile(final UUID uuid, @Nullable final String name) {
+    final List<File> backups = this.getBackupFiles(uuid);
     if (backups.isEmpty()) {
       return null;
     }
@@ -276,7 +280,7 @@ public class InventoryRestore implements Module, Listener {
             .orElse(null);
   }
 
-  private File buildBackupFile(UUID uuid) {
+  private File buildBackupFile(final UUID uuid) {
     return new File(
         this.backupPath,
         "%s%s%s%s"

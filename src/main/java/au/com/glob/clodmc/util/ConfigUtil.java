@@ -16,19 +16,20 @@ import org.yaml.snakeyaml.error.YAMLException;
 
 /** config file helpers */
 @NullMarked
-public class ConfigUtil {
+public final class ConfigUtil {
+  @SuppressWarnings("StaticNonFinalField")
   public static boolean sanityChecked = false;
 
   // validate all yaml config files can be loaded
   public static void sanityCheckConfigs() throws InvalidConfigException {
     // check configs for loading issues with configs (eg. malformed, missing classes)
-    List<String> errors = new ArrayList<>(0);
+    final List<String> errors = new ArrayList<>(0);
     try {
-      for (File file : getConfigFiles()) {
+      for (final File file : getConfigFiles()) {
         try {
           new YamlConfiguration().load(file);
-        } catch (YAMLException | IOException | InvalidConfigurationException e) {
-          StringJoiner message = new StringJoiner(": ");
+        } catch (final YAMLException | IOException | InvalidConfigurationException e) {
+          final StringJoiner message = new StringJoiner(": ");
           message.add(file.toString());
           message.add(e.getMessage());
           if (e.getCause() != null) {
@@ -37,7 +38,7 @@ public class ConfigUtil {
           errors.add(message.toString());
         }
       }
-    } catch (IOException e) {
+    } catch (final IOException e) {
       errors.add(e.getMessage());
     }
     if (!errors.isEmpty()) {
@@ -49,13 +50,13 @@ public class ConfigUtil {
 
   // find all yaml files in data folder
   private static List<File> getConfigFiles() throws IOException {
-    List<Path> paths;
-    try (Stream<Path> dataPaths = Files.walk(ClodMC.instance.getDataFolder().toPath())) {
+    final List<Path> paths;
+    try (final Stream<Path> dataPaths = Files.walk(ClodMC.instance.getDataFolder().toPath())) {
       paths = new ArrayList<>(dataPaths.toList());
     }
     return paths.stream()
         .filter(Files::isRegularFile)
-        .filter((Path path) -> path.toString().endsWith(".yml"))
+        .filter((final Path path) -> path.toString().endsWith(".yml"))
         .map(Path::toFile)
         .sorted()
         .toList();

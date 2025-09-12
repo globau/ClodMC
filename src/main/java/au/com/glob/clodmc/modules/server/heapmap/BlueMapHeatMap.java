@@ -50,7 +50,7 @@ public class BlueMapHeatMap extends Addon {
 
   private boolean generated = false;
 
-  public BlueMapHeatMap(BlueMapAPI api) {
+  public BlueMapHeatMap(final BlueMapAPI api) {
     super(api);
   }
 
@@ -69,8 +69,8 @@ public class BlueMapHeatMap extends Addon {
 
   // build heatmap markers for all worlds
   private void buildMarkers() {
-    try (DB db = new DB()) {
-      for (World world : Bukkit.getWorlds()) {
+    try (final DB db = new DB()) {
+      for (final World world : Bukkit.getWorlds()) {
         // determine min and max heatmap values
         int minCount = 0;
         int rowCount;
@@ -82,35 +82,36 @@ public class BlueMapHeatMap extends Addon {
           minCount++;
         }
 
-        double maxCount = db.getMaxCount(world);
+        final double maxCount = db.getMaxCount(world);
         if (maxCount == 0) {
           continue;
         }
 
-        List<List<Vector2i>> chunkLists = new ArrayList<>(COLOURS.length);
+        final List<List<Vector2i>> chunkLists = new ArrayList<>(COLOURS.length);
         for (int i = 0; i < COLOURS.length; i++) {
           chunkLists.add(new ArrayList<>());
         }
 
         // read chunks, grouped by colour
         try {
-          for (HeatMapChunk chunk : db.getChunks(world, minCount)) {
-            int index = chunk.index(COLOURS.length, maxCount);
+          for (final HeatMapChunk chunk : db.getChunks(world, minCount)) {
+            final int index = chunk.index(COLOURS.length, maxCount);
             chunkLists.get(index).add(new Vector2i(chunk.x, chunk.z));
           }
-        } catch (SQLException e) {
+        } catch (final SQLException e) {
           Logger.exception(e);
           continue;
         }
 
-        MarkerSet markerSet = MarkerSet.builder().label("HeatMap").defaultHidden(true).build();
+        final MarkerSet markerSet =
+            MarkerSet.builder().label("HeatMap").defaultHidden(true).build();
 
         // overlay between the map and the heatmap markers to make them readable
 
-        WorldBorder border = world.getWorldBorder();
-        Location centre = border.getCenter();
-        double radius = border.getSize() / 2.0 + 500.0;
-        Shape shape =
+        final WorldBorder border = world.getWorldBorder();
+        final Location centre = border.getCenter();
+        final double radius = border.getSize() / 2.0 + 500.0;
+        final Shape shape =
             Shape.createRect(
                 centre.getBlockX() - radius,
                 centre.getBlockZ() - radius,
@@ -130,15 +131,15 @@ public class BlueMapHeatMap extends Addon {
         int markerCount = 0;
         int id = 0;
         for (int i = 0; i < COLOURS.length; i++) {
-          Color colour = COLOURS[i];
+          final Color colour = COLOURS[i];
 
-          Collection<Cheese> platter =
+          final Collection<Cheese> platter =
               Cheese.createPlatterFromChunks(chunkLists.get(i).toArray(new Vector2i[0]));
 
           // markers
-          for (Cheese cheese : platter) {
+          for (final Cheese cheese : platter) {
             markerCount++;
-            ShapeMarker marker =
+            final ShapeMarker marker =
                 ShapeMarker.builder()
                     .shape(cheese.getShape(), world.getMaxHeight() + 2)
                     .label("")
@@ -156,8 +157,8 @@ public class BlueMapHeatMap extends Addon {
         this.api
             .getWorld(world)
             .ifPresent(
-                (BlueMapWorld blueMapWorld) -> {
-                  for (BlueMapMap map : blueMapWorld.getMaps()) {
+                (final BlueMapWorld blueMapWorld) -> {
+                  for (final BlueMapMap map : blueMapWorld.getMaps()) {
                     map.getMarkerSets().put("hm-%s".formatted(map.getName()), markerSet);
                   }
                 });

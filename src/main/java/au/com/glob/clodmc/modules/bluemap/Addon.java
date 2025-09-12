@@ -9,7 +9,7 @@ public abstract class Addon {
   protected final BlueMapAPI api;
 
   // initialise addon with bluemap api reference
-  protected Addon(BlueMapAPI api) {
+  protected Addon(final BlueMapAPI api) {
     this.api = api;
   }
 

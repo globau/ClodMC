@@ -22,14 +22,14 @@ public class Spawn implements Module {
     CommandBuilder.build("spawn")
         .description("Teleport to spawn")
         .executor(
-            (Player player) -> {
-              World world = Bukkit.getWorld("world");
+            (final Player player) -> {
+              final World world = Bukkit.getWorld("world");
               if (world == null) {
                 return;
               }
 
-              Integer spawnRadius = world.getGameRuleValue(GameRule.SPAWN_RADIUS);
-              Location location =
+              final Integer spawnRadius = world.getGameRuleValue(GameRule.SPAWN_RADIUS);
+              final Location location =
                   TeleportUtil.getRandomLoc(
                       world.getSpawnLocation(), spawnRadius == null ? 8 : spawnRadius);
 

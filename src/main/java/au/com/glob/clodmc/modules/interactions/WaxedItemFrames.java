@@ -35,17 +35,17 @@ public class WaxedItemFrames implements Module, Listener {
   // handle waxing item frames and click-through to containers
   @SuppressWarnings("MissingCasesInEnumSwitch")
   @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-  public void onPlayerInteractEntity(PlayerInteractEntityEvent event) {
-    if (!(event.getRightClicked() instanceof ItemFrame itemFrame)) {
+  public void onPlayerInteractEntity(final PlayerInteractEntityEvent event) {
+    if (!(event.getRightClicked() instanceof final ItemFrame itemFrame)) {
       return;
     }
 
-    PersistentDataContainer persistentData = itemFrame.getPersistentDataContainer();
-    Player player = event.getPlayer();
+    final PersistentDataContainer persistentData = itemFrame.getPersistentDataContainer();
+    final Player player = event.getPlayer();
 
     // waxing
-    EquipmentSlot hand = event.getHand();
-    ItemStack itemInHand = player.getInventory().getItem(hand);
+    final EquipmentSlot hand = event.getHand();
+    final ItemStack itemInHand = player.getInventory().getItem(hand);
     if (itemInHand.getType() == Material.HONEYCOMB) {
       // not already waxed
       if (persistentData.has(WAXED_KEY)) {
@@ -60,7 +60,7 @@ public class WaxedItemFrames implements Module, Listener {
       }
 
       // sound
-      Location loc = itemFrame.getLocation();
+      final Location loc = itemFrame.getLocation();
       player.playSound(loc, Sound.ITEM_HONEYCOMB_WAX_ON, 1.0f, 1.0f);
 
       // particles
@@ -108,9 +108,9 @@ public class WaxedItemFrames implements Module, Listener {
       event.setCancelled(true);
 
       // open container
-      Block attachedBlock =
+      final Block attachedBlock =
           itemFrame.getLocation().getBlock().getRelative(itemFrame.getAttachedFace());
-      if (attachedBlock.getState() instanceof Container container) {
+      if (attachedBlock.getState() instanceof final Container container) {
         player.openInventory(container.getInventory());
       }
     }

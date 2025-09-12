@@ -18,7 +18,7 @@ final class Colour {
   final Color color;
 
   // creates a colour with material, name, index and colour
-  Colour(Material material, String name, int index, Color color) {
+  Colour(final Material material, final String name, final int index, final Color color) {
     this.material = material;
     this.name = name;
     this.index = index;
@@ -41,14 +41,14 @@ final class Colour {
   }
 
   @Override
-  public boolean equals(@Nullable Object obj) {
+  public boolean equals(@Nullable final Object obj) {
     if (obj == this) {
       return true;
     }
     if (obj == null || obj.getClass() != this.getClass()) {
       return false;
     }
-    Colour that = (Colour) obj;
+    final Colour that = (Colour) obj;
     return Objects.equals(this.material, that.material)
         && Objects.equals(this.name, that.name)
         && this.index == that.index

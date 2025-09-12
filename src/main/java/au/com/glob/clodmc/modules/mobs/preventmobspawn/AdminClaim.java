@@ -14,7 +14,7 @@ final class AdminClaim {
   private final double maxX;
   private final double maxZ;
 
-  AdminClaim(Claim claim) {
+  AdminClaim(final Claim claim) {
     // cache claim boundaries for performance
     this.world = claim.getLesserBoundaryCorner().getWorld();
     this.minX = claim.getLesserBoundaryCorner().getX();
@@ -24,7 +24,7 @@ final class AdminClaim {
   }
 
   // check if location is within this admin claim
-  boolean contains(Location loc) {
+  boolean contains(final Location loc) {
     return loc.getWorld().equals(this.world)
         && loc.getX() >= this.minX
         && loc.getX() <= this.maxX

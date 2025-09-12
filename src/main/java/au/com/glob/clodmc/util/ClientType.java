@@ -11,7 +11,7 @@ public enum ClientType {
 
   private final String name;
 
-  ClientType(String name) {
+  ClientType(final String name) {
     this.name = name;
   }
 
@@ -21,11 +21,11 @@ public enum ClientType {
   }
 
   // parse client type from string name
-  public static @Nullable ClientType of(@Nullable String name) {
+  public static @Nullable ClientType of(@Nullable final String name) {
     if (name == null) {
       return null;
     }
-    for (ClientType gameType : ClientType.values()) {
+    for (final ClientType gameType : ClientType.values()) {
       if (gameType.name.equalsIgnoreCase(name)) {
         return gameType;
       }

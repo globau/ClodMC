@@ -72,7 +72,7 @@ public class VeinMiner implements Module, Listener {
 
   // register the veinmine enchantment during bootstrap
   @SuppressWarnings("UnstableApiUsage")
-  public static void bootstrap(BootstrapContextHelper context) {
+  public static void bootstrap(final BootstrapContextHelper context) {
     context.enchantment(
         VEINMINE_KEY,
         List.of(
@@ -109,16 +109,16 @@ public class VeinMiner implements Module, Listener {
 
   // handle vein mining when player breaks a block while sneaking
   @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-  public void onBlockBreak(BlockBreakEvent event) {
-    Player player = event.getPlayer();
-    Block block = event.getBlock();
+  public void onBlockBreak(final BlockBreakEvent event) {
+    final Player player = event.getPlayer();
+    final Block block = event.getBlock();
 
     if (!player.isSneaking()) {
       return;
     }
 
     // check tool
-    ItemStack tool = player.getInventory().getItemInMainHand();
+    final ItemStack tool = player.getInventory().getItemInMainHand();
     if (block.getDrops(tool).isEmpty() || !tool.containsEnchantment(this.veinmineEnchantment)) {
       return;
     }
@@ -140,8 +140,8 @@ public class VeinMiner implements Module, Listener {
     // cooldown if it was likely a block was veinmined
     // creative players aren't rate limited
     if (player.getGameMode().equals(GameMode.SURVIVAL)) {
-      for (BlockFace face : FACES) {
-        Block touchingBlock = block.getRelative(face);
+      for (final BlockFace face : FACES) {
+        final Block touchingBlock = block.getRelative(face);
         if (touchingBlock.getType().equals(block.getType())) {
           Schedule.delayed(3, () -> this.cooldownUUIDs.add(player.getUniqueId()));
           Schedule.delayed(23, () -> this.cooldownUUIDs.remove(player.getUniqueId()));
@@ -153,12 +153,12 @@ public class VeinMiner implements Module, Listener {
 
   // recursively break connected blocks of the same type
   private void breakBlocks(
-      Block block,
-      ItemStack tool,
-      Set<Block> processed,
-      Player player,
-      @Nullable Claim initialClaim) {
-    Material material = block.getType();
+      final Block block,
+      final ItemStack tool,
+      final Set<Block> processed,
+      final Player player,
+      @Nullable final Claim initialClaim) {
+    final Material material = block.getType();
     if (material == Material.AIR) {
       return;
     }
@@ -170,9 +170,9 @@ public class VeinMiner implements Module, Listener {
 
     // stop before breaking tools
     if (player.getGameMode().equals(GameMode.SURVIVAL)
-        && tool.getItemMeta() instanceof Damageable damageable) {
-      int damage = damageable.hasDamage() ? damageable.getDamage() : 0;
-      int maxDamage =
+        && tool.getItemMeta() instanceof final Damageable damageable) {
+      final int damage = damageable.hasDamage() ? damageable.getDamage() : 0;
+      final int maxDamage =
           damageable.hasMaxDamage() ? damageable.getMaxDamage() : tool.getType().getMaxDurability();
       if (maxDamage - damage <= COST) {
         return;
@@ -181,12 +181,12 @@ public class VeinMiner implements Module, Listener {
 
     // break this block, except for the initial block as that's handled by the BlockBreak event
     if (!processed.isEmpty()) {
-      Claim claim =
+      final Claim claim =
           GriefPrevention.instance.dataStore.getClaimAt(
               block.getLocation(), true, false, initialClaim);
       boolean canBreak = true;
       if (claim != null) {
-        Supplier<@Nullable String> denalMessage =
+        final Supplier<@Nullable String> denalMessage =
             claim.checkPermission(player, ClaimPermission.Build, null);
         canBreak = denalMessage == null || denalMessage.get() == null;
       }
@@ -204,12 +204,12 @@ public class VeinMiner implements Module, Listener {
     processed.add(block);
 
     // break touching blocks in random order
-    ArrayList<BlockFace> shuffledFaces = new ArrayList<>(FACES);
+    final ArrayList<BlockFace> shuffledFaces = new ArrayList<>(FACES);
     Collections.shuffle(shuffledFaces);
     boolean foundBlock = false;
-    Set<Block> skipped = new HashSet<>(6);
-    for (BlockFace face : shuffledFaces) {
-      Block touchingBlock = block.getRelative(face);
+    final Set<Block> skipped = new HashSet<>(6);
+    for (final BlockFace face : shuffledFaces) {
+      final Block touchingBlock = block.getRelative(face);
       if (touchingBlock.getType().equals(material) && !processed.contains(touchingBlock)) {
         if (processed.size() <= 6 || Math.random() < 0.75) {
           foundBlock = true;
@@ -221,7 +221,7 @@ public class VeinMiner implements Module, Listener {
       }
     }
     if (!foundBlock) {
-      for (Block skippedBlock : skipped) {
+      for (final Block skippedBlock : skipped) {
         if (!processed.contains(skippedBlock)) {
           Schedule.delayed(
               DELAY, () -> this.breakBlocks(skippedBlock, tool, processed, player, initialClaim));

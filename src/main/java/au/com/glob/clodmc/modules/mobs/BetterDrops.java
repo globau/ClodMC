@@ -19,7 +19,7 @@ import org.jspecify.annotations.NullMarked;
 public class BetterDrops implements Listener, Module {
   @SuppressWarnings("MissingCasesInEnumSwitch")
   @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
-  public void onEntityDeath(EntityDeathEvent event) {
+  public void onEntityDeath(final EntityDeathEvent event) {
     // adjust drops for mobs killed by players
     if (event.getEntity().getKiller() == null) {
       return;
@@ -33,7 +33,7 @@ public class BetterDrops implements Listener, Module {
               .add(new ItemStack(Material.SHULKER_SHELL, event.getDrops().isEmpty() ? 2 : 1));
       case WITHER_SKELETON -> {
         // increase wither-skeleton head drop chance
-        for (ItemStack drop : event.getDrops()) {
+        for (final ItemStack drop : event.getDrops()) {
           if (drop.getType() == Material.WITHER_SKELETON_SKULL) {
             return;
           }

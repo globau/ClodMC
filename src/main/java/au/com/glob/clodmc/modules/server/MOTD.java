@@ -24,7 +24,7 @@ public class MOTD implements Module, Listener {
     if (hostname == null) {
       hostname = "";
     }
-    String motd;
+    final String motd;
     if (hostname.equals("clod.glob.au")) {
       // prod
       motd = "<gold>clod-mc</gold> ∙ <blue>clod.glob.au";
@@ -42,7 +42,7 @@ public class MOTD implements Module, Listener {
 
   // set motd based on hostname environment
   @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-  public void onServerListPing(ServerListPingEvent event) {
+  public void onServerListPing(final ServerListPingEvent event) {
     event.motd(this.motd);
   }
 }

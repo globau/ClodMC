@@ -175,7 +175,7 @@ public class WelcomeBook implements Module, Listener {
         .description("Give specified player the welcome book")
         .requiresOp()
         .executor(
-            (EitherCommandSender sender, @Nullable Player player) -> {
+            (final EitherCommandSender sender, @Nullable final Player player) -> {
               if (player == null) {
                 throw new CommandUsageError();
               }
@@ -192,46 +192,47 @@ public class WelcomeBook implements Module, Listener {
                     .toList());
 
     // save the welcome book for other consumers
-    List<String> pagesAsJson =
+    final List<String> pagesAsJson =
         PAGES.stream()
             .map(StringUtil::asComponent)
             .map((Component component) -> JSONComponentSerializer.json().serialize(component))
             .toList();
-    String json = "[%s]".formatted(String.join(",", pagesAsJson));
+    final String json = "[%s]".formatted(String.join(",", pagesAsJson));
 
-    Gson gson = new GsonBuilder().setPrettyPrinting().create();
-    String prettyJson = gson.toJson(JsonParser.parseString(json));
+    final Gson gson = new GsonBuilder().setPrettyPrinting().create();
+    final String prettyJson = gson.toJson(JsonParser.parseString(json));
 
     try {
-      File jsonFile = new File(ClodMC.instance.getDataFolder(), "welcome-book.json");
+      final File jsonFile = new File(ClodMC.instance.getDataFolder(), "welcome-book.json");
       Files.writeString(jsonFile.toPath(), prettyJson);
-    } catch (IOException e) {
+    } catch (final IOException e) {
       Logger.error("failed to write welcome-book.json", e);
     }
   }
 
   // give welcome book to new players
   @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-  public void onPlayerJoin(PlayerJoinEvent event) {
+  public void onPlayerJoin(final PlayerJoinEvent event) {
     if (!event.getPlayer().hasPlayedBefore()) {
       Schedule.delayed(5, () -> giveWelcomeBook(event.getPlayer(), null));
     }
   }
 
   // create and give welcome book to player
-  private static void giveWelcomeBook(Player recipient, @Nullable CommandSender sender) {
-    ItemStack bookItem = new ItemStack(Material.WRITTEN_BOOK);
-    BookMeta bookMeta = (BookMeta) bookItem.getItemMeta();
+  private static void giveWelcomeBook(
+      final Player recipient, @Nullable final CommandSender sender) {
+    final ItemStack bookItem = new ItemStack(Material.WRITTEN_BOOK);
+    final BookMeta bookMeta = (BookMeta) bookItem.getItemMeta();
 
-    BookMeta.BookMetaBuilder builder = bookMeta.toBuilder();
-    for (String page : PAGES) {
+    final BookMeta.BookMetaBuilder builder = bookMeta.toBuilder();
+    for (final String page : PAGES) {
       builder.addPage(StringUtil.asComponent(page));
     }
     builder.title(Component.text(TITLE)).author(Component.text(AUTHOR));
 
     bookItem.setItemMeta(builder.build());
 
-    HashMap<Integer, ItemStack> overflow = recipient.getInventory().addItem(bookItem);
+    final HashMap<Integer, ItemStack> overflow = recipient.getInventory().addItem(bookItem);
     if (!overflow.isEmpty()) {
       recipient.dropItem(bookItem);
     }

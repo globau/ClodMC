@@ -13,15 +13,15 @@ import org.jspecify.annotations.NullMarked;
 /** displays world spawn points as markers on bluemap */
 @NullMarked
 public class BlueMapSpawn extends Addon {
-  protected BlueMapSpawn(BlueMapAPI api) {
+  protected BlueMapSpawn(final BlueMapAPI api) {
     super(api);
   }
 
   // create spawn point markers for all worlds
   @Override
   public void update() {
-    for (World world : Bukkit.getWorlds()) {
-      MarkerSet markerSet = MarkerSet.builder().label("Spawn").defaultHidden(false).build();
+    for (final World world : Bukkit.getWorlds()) {
+      final MarkerSet markerSet = MarkerSet.builder().label("Spawn").defaultHidden(false).build();
       markerSet.put(
           "spawn",
           POIMarker.builder()
@@ -35,8 +35,8 @@ public class BlueMapSpawn extends Addon {
       this.api
           .getWorld(world)
           .ifPresent(
-              (BlueMapWorld blueMapWorld) -> {
-                for (BlueMapMap map : blueMapWorld.getMaps()) {
+              (final BlueMapWorld blueMapWorld) -> {
+                for (final BlueMapMap map : blueMapWorld.getMaps()) {
                   map.getMarkerSets().put("spawn", markerSet);
                 }
               });

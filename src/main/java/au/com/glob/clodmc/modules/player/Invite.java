@@ -48,12 +48,12 @@ public class Invite implements Module {
 
   public Invite() {
     String secretApiKey;
-    File secretsFile = new File(ClodMC.instance.getDataFolder(), "secrets.yml");
-    YamlConfiguration config = new YamlConfiguration();
+    final File secretsFile = new File(ClodMC.instance.getDataFolder(), "secrets.yml");
+    final YamlConfiguration config = new YamlConfiguration();
     try {
       config.load(secretsFile);
       secretApiKey = config.getString("mcprofile.api-key");
-    } catch (IOException | InvalidConfigurationException e) {
+    } catch (final IOException | InvalidConfigurationException e) {
       Logger.error("bad or missing %s".formatted(secretsFile));
       secretApiKey = null;
     }
@@ -67,15 +67,17 @@ public class Invite implements Module {
         .usage("/invite <java|bedrock> <player>")
         .description("Add a player to the whitelist")
         .executor(
-            (EitherCommandSender sender, @Nullable String type, @Nullable String name) -> {
+            (final EitherCommandSender sender,
+                @Nullable final String type,
+                @Nullable final String name) -> {
               if (ClientType.of(type) == null || name == null) {
                 throw new CommandUsageError();
               }
 
               // check playtime
               if (sender.isPlayer() && !sender.isOp()) {
-                int ticks = sender.asPlayer().getStatistic(Statistic.PLAY_ONE_MINUTE);
-                long minutesPlayed = Math.round(ticks / 20.0 / 60.0);
+                final int ticks = sender.asPlayer().getStatistic(Statistic.PLAY_ONE_MINUTE);
+                final long minutesPlayed = Math.round(ticks / 20.0 / 60.0);
                 if (minutesPlayed < MIN_PLAY_TIME) {
                   throw new CommandError(
                       "You have not played on Clod-MC long enough to invite others");
@@ -87,17 +89,17 @@ public class Invite implements Module {
               try {
                 UUID.fromString(name.toLowerCase(Locale.ENGLISH));
                 throw new CommandError("Invalid player name");
-              } catch (IllegalArgumentException e) {
+              } catch (final IllegalArgumentException e) {
                 // ignore
               }
 
               Schedule.asynchronously(
                   () -> {
                     try {
-                      ClientType clientType = ClientType.of(type);
+                      final ClientType clientType = ClientType.of(type);
 
                       // check mcprofile.io
-                      UUID uuid = this.lookupUUID(Objects.requireNonNull(clientType), name);
+                      final UUID uuid = this.lookupUUID(Objects.requireNonNull(clientType), name);
                       if (uuid == null) {
                         throw new CommandError(
                             "Failed to find player with name: %s".formatted(name));
@@ -118,7 +120,7 @@ public class Invite implements Module {
                       Schedule.nextTick(
                           () -> {
                             try {
-                              String command =
+                              final String command =
                                   (clientType == ClientType.JAVA
                                       ? "whitelist add %s".formatted(name)
                                       : "fwhitelist add %s".formatted(uuid));
@@ -132,7 +134,7 @@ public class Invite implements Module {
                               }
 
                               // record who invited the new player
-                              PlayerDataFile dataFile = PlayerDataFiles.of(uuid);
+                              final PlayerDataFile dataFile = PlayerDataFiles.of(uuid);
                               dataFile.setPlayerName(name);
                               dataFile.setInvitedBy(sender.getName());
                               dataFile.save();
@@ -141,14 +143,14 @@ public class Invite implements Module {
                               Mailer.emailAdmin(
                                   "clod-mc: %s (%s) added to the whitelist by %s"
                                       .formatted(name, clientType, sender.getName()));
-                            } catch (CommandError e) {
+                            } catch (final CommandError e) {
                               Chat.error(
                                   sender,
                                   Objects.requireNonNullElse(
                                       e.getMessage(), "Failed to whitelist player"));
                             }
                           });
-                    } catch (CommandError e) {
+                    } catch (final CommandError e) {
                       Chat.error(
                           sender,
                           Objects.requireNonNullElse(e.getMessage(), "Failed to whitelist player"));
@@ -156,8 +158,8 @@ public class Invite implements Module {
                   });
             })
         .completor(
-            (CommandSender sender, List<String> args) -> {
-              List<String> types = List.of("java", "bedrock");
+            (final CommandSender sender, final List<String> args) -> {
+              final List<String> types = List.of("java", "bedrock");
               if (args.isEmpty()) {
                 return types;
               }
@@ -171,21 +173,21 @@ public class Invite implements Module {
   }
 
   // lookup player uuid from mcprofile.io api
-  private @Nullable UUID lookupUUID(ClientType clientType, String name) {
+  private @Nullable UUID lookupUUID(final ClientType clientType, final String name) {
     assert this.apiKey != null;
-    String url =
+    final String url =
         "https://mcprofile.io/api/v1/%s/%s"
             .formatted(
                 clientType == ClientType.JAVA ? "java/username" : "bedrock/gamertag",
                 URLEncoder.encode(name, StandardCharsets.UTF_8));
 
-    HttpJsonResponse result = HttpClient.getJSON(url, Map.of("x-api-key", this.apiKey));
-    JsonObject response = result.getResponse();
+    final HttpJsonResponse result = HttpClient.getJSON(url, Map.of("x-api-key", this.apiKey));
+    final JsonObject response = result.getResponse();
     if (response == null) {
       return null;
     }
 
-    String field = clientType == ClientType.JAVA ? "uuid" : "floodgateuid";
+    final String field = clientType == ClientType.JAVA ? "uuid" : "floodgateuid";
     return response.has(field) ? UUID.fromString(response.get(field).getAsString()) : null;
   }
 }

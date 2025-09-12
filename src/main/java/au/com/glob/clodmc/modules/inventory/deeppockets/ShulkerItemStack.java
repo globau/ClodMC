@@ -7,25 +7,25 @@ import org.jspecify.annotations.Nullable;
 /** represents an item stack location within a shulker box */
 @NullMarked
 final class ShulkerItemStack {
-  final int playerSlot;
-  final int shulkerSlot;
-  final int amount;
+  int playerSlot;
+  int shulkerSlot;
+  int amount;
 
-  ShulkerItemStack(int playerSlot, int shulkerSlot, int amount) {
+  ShulkerItemStack(final int playerSlot, final int shulkerSlot, final int amount) {
     this.playerSlot = playerSlot;
     this.shulkerSlot = shulkerSlot;
     this.amount = amount;
   }
 
   @Override
-  public boolean equals(@Nullable Object obj) {
+  public boolean equals(@Nullable final Object obj) {
     if (obj == this) {
       return true;
     }
     if (obj == null || obj.getClass() != this.getClass()) {
       return false;
     }
-    ShulkerItemStack that = (ShulkerItemStack) obj;
+    final ShulkerItemStack that = (ShulkerItemStack) obj;
     return this.playerSlot == that.playerSlot
         && this.shulkerSlot == that.shulkerSlot
         && this.amount == that.amount;

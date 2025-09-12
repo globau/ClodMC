@@ -15,7 +15,7 @@ public class BlockPos {
   public final int y;
   public final int z;
 
-  BlockPos(World world, int x, int y, int z) {
+  BlockPos(final World world, final int x, final int y, final int z) {
     this.world = world;
     this.x = x;
     this.y = y;
@@ -28,7 +28,7 @@ public class BlockPos {
   }
 
   // format position as string with optional world prefix
-  public String getString(boolean includeWorld) {
+  public String getString(final boolean includeWorld) {
     String prefix = "";
     if (includeWorld) {
       prefix =
@@ -43,11 +43,11 @@ public class BlockPos {
   }
 
   @Override
-  public boolean equals(@Nullable Object other) {
+  public boolean equals(@Nullable final Object other) {
     if (this == other) {
       return true;
     }
-    if (!(other instanceof BlockPos otherPos)) {
+    if (!(other instanceof final BlockPos otherPos)) {
       return false;
     }
     return this.x == otherPos.x
@@ -57,11 +57,11 @@ public class BlockPos {
   }
 
   // create block position from bukkit location
-  public static BlockPos of(Location loc) {
+  public static BlockPos of(final Location loc) {
     return new BlockPos(loc.getWorld(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ());
   }
 
-  // convert to bukkit location (centred in block)
+  // convert to bukkit location (centred in final block)
   public Location asLocation() {
     return new Location(this.world, this.x + 0.5, this.y, this.z + 0.5);
   }

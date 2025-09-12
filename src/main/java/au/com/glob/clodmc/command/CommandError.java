@@ -6,7 +6,7 @@ import org.jspecify.annotations.NullMarked;
 /** exception thrown when a command encounters an error during execution */
 @NullMarked
 public class CommandError extends CommandException {
-  public CommandError(String message) {
+  public CommandError(final String message) {
     super(message);
   }
 }

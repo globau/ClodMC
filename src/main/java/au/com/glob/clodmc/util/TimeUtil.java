@@ -7,7 +7,7 @@ import org.jspecify.annotations.NullMarked;
 
 /** Date/Time/Timezone helpers */
 @NullMarked
-public class TimeUtil {
+public final class TimeUtil {
   private static final ZoneId LOCAL_TZ = ZoneId.of("Australia/Perth");
   private static final ZoneId UTC = ZoneId.of("UTC");
 

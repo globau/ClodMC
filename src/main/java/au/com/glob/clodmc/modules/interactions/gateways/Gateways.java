@@ -107,7 +107,7 @@ public class Gateways implements Module, Listener {
   private static final int RANDOM_TP_COOLDOWN = 60; // seconds
 
   private final File configFile = new File(ClodMC.instance.getDataFolder(), "gateways.yml");
-  final Map<BlockPos, AnchorBlock> instances = new HashMap<>();
+  Map<BlockPos, AnchorBlock> instances = new HashMap<>();
   private final Map<Player, BlockPos> ignore = new HashMap<>();
   private final Random random = new Random();
 
@@ -127,13 +127,13 @@ public class Gateways implements Module, Listener {
     CommandBuilder.build("gateways")
         .description("List gateways in use")
         .executor(
-            (EitherCommandSender sender) -> {
+            (final EitherCommandSender sender) -> {
               if (this.instances.isEmpty()) {
                 Chat.warning(sender, "No gateways");
                 return;
               }
 
-              String gateways =
+              final String gateways =
                   this.instances.values().stream()
                       .map(AnchorBlock::getColourPair)
                       .distinct()
@@ -154,19 +154,20 @@ public class Gateways implements Module, Listener {
     this.instances.clear();
     this.ignore.clear();
 
-    YamlConfiguration config = YamlConfiguration.loadConfiguration(this.configFile);
-    List<?> rawList = config.getList("anchors");
+    final YamlConfiguration config = YamlConfiguration.loadConfiguration(this.configFile);
+    final List<?> rawList = config.getList("anchors");
     if (rawList == null) {
       return;
     }
 
     // load and connect
-    Map<Integer, BlockPos> connections = new HashMap<>();
-    for (Object obj : rawList) {
-      if (obj instanceof AnchorBlock anchorBlock) {
+    final Map<Integer, BlockPos> connections = new HashMap<>();
+    for (final Object obj : rawList) {
+      if (obj instanceof final AnchorBlock anchorBlock) {
         this.instances.put(anchorBlock.blockPos, anchorBlock);
         if (connections.containsKey(anchorBlock.networkId)) {
-          AnchorBlock otherAnchorBlock = this.instances.get(connections.get(anchorBlock.networkId));
+          final AnchorBlock otherAnchorBlock =
+              this.instances.get(connections.get(anchorBlock.networkId));
           if (otherAnchorBlock != null) {
             anchorBlock.connectTo(otherAnchorBlock);
           }
@@ -177,46 +178,47 @@ public class Gateways implements Module, Listener {
     }
 
     // visuals
-    for (AnchorBlock anchorBlock : this.instances.values()) {
+    for (final AnchorBlock anchorBlock : this.instances.values()) {
       anchorBlock.visuals.update();
     }
   }
 
   // save gateway configuration to yaml file
   private void save() {
-    YamlConfiguration config = new YamlConfiguration();
+    final YamlConfiguration config = new YamlConfiguration();
     config.set("anchors", new ArrayList<>(this.instances.values()));
     try {
       config.save(this.configFile);
       if (BlueMapGateways.instance != null) {
         BlueMapGateways.instance.update();
       }
-    } catch (IOException e) {
+    } catch (final IOException e) {
       Logger.error("failed to write %s".formatted(this.configFile), e);
     }
   }
 
   // set anchor item metadata during crafting
   @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-  public void onPrepareItemCraft(PrepareItemCraftEvent event) {
-    ItemStack item = event.getInventory().getResult();
+  public void onPrepareItemCraft(final PrepareItemCraftEvent event) {
+    final ItemStack item = event.getInventory().getResult();
     if (!AnchorItem.isAnchor(item)) {
       return;
     }
 
-    @Nullable ItemStack[] matrix = event.getInventory().getMatrix();
-    Colour topColour = Colours.of(matrix[1]);
-    Colour bottomColour = Colours.of(matrix[4]);
+    @Nullable final ItemStack[] matrix = event.getInventory().getMatrix();
+    final Colour topColour = Colours.of(matrix[1]);
+    final Colour bottomColour = Colours.of(matrix[4]);
     if (topColour == null || bottomColour == null) {
       Logger.error("failed to craft anchor block: invalid colour material");
       return;
     }
-    int networkId = Network.coloursToNetworkId(topColour, bottomColour);
+    final int networkId = Network.coloursToNetworkId(topColour, bottomColour);
 
     AnchorItem.setMeta(item, networkId);
 
     int amount = 2;
-    if (networkId == RANDOM_NETWORK_ID && event.getView().getPlayer() instanceof Player player) {
+    if (networkId == RANDOM_NETWORK_ID
+        && event.getView().getPlayer() instanceof final Player player) {
       amount = player.isOp() ? 1 : 0;
     }
     item.setAmount(amount);
@@ -226,8 +228,8 @@ public class Gateways implements Module, Listener {
 
   // clean up extra metadata after crafting
   @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-  public void onCraftItem(CraftItemEvent event) {
-    ItemStack item = event.getCurrentItem();
+  public void onCraftItem(final CraftItemEvent event) {
+    final ItemStack item = event.getCurrentItem();
 
     if (AnchorItem.isAnchor(item)) {
       AnchorItem.clearExtraMeta(item);
@@ -236,8 +238,8 @@ public class Gateways implements Module, Listener {
 
   // refresh anchor item metadata in anvil
   @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-  public void onPrepareAnvil(PrepareAnvilEvent event) {
-    ItemStack item = event.getResult();
+  public void onPrepareAnvil(final PrepareAnvilEvent event) {
+    final ItemStack item = event.getResult();
     if (AnchorItem.isAnchor(item)) {
       AnchorItem.refreshMeta(item);
     }
@@ -245,38 +247,38 @@ public class Gateways implements Module, Listener {
 
   // handle anchor block placement and network connections
   @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-  public void onBlockPlace(BlockPlaceEvent event) {
+  public void onBlockPlace(final BlockPlaceEvent event) {
     // prevent placing blocks in the 2 blocks above an anchorBlock
-    BlockPos below1Pos = BlockPos.of(event.getBlock().getLocation()).down();
-    BlockPos below2Pos = below1Pos.down();
+    final BlockPos below1Pos = BlockPos.of(event.getBlock().getLocation()).down();
+    final BlockPos below2Pos = below1Pos.down();
     if (this.instances.containsKey(below1Pos) || this.instances.containsKey(below2Pos)) {
       event.setCancelled(true);
       return;
     }
 
-    ItemStack item = event.getItemInHand();
+    final ItemStack item = event.getItemInHand();
     if (!AnchorItem.isAnchor(item)) {
       return;
     }
 
     // needs to be placed with two blocks of air above
-    BlockPos above1Pos = BlockPos.of(event.getBlock().getLocation()).up();
-    BlockPos above2Pos = above1Pos.up();
+    final BlockPos above1Pos = BlockPos.of(event.getBlock().getLocation()).up();
+    final BlockPos above2Pos = above1Pos.up();
     if (!(above1Pos.getBlock().isEmpty() && above2Pos.getBlock().isEmpty())) {
       event.setCancelled(true);
       Chat.error(event.getPlayer(), "Anchors require two air blocks above");
       return;
     }
 
-    int networkId = AnchorItem.getNetworkId(item);
-    AnchorBlock anchorBlock =
+    final int networkId = AnchorItem.getNetworkId(item);
+    final AnchorBlock anchorBlock =
         new AnchorBlock(networkId, event.getBlock().getLocation(), AnchorItem.getName(item));
 
     if (!anchorBlock.isRandom) {
       // find connecting anchor block
       AnchorBlock otherAnchorBlock = null;
       int matching = 0;
-      for (AnchorBlock a : this.instances.values()) {
+      for (final AnchorBlock a : this.instances.values()) {
         if (a.networkId == networkId) {
           otherAnchorBlock = a;
           matching++;
@@ -306,12 +308,12 @@ public class Gateways implements Module, Listener {
 
   // prevent falling blocks from interfering with gateways
   @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-  public void onEntityChangeBlock(EntityChangeBlockEvent event) {
+  public void onEntityChangeBlock(final EntityChangeBlockEvent event) {
     // if a falling entity turns into a block inside the gateway, break the block
-    if (event.getEntity() instanceof FallingBlock fallingBlock) {
-      BlockPos belowPos = BlockPos.of(event.getBlock().getLocation()).down();
+    if (event.getEntity() instanceof final FallingBlock fallingBlock) {
+      final BlockPos belowPos = BlockPos.of(event.getBlock().getLocation()).down();
       if (this.instances.containsKey(belowPos)) {
-        ItemStack itemStack = new ItemStack(fallingBlock.getBlockData().getMaterial());
+        final ItemStack itemStack = new ItemStack(fallingBlock.getBlockData().getMaterial());
         event.getBlock().getWorld().dropItem(event.getBlock().getLocation(), itemStack);
         event.setCancelled(true);
       }
@@ -320,9 +322,9 @@ public class Gateways implements Module, Listener {
 
   // handle anchor block removal and drop anchor item
   @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-  public void onBlockBreak(BlockBreakEvent event) {
-    BlockPos blockPos = BlockPos.of(event.getBlock().getLocation());
-    AnchorBlock anchorBlock = this.instances.get(blockPos);
+  public void onBlockBreak(final BlockBreakEvent event) {
+    final BlockPos blockPos = BlockPos.of(event.getBlock().getLocation());
+    final AnchorBlock anchorBlock = this.instances.get(blockPos);
     if (anchorBlock == null) {
       return;
     }
@@ -330,7 +332,7 @@ public class Gateways implements Module, Listener {
     // remove portal and disconnect
     anchorBlock.visuals.disable();
     this.instances.remove(blockPos);
-    AnchorBlock otherAnchorBlock = anchorBlock.connectedTo;
+    final AnchorBlock otherAnchorBlock = anchorBlock.connectedTo;
     if (otherAnchorBlock != null) {
       otherAnchorBlock.disconnect();
       otherAnchorBlock.visuals.update();
@@ -343,15 +345,15 @@ public class Gateways implements Module, Listener {
     }
     event.setDropItems(false);
 
-    ItemStack anchorItem = AnchorItem.create();
+    final ItemStack anchorItem = AnchorItem.create();
     AnchorItem.setMeta(anchorItem, anchorBlock.networkId, anchorBlock.name, null);
     anchorBlock.blockPos.world.dropItem(anchorBlock.blockPos.asLocation(), anchorItem);
   }
 
   // handle player movement and gateway interactions
   @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-  public void onPlayerMove(PlayerMoveEvent event) {
-    Player player = event.getPlayer();
+  public void onPlayerMove(final PlayerMoveEvent event) {
+    final Player player = event.getPlayer();
 
     // keep track of gateways within range of players
     if (event.hasChangedBlock()) {
@@ -363,16 +365,16 @@ public class Gateways implements Module, Listener {
     }
 
     // show colours of looked-at anchorblocks
-    Block targetBlock = player.getTargetBlockExact(Players.INTERACTION_RANGE);
+    final Block targetBlock = player.getTargetBlockExact(Players.INTERACTION_RANGE);
     if (targetBlock != null) {
-      AnchorBlock anchorBlock = this.instances.get(BlockPos.of(targetBlock.getLocation()));
+      final AnchorBlock anchorBlock = this.instances.get(BlockPos.of(targetBlock.getLocation()));
       if (anchorBlock != null) {
         ActionBar.plain(player, anchorBlock.getInformation());
       }
     }
 
-    Location playerLocation = player.getLocation();
-    BlockPos playerPos = BlockPos.of(playerLocation);
+    final Location playerLocation = player.getLocation();
+    final BlockPos playerPos = BlockPos.of(playerLocation);
 
     // ignore players after they teleport, until they step off the anchorblock
     if (this.ignore.containsKey(player)) {
@@ -383,14 +385,14 @@ public class Gateways implements Module, Listener {
     }
 
     // check for anchorblock
-    BlockPos standingOnPos = BlockPos.of(playerLocation).down();
-    AnchorBlock anchorBlock = this.instances.get(standingOnPos);
+    final BlockPos standingOnPos = BlockPos.of(playerLocation).down();
+    final AnchorBlock anchorBlock = this.instances.get(standingOnPos);
     if (anchorBlock == null) {
       return;
     }
 
-    Location teleportPos;
-    PlayerTeleportEvent.TeleportCause cause;
+    final Location teleportPos;
+    final PlayerTeleportEvent.TeleportCause cause;
 
     if (anchorBlock.networkId == RANDOM_NETWORK_ID) {
       teleportPos = this.randomTeleportLocation(anchorBlock, player);
@@ -403,7 +405,7 @@ public class Gateways implements Module, Listener {
     } else {
       // teleport to connected anchor
 
-      AnchorBlock connectedTo = anchorBlock.connectedTo;
+      final AnchorBlock connectedTo = anchorBlock.connectedTo;
       if (connectedTo == null) {
         ActionBar.plain(player, anchorBlock.getInformation());
         return;
@@ -416,11 +418,11 @@ public class Gateways implements Module, Listener {
 
     // teleport
     this.ignore.put(player, anchorBlock.blockPos.up());
-    Location finalTeleportPos = teleportPos;
+    final Location finalTeleportPos = teleportPos;
     player
         .teleportAsync(teleportPos, cause)
         .whenComplete(
-            (@Nullable Boolean result, Throwable e) -> {
+            (@Nullable final Boolean result, final Throwable e) -> {
               player.clearTitle();
               if (result != null && result) {
                 this.ignore.put(player, BlockPos.of(finalTeleportPos));
@@ -439,7 +441,7 @@ public class Gateways implements Module, Listener {
               }
             })
         .exceptionally(
-            (Throwable ex) -> {
+            (final Throwable ex) -> {
               Chat.error(player, "Teleport failed");
               return null;
             });
@@ -447,20 +449,20 @@ public class Gateways implements Module, Listener {
 
   // update nearby anchor visuals after teleportation
   @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-  public void onPlayerTeleport(PlayerTeleportEvent event) {
+  public void onPlayerTeleport(final PlayerTeleportEvent event) {
     this.updateNearbyAnchors(event.getPlayer(), event.getTo());
   }
 
   // update nearby anchor visuals after respawn
   @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-  public void onPlayerRespawn(PlayerRespawnEvent event) {
+  public void onPlayerRespawn(final PlayerRespawnEvent event) {
     this.updateNearbyAnchors(event.getPlayer(), event.getRespawnLocation());
   }
 
   // setup gateway visuals and recipes for joining player
   @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-  public void onPlayerJoin(PlayerJoinEvent event) {
-    Player player = event.getPlayer();
+  public void onPlayerJoin(final PlayerJoinEvent event) {
+    final Player player = event.getPlayer();
 
     // add recipe to book
     player.discoverRecipe(AnchorItem.RECIPE_KEY);
@@ -469,8 +471,8 @@ public class Gateways implements Module, Listener {
     this.updateNearbyAnchors(player);
 
     // if player spawns on an anchor block don't immediately teleport
-    BlockPos standingOnPos = BlockPos.of(player.getLocation()).down();
-    AnchorBlock anchorBlock = this.instances.get(standingOnPos);
+    final BlockPos standingOnPos = BlockPos.of(player.getLocation()).down();
+    final AnchorBlock anchorBlock = this.instances.get(standingOnPos);
     if (anchorBlock != null && anchorBlock.connectedTo != null) {
       this.ignore.put(player, BlockPos.of(player.getLocation()));
     }
@@ -478,38 +480,38 @@ public class Gateways implements Module, Listener {
 
   // clean up player data when they quit
   @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-  public void onPlayerQuit(PlayerQuitEvent event) {
-    Player player = event.getPlayer();
+  public void onPlayerQuit(final PlayerQuitEvent event) {
+    final Player player = event.getPlayer();
 
     this.ignore.remove(player);
 
-    for (AnchorBlock anchorBlock : this.instances.values()) {
+    for (final AnchorBlock anchorBlock : this.instances.values()) {
       anchorBlock.visuals.removeNearbyPlayer(player);
     }
   }
 
   // prevent charging respawn anchors used as gateways
   @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-  public void onPlayerInteract(PlayerInteractEvent event) {
+  public void onPlayerInteract(final PlayerInteractEvent event) {
     if (event.getAction() != Action.RIGHT_CLICK_BLOCK || event.getClickedBlock() == null) {
       return;
     }
 
     // prevent charging up the respawn anchor
-    AnchorBlock anchorBlock =
+    final AnchorBlock anchorBlock =
         this.instances.get(BlockPos.of(event.getClickedBlock().getLocation()));
     event.setCancelled(anchorBlock != null);
   }
 
   // update visual effects for all anchors near player location
-  public void updateNearbyAnchors(Player player, Location location) {
-    for (AnchorBlock anchorBlock : this.instances.values()) {
+  public void updateNearbyAnchors(final Player player, final Location location) {
+    for (final AnchorBlock anchorBlock : this.instances.values()) {
       anchorBlock.visuals.updateNearbyPlayer(player, location);
     }
   }
 
   // update visual effects for all anchors near player
-  public void updateNearbyAnchors(Player player) {
+  public void updateNearbyAnchors(final Player player) {
     this.updateNearbyAnchors(player, player.getLocation());
   }
 
@@ -519,11 +521,12 @@ public class Gateways implements Module, Listener {
   }
 
   // find safe random teleport location for new players
-  private @Nullable Location randomTeleportLocation(AnchorBlock anchorBlock, Player player) {
+  private @Nullable Location randomTeleportLocation(
+      final AnchorBlock anchorBlock, final Player player) {
     // only new players can use a random gateway
     if (!player.isOp()) {
-      int ticks = player.getStatistic(Statistic.PLAY_ONE_MINUTE);
-      long minutesPlayed = Math.round(ticks / 20.0 / 60.0);
+      final int ticks = player.getStatistic(Statistic.PLAY_ONE_MINUTE);
+      final long minutesPlayed = Math.round(ticks / 20.0 / 60.0);
       if (minutesPlayed > MAX_RANDOM_TP_TIME) {
         Chat.error(player, "New Players Only");
         return null;
@@ -531,11 +534,11 @@ public class Gateways implements Module, Listener {
     }
 
     // cooldown
-    PlayerDataFile dataFile = PlayerDataFiles.of(player);
-    LocalDateTime now = TimeUtil.localNow();
-    LocalDateTime lastRandomTeleport = dataFile.getDateTime("tpr");
+    final PlayerDataFile dataFile = PlayerDataFiles.of(player);
+    final LocalDateTime now = TimeUtil.localNow();
+    final LocalDateTime lastRandomTeleport = dataFile.getDateTime("tpr");
     if (lastRandomTeleport != null) {
-      long secondsSinceRandomTeleport = Duration.between(lastRandomTeleport, now).toSeconds();
+      final long secondsSinceRandomTeleport = Duration.between(lastRandomTeleport, now).toSeconds();
       if (secondsSinceRandomTeleport < RANDOM_TP_COOLDOWN) {
         this.ignore.put(player, anchorBlock.blockPos.up());
         Chat.warning(
@@ -557,40 +560,40 @@ public class Gateways implements Module, Listener {
             Component.text("Teleporting"),
             Title.Times.times(Duration.ZERO, Duration.ofSeconds(2), Duration.ofMillis(500))));
 
-    World world = Bukkit.getWorld("world");
+    final World world = Bukkit.getWorld("world");
     if (world == null) {
       this.ignore.put(player, anchorBlock.blockPos.up());
       return null;
     }
-    WorldBorder border = world.getWorldBorder();
+    final WorldBorder border = world.getWorldBorder();
 
     int attemptsLeft = 25;
     while (attemptsLeft > 0) {
       attemptsLeft--;
 
       // pick a random location
-      double radius = border.getSize() / 2.0;
-      Location center = border.getCenter();
+      final double radius = border.getSize() / 2.0;
+      final Location center = border.getCenter();
       Location randomPos;
       do {
-        double distance =
+        final double distance =
             MIN_RANDOM_TP_DISTANCE + (this.random.nextDouble() * (radius - MIN_RANDOM_TP_DISTANCE));
-        double angle = 2 * Math.PI * this.random.nextDouble();
-        double x = center.getX() + distance * Math.cos(angle);
-        double z = center.getZ() + distance * Math.sin(angle);
-        double y = world.getHighestBlockYAt(new Location(world, x, 0, z));
+        final double angle = 2 * Math.PI * this.random.nextDouble();
+        final double x = center.getX() + distance * Math.cos(angle);
+        final double z = center.getZ() + distance * Math.sin(angle);
+        final double y = world.getHighestBlockYAt(new Location(world, x, 0, z));
         randomPos = new Location(world, x, y, z);
       } while (!border.isInside(randomPos));
 
       // avoid claims
-      Claim claim = GriefPrevention.instance.dataStore.getClaimAt(randomPos, true, null);
+      final Claim claim = GriefPrevention.instance.dataStore.getClaimAt(randomPos, true, null);
       if (claim != null) {
         continue;
       }
 
       // find a safe location
-      Location teleportPos = TeleportUtil.getSafePos(randomPos);
-      String biomeKey = teleportPos.getBlock().getBiome().getKey().value();
+      final Location teleportPos = TeleportUtil.getSafePos(randomPos);
+      final String biomeKey = teleportPos.getBlock().getBiome().getKey().value();
       if (biomeKey.equals("ocean")
           || biomeKey.endsWith("_ocean")
           || biomeKey.equals("river")

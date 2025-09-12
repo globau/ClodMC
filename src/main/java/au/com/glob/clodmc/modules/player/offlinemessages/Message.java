@@ -19,14 +19,14 @@ public class Message implements ConfigurationSerializable {
   private final String sender;
   private final String message;
 
-  public Message(long timestamp, String sender, String message) {
+  public Message(final long timestamp, final String sender, final String message) {
     this.timestamp = timestamp;
     this.sender = sender;
     this.message = message;
   }
 
   // send this message to a player with timestamp
-  public void sendTo(Player player) {
+  public void sendTo(final Player player) {
     Chat.whisper(
         player,
         "%s ago %s whispered to you: %s"
@@ -39,7 +39,7 @@ public class Message implements ConfigurationSerializable {
   // serialise message for datafile
   @Override
   public Map<String, Object> serialize() {
-    Map<String, Object> serialised = new HashMap<>();
+    final Map<String, Object> serialised = new HashMap<>();
     serialised.put("timestamp", this.timestamp);
     serialised.put("sender", this.sender);
     serialised.put("message", this.message);
@@ -48,7 +48,7 @@ public class Message implements ConfigurationSerializable {
 
   // deserialise message from datafile
   @SuppressWarnings("unused")
-  public static Message deserialize(Map<String, Object> args) {
+  public static Message deserialize(final Map<String, Object> args) {
     return new Message(
         NumberConversions.toLong(args.get("timestamp")),
         Objects.requireNonNull((String) args.get("sender")),

@@ -20,24 +20,24 @@ public class BlueMapWorldBorder extends Addon {
   private static final Color LINE_COLOUR = new Color("#a52a2aff");
   private static final Color FILL_COLOUR = new Color("#00000000");
 
-  protected BlueMapWorldBorder(BlueMapAPI api) {
+  protected BlueMapWorldBorder(final BlueMapAPI api) {
     super(api);
   }
 
   // create world border markers for all worlds
   @Override
   public void update() {
-    for (World world : Bukkit.getWorlds()) {
-      WorldBorder border = world.getWorldBorder();
-      Location centre = border.getCenter();
-      double radius = border.getSize() / 2.0;
-      Shape shape =
+    for (final World world : Bukkit.getWorlds()) {
+      final WorldBorder border = world.getWorldBorder();
+      final Location centre = border.getCenter();
+      final double radius = border.getSize() / 2.0;
+      final Shape shape =
           Shape.createRect(
               centre.getBlockX() - radius,
               centre.getBlockZ() - radius,
               centre.getBlockX() + radius,
               centre.getBlockZ() + radius);
-      ShapeMarker marker =
+      final ShapeMarker marker =
           ShapeMarker.builder()
               .label("World Border")
               .shape(shape, world.getSeaLevel())
@@ -47,7 +47,7 @@ public class BlueMapWorldBorder extends Addon {
               .depthTestEnabled(false)
               .build();
 
-      MarkerSet markerSet = MarkerSet.builder().label("World Border").build();
+      final MarkerSet markerSet = MarkerSet.builder().label("World Border").build();
       markerSet.getMarkers().put("ClodMC", marker);
       this.api
           .getWorld(world.getName())

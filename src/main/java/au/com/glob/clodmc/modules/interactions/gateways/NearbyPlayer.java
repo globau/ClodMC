@@ -11,13 +11,13 @@ final class NearbyPlayer {
   final Player player;
   final boolean isBedrock;
 
-  NearbyPlayer(Player player) {
+  NearbyPlayer(final Player player) {
     this.player = player;
     this.isBedrock = Players.isBedrock(player);
   }
 
   @Override
-  public boolean equals(@Nullable Object obj) {
+  public boolean equals(@Nullable final Object obj) {
     if (obj == this) {
       return true;
     }

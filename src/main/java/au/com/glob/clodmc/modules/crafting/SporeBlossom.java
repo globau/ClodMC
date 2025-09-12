@@ -39,19 +39,19 @@ public class SporeBlossom implements Module, Listener {
 
   // auto-discover recipe when player joins if they have ingredients
   @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-  public void onPlayerJoin(PlayerJoinEvent event) {
+  public void onPlayerJoin(final PlayerJoinEvent event) {
     Schedule.asynchronously(
         () -> {
-          Player player = event.getPlayer();
+          final Player player = event.getPlayer();
           if (player.hasDiscoveredRecipe(this.recipe.getKey())) {
             return;
           }
 
-          for (ItemStack item : player.getInventory().getContents()) {
+          for (final ItemStack item : player.getInventory().getContents()) {
             if (item == null || item.isEmpty()) {
               continue;
             }
-            for (RecipeChoice choice : this.recipe.getChoiceList()) {
+            for (final RecipeChoice choice : this.recipe.getChoiceList()) {
               if (choice.test(item)) {
                 Schedule.onMainThread(() -> player.discoverRecipe(this.recipe.getKey()));
               }
@@ -62,16 +62,16 @@ public class SporeBlossom implements Module, Listener {
 
   // auto-discover recipe when player picks up required ingredients
   @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-  public void onEntityPickupItem(EntityPickupItemEvent event) {
-    if (!(event.getEntity() instanceof Player player)) {
+  public void onEntityPickupItem(final EntityPickupItemEvent event) {
+    if (!(event.getEntity() instanceof final Player player)) {
       return;
     }
     if (player.hasDiscoveredRecipe(this.recipe.getKey())) {
       return;
     }
 
-    ItemStack item = event.getItem().getItemStack();
-    for (RecipeChoice choice : this.recipe.getChoiceList()) {
+    final ItemStack item = event.getItem().getItemStack();
+    for (final RecipeChoice choice : this.recipe.getChoiceList()) {
       if (choice.test(item)) {
         Schedule.onMainThread(() -> player.discoverRecipe(this.recipe.getKey()));
       }

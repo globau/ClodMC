@@ -24,7 +24,7 @@ import org.jspecify.annotations.Nullable;
 
 /** utilities for player management and bedrock client detection */
 @NullMarked
-public class Players {
+public final class Players {
   // Attribute.BLOCK_INTERACTION_RANGE + 1
   public static final int INTERACTION_RANGE = 5;
 
@@ -36,21 +36,21 @@ public class Players {
   }
 
   // check if uuid is already in whitelist.json
-  public static boolean isInWhitelistConfig(UUID uuid) {
-    String uuidString = uuid.toString();
+  public static boolean isInWhitelistConfig(final UUID uuid) {
+    final String uuidString = uuid.toString();
     try {
-      Path whitelistFile =
+      final Path whitelistFile =
           Path.of(
               Bukkit.getServer().getWorldContainer().getCanonicalFile().getAbsolutePath(),
               "whitelist.json");
-      String jsonContent = Files.readString(whitelistFile);
-      for (JsonElement jsonElement : JsonParser.parseString(jsonContent).getAsJsonArray()) {
-        JsonObject entry = jsonElement.getAsJsonObject();
+      final String jsonContent = Files.readString(whitelistFile);
+      for (final JsonElement jsonElement : JsonParser.parseString(jsonContent).getAsJsonArray()) {
+        final JsonObject entry = jsonElement.getAsJsonObject();
         if (uuidString.equalsIgnoreCase(entry.get("uuid").getAsString())) {
           return true;
         }
       }
-    } catch (IOException | JsonSyntaxException e) {
+    } catch (final IOException | JsonSyntaxException e) {
       Logger.exception(e);
     }
     return false;
@@ -60,19 +60,23 @@ public class Players {
   public static void updateWhitelisted() {
     Schedule.asynchronously(
         () -> {
-          File playersPath = ClodMC.instance.getDataFolder().toPath().resolve("players").toFile();
-          File[] ymlFiles = playersPath.listFiles((File file) -> file.getName().endsWith(".yml"));
-          List<UUID> uuids =
+          final File playersPath =
+              ClodMC.instance.getDataFolder().toPath().resolve("players").toFile();
+          final File[] ymlFiles =
+              playersPath.listFiles((final File file) -> file.getName().endsWith(".yml"));
+          final List<UUID> uuids =
               ymlFiles == null
                   ? List.of()
                   : Arrays.stream(ymlFiles)
-                      .map((File file) -> file.getName().substring(0, file.getName().indexOf(".")))
+                      .map(
+                          (final File file) ->
+                              file.getName().substring(0, file.getName().indexOf(".")))
                       .map(UUID::fromString)
                       .toList();
 
-          Map<String, UUID> updatedWhitelist = new HashMap<>();
-          for (UUID uuid : uuids) {
-            PlayerDataFile config = PlayerDataFiles.of(uuid);
+          final Map<String, UUID> updatedWhitelist = new HashMap<>();
+          for (final UUID uuid : uuids) {
+            final PlayerDataFile config = PlayerDataFiles.of(uuid);
             updatedWhitelist.put(config.getPlayerName(), uuid);
           }
           whitelisted = Collections.unmodifiableMap(updatedWhitelist);
@@ -80,21 +84,21 @@ public class Players {
   }
 
   // check if player name is whitelisted
-  public static boolean isWhitelisted(String name) {
-    return whitelisted.keySet().stream().anyMatch((String p) -> p.equalsIgnoreCase(name));
+  public static boolean isWhitelisted(final String name) {
+    return whitelisted.keySet().stream().anyMatch((final String p) -> p.equalsIgnoreCase(name));
   }
 
   // get uuid for whitelisted player name
-  public static @Nullable UUID getWhitelistedUUID(String name) {
+  public static @Nullable UUID getWhitelistedUUID(final String name) {
     return whitelisted.entrySet().stream()
-        .filter((Map.Entry<String, UUID> entry) -> entry.getKey().equalsIgnoreCase(name))
+        .filter((final Map.Entry<String, UUID> entry) -> entry.getKey().equalsIgnoreCase(name))
         .map(Map.Entry::getValue)
         .findFirst()
         .orElse(null);
   }
 
   // check if player is using bedrock client
-  public static boolean isBedrock(Player player) {
+  public static boolean isBedrock(final Player player) {
     return Bedrock.isGeyserLoaded() && Bedrock.isBedrockUUID(player.getUniqueId());
   }
 }

@@ -27,12 +27,12 @@ public class NoDirectMessageSendingCheck extends AbstractCheck {
   }
 
   @Override
-  public void beginTree(DetailAST rootAST) {
+  public void beginTree(final DetailAST rootAST) {
     this.fileContainsCommandSenderImpl = false;
   }
 
   @Override
-  public void visitToken(DetailAST ast) {
+  public void visitToken(final DetailAST ast) {
     // skip CommandSender implementors
     if (ast.getType() == TokenTypes.CLASS_DEF) {
       if (CheckUtils.classImplements(ast, "CommandSender")) {
@@ -52,18 +52,18 @@ public class NoDirectMessageSendingCheck extends AbstractCheck {
     if (ast.getType() != TokenTypes.METHOD_CALL) {
       return;
     }
-    DetailAST dot = ast.findFirstToken(TokenTypes.DOT);
+    final DetailAST dot = ast.findFirstToken(TokenTypes.DOT);
     if (dot == null) {
       return;
     }
 
-    DetailAST receiver = dot.getFirstChild();
-    DetailAST method = receiver != null ? receiver.getNextSibling() : null;
+    final DetailAST receiver = dot.getFirstChild();
+    final DetailAST method = receiver != null ? receiver.getNextSibling() : null;
     if (method == null || method.getType() != TokenTypes.IDENT) {
       return;
     }
 
-    String methodName = method.getText();
+    final String methodName = method.getText();
     if ("sendMessage".equals(methodName) || "sendRichMessage".equals(methodName)) {
       this.log(
           ast,

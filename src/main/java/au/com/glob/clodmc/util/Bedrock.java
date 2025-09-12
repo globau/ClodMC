@@ -8,14 +8,14 @@ import org.jspecify.annotations.NullMarked;
 
 /** utilities for detecting bedrock edition clients via geyser api */
 @NullMarked
-public class Bedrock {
+public final class Bedrock {
   private static boolean geyserLoaded;
 
   static {
     try {
       GeyserApi.api();
       geyserLoaded = true;
-    } catch (NoClassDefFoundError e) {
+    } catch (final NoClassDefFoundError e) {
       geyserLoaded = false;
     }
   }
@@ -29,7 +29,7 @@ public class Bedrock {
   private static final Map<UUID, Boolean> IS_BEDROCK_CACHE = new HashMap<>();
 
   // check if a player uuid is from a bedrock client (cached)
-  public static boolean isBedrockUUID(UUID uuid) {
+  public static boolean isBedrockUUID(final UUID uuid) {
     if (!IS_BEDROCK_CACHE.containsKey(uuid)) {
       IS_BEDROCK_CACHE.put(uuid, GeyserApi.api().connectionByUuid(uuid) != null);
     }

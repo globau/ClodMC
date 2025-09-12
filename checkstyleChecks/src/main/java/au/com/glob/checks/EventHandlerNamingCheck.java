@@ -26,23 +26,23 @@ public class EventHandlerNamingCheck extends AbstractCheck {
   }
 
   @Override
-  public void visitToken(DetailAST ast) {
+  public void visitToken(final DetailAST ast) {
     if (!AnnotationUtil.containsAnnotation(ast, "EventHandler")) {
       return;
     }
 
-    String methodName = CheckUtils.getName(ast);
+    final String methodName = CheckUtils.getName(ast);
     if (methodName == null) {
       return;
     }
 
-    DetailAST parameters = ast.findFirstToken(TokenTypes.PARAMETERS);
+    final DetailAST parameters = ast.findFirstToken(TokenTypes.PARAMETERS);
     if (parameters == null) {
       return;
     }
 
     // should have exactly one parameter
-    DetailAST firstParam = parameters.findFirstToken(TokenTypes.PARAMETER_DEF);
+    final DetailAST firstParam = parameters.findFirstToken(TokenTypes.PARAMETER_DEF);
     if (firstParam == null) {
       return;
     }
@@ -54,8 +54,8 @@ public class EventHandlerNamingCheck extends AbstractCheck {
       return;
     }
 
-    String paramName = CheckUtils.getName(firstParam);
-    String paramType = CheckUtils.getParameterType(firstParam);
+    final String paramName = CheckUtils.getName(firstParam);
+    final String paramType = CheckUtils.getParameterType(firstParam);
     if (paramName == null || paramType == null) {
       return;
     }
@@ -73,8 +73,8 @@ public class EventHandlerNamingCheck extends AbstractCheck {
     }
 
     // check method name follows pattern on{EventType}
-    String eventType = paramType.substring(0, paramType.length() - 5); // remove "Event"
-    String expectedMethodName = "on%s".formatted(eventType);
+    final String eventType = paramType.substring(0, paramType.length() - 5); // remove "Event"
+    final String expectedMethodName = "on%s".formatted(eventType);
 
     if (!expectedMethodName.equals(methodName)) {
       this.log(

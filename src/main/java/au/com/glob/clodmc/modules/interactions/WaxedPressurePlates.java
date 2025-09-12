@@ -34,8 +34,8 @@ public class WaxedPressurePlates implements Module, Listener {
 
   // handle waxing pressure plates and blocking activation when waxed
   @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-  public void onPlayerInteract(PlayerInteractEvent event) {
-    Block block = event.getClickedBlock();
+  public void onPlayerInteract(final PlayerInteractEvent event) {
+    final Block block = event.getClickedBlock();
     if (block == null) {
       return;
     }
@@ -46,7 +46,7 @@ public class WaxedPressurePlates implements Module, Listener {
     switch (event.getAction()) {
       case PHYSICAL -> {
         // pressure plate activated - cancel interaction if waxed
-        PersistentDataContainer customBlockData = new CustomBlockData(block, ClodMC.instance);
+        final PersistentDataContainer customBlockData = new CustomBlockData(block, ClodMC.instance);
         if (customBlockData.has(WAXED_KEY)) {
           event.setCancelled(true);
         }
@@ -54,18 +54,18 @@ public class WaxedPressurePlates implements Module, Listener {
 
       case RIGHT_CLICK_BLOCK -> {
         // right-clicked - apply wax if holding honeycomb
-        Player player = event.getPlayer();
-        EquipmentSlot hand = event.getHand();
+        final Player player = event.getPlayer();
+        final EquipmentSlot hand = event.getHand();
         if (hand == null) {
           return;
         }
-        ItemStack itemInHand = player.getInventory().getItem(hand);
+        final ItemStack itemInHand = player.getInventory().getItem(hand);
         if (itemInHand.getType() != Material.HONEYCOMB) {
           return;
         }
 
         // not already waxed
-        PersistentDataContainer customBlockData = new CustomBlockData(block, ClodMC.instance);
+        final PersistentDataContainer customBlockData = new CustomBlockData(block, ClodMC.instance);
         if (customBlockData.has(WAXED_KEY)) {
           return;
         }
@@ -77,7 +77,7 @@ public class WaxedPressurePlates implements Module, Listener {
         }
 
         // sound and particles
-        Location loc = block.getLocation();
+        final Location loc = block.getLocation();
         player.playSound(loc, Sound.ITEM_HONEYCOMB_WAX_ON, 1.0f, 1.0f);
         player.getWorld().spawnParticle(Particle.WAX_ON, loc.add(0.5, 0.1, 0.5), 7, 0.25, 0, 0.25);
 

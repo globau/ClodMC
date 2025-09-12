@@ -10,11 +10,11 @@ import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
 @NullMarked
-public class CheckUtils {
+public final class CheckUtils {
   private CheckUtils() {}
 
-  static String getRelativeFilename(File file) {
-    Path absolutePath = Paths.get(file.getAbsolutePath());
+  static String getRelativeFilename(final File file) {
+    final Path absolutePath = Paths.get(file.getAbsolutePath());
     Path current = absolutePath.getParent();
     while (current != null) {
       if (current.resolve("build.gradle.kts").toFile().exists()) {
@@ -25,40 +25,40 @@ public class CheckUtils {
     return absolutePath.getFileName().toString();
   }
 
-  static String getRelativeFilename(String filename) {
+  static String getRelativeFilename(final String filename) {
     return getRelativeFilename(new File(filename));
   }
 
-  static boolean isRelativeTo(File file, String relativePath) {
+  static boolean isRelativeTo(final File file, String relativePath) {
     if (!relativePath.endsWith("/")) {
       relativePath = "%s/".formatted(relativePath);
     }
     return getRelativeFilename(file).startsWith(relativePath);
   }
 
-  static boolean isRelativeTo(String filename, String relativePath) {
+  static boolean isRelativeTo(final String filename, final String relativePath) {
     return isRelativeTo(new File(filename), relativePath);
   }
 
-  static @Nullable String getName(DetailAST classDef) {
-    DetailAST nameNode = classDef.findFirstToken(TokenTypes.IDENT);
+  static @Nullable String getName(final DetailAST classDef) {
+    final DetailAST nameNode = classDef.findFirstToken(TokenTypes.IDENT);
     return nameNode != null ? nameNode.getText() : null;
   }
 
-  static @Nullable String getParameterType(DetailAST paramDef) {
-    DetailAST typeNode = paramDef.findFirstToken(TokenTypes.TYPE);
+  static @Nullable String getParameterType(final DetailAST paramDef) {
+    final DetailAST typeNode = paramDef.findFirstToken(TokenTypes.TYPE);
     if (typeNode == null) {
       return null;
     }
 
     // handle simple type (IDENT)
-    DetailAST identNode = typeNode.findFirstToken(TokenTypes.IDENT);
+    final DetailAST identNode = typeNode.findFirstToken(TokenTypes.IDENT);
     if (identNode != null) {
       return identNode.getText();
     }
 
     // handle qualified type (DOT)
-    DetailAST dotNode = typeNode.findFirstToken(TokenTypes.DOT);
+    final DetailAST dotNode = typeNode.findFirstToken(TokenTypes.DOT);
     if (dotNode != null) {
       return getQualifiedName(dotNode);
     }
@@ -66,12 +66,12 @@ public class CheckUtils {
     return null;
   }
 
-  static String getTypeName(DetailAST ast) {
-    DetailAST nameNode = ast.findFirstToken(TokenTypes.IDENT);
+  static String getTypeName(final DetailAST ast) {
+    final DetailAST nameNode = ast.findFirstToken(TokenTypes.IDENT);
     return nameNode != null ? nameNode.getText() : "unknown";
   }
 
-  static String getTypeKind(int tokenType) {
+  static String getTypeKind(final int tokenType) {
     return switch (tokenType) {
       case TokenTypes.CLASS_DEF -> "Class";
       case TokenTypes.INTERFACE_DEF -> "Interface";
@@ -82,27 +82,27 @@ public class CheckUtils {
     };
   }
 
-  private static String getQualifiedName(DetailAST dotNode) {
-    StringBuilder sb = new StringBuilder();
+  private static String getQualifiedName(final DetailAST dotNode) {
+    final StringBuilder sb = new StringBuilder();
     buildQualifiedName(dotNode, sb);
     return sb.toString();
   }
 
-  private static void buildQualifiedName(DetailAST node, StringBuilder sb) {
+  private static void buildQualifiedName(final DetailAST node, final StringBuilder sb) {
     if (node.getType() == TokenTypes.IDENT) {
       sb.append(node.getText());
     } else if (node.getType() == TokenTypes.DOT) {
-      DetailAST left = node.getFirstChild();
-      DetailAST right = left.getNextSibling();
+      final DetailAST left = node.getFirstChild();
+      final DetailAST right = left.getNextSibling();
       buildQualifiedName(left, sb);
       sb.append('.');
       buildQualifiedName(right, sb);
     }
   }
 
-  static boolean isTopLevelDeclaration(DetailAST ast) {
+  static boolean isTopLevelDeclaration(final DetailAST ast) {
     // check if this is a type declaration
-    int tokenType = ast.getType();
+    final int tokenType = ast.getType();
     if (tokenType != TokenTypes.CLASS_DEF
         && tokenType != TokenTypes.INTERFACE_DEF
         && tokenType != TokenTypes.ENUM_DEF
@@ -113,7 +113,7 @@ public class CheckUtils {
     // check if it's at the top level (not nested inside another type)
     DetailAST parent = ast.getParent();
     while (parent != null) {
-      int parentType = parent.getType();
+      final int parentType = parent.getType();
       if (parentType == TokenTypes.CLASS_DEF
           || parentType == TokenTypes.INTERFACE_DEF
           || parentType == TokenTypes.ENUM_DEF
@@ -126,8 +126,8 @@ public class CheckUtils {
     return true;
   }
 
-  static boolean classImplements(DetailAST classDef, String name) {
-    DetailAST implementsClause = classDef.findFirstToken(TokenTypes.IMPLEMENTS_CLAUSE);
+  static boolean classImplements(final DetailAST classDef, final String name) {
+    final DetailAST implementsClause = classDef.findFirstToken(TokenTypes.IMPLEMENTS_CLAUSE);
     if (implementsClause == null) {
       return false;
     }
@@ -139,7 +139,7 @@ public class CheckUtils {
       }
       // check for qualified names like some.package.Module
       if (child.getType() == TokenTypes.DOT) {
-        String qualifiedName = getQualifiedName(child);
+        final String qualifiedName = getQualifiedName(child);
         if (qualifiedName.endsWith(".%s".formatted(name)) || name.equals(qualifiedName)) {
           return true;
         }
@@ -150,12 +150,12 @@ public class CheckUtils {
     return false;
   }
 
-  static boolean branchContains(DetailAST node, int type) {
+  static boolean branchContains(final DetailAST node, final int type) {
     return node.getType() == type || children(node).anyMatch(child -> branchContains(child, type));
   }
 
-  private static Stream<DetailAST> children(DetailAST node) {
-    Stream.Builder<DetailAST> builder = Stream.builder();
+  private static Stream<DetailAST> children(final DetailAST node) {
+    final Stream.Builder<DetailAST> builder = Stream.builder();
     DetailAST child = node.getFirstChild();
     while (child != null) {
       builder.accept(child);
@@ -164,9 +164,10 @@ public class CheckUtils {
     return builder.build();
   }
 
-  static boolean isInAbstractOrNativeMethod(DetailAST method) {
-    DetailAST modifiers = method.findFirstToken(TokenTypes.MODIFIERS);
-    return CheckUtils.branchContains(modifiers, TokenTypes.ABSTRACT)
-        || CheckUtils.branchContains(modifiers, TokenTypes.LITERAL_NATIVE);
+  static boolean isInAbstractOrNativeMethod(final DetailAST method) {
+    final DetailAST modifiers = method.findFirstToken(TokenTypes.MODIFIERS);
+    return modifiers != null
+        && (CheckUtils.branchContains(modifiers, TokenTypes.ABSTRACT)
+            || CheckUtils.branchContains(modifiers, TokenTypes.LITERAL_NATIVE));
   }
 }

@@ -22,8 +22,8 @@ import org.jspecify.annotations.NullMarked;
 public class PlayerTracker implements Module, Listener {
   // update player data on join
   @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-  public void onPlayerJoin(PlayerJoinEvent event) {
-    PlayerDataFile dataFile = PlayerDataFiles.of(event.getPlayer());
+  public void onPlayerJoin(final PlayerJoinEvent event) {
+    final PlayerDataFile dataFile = PlayerDataFiles.of(event.getPlayer());
     dataFile.setPlayerName(event.getPlayer().getName());
     dataFile.touchLastLogin();
     dataFile.save();
@@ -31,8 +31,8 @@ public class PlayerTracker implements Module, Listener {
 
   // update player data on quit and schedule file unload
   @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-  public void onPlayerQuit(PlayerQuitEvent event) {
-    PlayerDataFile dataFile = PlayerDataFiles.of(event.getPlayer());
+  public void onPlayerQuit(final PlayerQuitEvent event) {
+    final PlayerDataFile dataFile = PlayerDataFiles.of(event.getPlayer());
     dataFile.touchLastLogout();
     dataFile.setPlaytimeMins(
         Math.round(event.getPlayer().getStatistic(Statistic.PLAY_ONE_MINUTE) / 20.0 / 60.0));

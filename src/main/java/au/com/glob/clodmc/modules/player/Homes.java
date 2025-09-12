@@ -35,10 +35,10 @@ public class Homes implements Listener, Module {
         .usage("/home [name]")
         .description("Teleport home")
         .executor(
-            (Player player, @Nullable String name) -> {
+            (final Player player, @Nullable String name) -> {
               name = name == null ? DEFAULT_NAME : name;
 
-              Map<String, Location> homes = getHomes(player);
+              final Map<String, Location> homes = getHomes(player);
               if (homes.isEmpty() || !homes.containsKey(name)) {
                 throw new CommandError(
                     name.equals(DEFAULT_NAME)
@@ -46,7 +46,7 @@ public class Homes implements Listener, Module {
                         : "No such home '%s'".formatted(name));
               }
 
-              Location location = homes.get(name);
+              final Location location = homes.get(name);
               TeleportUtil.teleport(
                   player, location, name.equals(DEFAULT_NAME) ? "home" : "to '%s'".formatted(name));
             })
@@ -55,14 +55,14 @@ public class Homes implements Listener, Module {
     CommandBuilder.build("homes")
         .description("List homes")
         .executor(
-            (Player player) -> {
-              Map<String, Location> homes = getHomes(player);
+            (final Player player) -> {
+              final Map<String, Location> homes = getHomes(player);
 
               if (homes.isEmpty()) {
                 Chat.warning(player, "No homes");
               } else {
-                StringJoiner joiner = new StringJoiner(", ");
-                for (String name : homes.keySet().stream().sorted().toList()) {
+                final StringJoiner joiner = new StringJoiner(", ");
+                for (final String name : homes.keySet().stream().sorted().toList()) {
                   joiner.add(name);
                 }
                 Chat.info(player, "Homes: %s".formatted(joiner));
@@ -73,18 +73,18 @@ public class Homes implements Listener, Module {
         .usage("/sethome [name]")
         .description("Sets a home to your current location")
         .executor(
-            (Player player, @Nullable String name) -> {
+            (final Player player, @Nullable String name) -> {
               name = name == null ? DEFAULT_NAME : name;
 
-              Map<String, Location> homes = getHomes(player);
-              boolean existing = homes.containsKey(name);
+              final Map<String, Location> homes = getHomes(player);
+              final boolean existing = homes.containsKey(name);
 
               if (!existing && homes.size() >= MAX_HOMES) {
                 throw new CommandError(
                     "You have reached the maximum number of homes (%d)".formatted(MAX_HOMES));
               }
 
-              Location location = TeleportUtil.getStandingPos(player);
+              final Location location = TeleportUtil.getStandingPos(player);
 
               if (TeleportUtil.isUnsafe(location.getBlock())) {
                 throw new CommandError("Your current location is not safe");
@@ -106,10 +106,10 @@ public class Homes implements Listener, Module {
         .usage("/delhome [name]")
         .description("Delete home")
         .executor(
-            (Player player, @Nullable String name) -> {
+            (final Player player, @Nullable String name) -> {
               name = name == null ? DEFAULT_NAME : name;
 
-              Map<String, Location> homes = getHomes(player);
+              final Map<String, Location> homes = getHomes(player);
               if (homes.isEmpty() || !homes.containsKey(name)) {
                 throw new CommandError(
                     name.equals(DEFAULT_NAME)
@@ -130,12 +130,12 @@ public class Homes implements Listener, Module {
   }
 
   // tab completion for home names
-  private static List<String> completeHomes(Player player, List<String> args) {
+  private static List<String> completeHomes(final Player player, final List<String> args) {
     if (args.isEmpty()) {
       return List.of();
     }
 
-    Map<String, Location> homes = getHomes(player);
+    final Map<String, Location> homes = getHomes(player);
     return homes.keySet().stream()
         .filter((String name) -> name.startsWith(args.getFirst()))
         .sorted(String::compareToIgnoreCase)
@@ -143,16 +143,16 @@ public class Homes implements Listener, Module {
   }
 
   // retrieve all homes for a player from data file
-  private static Map<String, Location> getHomes(Player player) {
-    PlayerDataFile dataFile = PlayerDataFiles.of(player);
+  private static Map<String, Location> getHomes(final Player player) {
+    final PlayerDataFile dataFile = PlayerDataFiles.of(player);
 
-    ConfigurationSection section = dataFile.getConfigurationSection("homes");
+    final ConfigurationSection section = dataFile.getConfigurationSection("homes");
     if (section == null) {
       return new HashMap<>(0);
     }
-    Map<String, Location> result = new HashMap<>();
-    for (String name : section.getKeys(false)) {
-      Location playerLocation =
+    final Map<String, Location> result = new HashMap<>();
+    for (final String name : section.getKeys(false)) {
+      final Location playerLocation =
           dataFile.getSerializable("homes.%s".formatted(name), Location.class, null);
       result.put(name, Objects.requireNonNull(playerLocation));
     }
@@ -160,17 +160,17 @@ public class Homes implements Listener, Module {
   }
 
   // save all homes for a player to data file
-  private static void setHomes(Player player, Map<String, Location> homes) {
-    PlayerDataFile dataFile = PlayerDataFiles.of(player);
-    ConfigurationSection section = dataFile.getConfigurationSection("homes");
+  private static void setHomes(final Player player, final Map<String, Location> homes) {
+    final PlayerDataFile dataFile = PlayerDataFiles.of(player);
+    final ConfigurationSection section = dataFile.getConfigurationSection("homes");
     if (section != null) {
-      for (String name : section.getKeys(false)) {
+      for (final String name : section.getKeys(false)) {
         if (!homes.containsKey(name)) {
           section.set(name, null);
         }
       }
     }
-    for (String name : homes.keySet()) {
+    for (final String name : homes.keySet()) {
       dataFile.set("homes.%s".formatted(name), homes.get(name));
     }
     dataFile.save();

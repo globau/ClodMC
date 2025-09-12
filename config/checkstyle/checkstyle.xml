@@ -386,6 +386,10 @@
         <module name="IllegalImport">
             <property name="illegalPkgs" value="org.jetbrains.annotations" />
         </module>
+        <!-- glob: require final -->
+        <module name="FinalClass" />
+        <module name="FinalParameters" />
+        <module name="FinalLocalVariable" />
         <!-- glob: custom checks -->
         <module name="au.com.glob.checks.EventHandlerNamingCheck" />
         <module name="au.com.glob.checks.MainMethodOrderCheck" />

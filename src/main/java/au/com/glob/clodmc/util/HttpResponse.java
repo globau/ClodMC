@@ -8,7 +8,7 @@ import org.jspecify.annotations.Nullable;
 public class HttpResponse<T> {
   private final @Nullable T response;
 
-  public HttpResponse(@Nullable T response) {
+  public HttpResponse(@Nullable final T response) {
     this.response = response;
   }
 

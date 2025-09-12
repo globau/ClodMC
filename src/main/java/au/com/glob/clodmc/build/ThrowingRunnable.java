@@ -12,7 +12,7 @@ public interface ThrowingRunnable extends Runnable {
   }
 
   @SuppressWarnings("unchecked")
-  private static <E extends Throwable> void throwUnchecked(Throwable t) throws E {
+  private static <E extends Throwable> void throwUnchecked(final Throwable t) throws E {
     throw (E) t;
   }
 

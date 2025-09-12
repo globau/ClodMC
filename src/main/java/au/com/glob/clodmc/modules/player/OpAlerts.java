@@ -30,13 +30,13 @@ public class OpAlerts implements Module, Listener {
   }
 
   // add an alert to be shown to first op who joins
-  public static void addAlert(String alert) {
+  public static void addAlert(final String alert) {
     instance.alerts.add(alert);
   }
 
   // send pending alerts to first op who joins
   @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-  public void onPlayerJoin(PlayerJoinEvent event) {
+  public void onPlayerJoin(final PlayerJoinEvent event) {
     if (this.alerts.isEmpty() || !event.getPlayer().isOp()) {
       return;
     }
@@ -44,7 +44,7 @@ public class OpAlerts implements Module, Listener {
     Schedule.delayed(
         20,
         () -> {
-          for (String alert : this.alerts) {
+          for (final String alert : this.alerts) {
             Chat.error(event.getPlayer(), "[ClodMC] %s".formatted(alert));
           }
           this.alerts.clear();

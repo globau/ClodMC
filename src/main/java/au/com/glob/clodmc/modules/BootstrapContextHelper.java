@@ -25,15 +25,15 @@ import org.jspecify.annotations.Nullable;
 public class BootstrapContextHelper {
   private final LifecycleEventManager<BootstrapContext> manager;
 
-  public BootstrapContextHelper(BootstrapContext context) {
+  public BootstrapContextHelper(final BootstrapContext context) {
     this.manager = context.getLifecycleManager();
   }
 
   // register custom enchantment with optional tags
   public void enchantment(
-      TypedKey<Enchantment> key,
-      @Nullable List<TagKey<Enchantment>> tags,
-      BiConsumer<
+      final TypedKey<Enchantment> key,
+      @Nullable final List<TagKey<Enchantment>> tags,
+      final BiConsumer<
               RegistryComposeEvent<Enchantment, EnchantmentRegistryEntry.Builder>,
               EnchantmentRegistryEntry.Builder>
           handler) {
@@ -51,10 +51,10 @@ public class BootstrapContextHelper {
     if (tags != null) {
       this.manager.registerEventHandler(
           LifecycleEvents.TAGS.postFlatten(RegistryKey.ENCHANTMENT),
-          (ReloadableRegistrarEvent<PostFlattenTagRegistrar<Enchantment>> event) -> {
-            PostFlattenTagRegistrar<Enchantment> registrar = event.registrar();
-            Set<TypedKey<Enchantment>> keySet = Set.of(key);
-            for (TagKey<Enchantment> tag : Objects.requireNonNull(tags)) {
+          (final ReloadableRegistrarEvent<PostFlattenTagRegistrar<Enchantment>> event) -> {
+            final PostFlattenTagRegistrar<Enchantment> registrar = event.registrar();
+            final Set<TypedKey<Enchantment>> keySet = Set.of(key);
+            for (final TagKey<Enchantment> tag : Objects.requireNonNull(tags)) {
               registrar.addToTag(tag, keySet);
             }
           });

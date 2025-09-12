@@ -19,7 +19,7 @@ import org.jspecify.annotations.Nullable;
  */
 @NullMarked
 public class PlayerDataFile extends DataFile {
-  protected PlayerDataFile(String filename) {
+  protected PlayerDataFile(final String filename) {
     super(new File(ClodMC.instance.getDataFolder(), filename));
 
     if (!ConfigUtil.sanityChecked) {
@@ -34,7 +34,7 @@ public class PlayerDataFile extends DataFile {
   }
 
   // set player name in datafile
-  public void setPlayerName(String name) {
+  public void setPlayerName(final String name) {
     this.set("player.name", name);
   }
 
@@ -64,12 +64,12 @@ public class PlayerDataFile extends DataFile {
   }
 
   // set total playtime in minutes
-  public void setPlaytimeMins(long value) {
+  public void setPlaytimeMins(final long value) {
     this.set("player.playtime_min", value);
   }
 
   // record who invited this player
-  public void setInvitedBy(String name) {
+  public void setInvitedBy(final String name) {
     this.set("player.invited_by", name);
   }
 }

@@ -31,12 +31,12 @@ public class AnchorBlock implements ConfigurationSerializable {
   final boolean isRandom;
 
   // creates an anchor block with network id, location and optional name
-  public AnchorBlock(int networkId, Location location, @Nullable String name) {
+  public AnchorBlock(final int networkId, final Location location, @Nullable final String name) {
     this.networkId = networkId;
     this.blockPos = BlockPos.of(location);
     this.name = name;
 
-    Network network = Network.of(networkId);
+    final Network network = Network.of(networkId);
     this.topColour = network.top;
     this.bottomColour = network.bottom;
 
@@ -55,7 +55,7 @@ public class AnchorBlock implements ConfigurationSerializable {
 
   // gets display information about the anchor block
   String getInformation() {
-    String prefix = "<yellow>%s</yellow> - ".formatted(this.displayName);
+    final String prefix = "<yellow>%s</yellow> - ".formatted(this.displayName);
     if (this.connectedTo != null) {
       return "%s%s"
           .formatted(
@@ -76,7 +76,7 @@ public class AnchorBlock implements ConfigurationSerializable {
   }
 
   // connects this anchor to another anchor
-  void connectTo(AnchorBlock otherBlock) {
+  void connectTo(final AnchorBlock otherBlock) {
     this.connectedTo = otherBlock;
     otherBlock.connectedTo = this;
   }
@@ -90,24 +90,24 @@ public class AnchorBlock implements ConfigurationSerializable {
   }
 
   // checks if player is not facing an anchor block
-  private static boolean notFacingAnchor(Location location) {
+  private static boolean notFacingAnchor(final Location location) {
     return !Gateways.instance.instances.containsKey(
         BlockPos.of(LocationUtil.facingLocation(location)));
   }
 
   // calculates optimal teleport location for player considering rotation and safety
-  Location teleportLocation(Player player) {
+  Location teleportLocation(final Player player) {
     // rotate player to avoid facing a wall
 
     // get standing-on block, bottom, and top blocks for the player's location
-    Location blockLoc = this.blockPos.asLocation();
+    final Location blockLoc = this.blockPos.asLocation();
     blockLoc.setPitch(player.getLocation().getPitch());
-    Location bottomLoc = blockLoc.clone().add(0, 1, 0);
-    Location topLoc = bottomLoc.clone().add(0, 1, 0);
+    final Location bottomLoc = blockLoc.clone().add(0, 1, 0);
+    final Location topLoc = bottomLoc.clone().add(0, 1, 0);
 
     // snap yaws to 90 degrees of rotation
-    float playerYaw = Math.round(player.getLocation().getYaw() / 90.0) * 90;
-    float[] yaws = new float[4];
+    final float playerYaw = Math.round(player.getLocation().getYaw() / 90.0) * 90;
+    final float[] yaws = new float[4];
     float y = playerYaw;
     for (int i = 0; i < 4; i++) {
       yaws[i] = y;
@@ -115,7 +115,7 @@ public class AnchorBlock implements ConfigurationSerializable {
     }
 
     // air blocks, avoid anchors
-    for (float yaw : yaws) {
+    for (final float yaw : yaws) {
       blockLoc.setYaw(yaw);
       bottomLoc.setYaw(yaw);
       topLoc.setYaw(yaw);
@@ -127,7 +127,7 @@ public class AnchorBlock implements ConfigurationSerializable {
     }
 
     // non-solid, avoid anchors
-    for (float yaw : yaws) {
+    for (final float yaw : yaws) {
       blockLoc.setYaw(yaw);
       bottomLoc.setYaw(yaw);
       topLoc.setYaw(yaw);
@@ -139,7 +139,7 @@ public class AnchorBlock implements ConfigurationSerializable {
     }
 
     // air, anchors ok
-    for (float yaw : yaws) {
+    for (final float yaw : yaws) {
       blockLoc.setYaw(yaw);
       bottomLoc.setYaw(yaw);
       topLoc.setYaw(yaw);
@@ -149,7 +149,7 @@ public class AnchorBlock implements ConfigurationSerializable {
     }
 
     // non-solid, anchors ok
-    for (float yaw : yaws) {
+    for (final float yaw : yaws) {
       blockLoc.setYaw(yaw);
       bottomLoc.setYaw(yaw);
       topLoc.setYaw(yaw);
@@ -166,7 +166,7 @@ public class AnchorBlock implements ConfigurationSerializable {
   @Override
   public Map<String, Object> serialize() {
     // note: doesn't store adjustY
-    Map<String, Object> serialised = new HashMap<>();
+    final Map<String, Object> serialised = new HashMap<>();
     serialised.put("title", this.displayName);
     serialised.put("world", this.blockPos.world.getName());
     serialised.put("x", this.blockPos.x);
@@ -181,8 +181,8 @@ public class AnchorBlock implements ConfigurationSerializable {
 
   @SuppressWarnings("unused")
   // deserialises anchor block from configuration map
-  public static AnchorBlock deserialize(Map<String, Object> args) {
-    World world = Bukkit.getWorld((String) args.get("world"));
+  public static AnchorBlock deserialize(final Map<String, Object> args) {
+    final World world = Bukkit.getWorld((String) args.get("world"));
     if (world == null) {
       throw new IllegalArgumentException("unknown world");
     }

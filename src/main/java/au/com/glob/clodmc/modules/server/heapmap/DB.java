@@ -23,7 +23,7 @@ class DB implements AutoCloseable {
 
   DB() {
     try {
-      File dbFile = new File(ClodMC.instance.getDataFolder(), "heatmap.sqlite");
+      final File dbFile = new File(ClodMC.instance.getDataFolder(), "heatmap.sqlite");
       this.conn = DriverManager.getConnection("jdbc:sqlite:%s".formatted(dbFile));
       this.conn
           .prepareStatement(
@@ -39,7 +39,7 @@ class DB implements AutoCloseable {
               VALUES(?, ?, ?, 1)
               ON CONFLICT(world, x, z) DO UPDATE SET count = count + 1
               """);
-    } catch (SQLException e) {
+    } catch (final SQLException e) {
       throw new RuntimeException(e);
     }
   }
@@ -49,41 +49,41 @@ class DB implements AutoCloseable {
   public void close() {
     try {
       this.conn.close();
-    } catch (SQLException e) {
+    } catch (final SQLException e) {
       Logger.exception(e);
     }
   }
 
   // increment visit count for a list of chunks
-  void incChunks(Set<Chunk> chunks) {
+  void incChunks(final Set<Chunk> chunks) {
     try {
       this.conn.setAutoCommit(false);
-      for (Chunk chunk : chunks) {
+      for (final Chunk chunk : chunks) {
         this.insertStatement.setString(1, chunk.getWorld().getName());
         this.insertStatement.setInt(2, chunk.getX());
         this.insertStatement.setInt(3, chunk.getZ());
         this.insertStatement.execute();
       }
       this.conn.commit();
-    } catch (SQLException e) {
+    } catch (final SQLException e) {
       try {
         this.conn.rollback();
-      } catch (SQLException rollbackException) {
+      } catch (final SQLException rollbackException) {
         Logger.exception(rollbackException);
       }
       Logger.exception(e);
     } finally {
       try {
         this.conn.setAutoCommit(true);
-      } catch (SQLException e) {
+      } catch (final SQLException e) {
         Logger.exception(e);
       }
     }
   }
 
   // get highest visit count for any chunk in world
-  int getMaxCount(World world) {
-    try (PreparedStatement s =
+  int getMaxCount(final World world) {
+    try (final PreparedStatement s =
         this.conn.prepareStatement(
             """
               SELECT MAX(`count`)
@@ -92,15 +92,15 @@ class DB implements AutoCloseable {
             """)) {
       s.setString(1, world.getName());
       return s.executeQuery().getInt(1);
-    } catch (SQLException e) {
+    } catch (final SQLException e) {
       Logger.exception(e);
       return 0;
     }
   }
 
   // count chunks with at least minCount visits
-  int getMarkerCount(World world, int minCount) {
-    try (PreparedStatement s =
+  int getMarkerCount(final World world, final int minCount) {
+    try (final PreparedStatement s =
         this.conn.prepareStatement(
             """
               SELECT COUNT(*)
@@ -110,15 +110,15 @@ class DB implements AutoCloseable {
       s.setString(1, world.getName());
       s.setInt(2, minCount);
       return s.executeQuery().getInt(1);
-    } catch (SQLException e) {
+    } catch (final SQLException e) {
       Logger.exception(e);
       return 0;
     }
   }
 
   // return all heatmap rows for the given world with at least minCount
-  List<HeatMapChunk> getChunks(World world, int minCount) throws SQLException {
-    try (PreparedStatement s =
+  List<HeatMapChunk> getChunks(final World world, final int minCount) throws SQLException {
+    try (final PreparedStatement s =
         this.conn.prepareStatement(
             """
               SELECT world, x, z, count
@@ -127,9 +127,9 @@ class DB implements AutoCloseable {
             """)) {
       s.setString(1, world.getName());
       s.setInt(2, minCount);
-      ResultSet rs = s.executeQuery();
+      final ResultSet rs = s.executeQuery();
 
-      List<HeatMapChunk> rows = new ArrayList<>();
+      final List<HeatMapChunk> rows = new ArrayList<>();
       while (rs.next()) {
         rows.add(
             new HeatMapChunk(

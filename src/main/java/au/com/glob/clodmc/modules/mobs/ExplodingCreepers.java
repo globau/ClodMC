@@ -26,23 +26,24 @@ import org.jspecify.annotations.NullMarked;
 public class ExplodingCreepers implements Module, Listener {
 
   @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-  public void onEntityExplode(EntityExplodeEvent event) {
-    Entity entity = event.getEntity();
+  public void onEntityExplode(final EntityExplodeEvent event) {
+    final Entity entity = event.getEntity();
     if (!(entity instanceof Creeper)) {
       return;
     }
 
     // 10% chance
-    Random random = ThreadLocalRandom.current();
+    final Random random = ThreadLocalRandom.current();
     if (random.nextDouble() > 0.1) {
       return;
     }
 
-    Firework firework = entity.getWorld().spawn(event.getLocation().add(0, 0.2, 0), Firework.class);
-    FireworkMeta meta = firework.getFireworkMeta();
-    int count = random.nextInt(3) + 1;
+    final Firework firework =
+        entity.getWorld().spawn(event.getLocation().add(0, 0.2, 0), Firework.class);
+    final FireworkMeta meta = firework.getFireworkMeta();
+    final int count = random.nextInt(3) + 1;
     for (int i = 0; i < count; i++) {
-      FireworkEffect.Builder builder =
+      final FireworkEffect.Builder builder =
           FireworkEffect.builder()
               .flicker(random.nextBoolean())
               .trail(random.nextBoolean())
@@ -59,7 +60,7 @@ public class ExplodingCreepers implements Module, Listener {
     event.setCancelled(true);
   }
 
-  private static Color getRandomColour(Random random) {
+  private static Color getRandomColour(final Random random) {
     return Color.fromRGB(random.nextInt(256), random.nextInt(256), random.nextInt(256));
   }
 }

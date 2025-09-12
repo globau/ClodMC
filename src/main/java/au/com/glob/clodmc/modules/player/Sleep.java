@@ -25,9 +25,9 @@ import org.jspecify.annotations.NullMarked;
 @NullMarked
 public class Sleep implements Listener, Module {
   @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-  public void onTimeSkip(TimeSkipEvent event) {
-    Collection<? extends Player> players = ClodMC.instance.getServer().getOnlinePlayers();
-    List<String> sleeping =
+  public void onTimeSkip(final TimeSkipEvent event) {
+    final Collection<? extends Player> players = ClodMC.instance.getServer().getOnlinePlayers();
+    final List<String> sleeping =
         new java.util.ArrayList<>(
             players.stream()
                 .filter(LivingEntity::isSleeping)
@@ -40,7 +40,7 @@ public class Sleep implements Listener, Module {
 
     // notify players who slept the night
     // however, no need to tell the only player who slept
-    for (Player player : players) {
+    for (final Player player : players) {
       if (player.getWorld().getEnvironment() == World.Environment.NORMAL) {
         if (sleeping.size() > 1 || !sleeping.getFirst().equals(player.getName())) {
           Chat.fyi(player, "%s skipped the night".formatted(StringUtil.joinComma(sleeping)));

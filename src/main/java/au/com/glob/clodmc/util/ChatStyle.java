@@ -14,7 +14,7 @@ public enum ChatStyle {
 
   final String prefix;
 
-  ChatStyle(String prefix) {
+  ChatStyle(final String prefix) {
     this.prefix = prefix;
   }
 }

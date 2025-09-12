@@ -16,7 +16,7 @@ import java.util.stream.Stream;
 
 /** manages vendoring of third-party dependencies into the codebase */
 @SuppressWarnings("NullabilityAnnotations")
-public class Vendor {
+public final class Vendor {
   private static final Path VENDORED_PATH = Path.of("src/vendored");
   private static final String VENDORED_FILENAME = "vendored.properties";
 
@@ -28,9 +28,9 @@ public class Vendor {
     List<String> include;
     Set<String> exclude;
 
-    LibraryConfig(Path path) throws IOException {
-      Properties props = new Properties();
-      try (InputStream in = Files.newInputStream(path.resolve(VENDORED_FILENAME))) {
+    LibraryConfig(final Path path) throws IOException {
+      final Properties props = new Properties();
+      try (final InputStream in = Files.newInputStream(path.resolve(VENDORED_FILENAME))) {
         props.load(in);
       }
       this.name = path.getFileName().toString();
@@ -46,7 +46,7 @@ public class Vendor {
 
     // write configuration back to properties file
     void write() throws IOException {
-      List<String> lines = new ArrayList<>();
+      final List<String> lines = new ArrayList<>();
       lines.add("# use `scripts/vendor %s` to update".formatted(this.name));
       lines.add("repo=%s".formatted(this.repo));
       lines.add("path=%s".formatted(this.path));
@@ -62,12 +62,12 @@ public class Vendor {
   private record FileCopy(Path src, Path dst) {}
 
   // vendor specified library into codebase
-  public static void main(String[] args) {
+  public static void main(final String[] args) {
     Util.mainWrapper(
         () -> {
           // find vendored prop files
-          List<Path> librayPaths;
-          try (Stream<Path> stream = Files.list(VENDORED_PATH)) {
+          final List<Path> librayPaths;
+          try (final Stream<Path> stream = Files.list(VENDORED_PATH)) {
             librayPaths =
                 stream
                     .filter(Files::isDirectory)
@@ -75,18 +75,18 @@ public class Vendor {
                     .sorted(Comparator.naturalOrder())
                     .toList();
           }
-          List<String> libraryNames =
+          final List<String> libraryNames =
               librayPaths.stream().map((p) -> p.getFileName().toString()).toList();
 
           if (args.length != 1) {
             throw new RuntimeException(
                 "usage: scripts/vendor { %s }".formatted(Util.join(libraryNames, " | ")));
           }
-          String libraryName = args[0];
+          final String libraryName = args[0];
 
           // load
           LibraryConfig lib = null;
-          for (Path path : librayPaths) {
+          for (final Path path : librayPaths) {
             if (path.getFileName().toString().equals(libraryName)) {
               lib = new LibraryConfig(path);
               break;
@@ -101,8 +101,8 @@ public class Vendor {
           // vendor
           System.out.printf("vendoring %s%n", lib.name);
 
-          Path srcPath = Paths.get(".git/vendored/%s".formatted(lib.name));
-          Path dstPath = Paths.get("src/main/java/vendored/%s".formatted(lib.path));
+          final Path srcPath = Paths.get(".git/vendored/%s".formatted(lib.name));
+          final Path dstPath = Paths.get("src/main/java/vendored/%s".formatted(lib.path));
 
           // clone or update repo
           try {
@@ -112,7 +112,7 @@ public class Vendor {
             } else {
               Util.runIn(srcPath, "git", "pull");
             }
-          } catch (RuntimeException e) {
+          } catch (final RuntimeException e) {
             System.exit(1);
           }
 
@@ -122,34 +122,34 @@ public class Vendor {
           }
 
           // build list of files to copy
-          List<FileCopy> copyFilepaths = new ArrayList<>();
-          for (String srcFilename : lib.include) {
+          final List<FileCopy> copyFilepaths = new ArrayList<>();
+          for (final String srcFilename : lib.include) {
             if (srcFilename.endsWith("/")) {
-              Path path = srcPath.resolve(srcFilename.substring(0, srcFilename.length() - 1));
-              try (Stream<Path> files = Files.walk(path)) {
-                Set<String> exclude = lib.exclude;
+              final Path path = srcPath.resolve(srcFilename.substring(0, srcFilename.length() - 1));
+              try (final Stream<Path> files = Files.walk(path)) {
+                final Set<String> exclude = lib.exclude;
                 files
                     .filter(Files::isRegularFile)
                     .filter((Path fp) -> !exclude.contains(fp.getFileName().toString()))
                     .forEach(
-                        (Path srcFilepath) -> {
-                          Path dstFilepath = dstPath.resolve(path.relativize(srcFilepath));
+                        (final Path srcFilepath) -> {
+                          final Path dstFilepath = dstPath.resolve(path.relativize(srcFilepath));
                           copyFilepaths.add(new FileCopy(srcFilepath, dstFilepath));
                         });
               }
             } else {
-              Path srcFilepath = srcPath.resolve(srcFilename);
+              final Path srcFilepath = srcPath.resolve(srcFilename);
               if (!lib.exclude.contains(srcFilepath.getFileName().toString())) {
-                Path dstFilepath = dstPath.resolve(srcFilepath.getFileName());
+                final Path dstFilepath = dstPath.resolve(srcFilepath.getFileName());
                 copyFilepaths.add(new FileCopy(srcFilepath, dstFilepath));
               }
             }
           }
 
           // copy files
-          Set<Path> expectedFilepaths = new HashSet<>();
+          final Set<Path> expectedFilepaths = new HashSet<>();
           copyFilepaths.sort(Comparator.comparing((FileCopy fc) -> fc.src));
-          for (FileCopy fc : copyFilepaths) {
+          for (final FileCopy fc : copyFilepaths) {
             Files.createDirectories(fc.dst.getParent());
             System.out.printf("%s -> %s%n", srcPath.relativize(fc.src), fc.dst);
             Files.copy(fc.src, fc.dst, StandardCopyOption.REPLACE_EXISTING);
@@ -158,16 +158,16 @@ public class Vendor {
 
           // delete extra files
           if (Files.exists(dstPath)) {
-            Set<Path> actualFilepaths = new HashSet<>();
-            try (Stream<Path> files = Files.walk(dstPath)) {
+            final Set<Path> actualFilepaths = new HashSet<>();
+            try (final Stream<Path> files = Files.walk(dstPath)) {
               files
                   .filter(Files::isRegularFile)
                   .forEach((Path fp) -> actualFilepaths.add(dstPath.relativize(fp)));
             }
 
-            for (Path relFilename : actualFilepaths) {
+            for (final Path relFilename : actualFilepaths) {
               if (!expectedFilepaths.contains(relFilename)) {
-                Path filepath = dstPath.resolve(relFilename);
+                final Path filepath = dstPath.resolve(relFilename);
                 System.out.printf("deleting %s%n", filepath);
                 Files.delete(filepath);
               }
@@ -178,24 +178,24 @@ public class Vendor {
           Util.run("./gradlew", ":spotlessApply");
 
           // apply patches
-          Path patchDir = Paths.get("src/vendored/%s".formatted(lib.name));
+          final Path patchDir = Paths.get("src/vendored/%s".formatted(lib.name));
           if (Files.exists(patchDir)) {
-            try (Stream<Path> patches = Files.list(patchDir)) {
+            try (final Stream<Path> patches = Files.list(patchDir)) {
               patches
                   .filter((Path p) -> p.getFileName().toString().endsWith(".patch"))
                   .sorted(
                       Comparator.comparing(
-                          (Path p) -> {
+                          (final Path p) -> {
                             String stem = p.getFileName().toString();
                             stem = stem.substring(0, stem.lastIndexOf('.'));
                             return Integer.parseInt(stem.split("-", -1)[0]);
                           }))
                   .forEach(
-                      (Path patchPath) -> {
+                      (final Path patchPath) -> {
                         System.out.printf("patching %s%n", patchPath);
                         try {
                           Util.run("git", "apply", patchPath.toString());
-                        } catch (Exception e) {
+                        } catch (final Exception e) {
                           throw new RuntimeException(e);
                         }
                       });
@@ -206,14 +206,14 @@ public class Vendor {
           Util.run("./gradlew", ":spotlessApply");
 
           // check for changes
-          String modified = Util.capture("git", "status", "--porcelain", dstPath.toString());
+          final String modified = Util.capture("git", "status", "--porcelain", dstPath.toString());
           if (modified.trim().isEmpty()) {
             System.out.printf("%n%s is already up to date%n", lib.name);
             return;
           }
 
           // update commit .properties
-          String sha = Util.capture(srcPath, "git", "rev-parse", "HEAD").trim();
+          final String sha = Util.capture(srcPath, "git", "rev-parse", "HEAD").trim();
           lib.commit = sha;
           lib.write();
 

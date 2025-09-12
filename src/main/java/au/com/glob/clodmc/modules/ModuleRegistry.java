@@ -56,7 +56,7 @@ public class ModuleRegistry implements Iterable<Module>, PluginBootstrap {
 
   // paper bootstrap lifecycle hook for early module registration
   @Override
-  public void bootstrap(BootstrapContext context) {
+  public void bootstrap(final BootstrapContext context) {
     VeinMiner.bootstrap(new BootstrapContextHelper(context));
   }
 
@@ -118,8 +118,9 @@ public class ModuleRegistry implements Iterable<Module>, PluginBootstrap {
   }
 
   // register individual module with plugin dependency validation
-  private void register(Class<? extends Module> moduleClass, String... requiredPlugins) {
-    for (String plugin : requiredPlugins) {
+  private void register(
+      final Class<? extends Module> moduleClass, final String... requiredPlugins) {
+    for (final String plugin : requiredPlugins) {
       if (!Bukkit.getPluginManager().isPluginEnabled(plugin)) {
         Logger.warning(
             "Cannot load module %s: depends on plugin %s which is not enabled"
@@ -128,15 +129,15 @@ public class ModuleRegistry implements Iterable<Module>, PluginBootstrap {
       }
     }
 
-    Module module;
+    final Module module;
     try {
       module = moduleClass.getDeclaredConstructor().newInstance();
-    } catch (Exception e) {
+    } catch (final Exception e) {
       throw new RuntimeException(e);
     }
     this.modules.put(moduleClass, module);
 
-    if (module instanceof Listener listener) {
+    if (module instanceof final Listener listener) {
       Bukkit.getServer().getPluginManager().registerEvents(listener, ClodMC.instance);
     }
   }
@@ -149,8 +150,8 @@ public class ModuleRegistry implements Iterable<Module>, PluginBootstrap {
 
   // get specific module instance by class type
   @SuppressWarnings("unchecked")
-  public @Nullable <T extends Module> T get(Class<T> moduleClass) {
-    Module module = this.modules.get(moduleClass);
+  public @Nullable <T extends Module> T get(final Class<T> moduleClass) {
+    final Module module = this.modules.get(moduleClass);
     return (T) module;
   }
 }

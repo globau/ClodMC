@@ -26,9 +26,9 @@ public class Back implements Module, Listener {
     CommandBuilder.build("back")
         .description("Teleport to previous location")
         .executor(
-            (Player player) -> {
-              PlayerDataFile dataFile = PlayerDataFiles.of(player);
-              Location location = (Location) dataFile.get("back");
+            (final Player player) -> {
+              final PlayerDataFile dataFile = PlayerDataFiles.of(player);
+              final Location location = (Location) dataFile.get("back");
               if (location == null) {
                 throw new CommandError("No previous location");
               }
@@ -38,9 +38,9 @@ public class Back implements Module, Listener {
 
   // store previous location when player teleports via command
   @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-  public void onPlayerTeleport(PlayerTeleportEvent event) {
+  public void onPlayerTeleport(final PlayerTeleportEvent event) {
     if (event.getCause() == PlayerTeleportEvent.TeleportCause.COMMAND) {
-      PlayerDataFile dataFile = PlayerDataFiles.of(event.getPlayer());
+      final PlayerDataFile dataFile = PlayerDataFiles.of(event.getPlayer());
       dataFile.set("back", event.getPlayer().getLocation());
       dataFile.save();
     }

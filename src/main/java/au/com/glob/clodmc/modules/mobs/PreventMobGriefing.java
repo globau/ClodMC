@@ -20,7 +20,7 @@ import org.jspecify.annotations.NullMarked;
 public class PreventMobGriefing implements Listener, Module {
   // prevent creeper explosions from destroying blocks
   @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-  public void onEntityExplode(EntityExplodeEvent event) {
+  public void onEntityExplode(final EntityExplodeEvent event) {
     // stop creeper explosions from destroying blocks
     if (event.getEntity() instanceof Creeper) {
       event.blockList().clear();
@@ -29,7 +29,7 @@ public class PreventMobGriefing implements Listener, Module {
 
   // prevent endermen from picking up blocks
   @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-  public void onEntityChangeBlock(EntityChangeBlockEvent event) {
+  public void onEntityChangeBlock(final EntityChangeBlockEvent event) {
     // stop endermen from picking up blocks
     if (event.getEntity() instanceof Enderman) {
       event.setCancelled(true);

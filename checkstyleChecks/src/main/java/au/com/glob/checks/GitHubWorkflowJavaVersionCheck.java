@@ -22,8 +22,8 @@ public class GitHubWorkflowJavaVersionCheck extends AbstractFileSetCheck {
   private @Nullable String gradleJavaVersion;
 
   @Override
-  protected void processFiltered(File file, FileText fileText) {
-    String relativeFilename = CheckUtils.getRelativeFilename(file);
+  protected void processFiltered(final File file, final FileText fileText) {
+    final String relativeFilename = CheckUtils.getRelativeFilename(file);
     if (relativeFilename.equals("gradle.properties")) {
       this.processGradlePropertiesFile(file);
     } else if (CheckUtils.isRelativeTo(file, ".github/workflows")
@@ -32,12 +32,12 @@ public class GitHubWorkflowJavaVersionCheck extends AbstractFileSetCheck {
     }
   }
 
-  private void processGradlePropertiesFile(File file) {
-    Properties properties = new Properties();
-    try (InputStream in = Files.newInputStream(file.toPath())) {
+  private void processGradlePropertiesFile(final File file) {
+    final Properties properties = new Properties();
+    try (final InputStream in = Files.newInputStream(file.toPath())) {
       properties.load(in);
       this.gradleJavaVersion = properties.getProperty("javaVersion");
-    } catch (IOException e) {
+    } catch (final IOException e) {
       this.log(
           0,
           "failed to read java version from %s: %s"
@@ -53,37 +53,37 @@ public class GitHubWorkflowJavaVersionCheck extends AbstractFileSetCheck {
   }
 
   @SuppressWarnings("unchecked")
-  private void processWorkflowFile(File file) {
+  private void processWorkflowFile(final File file) {
     if (this.gradleJavaVersion == null) {
       this.log(0, "GitHubWorkflowJavaVersionCheck: missing java version");
       return;
     }
 
-    Yaml yaml = new Yaml();
-    try (InputStream in = Files.newInputStream(file.toPath())) {
-      Map<String, Object> workflow = yaml.load(in);
-      Map<String, Object> jobs = (Map<String, Object>) workflow.get("jobs");
+    final Yaml yaml = new Yaml();
+    try (final InputStream in = Files.newInputStream(file.toPath())) {
+      final Map<String, Object> workflow = yaml.load(in);
+      final Map<String, Object> jobs = (Map<String, Object>) workflow.get("jobs");
       if (jobs == null) {
         return;
       }
 
-      for (Map.Entry<String, Object> jobEntry : jobs.entrySet()) {
-        Map<String, Object> job = (Map<String, Object>) jobEntry.getValue();
-        List<Map<String, Object>> steps = (List<Map<String, Object>>) job.get("steps");
+      for (final Map.Entry<String, Object> jobEntry : jobs.entrySet()) {
+        final Map<String, Object> job = (Map<String, Object>) jobEntry.getValue();
+        final List<Map<String, Object>> steps = (List<Map<String, Object>>) job.get("steps");
         if (steps == null) {
           continue;
         }
 
-        for (Map<String, Object> step : steps) {
-          String uses = (String) step.get("uses");
+        for (final Map<String, Object> step : steps) {
+          final String uses = (String) step.get("uses");
           if (uses == null || !uses.startsWith("actions/setup-java@")) {
             continue;
           }
-          Map<String, Object> with = (Map<String, Object>) step.get("with");
+          final Map<String, Object> with = (Map<String, Object>) step.get("with");
           if (with == null) {
             continue;
           }
-          Object javaVersionObj = with.get("java-version");
+          final Object javaVersionObj = with.get("java-version");
           String workflowJavaVersion = null;
           if (javaVersionObj instanceof String) {
             workflowJavaVersion = (String) javaVersionObj;
@@ -103,9 +103,9 @@ public class GitHubWorkflowJavaVersionCheck extends AbstractFileSetCheck {
           }
         }
       }
-    } catch (IOException e) {
+    } catch (final IOException e) {
       this.log(0, "failed to read workflow from %s: %s".formatted(file.getPath(), e));
-    } catch (ClassCastException e) {
+    } catch (final ClassCastException e) {
       this.log(
           0,
           "unexpected yaml structure in %s: %s".formatted(CheckUtils.getRelativeFilename(file), e));

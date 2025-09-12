@@ -30,7 +30,7 @@ public class NullMarkedCheck extends AbstractCheck {
   }
 
   @Override
-  public void visitToken(DetailAST ast) {
+  public void visitToken(final DetailAST ast) {
     if (!CheckUtils.isRelativeTo(this.getFilePath(), "src/main/java/au/com/glob/")) {
       return;
     }

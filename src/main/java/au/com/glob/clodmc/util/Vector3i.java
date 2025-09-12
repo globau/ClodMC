@@ -6,13 +6,13 @@ import org.jspecify.annotations.Nullable;
 
 /** immutable 3d integer vector for coordinates */
 @NullMarked
-public final class Vector3i {
-  public final int x;
-  public final int y;
-  public final int z;
+public class Vector3i {
+  public int x;
+  public int y;
+  public int z;
 
   // create vector with x, y, z coordinates
-  public Vector3i(int x, int y, int z) {
+  public Vector3i(final int x, final int y, final int z) {
     this.x = x;
     this.y = y;
     this.z = z;
@@ -20,14 +20,13 @@ public final class Vector3i {
 
   // check equality based on coordinates
   @Override
-  public boolean equals(@Nullable Object obj) {
+  public boolean equals(@Nullable final Object obj) {
     if (obj == this) {
       return true;
     }
-    if (obj == null || obj.getClass() != this.getClass()) {
+    if (!(obj instanceof final Vector3i that)) {
       return false;
     }
-    Vector3i that = (Vector3i) obj;
     return this.x == that.x && this.y == that.y && this.z == that.z;
   }
 

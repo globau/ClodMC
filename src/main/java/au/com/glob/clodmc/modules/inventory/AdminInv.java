@@ -35,7 +35,7 @@ public class AdminInv implements Module, Listener {
         .description("Toggle admin/player inventory")
         .requiresOp()
         .executor(
-            (Player player) -> {
+            (final Player player) -> {
               if (this.hasStoredInventory(player)) {
                 this.restoreInventory(player);
                 Chat.info(player, "Switched to Player inventory");
@@ -47,8 +47,8 @@ public class AdminInv implements Module, Listener {
   }
 
   // store current player inventory and switch to admin inventory
-  private void storeInventory(Player player) {
-    UUID uuid = player.getUniqueId();
+  private void storeInventory(final Player player) {
+    final UUID uuid = player.getUniqueId();
 
     this.playerInventories.put(uuid, player.getInventory().getContents());
 
@@ -60,8 +60,8 @@ public class AdminInv implements Module, Listener {
   }
 
   // restore original player inventory from storage
-  private void restoreInventory(Player player) {
-    UUID uuid = player.getUniqueId();
+  private void restoreInventory(final Player player) {
+    final UUID uuid = player.getUniqueId();
 
     if (this.playerInventories.containsKey(uuid)) {
       this.adminInventories.put(uuid, player.getInventory().getContents());
@@ -70,14 +70,14 @@ public class AdminInv implements Module, Listener {
   }
 
   // check if player has a stored inventory
-  private boolean hasStoredInventory(Player player) {
-    UUID uuid = player.getUniqueId();
+  private boolean hasStoredInventory(final Player player) {
+    final UUID uuid = player.getUniqueId();
     return this.playerInventories.containsKey(uuid);
   }
 
   // restore inventory when player quits to prevent item loss
   @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-  public void onPlayerQuit(PlayerQuitEvent event) {
+  public void onPlayerQuit(final PlayerQuitEvent event) {
     if (event.getPlayer().isOp()) {
       this.restoreInventory(event.getPlayer());
     }
@@ -85,10 +85,10 @@ public class AdminInv implements Module, Listener {
 
   // restore all inventories on plugin disable (shutdown) to prevent item loss
   @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-  public void onPluginDisable(PluginDisableEvent event) {
+  public void onPluginDisable(final PluginDisableEvent event) {
     if (event.getPlugin().equals(ClodMC.instance)) {
-      for (UUID uuid : this.playerInventories.keySet()) {
-        Player player = Bukkit.getPlayer(uuid);
+      for (final UUID uuid : this.playerInventories.keySet()) {
+        final Player player = Bukkit.getPlayer(uuid);
         if (player != null && player.isOp()) {
           this.restoreInventory(player);
         }

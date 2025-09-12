@@ -34,7 +34,7 @@ public class Seen implements Module, Listener {
         .usage("/seen <player>")
         .description("Show time since player's last login")
         .executor(
-            (EitherCommandSender sender, @Nullable String playerName) -> {
+            (final EitherCommandSender sender, @Nullable final String playerName) -> {
               if (playerName == null) {
                 throw new CommandUsageError();
               }
@@ -44,18 +44,18 @@ public class Seen implements Module, Listener {
                 return;
               }
 
-              Player player = Bukkit.getPlayerExact(playerName);
+              final Player player = Bukkit.getPlayerExact(playerName);
               if (player != null) {
                 Chat.info(sender, "%s is online now".formatted(playerName));
                 return;
               }
 
-              UUID playerUUID = Players.getWhitelistedUUID(playerName);
+              final UUID playerUUID = Players.getWhitelistedUUID(playerName);
               if (playerUUID == null) {
                 Chat.error(sender, "%s doesn't play on this server".formatted(playerName));
                 return;
               }
-              PlayerDataFile dataFile = PlayerDataFiles.of(playerUUID);
+              final PlayerDataFile dataFile = PlayerDataFiles.of(playerUUID);
 
               LocalDateTime date = dataFile.getLastLogout();
               if (date == null) {
@@ -66,7 +66,7 @@ public class Seen implements Module, Listener {
                 return;
               }
 
-              String dateAgo =
+              final String dateAgo =
                   StringUtil.relativeTime(
                       System.currentTimeMillis() / 1000L - date.toEpochSecond(ZoneOffset.of("+8")));
               Chat.info(sender, "%s was last seen %s ago".formatted(playerName, dateAgo));

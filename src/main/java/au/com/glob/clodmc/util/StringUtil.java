@@ -13,13 +13,13 @@ import org.jspecify.annotations.Nullable;
 
 /** String helpers */
 @NullMarked
-public class StringUtil {
+public final class StringUtil {
   // format seconds as human-readable relative time
-  public static String relativeTime(long seconds) {
-    long dd = TimeUnit.SECONDS.toDays(seconds);
-    long hh = TimeUnit.SECONDS.toHours(seconds) % 24;
-    long mm = TimeUnit.SECONDS.toMinutes(seconds) % 60;
-    seconds %= 60;
+  public static String relativeTime(final long inputSeconds) {
+    final long dd = TimeUnit.SECONDS.toDays(inputSeconds);
+    final long hh = TimeUnit.SECONDS.toHours(inputSeconds) % 24;
+    final long mm = TimeUnit.SECONDS.toMinutes(inputSeconds) % 60;
+    final long seconds = inputSeconds % 60;
 
     if (dd >= 7) {
       return plural(dd, "day");
@@ -35,17 +35,17 @@ public class StringUtil {
   }
 
   // format value with unit, adding 's' for plural
-  public static String plural(long value, String unit) {
+  public static String plural(final long value, final String unit) {
     return String.format("%d %s%s", value, unit, value == 1 ? "" : "s");
   }
 
   // alternative plural formatting with value prefix
-  public static String plural2(long value, String unit) {
+  public static String plural2(final long value, final String unit) {
     return value == 1 ? unit : String.format("%d %ss", value, unit);
   }
 
   // join list with oxford commas and 'and' for last item
-  public static String joinComma(List<String> items) {
+  public static String joinComma(final List<String> items) {
     if (items.isEmpty()) {
       return "";
     }
@@ -60,9 +60,9 @@ public class StringUtil {
   }
 
   // convert string to title case
-  public static String toTitleCase(String value) {
-    StringBuilder titleCase = new StringBuilder();
-    for (String word : value.split("\\s+", -1)) {
+  public static String toTitleCase(final String value) {
+    final StringBuilder titleCase = new StringBuilder();
+    for (final String word : value.split("\\s+", -1)) {
       titleCase
           .append(Character.toUpperCase(word.charAt(0)))
           .append(word.substring(1).toLowerCase(Locale.ENGLISH))
@@ -72,24 +72,24 @@ public class StringUtil {
   }
 
   // convert translatable component to plain text
-  public static String asText(Translatable component) {
+  public static String asText(final Translatable component) {
     return asText(
         GlobalTranslator.render(
             Component.translatable(component.translationKey()), Locale.ENGLISH));
   }
 
   // convert adventure component to plain text
-  public static String asText(Component component) {
+  public static String asText(final Component component) {
     return PlainTextComponentSerializer.plainText().serialize(component);
   }
 
   // convert component to text with fallback
-  public static String asText(@Nullable Component component, String fallback) {
+  public static String asText(@Nullable final Component component, final String fallback) {
     return component == null ? fallback : asText(component);
   }
 
   // parse minimessage string into component
-  public static Component asComponent(String value) {
+  public static Component asComponent(final String value) {
     return MiniMessage.miniMessage().deserialize(value);
   }
 }

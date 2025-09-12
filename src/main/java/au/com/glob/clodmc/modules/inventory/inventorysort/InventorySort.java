@@ -38,7 +38,7 @@ import org.jspecify.annotations.Nullable;
     description = "Sort containers by shift+right-clicking in the inventory screen")
 @NullMarked
 public class InventorySort implements Listener, Module {
-  static final Map<String, Integer> materialOrder = new HashMap<>(1477);
+  static Map<String, Integer> materialOrder = new HashMap<>(1477);
 
   public InventorySort() {
     super();
@@ -47,19 +47,19 @@ public class InventorySort implements Listener, Module {
   // load material sorting order from embedded resource file
   @Override
   public void loadConfig() {
-    List<String> alerts = new ArrayList<>(0);
-    List<String> warnings = new ArrayList<>(0);
-    List<String> allMaterials = Registry.MATERIAL.stream().map(Enum::name).toList();
+    final List<String> alerts = new ArrayList<>(0);
+    final List<String> warnings = new ArrayList<>(0);
+    final List<String> allMaterials = Registry.MATERIAL.stream().map(Enum::name).toList();
 
     // read inventory_order.txt. format follows.  english name is ignored
     // # comment
     // english name  :MATERIAL
-    List<String> orderedMaterials = new ArrayList<>();
-    InputStream resourceStream = ClodMC.instance.getResource("inventory_order.txt");
+    final List<String> orderedMaterials = new ArrayList<>();
+    final InputStream resourceStream = ClodMC.instance.getResource("inventory_order.txt");
     if (resourceStream == null) {
       throw new RuntimeException("failed to read");
     }
-    try (BufferedReader reader =
+    try (final BufferedReader reader =
         new BufferedReader(new InputStreamReader(resourceStream, StandardCharsets.UTF_8))) {
       String line;
       int lineNo = 0;
@@ -68,21 +68,21 @@ public class InventorySort implements Listener, Module {
         if (line.isBlank() || line.startsWith("#")) {
           continue;
         }
-        String[] parts = line.split(":", -1);
+        final String[] parts = line.split(":", -1);
         if (parts.length != 2) {
           alerts.add("inventory_order.txt: invalid line %d".formatted(lineNo));
           continue;
         }
         orderedMaterials.add(parts[1]);
       }
-    } catch (IOException e) {
+    } catch (final IOException e) {
       Logger.exception(e);
       return;
     }
 
     // build material --> SortItem mapping
     int index = 0;
-    for (String material : orderedMaterials) {
+    for (final String material : orderedMaterials) {
       // must exist; these are only warnings as invalid items are ignored
       if (!allMaterials.contains(material)) {
         warnings.add("inventory_order.txt: invalid: %s".formatted(material));
@@ -99,9 +99,9 @@ public class InventorySort implements Listener, Module {
       index++;
     }
 
-    for (String name : allMaterials) {
+    for (final String name : allMaterials) {
       if (!materialOrder.containsKey(name)) {
-        Material material =
+        final Material material =
             Registry.MATERIAL.stream()
                 .filter((Material m) -> m.name().equals(name))
                 .findFirst()
@@ -111,25 +111,25 @@ public class InventorySort implements Listener, Module {
       }
     }
 
-    for (String alert : alerts) {
+    for (final String alert : alerts) {
       Logger.error(alert);
       OpAlerts.addAlert(alert);
     }
-    for (String warning : warnings) {
+    for (final String warning : warnings) {
       Logger.warning(warning);
     }
   }
 
   // sort inventory when shift+right-click on inventory slot
   @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-  public void onInventoryClick(InventoryClickEvent event) {
+  public void onInventoryClick(final InventoryClickEvent event) {
     if (!(event.getWhoClicked() instanceof Player
         && event.getClick() == ClickType.SHIFT_RIGHT
         && event.getSlotType() == InventoryType.SlotType.CONTAINER)) {
       return;
     }
 
-    Inventory inventory = event.getClickedInventory();
+    final Inventory inventory = event.getClickedInventory();
     if (inventory == null) {
       return;
     }
@@ -149,13 +149,13 @@ public class InventorySort implements Listener, Module {
     }
 
     // merge similar itemstacks
-    List<ItemStack> combinedStacks = new ArrayList<>(inventory.getSize());
+    final List<ItemStack> combinedStacks = new ArrayList<>(inventory.getSize());
     for (int slot = minSlot; slot <= maxSlot; slot++) {
-      ItemStack invStack = inventory.getItem(slot);
+      final ItemStack invStack = inventory.getItem(slot);
       if (invStack == null) {
         continue;
       }
-      for (ItemStack combinedStack : combinedStacks) {
+      for (final ItemStack combinedStack : combinedStacks) {
         if (invStack.isSimilar(combinedStack)) {
           if (invStack.getAmount() + combinedStack.getAmount() < combinedStack.getMaxStackSize()) {
             combinedStack.setAmount(combinedStack.getAmount() + invStack.getAmount());
@@ -174,7 +174,7 @@ public class InventorySort implements Listener, Module {
     }
 
     // sort
-    List<ItemStack> sortedItems =
+    final List<ItemStack> sortedItems =
         new ArrayList<>(
             combinedStacks.stream()
                 .map(InventoryItem::new)
@@ -183,7 +183,7 @@ public class InventorySort implements Listener, Module {
                 .toList());
 
     // update container
-    List<@Nullable ItemStack> inventoryContents = new ArrayList<>(inventory.getSize());
+    final List<@Nullable ItemStack> inventoryContents = new ArrayList<>(inventory.getSize());
     for (int i = 0; i < inventory.getSize(); i++) {
       if (i < minSlot || i > maxSlot) {
         inventoryContents.add(inventory.getItem(i));
@@ -197,8 +197,8 @@ public class InventorySort implements Listener, Module {
     inventory.setContents(inventoryContents.toArray(new ItemStack[0]));
 
     // notify viewers
-    for (HumanEntity viewer : event.getViewers()) {
-      if (viewer instanceof Player player) {
+    for (final HumanEntity viewer : event.getViewers()) {
+      if (viewer instanceof final Player player) {
         player.updateInventory();
       }
     }

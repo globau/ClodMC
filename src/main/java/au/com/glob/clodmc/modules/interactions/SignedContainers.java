@@ -29,27 +29,27 @@ import org.jspecify.annotations.NullMarked;
 @NullMarked
 public class SignedContainers implements Module, Listener {
   @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-  public void onPlayerInteract(PlayerInteractEvent event) {
+  public void onPlayerInteract(final PlayerInteractEvent event) {
     if (event.getAction() != Action.RIGHT_CLICK_BLOCK || event.getHand() != EquipmentSlot.HAND) {
       return;
     }
 
-    Block clickedBlock = event.getClickedBlock();
+    final Block clickedBlock = event.getClickedBlock();
     if (clickedBlock == null) {
       return;
     }
 
-    BlockState blockState = clickedBlock.getState();
-    if (!(blockState instanceof Sign sign) || !sign.isWaxed()) {
+    final BlockState blockState = clickedBlock.getState();
+    if (!(blockState instanceof final Sign sign) || !sign.isWaxed()) {
       return;
     }
 
-    BlockData blockData = clickedBlock.getBlockData();
-    if (blockData instanceof WallSign wallSign) {
-      Block attachedBlock = clickedBlock.getRelative(wallSign.getFacing().getOppositeFace());
-      if (attachedBlock.getState() instanceof Container container) {
+    final BlockData blockData = clickedBlock.getBlockData();
+    if (blockData instanceof final WallSign wallSign) {
+      final Block attachedBlock = clickedBlock.getRelative(wallSign.getFacing().getOppositeFace());
+      if (attachedBlock.getState() instanceof final Container container) {
         event.setCancelled(true);
-        Player player = event.getPlayer();
+        final Player player = event.getPlayer();
 
         // remove wax with an axe while sneaking for parity with copper chests
         if (player.isSneaking()
@@ -59,7 +59,7 @@ public class SignedContainers implements Module, Listener {
           sign.setWaxed(false);
           sign.update();
 
-          Location loc = sign.getLocation();
+          final Location loc = sign.getLocation();
           player.playSound(loc, Sound.ITEM_AXE_WAX_OFF, 1.0f, 1.0f);
           player
               .getWorld()

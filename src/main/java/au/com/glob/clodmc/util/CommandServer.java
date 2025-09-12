@@ -19,7 +19,7 @@ public class CommandServer implements Closeable {
   private final BufferedReader inStream;
   private final DataOutputStream outStream;
 
-  CommandServer(String hostname, int port) throws IOException {
+  CommandServer(final String hostname, final int port) throws IOException {
     this.socket = new Socket(hostname, port);
     this.socket.setSoTimeout(SOCKET_TIMEOUT_MS);
     this.inStream =
@@ -29,7 +29,7 @@ public class CommandServer implements Closeable {
   }
 
   // send a line of text with crlf termination
-  public void sendLine(String line) throws IOException {
+  public void sendLine(final String line) throws IOException {
     this.outStream.writeBytes("%s\r\n".formatted(line));
   }
 
@@ -39,9 +39,9 @@ public class CommandServer implements Closeable {
   }
 
   // read and discard lines until one starts with the given prefix
-  public void waitFor(String prefix) throws IOException {
+  public void waitFor(final String prefix) throws IOException {
     while (true) {
-      String line = this.readLine();
+      final String line = this.readLine();
       if (line == null || line.startsWith(prefix)) {
         return;
       }
@@ -49,7 +49,7 @@ public class CommandServer implements Closeable {
   }
 
   // send a command and wait for a response with the given prefix
-  public void sendAndWait(String line, String prefix) throws IOException {
+  public void sendAndWait(final String line, final String prefix) throws IOException {
     this.sendLine(line);
     this.waitFor(prefix);
   }

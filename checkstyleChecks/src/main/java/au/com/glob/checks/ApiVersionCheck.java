@@ -25,21 +25,21 @@ public class ApiVersionCheck extends AbstractFileSetCheck {
   private @Nullable String pluginVersion;
 
   @Override
-  protected void processFiltered(File file, FileText fileText) {
-    String relativeFilename = CheckUtils.getRelativeFilename(file);
+  protected void processFiltered(final File file, final FileText fileText) {
+    final String relativeFilename = CheckUtils.getRelativeFilename(file);
     if (relativeFilename.equals("gradle/libs.versions.toml")) {
       this.processVersionsFile(file);
     } else if (relativeFilename.equals("src/main/resources/paper-plugin.yml")) {
-      this.processPluginFile(file, fileText);
+      this.processPluginFile(file);
     }
   }
 
-  private void processVersionsFile(File file) {
-    try (Reader reader = Files.newBufferedReader(file.toPath())) {
-      TomlTable table = Toml.from(reader);
+  private void processVersionsFile(final File file) {
+    try (final Reader reader = Files.newBufferedReader(file.toPath())) {
+      final TomlTable table = Toml.from(reader);
       this.buildVersion = ((String) table.get("versions.paper"));
       this.buildVersion = this.buildVersion.replaceFirst("-R0\\.1-SNAPSHOT$", "");
-    } catch (IOException e) {
+    } catch (final IOException e) {
       this.log(
           0,
           "failed to read paper-api version from %s: %s"
@@ -53,12 +53,12 @@ public class ApiVersionCheck extends AbstractFileSetCheck {
     this.checkVersions();
   }
 
-  private void processPluginFile(File file, FileText fileText) {
-    Yaml yaml = new Yaml();
-    try (InputStream in = new FileInputStream(file)) {
-      Map<String, Object> obj = yaml.load(in);
+  private void processPluginFile(final File file) {
+    final Yaml yaml = new Yaml();
+    try (final InputStream in = new FileInputStream(file)) {
+      final Map<String, Object> obj = yaml.load(in);
       this.pluginVersion = (String) obj.get("api-version");
-    } catch (IOException e) {
+    } catch (final IOException e) {
       this.log(
           0,
           "failed to read api-version version from %s: %s"

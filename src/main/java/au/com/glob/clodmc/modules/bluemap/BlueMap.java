@@ -24,10 +24,10 @@ public class BlueMap implements Module, Listener {
   private final List<Addon> addons = new ArrayList<>(4);
 
   // register bluemap addon instance
-  private void register(Class<? extends Addon> cls, @Nullable BlueMapAPI api) {
+  private void register(final Class<? extends Addon> cls, @Nullable final BlueMapAPI api) {
     try {
       this.addons.add(cls.getDeclaredConstructor(BlueMapAPI.class).newInstance(api));
-    } catch (Exception e) {
+    } catch (final Exception e) {
       Logger.exception(e);
     }
   }
@@ -36,7 +36,7 @@ public class BlueMap implements Module, Listener {
   @Override
   public void loadConfig() {
     BlueMapAPI.onEnable(
-        (BlueMapAPI api) -> {
+        (final BlueMapAPI api) -> {
           Logger.info("Initialising BlueMap addons");
           this.register(BlueMapSpawn.class, api);
           this.register(BlueMapWorldBorder.class, api);
@@ -51,10 +51,10 @@ public class BlueMap implements Module, Listener {
               5 * 20,
               () -> {
                 Logger.info("Triggering BlueMap addon updates");
-                for (Addon addon : this.addons) {
+                for (final Addon addon : this.addons) {
                   try {
                     addon.update();
-                  } catch (Exception e) {
+                  } catch (final Exception e) {
                     Logger.exception(e);
                   }
                 }

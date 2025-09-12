@@ -8,9 +8,9 @@ class Network {
   final Colour top;
   final Colour bottom;
 
-  Network(int networkId) {
-    Colour topColour = Colours.of((networkId >> 4) & 0x0F);
-    Colour bottomColour = Colours.of(networkId & 0x0F);
+  Network(final int networkId) {
+    final Colour topColour = Colours.of((networkId >> 4) & 0x0F);
+    final Colour bottomColour = Colours.of(networkId & 0x0F);
     if (topColour == null || bottomColour == null) {
       throw new RuntimeException("malformed anchor networkID: %d".formatted(networkId));
     }
@@ -19,12 +19,12 @@ class Network {
   }
 
   // creates network instance from network id
-  static Network of(int networkId) {
+  static Network of(final int networkId) {
     return new Network(networkId);
   }
 
   // converts colour pair to network id
-  static int coloursToNetworkId(Colour topColour, Colour bottomColour) {
+  static int coloursToNetworkId(final Colour topColour, final Colour bottomColour) {
     return (topColour.index << 4) | bottomColour.index;
   }
 }

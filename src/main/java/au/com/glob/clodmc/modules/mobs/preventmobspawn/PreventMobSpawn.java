@@ -25,7 +25,7 @@ public class PreventMobSpawn implements Listener, Module {
   // cache all admin claims for spawn checking
   @Override
   public void loadConfig() {
-    for (Claim claim : GriefPrevention.instance.dataStore.getClaims()) {
+    for (final Claim claim : GriefPrevention.instance.dataStore.getClaims()) {
       if (claim.isAdminClaim()) {
         this.adminClaims.add(new AdminClaim(claim));
       }
@@ -34,9 +34,9 @@ public class PreventMobSpawn implements Listener, Module {
 
   // prevent enemy mobs from spawning in admin claims
   @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-  public void onCreatureSpawn(CreatureSpawnEvent event) {
+  public void onCreatureSpawn(final CreatureSpawnEvent event) {
     if (event.getEntity() instanceof Enemy) {
-      for (AdminClaim adminClaim : this.adminClaims) {
+      for (final AdminClaim adminClaim : this.adminClaims) {
         if (adminClaim.contains(event.getLocation())) {
           event.setCancelled(true);
           return;

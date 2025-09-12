@@ -30,13 +30,13 @@ public class HeatMap implements Module, Listener {
         () -> {
           assert this.afk != null;
 
-          Collection<? extends Player> onlinePlayers = Bukkit.getOnlinePlayers();
+          final Collection<? extends Player> onlinePlayers = Bukkit.getOnlinePlayers();
           if (onlinePlayers.isEmpty()) {
             return;
           }
 
-          HashSet<Chunk> inhabitedChunks = new HashSet<>(onlinePlayers.size());
-          for (Player player : onlinePlayers) {
+          final HashSet<Chunk> inhabitedChunks = new HashSet<>(onlinePlayers.size());
+          for (final Player player : onlinePlayers) {
             if (!this.afk.isAway(player)) {
               inhabitedChunks.add(player.getChunk());
             }
@@ -44,7 +44,7 @@ public class HeatMap implements Module, Listener {
 
           Schedule.asynchronously(
               () -> {
-                try (DB db = new DB()) {
+                try (final DB db = new DB()) {
                   db.incChunks(inhabitedChunks);
                 }
               });

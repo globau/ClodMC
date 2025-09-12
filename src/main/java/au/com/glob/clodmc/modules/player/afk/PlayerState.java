@@ -8,12 +8,12 @@ import org.jspecify.annotations.NullMarked;
 /** tracks player afk state and last interaction time */
 @NullMarked
 final class PlayerState {
-  final Player player;
+  Player player;
   long lastInteractionTime;
   boolean isAway;
 
   // create new player state tracking
-  PlayerState(Player player) {
+  PlayerState(final Player player) {
     this.player = player;
     this.lastInteractionTime = System.currentTimeMillis() / 1000;
     this.isAway = false;
@@ -37,7 +37,7 @@ final class PlayerState {
   }
 
   // set player as afk
-  public void setAway(boolean announce) {
+  public void setAway(final boolean announce) {
     this.isAway = true;
     AFK.getAfkTeam().addEntry(this.player.getName());
     if (announce) {
@@ -46,7 +46,7 @@ final class PlayerState {
   }
 
   // set player as no longer afk
-  public void setBack(boolean announce) {
+  public void setBack(final boolean announce) {
     this.isAway = false;
     AFK.getAfkTeam().removeEntry(this.player.getName());
     if (announce) {
@@ -56,7 +56,7 @@ final class PlayerState {
 
   // announce afk status change to all players
   private void announce() {
-    for (Player player : Bukkit.getOnlinePlayers()) {
+    for (final Player player : Bukkit.getOnlinePlayers()) {
       if (player.equals(this.player)) {
         Chat.fyi(player, this.isAway ? "You are now AFK" : "You are no longer AFK");
       } else {

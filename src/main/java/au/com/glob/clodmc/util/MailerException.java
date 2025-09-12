@@ -6,7 +6,7 @@ import org.jspecify.annotations.Nullable;
 /** exception for email sending failures */
 @NullMarked
 public class MailerException extends Exception {
-  public MailerException(@Nullable String message) {
+  public MailerException(@Nullable final String message) {
     super(message);
   }
 }

@@ -31,13 +31,13 @@ public class MainMethodOrderCheck extends AbstractCheck {
   }
 
   @Override
-  public void beginTree(DetailAST rootAST) {
+  public void beginTree(final DetailAST rootAST) {
     this.methods.clear();
     this.mainMethod = null;
   }
 
   @Override
-  public void visitToken(DetailAST ast) {
+  public void visitToken(final DetailAST ast) {
     if (!CheckUtils.isRelativeTo(this.getFilePath(), "src/main/java/au/com/glob/clodmc/build")) {
       return;
     }
@@ -49,11 +49,11 @@ public class MainMethodOrderCheck extends AbstractCheck {
     }
 
     if (ast.getType() == TokenTypes.METHOD_DEF) {
-      String methodName = CheckUtils.getName(ast);
+      final String methodName = CheckUtils.getName(ast);
       if ("main".equals(methodName)) {
         // check if it's a static method
-        DetailAST modifiers = ast.findFirstToken(TokenTypes.MODIFIERS);
-        if (CheckUtils.branchContains(modifiers, TokenTypes.LITERAL_STATIC)) {
+        final DetailAST modifiers = ast.findFirstToken(TokenTypes.MODIFIERS);
+        if (modifiers != null && CheckUtils.branchContains(modifiers, TokenTypes.LITERAL_STATIC)) {
           this.mainMethod = ast;
         }
       }
@@ -62,10 +62,10 @@ public class MainMethodOrderCheck extends AbstractCheck {
   }
 
   @Override
-  public void finishTree(DetailAST rootAST) {
+  public void finishTree(final DetailAST rootAST) {
     if (this.mainMethod != null && !this.methods.isEmpty()) {
       // check if main() is the last method
-      DetailAST lastMethod = this.methods.getLast();
+      final DetailAST lastMethod = this.methods.getLast();
       if (!this.mainMethod.equals(lastMethod)) {
         this.log(
             this.mainMethod,

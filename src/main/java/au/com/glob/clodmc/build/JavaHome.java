@@ -11,25 +11,25 @@ import java.util.stream.Stream;
 
 /** outputs the java home for the correct version (as per gradle.properties) */
 @SuppressWarnings("NullabilityAnnotations")
-public class JavaHome {
+public final class JavaHome {
   private static final String JDK_VERSION = readJavaVersion();
   private static final Path CACHE_FILE = Path.of("build", "java_home-%s".formatted(JDK_VERSION));
 
   // read java version from gradle.properties
   private static String readJavaVersion() {
-    Properties props = new Properties();
+    final Properties props = new Properties();
     try {
       props.load(Files.newBufferedReader(Path.of("gradle.properties")));
-    } catch (IOException e) {
+    } catch (final IOException e) {
       throw new RuntimeException(e);
     }
-    String javaVersion = props.getProperty("javaVersion");
+    final String javaVersion = props.getProperty("javaVersion");
     if (javaVersion == null) {
       throw new RuntimeException("javaVersion not found in gradle.properties");
     }
     try {
       Integer.parseInt(javaVersion);
-    } catch (NumberFormatException e) {
+    } catch (final NumberFormatException e) {
       throw new RuntimeException("malformed javaVersion in gradle.properties");
     }
     return javaVersion;
@@ -38,43 +38,43 @@ public class JavaHome {
   // read cached java home path if valid
   private static String readCached() {
     try {
-      String cachedJavaHome = Files.readString(CACHE_FILE).trim();
+      final String cachedJavaHome = Files.readString(CACHE_FILE).trim();
       if (Files.exists(Path.of("%s/bin/java".formatted(cachedJavaHome)))) {
         return cachedJavaHome;
       }
       Files.delete(CACHE_FILE);
-    } catch (IOException e) {
+    } catch (final IOException e) {
       // ignored
     }
     return null;
   }
 
   // write java home path to cache file
-  private static void writeCached(String path) {
+  private static void writeCached(final String path) {
     try {
       Files.writeString(CACHE_FILE, "%s\n".formatted(path));
-    } catch (IOException e) {
+    } catch (final IOException e) {
       // ignored
     }
   }
 
   // find and output java home directory
-  public static void main(String[] args) {
+  public static void main(final String[] args) {
     Util.mainWrapper(
         () -> {
-          String cached = readCached();
+          final String cached = readCached();
           if (cached != null) {
             System.out.println(cached);
             return;
           }
 
           // check the running java version
-          Matcher matcher =
+          final Matcher matcher =
               Pattern.compile("^(\\d+)\\.").matcher(System.getProperty("java.version"));
           if (matcher.find()) {
-            String version = matcher.group(1);
+            final String version = matcher.group(1);
             if (version.equals(JDK_VERSION)) {
-              String javaHome = System.getProperty("java.home");
+              final String javaHome = System.getProperty("java.home");
               writeCached(javaHome);
               System.out.println(javaHome);
               return;
@@ -82,24 +82,25 @@ public class JavaHome {
           }
 
           // try to find the correct jdk version in the standard macOS locations
-          List<Path> paths =
+          final List<Path> paths =
               List.of(
                   Path.of(
                       "%s/Library/Java/JavaVirtualMachines"
                           .formatted(System.getProperty("user.home"))),
                   Path.of("/Library/Java/JavaVirtualMachines"));
-          for (Path jvmPath : paths) {
-            try (Stream<Path> stream = Files.list(jvmPath)) {
-              List<String> versionPaths =
+          for (final Path jvmPath : paths) {
+            try (final Stream<Path> stream = Files.list(jvmPath)) {
+              final List<String> versionPaths =
                   stream.filter(Files::isDirectory).map(Path::toString).toList();
-              for (String versionPath : versionPaths) {
-                String javaHome = "%s/Contents/Home".formatted(versionPath);
-                String javaFilename = "%s/bin/java".formatted(javaHome);
+              for (final String versionPath : versionPaths) {
+                final String javaHome = "%s/Contents/Home".formatted(versionPath);
+                final String javaFilename = "%s/bin/java".formatted(javaHome);
                 if (Files.exists(Path.of(javaFilename))) {
-                  String versionOutput = Util.capture(javaFilename, "--version");
-                  Matcher matcher1 = Pattern.compile("^\\S+ (\\d+)\\.").matcher(versionOutput);
+                  final String versionOutput = Util.capture(javaFilename, "--version");
+                  final Matcher matcher1 =
+                      Pattern.compile("^\\S+ (\\d+)\\.").matcher(versionOutput);
                   if (matcher1.find()) {
-                    String version = matcher1.group(1);
+                    final String version = matcher1.group(1);
                     if (version.equals(JDK_VERSION)) {
                       writeCached(javaHome);
                       System.out.println(javaHome);

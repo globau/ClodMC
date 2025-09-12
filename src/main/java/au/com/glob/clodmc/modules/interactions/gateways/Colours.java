@@ -9,7 +9,7 @@ import org.jspecify.annotations.Nullable;
 
 /** manages available gateway colours and their material mappings */
 @NullMarked
-public class Colours {
+public final class Colours {
   static final List<Colour> COLOURS =
       List.of(
           new Colour(Material.WHITE_WOOL, "white", 0, Color.fromRGB(0xf9ffff)),
@@ -30,8 +30,8 @@ public class Colours {
           new Colour(Material.BLACK_WOOL, "black", 15, Color.fromRGB(0x1d1c21)));
 
   // finds colour by material
-  static @Nullable Colour of(Material material) {
-    for (Colour colour : COLOURS) {
+  static @Nullable Colour of(final Material material) {
+    for (final Colour colour : COLOURS) {
       if (colour.material == material) {
         return colour;
       }
@@ -40,8 +40,8 @@ public class Colours {
   }
 
   // finds colour by index
-  static @Nullable Colour of(int index) {
-    for (Colour colour : COLOURS) {
+  static @Nullable Colour of(final int index) {
+    for (final Colour colour : COLOURS) {
       if (colour.index == index) {
         return colour;
       }
@@ -50,7 +50,7 @@ public class Colours {
   }
 
   // finds colour by item material
-  static @Nullable Colour of(@Nullable ItemStack item) {
+  static @Nullable Colour of(@Nullable final ItemStack item) {
     return item == null ? null : of(item.getType());
   }
 }

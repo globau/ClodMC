@@ -10,7 +10,7 @@ import org.jspecify.annotations.NullMarked;
 public class FilePermissionsCheck extends AbstractFileSetCheck {
 
   @Override
-  protected void processFiltered(File file, FileText fileText) {
+  protected void processFiltered(final File file, final FileText fileText) {
     if (file.canExecute() && CheckUtils.isRelativeTo(file, "src/main")) {
       this.log(0, "bad file permissions (+x): %s".formatted(CheckUtils.getRelativeFilename(file)));
     }

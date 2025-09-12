@@ -8,7 +8,7 @@ import org.jspecify.annotations.NullMarked;
 public class InvalidConfigException extends Exception {
   private final List<String> errors;
 
-  public InvalidConfigException(List<String> errors) {
+  public InvalidConfigException(final List<String> errors) {
     this.errors = errors;
   }
 
@@ -19,7 +19,7 @@ public class InvalidConfigException extends Exception {
 
   // log all validation errors to the server log
   public void logErrors() {
-    for (String line : this.errors) {
+    for (final String line : this.errors) {
       Logger.error(line);
     }
   }
