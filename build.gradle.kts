@@ -147,7 +147,16 @@ tasks.register<Exec>("generateReadme") {
     doLast { file("README.md").writeText(standardOutput.toString()) }
 }
 
-tasks.named("build") { finalizedBy("generateReadme") }
+tasks.register("printVersion") {
+    val jarTask = tasks.named<Jar>("jar")
+    val jarPath = jarTask.map { task -> project.relativePath(task.archiveFile.get().asFile) }
+    doLast { logger.quiet("built " + jarPath.get()) }
+}
+
+tasks.named("build") {
+    finalizedBy("generateReadme")
+    finalizedBy("printVersion")
+}
 
 if (file("local.gradle.kts").exists()) {
     apply(from = "local.gradle.kts")

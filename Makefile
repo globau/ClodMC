@@ -7,7 +7,6 @@ gradle := ./gradlew -Dorg.gradle.java.home=$(shell ./scripts/java-home)
 build: build/libs/ClodMC-$(version).jar
 build/libs/ClodMC-$(version).jar: $(java-files) $(config-files)
 	$(gradle) build
-	@echo built build/libs/ClodMC-$(version).jar
 
 .PHONY: format
 format: build/format
