@@ -1,9 +1,9 @@
 [versions]
 bluemap = "2.7.5" # https://repo.bluecolored.de/#/releases/de/bluecolored/bluemap-api
-checkstyle = "11.0.0" # https://checkstyle.sourceforge.io/
+checkstyle = "11.0.1" # https://checkstyle.sourceforge.io/
 errorprone-gradle = "4.3.0" # https://github.com/google/error-prone/releases
 errorprone = "2.41.0" # https://github.com/google/error-prone/releases
-geyser = "2.8.2-SNAPSHOT" # https://geysermc.org/wiki/geyser/getting-started-with-the-api
+geyser = "2.8.3-SNAPSHOT" # https://geysermc.org/wiki/geyser/getting-started-with-the-api
 google-java-format = "1.28.0" # https://github.com/google/google-java-format/releases
 griefprevention = "16.18.4" # https://github.com/GriefPrevention/GriefPrevention/releases
 jspecify = "1.0.0" # https://jspecify.dev/docs/using/
