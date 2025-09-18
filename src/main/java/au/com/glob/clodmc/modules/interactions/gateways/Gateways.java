@@ -7,6 +7,7 @@ import au.com.glob.clodmc.command.CommandBuilder;
 import au.com.glob.clodmc.command.EitherCommandSender;
 import au.com.glob.clodmc.datafile.PlayerDataFile;
 import au.com.glob.clodmc.datafile.PlayerDataFiles;
+import au.com.glob.clodmc.events.PlayerTargetBlockEvent;
 import au.com.glob.clodmc.modules.Module;
 import au.com.glob.clodmc.util.ActionBar;
 import au.com.glob.clodmc.util.BlockPos;
@@ -350,30 +351,36 @@ public class Gateways implements Module, Listener {
     anchorBlock.blockPos.world.dropItem(anchorBlock.blockPos.asLocation(), anchorItem);
   }
 
+  // show info when a player looks at a gateway
+  @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+  public void onPlayerTargetBlock(final PlayerTargetBlockEvent event) {
+    final Player player = event.getPlayer();
+    final Block block = event.getTargetBlock();
+
+    if (block == null) {
+      return;
+    }
+
+    final AnchorBlock anchorBlock = this.instances.get(BlockPos.of(block.getLocation()));
+    if (anchorBlock != null) {
+      ActionBar.plain(player, anchorBlock.getInformation());
+    }
+  }
+
   // handle player movement and gateway interactions
   @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
   public void onPlayerMove(final PlayerMoveEvent event) {
     final Player player = event.getPlayer();
 
-    // keep track of gateways within range of players
-    if (event.hasChangedBlock()) {
-      this.updateNearbyAnchors(player);
-    }
-
-    if (player.getGameMode().equals(GameMode.SPECTATOR)) {
+    // don't teleport spectators, and only need to check if player's block changes
+    if (player.getGameMode().equals(GameMode.SPECTATOR) || !event.hasChangedBlock()) {
       return;
     }
 
-    // show colours of looked-at anchorblocks
-    final Block targetBlock = player.getTargetBlockExact(Players.INTERACTION_RANGE);
-    if (targetBlock != null) {
-      final AnchorBlock anchorBlock = this.instances.get(BlockPos.of(targetBlock.getLocation()));
-      if (anchorBlock != null) {
-        ActionBar.plain(player, anchorBlock.getInformation());
-      }
-    }
+    // keep track of gateways within range of players
+    this.updateNearbyAnchors(player);
 
-    final Location playerLocation = player.getLocation();
+    final Location playerLocation = event.getTo();
     final BlockPos playerPos = BlockPos.of(playerLocation);
 
     // ignore players after they teleport, until they step off the anchorblock

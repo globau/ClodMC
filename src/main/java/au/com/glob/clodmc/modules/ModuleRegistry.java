@@ -2,15 +2,16 @@ package au.com.glob.clodmc.modules;
 
 import au.com.glob.clodmc.ClodMC;
 import au.com.glob.clodmc.command.CommandBuilder;
+import au.com.glob.clodmc.events.PlayerTargetBlockListener;
 import au.com.glob.clodmc.modules.bluemap.BlueMap;
 import au.com.glob.clodmc.modules.crafting.SporeBlossom;
 import au.com.glob.clodmc.modules.interactions.FastLeafDecay;
+import au.com.glob.clodmc.modules.interactions.NamedStorage;
 import au.com.glob.clodmc.modules.interactions.SignedContainers;
 import au.com.glob.clodmc.modules.interactions.VeinMiner;
 import au.com.glob.clodmc.modules.interactions.WaxedItemFrames;
 import au.com.glob.clodmc.modules.interactions.WaxedPressurePlates;
 import au.com.glob.clodmc.modules.interactions.gateways.Gateways;
-import au.com.glob.clodmc.modules.interactions.namedstorage.NamedStorage;
 import au.com.glob.clodmc.modules.inventory.AdminInv;
 import au.com.glob.clodmc.modules.inventory.InventoryRestore;
 import au.com.glob.clodmc.modules.inventory.deeppockets.DeepPockets;
@@ -62,6 +63,9 @@ public class ModuleRegistry implements Iterable<Module>, PluginBootstrap {
 
   // register all modules organised by category
   public void registerAll() {
+    // custom event listeners
+    registerListener(new PlayerTargetBlockListener());
+
     // core - used by other modules
     this.register(OpAlerts.class);
 
@@ -138,8 +142,12 @@ public class ModuleRegistry implements Iterable<Module>, PluginBootstrap {
     this.modules.put(moduleClass, module);
 
     if (module instanceof final Listener listener) {
-      Bukkit.getServer().getPluginManager().registerEvents(listener, ClodMC.instance);
+      registerListener(listener);
     }
+  }
+
+  private static void registerListener(final Listener listener) {
+    Bukkit.getServer().getPluginManager().registerEvents(listener, ClodMC.instance);
   }
 
   // iterate over registered modules
