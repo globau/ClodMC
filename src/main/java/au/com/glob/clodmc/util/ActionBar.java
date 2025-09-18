@@ -9,7 +9,7 @@ import org.jspecify.annotations.NullMarked;
 public final class ActionBar {
   private static void setActionBar(
       final Player player, final ChatStyle style, final String message) {
-    player.sendActionBar(StringUtil.asComponent("%s%s".formatted(style, message)));
+    player.sendActionBar(StringUtil.asComponent("%s%s".formatted(style.prefix, message)));
   }
 
   public static void info(final Player player, final String message) {
