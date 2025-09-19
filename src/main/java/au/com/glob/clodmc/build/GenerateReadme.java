@@ -49,7 +49,7 @@ public final class GenerateReadme {
   }
 
   private static void generateReleaseChanges() throws Exception {
-    System.out.println("## Changes\n");
+    System.out.println("\n## Changes\n");
 
     final String commitLog = Util.capture("git", "log", "--pretty=format:[%d] %h %s");
     for (String commitLine : commitLog.split("\n", -1)) {
