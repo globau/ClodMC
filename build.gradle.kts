@@ -147,6 +147,22 @@ tasks.register<Exec>("generateReadme") {
     doLast { file("README.md").writeText(standardOutput.toString()) }
 }
 
+tasks.register<Exec>("checkReadme") {
+    description = "Verify README.md matches generated content"
+    group = "verification"
+    commandLine("./scripts/generate-readme")
+    standardOutput = ByteArrayOutputStream()
+    doLast {
+        val generatedContent = standardOutput.toString()
+        val currentContent = file("README.md").readText()
+        if (generatedContent != currentContent) {
+            throw GradleException(
+                "README.md does not match generated content; run 'make format' to update it",
+            )
+        }
+    }
+}
+
 tasks.register("printVersion") {
     val jarTask = tasks.named<Jar>("jar")
     val jarPath = jarTask.map { task -> project.relativePath(task.archiveFile.get().asFile) }
@@ -157,6 +173,8 @@ tasks.named("build") {
     finalizedBy("generateReadme")
     finalizedBy("printVersion")
 }
+
+tasks.named("check") { dependsOn("checkReadme") }
 
 if (file("local.gradle.kts").exists()) {
     apply(from = "local.gradle.kts")

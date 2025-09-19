@@ -15,7 +15,7 @@ While Clod-MC is open-source, pull requests are not accepted.
 - **Homes** - Set limited number of named teleport locations [[src](src/main/java/au/com/glob/clodmc/modules/player/Homes.java)]
 - **Inventory Sorting** - Sort containers by shift+right-clicking in the inventory screen [[src](src/main/java/au/com/glob/clodmc/modules/inventory/inventorysort/InventorySort.java)]
 - **Invite** - Allows players with enough playtime to add others to the whitelist [[src](src/main/java/au/com/glob/clodmc/modules/player/Invite.java)]
-- **Named Storage** - If a container has been named in an anvil, show that name when looking at it [[src](src/main/java/au/com/glob/clodmc/modules/interactions/namedstorage/NamedStorage.java)]
+- **Named Storage** - If a container has been named in an anvil, show that name when looking at it [[src](src/main/java/au/com/glob/clodmc/modules/interactions/NamedStorage.java)]
 - **Offline Messages** - Queue and deliver whispers sent to offline players [[src](src/main/java/au/com/glob/clodmc/modules/player/offlinemessages/OfflineMessages.java)]
 - **Point-to-Point Gateways** - Player-built point-to-point teleportation system using coloured wool anchors [[src](src/main/java/au/com/glob/clodmc/modules/interactions/gateways/Gateways.java)]
 - **Seen** - Show how long it's been since the server last saw the player [[src](src/main/java/au/com/glob/clodmc/modules/player/Seen.java)]

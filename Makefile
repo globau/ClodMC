@@ -12,7 +12,7 @@ build/libs/ClodMC-$(version).jar: $(java-files) $(config-files)
 format: build/format
 build/format: $(java-files) $(test-files) $(config-files) $(xml-files)
 	@mkdir -p build
-	$(gradle) :spotlessApply
+	$(gradle) :spotlessApply generateReadme
 	@touch $@
 
 .PHONY: clean
