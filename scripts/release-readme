@@ -1,4 +1,0 @@
-#!/bin/sh
-# augment README.md with a list of recent changes from the commit log
-cd "`git rev-parse --show-toplevel`"
-sh scripts/run-build-script ReleaseReadme $*

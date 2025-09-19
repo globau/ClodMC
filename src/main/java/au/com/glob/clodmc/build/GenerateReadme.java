@@ -16,6 +16,8 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Stream;
 import javax.tools.JavaCompiler;
 import javax.tools.JavaFileObject;
@@ -25,7 +27,8 @@ import javax.tools.ToolProvider;
 /** generates README.md from @doc annotations and src/doc/README.md */
 @SuppressWarnings("NullabilityAnnotations")
 public final class GenerateReadme {
-  private static void generateReadme(final List<ModuleInfo> modules) throws Exception {
+  private static void generateReadme(final List<ModuleInfo> modules, final boolean isRelease)
+      throws Exception {
     String template = Files.readString(Path.of("src/doc/README.md"));
 
     // sort modules by title
@@ -39,6 +42,34 @@ public final class GenerateReadme {
     template = template.replace("{{admin-commands}}", generateCommandList(modules, "ADMIN"));
 
     System.out.print(template);
+
+    if (isRelease) {
+      generateReleaseChanges();
+    }
+  }
+
+  private static void generateReleaseChanges() throws Exception {
+    System.out.println("## Changes\n");
+
+    final String commitLog = Util.capture("git", "log", "--pretty=format:[%d] %h %s");
+    for (String commitLine : commitLog.split("\n", -1)) {
+      commitLine = commitLine.trim();
+
+      final Matcher matcher = Pattern.compile("^\\[([^]]*)] (\\S+) (.+)$").matcher(commitLine);
+      if (!matcher.matches()) {
+        throw new RuntimeException("Failed to parse commit line: %s".formatted(commitLine));
+      }
+
+      final String meta = matcher.group(1).trim();
+      final String sha = matcher.group(2);
+      final String desc = matcher.group(3);
+
+      if (meta.startsWith("(tag:")) {
+        break;
+      }
+
+      System.out.printf("- %s %s%n", sha, desc);
+    }
   }
 
   private static String generateModuleList(final List<ModuleInfo> modules, final String audience) {
@@ -236,6 +267,9 @@ public final class GenerateReadme {
   public static void main(final String[] args) {
     Util.mainWrapper(
         () -> {
+          // check for --release flag
+          final boolean isRelease = args.length > 0 && "--release".equals(args[0]);
+
           final List<Path> javaFiles = new ArrayList<>();
           try (final Stream<Path> paths = Files.walk(Path.of("src/main/java"))) {
             paths
@@ -259,7 +293,7 @@ public final class GenerateReadme {
               scanner.scan(tree, null);
             }
 
-            generateReadme(scanner.getModules());
+            generateReadme(scanner.getModules(), isRelease);
           }
         });
   }
