@@ -1,6 +1,5 @@
 java-files := $(shell find src -name '*.java') $(shell find checkstyleChecks/src -name '*.java')
 config-files := $(shell find src -name '*.yml') *.gradle.kts Makefile $(shell find config -type f)
-xml-files := $(shell find src -name '*.xml')
 version := $(shell ./scripts/version)
 gradle := ./gradlew -Dorg.gradle.java.home=$(shell ./scripts/java-home)
 
@@ -9,11 +8,8 @@ build/libs/ClodMC-$(version).jar: $(java-files) $(config-files)
 	$(gradle) build
 
 .PHONY: format
-format: build/format
-build/format: $(java-files) $(test-files) $(config-files) $(xml-files)
-	@mkdir -p build
+format:
 	$(gradle) :spotlessApply generateReadme
-	@touch $@
 
 .PHONY: clean
 clean:

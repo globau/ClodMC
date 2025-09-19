@@ -169,10 +169,7 @@ tasks.register("printVersion") {
     doLast { logger.quiet("built " + jarPath.get()) }
 }
 
-tasks.named("build") {
-    finalizedBy("generateReadme")
-    finalizedBy("printVersion")
-}
+tasks.named("build") { finalizedBy("printVersion") }
 
 tasks.named("check") { dependsOn("checkReadme") }
 
