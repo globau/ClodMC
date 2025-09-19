@@ -4,7 +4,7 @@ import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.jspecify.annotations.NullMarked;
 
-/** Location related helpers */
+/** location related helpers */
 @NullMarked
 public final class LocationUtil {
   // calculates location the player is facing from given location

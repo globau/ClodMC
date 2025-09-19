@@ -22,7 +22,7 @@ import javax.tools.JavaFileObject;
 import javax.tools.StandardJavaFileManager;
 import javax.tools.ToolProvider;
 
-/** generates README.md from @Doc annotations and src/doc/README.md */
+/** generates README.md from @doc annotations and src/doc/README.md */
 @SuppressWarnings("NullabilityAnnotations")
 public final class GenerateReadme {
   private static void generateReadme(final List<ModuleInfo> modules) throws Exception {

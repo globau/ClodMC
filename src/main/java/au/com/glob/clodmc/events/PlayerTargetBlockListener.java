@@ -14,6 +14,7 @@ import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.jspecify.annotations.NullMarked;
 
+/** listens for player movement and fires target block events when view direction changes */
 @NullMarked
 public class PlayerTargetBlockListener implements Listener {
   private final WeakHashMap<UUID, ViewDirection> lastView = new WeakHashMap<>();

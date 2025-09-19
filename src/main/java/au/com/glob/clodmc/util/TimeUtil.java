@@ -5,7 +5,7 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import org.jspecify.annotations.NullMarked;
 
-/** Date/Time/Timezone helpers */
+/** date/time/timezone helpers */
 @NullMarked
 public final class TimeUtil {
   private static final ZoneId LOCAL_TZ = ZoneId.of("Australia/Perth");

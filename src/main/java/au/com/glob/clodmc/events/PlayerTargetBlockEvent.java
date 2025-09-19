@@ -7,6 +7,7 @@ import org.bukkit.event.HandlerList;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
+/** fired when player changes view direction and targets a different block */
 @NullMarked
 public class PlayerTargetBlockEvent extends Event {
   private static final HandlerList handlers = new HandlerList();

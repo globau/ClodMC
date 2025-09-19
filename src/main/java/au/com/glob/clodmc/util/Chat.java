@@ -3,7 +3,7 @@ package au.com.glob.clodmc.util;
 import org.bukkit.command.CommandSender;
 import org.jspecify.annotations.NullMarked;
 
-/** Standardised styling for messages sent to players via chat */
+/** standardised styling for messages sent to players via chat */
 @NullMarked
 public final class Chat {
   // send styled message to command sender

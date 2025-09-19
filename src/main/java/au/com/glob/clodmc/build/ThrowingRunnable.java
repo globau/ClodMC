@@ -1,5 +1,6 @@
 package au.com.glob.clodmc.build;
 
+/** runnable that can throw checked exceptions */
 @SuppressWarnings("NullabilityAnnotations")
 public interface ThrowingRunnable extends Runnable {
   @Override

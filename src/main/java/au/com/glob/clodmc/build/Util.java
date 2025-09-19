@@ -14,6 +14,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+/** utilities for build scripts */
 @SuppressWarnings("NullabilityAnnotations")
 public final class Util {
   // 'static main()' wrapper for standardised exception handling

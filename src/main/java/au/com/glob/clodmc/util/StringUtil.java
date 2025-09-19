@@ -11,7 +11,7 @@ import net.kyori.adventure.translation.Translatable;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
-/** String helpers */
+/** string helpers */
 @NullMarked
 public final class StringUtil {
   // format seconds as human-readable relative time

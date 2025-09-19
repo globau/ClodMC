@@ -12,7 +12,7 @@ import java.util.Map;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
-/** HTTP client helpers */
+/** http client helpers */
 @NullMarked
 public final class HttpClient {
   private HttpClient() {}

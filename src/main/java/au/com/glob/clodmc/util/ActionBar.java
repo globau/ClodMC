@@ -4,7 +4,7 @@ import net.kyori.adventure.text.Component;
 import org.bukkit.entity.Player;
 import org.jspecify.annotations.NullMarked;
 
-/** Standardised styling for messages sent to players via the action bar */
+/** standardised styling for messages sent to players via the action bar */
 @NullMarked
 public final class ActionBar {
   private static void setActionBar(

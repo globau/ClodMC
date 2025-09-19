@@ -391,6 +391,7 @@
         <module name="FinalParameters" />
         <module name="FinalLocalVariable" />
         <!-- glob: custom checks -->
+        <module name="au.com.glob.checks.DescriptionCheck" />
         <module name="au.com.glob.checks.EventHandlerNamingCheck" />
         <module name="au.com.glob.checks.MainMethodOrderCheck" />
         <module name="au.com.glob.checks.ModuleDocAnnotationCheck" />
