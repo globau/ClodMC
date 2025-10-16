@@ -539,6 +539,11 @@ public class CustomBlockData implements PersistentDataContainer {
   }
 
   @Override
+  public int getSize() {
+    return pdc.getSize();
+  }
+
+  @Override
   public void remove(final @NotNull NamespacedKey namespacedKey) {
     pdc.remove(namespacedKey);
     save();

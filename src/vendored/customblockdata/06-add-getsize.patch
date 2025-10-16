@@ -1,0 +1,16 @@
+diff --git a/src/main/java/vendored/com/jeff_media/customblockdata/CustomBlockData.java b/src/main/java/vendored/com/jeff_media/customblockdata/CustomBlockData.java
+index 1d4e95d..afee894 100644
+--- a/src/main/java/vendored/com/jeff_media/customblockdata/CustomBlockData.java
++++ b/src/main/java/vendored/com/jeff_media/customblockdata/CustomBlockData.java
+@@ -538,6 +538,11 @@ public class CustomBlockData implements PersistentDataContainer {
+     return pdc.getKeys();
+   }
+ 
++  @Override
++  public int getSize() {
++    return pdc.getSize();
++  }
++
+   @Override
+   public void remove(final @NotNull NamespacedKey namespacedKey) {
+     pdc.remove(namespacedKey);

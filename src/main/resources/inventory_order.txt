@@ -14,6 +14,7 @@ Acacia Sign                              :ACACIA_SIGN
 Acacia Sign                              :ACACIA_WALL_SIGN
 Acacia Hanging Sign                      :ACACIA_HANGING_SIGN
 Acacia Hanging Sign                      :ACACIA_WALL_HANGING_SIGN
+Acacia Shelf                             :ACACIA_SHELF
 Acacia Slab                              :ACACIA_SLAB
 Acacia Stairs                            :ACACIA_STAIRS
 Acacia Trapdoor                          :ACACIA_TRAPDOOR
@@ -29,7 +30,6 @@ Flowering Azalea Leaves                  :FLOWERING_AZALEA_LEAVES
 
 Bamboo                                   :BAMBOO
 Bamboo Sapling                           :BAMBOO_SAPLING
-Bamboo Button                            :BAMBOO_BUTTON
 Bamboo Door                              :BAMBOO_DOOR
 Bamboo Fence                             :BAMBOO_FENCE
 Bamboo Fence Gate                        :BAMBOO_FENCE_GATE
@@ -39,9 +39,9 @@ Bamboo Mosaic                            :BAMBOO_MOSAIC
 Bamboo Mosaic Slab                       :BAMBOO_MOSAIC_SLAB
 Bamboo Mosaic Stairs                     :BAMBOO_MOSAIC_STAIRS
 Bamboo Planks                            :BAMBOO_PLANKS
-Bamboo Pressure Plate                    :BAMBOO_PRESSURE_PLATE
 Bamboo Sign                              :BAMBOO_SIGN
 Bamboo Sign                              :BAMBOO_WALL_SIGN
+Bamboo Shelf                             :BAMBOO_SHELF
 Bamboo Slab                              :BAMBOO_SLAB
 Bamboo Stairs                            :BAMBOO_STAIRS
 Bamboo Trapdoor                          :BAMBOO_TRAPDOOR
@@ -62,6 +62,7 @@ Birch Sign                               :BIRCH_SIGN
 Birch Sign                               :BIRCH_WALL_SIGN
 Birch Hanging Sign                       :BIRCH_HANGING_SIGN
 Birch Hanging Sign                       :BIRCH_WALL_HANGING_SIGN
+Birch Shelf                              :BIRCH_SHELF
 Birch Slab                               :BIRCH_SLAB
 Birch Stairs                             :BIRCH_STAIRS
 Birch Trapdoor                           :BIRCH_TRAPDOOR
@@ -70,7 +71,6 @@ Stripped Birch Wood                      :STRIPPED_BIRCH_WOOD
 Birch Boat                               :BIRCH_BOAT
 Birch Boat With Chest                    :BIRCH_CHEST_BOAT
 
-Cherry Button                            :CHERRY_BUTTON
 Cherry Door                              :CHERRY_DOOR
 Cherry Fence                             :CHERRY_FENCE
 Cherry Fence Gate                        :CHERRY_FENCE_GATE
@@ -80,10 +80,10 @@ Cherry Leaves                            :CHERRY_LEAVES
 Cherry Log                               :CHERRY_LOG
 Stripped Cherry Log                      :STRIPPED_CHERRY_LOG
 Cherry Planks                            :CHERRY_PLANKS
-Cherry Pressure Plate                    :CHERRY_PRESSURE_PLATE
 Cherry Sapling                           :CHERRY_SAPLING
 Cherry Sign                              :CHERRY_SIGN
 Cherry Sign                              :CHERRY_WALL_SIGN
+Cherry Shelf                             :CHERRY_SHELF
 Cherry Slab                              :CHERRY_SLAB
 Cherry Stairs                            :CHERRY_STAIRS
 Cherry Trapdoor                          :CHERRY_TRAPDOOR
@@ -105,6 +105,7 @@ Crimson Sign                             :CRIMSON_SIGN
 Crimson Sign                             :CRIMSON_WALL_SIGN
 Crimson Hanging Sign                     :CRIMSON_HANGING_SIGN
 Crimson Hanging Sign                     :CRIMSON_WALL_HANGING_SIGN
+Crimson Shelf                            :CRIMSON_SHELF
 Crimson Slab                             :CRIMSON_SLAB
 Crimson Stairs                           :CRIMSON_STAIRS
 Crimson Stem                             :CRIMSON_STEM
@@ -123,8 +124,8 @@ Dark Oak Sign                            :DARK_OAK_SIGN
 Dark Oak Sign                            :DARK_OAK_WALL_SIGN
 Dark Oak Hanging Sign                    :DARK_OAK_HANGING_SIGN
 Dark Oak Hanging Sign                    :DARK_OAK_WALL_HANGING_SIGN
+Dark Oak Shelf                           :DARK_OAK_SHELF
 Dark Oak Slab                            :DARK_OAK_SLAB
-Petrified Oak Slab                       :PETRIFIED_OAK_SLAB
 Dark Oak Stairs                          :DARK_OAK_STAIRS
 Dark Oak Trapdoor                        :DARK_OAK_TRAPDOOR
 Dark Oak Wood                            :DARK_OAK_WOOD
@@ -144,6 +145,7 @@ Jungle Sign                              :JUNGLE_SIGN
 Jungle Sign                              :JUNGLE_WALL_SIGN
 Jungle Hanging Sign                      :JUNGLE_HANGING_SIGN
 Jungle Hanging Sign                      :JUNGLE_WALL_HANGING_SIGN
+Jungle Shelf                             :JUNGLE_SHELF
 Jungle Slab                              :JUNGLE_SLAB
 Jungle Stairs                            :JUNGLE_STAIRS
 Jungle Trapdoor                          :JUNGLE_TRAPDOOR
@@ -166,6 +168,7 @@ Mangrove Sign                            :MANGROVE_SIGN
 Mangrove Sign                            :MANGROVE_WALL_SIGN
 Mangrove Hanging Sign                    :MANGROVE_HANGING_SIGN
 Mangrove Hanging Sign                    :MANGROVE_WALL_HANGING_SIGN
+Mangrove Shelf                           :MANGROVE_SHELF
 Mangrove Slab                            :MANGROVE_SLAB
 Mangrove Stairs                          :MANGROVE_STAIRS
 Mangrove Trapdoor                        :MANGROVE_TRAPDOOR
@@ -186,7 +189,9 @@ Oak Sign                                 :OAK_SIGN
 Oak Sign                                 :OAK_WALL_SIGN
 Oak Hanging Sign                         :OAK_HANGING_SIGN
 Oak Hanging Sign                         :OAK_WALL_HANGING_SIGN
+Oak Shelf                                :OAK_SHELF
 Oak Slab                                 :OAK_SLAB
+Petrified Oak Slab                       :PETRIFIED_OAK_SLAB
 Oak Stairs                               :OAK_STAIRS
 Oak Trapdoor                             :OAK_TRAPDOOR
 Oak Wood                                 :OAK_WOOD
@@ -206,6 +211,7 @@ Pale Oak Sign                            :PALE_OAK_SIGN
 Pale Oak Sign                            :PALE_OAK_WALL_SIGN
 Pale Oak Hanging Sign                    :PALE_OAK_HANGING_SIGN
 Pale Oak Hanging Sign                    :PALE_OAK_WALL_HANGING_SIGN
+Pale Oak Shelf                           :PALE_OAK_SHELF
 Pale Oak Slab                            :PALE_OAK_SLAB
 Pale Oak Stairs                          :PALE_OAK_STAIRS
 Pale Oak Trapdoor                        :PALE_OAK_TRAPDOOR
@@ -235,6 +241,7 @@ Spruce Sign                              :SPRUCE_SIGN
 Spruce Sign                              :SPRUCE_WALL_SIGN
 Spruce Hanging Sign                      :SPRUCE_HANGING_SIGN
 Spruce Hanging Sign                      :SPRUCE_WALL_HANGING_SIGN
+Spruce Shelf                             :SPRUCE_SHELF
 Spruce Slab                              :SPRUCE_SLAB
 Spruce Stairs                            :SPRUCE_STAIRS
 Spruce Trapdoor                          :SPRUCE_TRAPDOOR
@@ -256,6 +263,7 @@ Warped Sign                              :WARPED_SIGN
 Warped Sign                              :WARPED_WALL_SIGN
 Warped Hanging Sign                      :WARPED_HANGING_SIGN
 Warped Hanging Sign                      :WARPED_WALL_HANGING_SIGN
+Warped Shelf                             :WARPED_SHELF
 Warped Slab                              :WARPED_SLAB
 Warped Stairs                            :WARPED_STAIRS
 Warped Stem                              :WARPED_STEM
@@ -792,6 +800,7 @@ Block Of Coal                            :COAL_BLOCK
 Coal Ore                                 :COAL_ORE
 Deepslate Coal Ore                       :DEEPSLATE_COAL_ORE
 
+Copper Nugget                            :COPPER_NUGGET
 Copper Ingot                             :COPPER_INGOT
 Block Of Raw Copper                      :RAW_COPPER_BLOCK
 Raw Copper                               :RAW_COPPER
@@ -928,7 +937,9 @@ Smooth Quartz Stairs                     :SMOOTH_QUARTZ_STAIRS
 #
 
 Acacia Button                            :ACACIA_BUTTON
+Bamboo Button                            :BAMBOO_BUTTON
 Birch Button                             :BIRCH_BUTTON
+Cherry Button                            :CHERRY_BUTTON
 Polished Blackstone Button               :POLISHED_BLACKSTONE_BUTTON
 Crimson Button                           :CRIMSON_BUTTON
 Dark Oak Button                          :DARK_OAK_BUTTON
@@ -967,8 +978,10 @@ Piston Head                              :PISTON_HEAD
 Moving Piston                            :MOVING_PISTON
 
 Acacia Pressure Plate                    :ACACIA_PRESSURE_PLATE
+Bamboo Pressure Plate                    :BAMBOO_PRESSURE_PLATE
 Birch Pressure Plate                     :BIRCH_PRESSURE_PLATE
 Polished Blackstone Pressure Plate       :POLISHED_BLACKSTONE_PRESSURE_PLATE
+Cherry Pressure Plate                    :CHERRY_PRESSURE_PLATE
 Crimson Pressure Plate                   :CRIMSON_PRESSURE_PLATE
 Dark Oak Pressure Plate                  :DARK_OAK_PRESSURE_PLATE
 Light Weighted Pressure Plate            :LIGHT_WEIGHTED_PRESSURE_PLATE
@@ -1082,89 +1095,105 @@ Suspicious Stew                          :SUSPICIOUS_STEW
 # armour, weapons, tools
 #
 
+Bow                                      :BOW
+Crossbow                                 :CROSSBOW
 Arrow                                    :ARROW
 Spectral Arrow                           :SPECTRAL_ARROW
 Tipped Arrow                             :TIPPED_ARROW
-Bow                                      :BOW
-
-Chainmail Boots                          :CHAINMAIL_BOOTS
-Chainmail Chestplate                     :CHAINMAIL_CHESTPLATE
-Chainmail Helmet                         :CHAINMAIL_HELMET
-Chainmail Leggings                       :CHAINMAIL_LEGGINGS
-
-Crossbow                                 :CROSSBOW
-
-Diamond Axe                              :DIAMOND_AXE
-Diamond Boots                            :DIAMOND_BOOTS
-Diamond Chestplate                       :DIAMOND_CHESTPLATE
-Diamond Helmet                           :DIAMOND_HELMET
-Diamond Hoe                              :DIAMOND_HOE
-Diamond Leggings                         :DIAMOND_LEGGINGS
-Diamond Pickaxe                          :DIAMOND_PICKAXE
-Diamond Shovel                           :DIAMOND_SHOVEL
-Diamond Sword                            :DIAMOND_SWORD
-
-Elytra                                   :ELYTRA
-
-Golden Axe                               :GOLDEN_AXE
-Golden Boots                             :GOLDEN_BOOTS
-Golden Chestplate                        :GOLDEN_CHESTPLATE
-Golden Helmet                            :GOLDEN_HELMET
-Golden Hoe                               :GOLDEN_HOE
-Golden Leggings                          :GOLDEN_LEGGINGS
-Golden Pickaxe                           :GOLDEN_PICKAXE
-Golden Shovel                            :GOLDEN_SHOVEL
-Golden Sword                             :GOLDEN_SWORD
 
 Heavy Core                               :HEAVY_CORE
 Mace                                     :MACE
 
-Diamond Horse Armor                      :DIAMOND_HORSE_ARMOR
-Golden Horse Armor                       :GOLDEN_HORSE_ARMOR
-Iron Horse Armor                         :IRON_HORSE_ARMOR
-Leather Horse Armor                      :LEATHER_HORSE_ARMOR
+Trident                                  :TRIDENT
 
-Iron Axe                                 :IRON_AXE
-Iron Boots                               :IRON_BOOTS
-Iron Chestplate                          :IRON_CHESTPLATE
-Iron Helmet                              :IRON_HELMET
-Iron Hoe                                 :IRON_HOE
-Iron Leggings                            :IRON_LEGGINGS
-Iron Pickaxe                             :IRON_PICKAXE
-Iron Shovel                              :IRON_SHOVEL
-Iron Sword                               :IRON_SWORD
+Elytra                                   :ELYTRA
 
-Leather Boots                            :LEATHER_BOOTS
-Leather Cap                              :LEATHER_HELMET
-Leather Pants                            :LEATHER_LEGGINGS
-Leather Tunic                            :LEATHER_CHESTPLATE
-
+Netherite Sword                          :NETHERITE_SWORD
 Netherite Axe                            :NETHERITE_AXE
-Netherite Boots                          :NETHERITE_BOOTS
-Netherite Chestplate                     :NETHERITE_CHESTPLATE
-Netherite Helmet                         :NETHERITE_HELMET
 Netherite Hoe                            :NETHERITE_HOE
-Netherite Leggings                       :NETHERITE_LEGGINGS
 Netherite Pickaxe                        :NETHERITE_PICKAXE
 Netherite Shovel                         :NETHERITE_SHOVEL
-Netherite Sword                          :NETHERITE_SWORD
 
-Shield                                   :SHIELD
+Diamond Sword                            :DIAMOND_SWORD
+Diamond Axe                              :DIAMOND_AXE
+Diamond Hoe                              :DIAMOND_HOE
+Diamond Pickaxe                          :DIAMOND_PICKAXE
+Diamond Shovel                           :DIAMOND_SHOVEL
 
+Golden Sword                             :GOLDEN_SWORD
+Golden Axe                               :GOLDEN_AXE
+Golden Hoe                               :GOLDEN_HOE
+Golden Pickaxe                           :GOLDEN_PICKAXE
+Golden Shovel                            :GOLDEN_SHOVEL
+
+Iron Sword                               :IRON_SWORD
+Iron Axe                                 :IRON_AXE
+Iron Pickaxe                             :IRON_PICKAXE
+Iron Hoe                                 :IRON_HOE
+Iron Shovel                              :IRON_SHOVEL
+
+Copper Sword                             :COPPER_SWORD
+Copper Axe                               :COPPER_AXE
+Copper Hoe                               :COPPER_HOE
+Copper Pickaxe                           :COPPER_PICKAXE
+Copper Shovel                            :COPPER_SHOVEL
+
+Stone Sword                              :STONE_SWORD
 Stone Axe                                :STONE_AXE
 Stone Hoe                                :STONE_HOE
 Stone Pickaxe                            :STONE_PICKAXE
 Stone Shovel                             :STONE_SHOVEL
-Stone Sword                              :STONE_SWORD
 
-Trident                                  :TRIDENT
-Wolf Armor                               :WOLF_ARMOR
-
+Wooden Sword                             :WOODEN_SWORD
 Wooden Axe                               :WOODEN_AXE
 Wooden Hoe                               :WOODEN_HOE
 Wooden Pickaxe                           :WOODEN_PICKAXE
 Wooden Shovel                            :WOODEN_SHOVEL
-Wooden Sword                             :WOODEN_SWORD
+
+Shield                                   :SHIELD
+
+Netherite Helmet                         :NETHERITE_HELMET
+Netherite Chestplate                     :NETHERITE_CHESTPLATE
+Netherite Leggings                       :NETHERITE_LEGGINGS
+Netherite Boots                          :NETHERITE_BOOTS
+
+Diamond Helmet                           :DIAMOND_HELMET
+Diamond Chestplate                       :DIAMOND_CHESTPLATE
+Diamond Leggings                         :DIAMOND_LEGGINGS
+Diamond Boots                            :DIAMOND_BOOTS
+
+Golden Helmet                            :GOLDEN_HELMET
+Golden Chestplate                        :GOLDEN_CHESTPLATE
+Golden Leggings                          :GOLDEN_LEGGINGS
+Golden Boots                             :GOLDEN_BOOTS
+
+Chainmail Helmet                         :CHAINMAIL_HELMET
+Chainmail Chestplate                     :CHAINMAIL_CHESTPLATE
+Chainmail Leggings                       :CHAINMAIL_LEGGINGS
+Chainmail Boots                          :CHAINMAIL_BOOTS
+
+Iron Helmet                              :IRON_HELMET
+Iron Chestplate                          :IRON_CHESTPLATE
+Iron Leggings                            :IRON_LEGGINGS
+Iron Boots                               :IRON_BOOTS
+
+Copper Helmet                            :COPPER_HELMET
+Copper Chestplate                        :COPPER_CHESTPLATE
+Copper Leggings                          :COPPER_LEGGINGS
+Copper Boots                             :COPPER_BOOTS
+
+Leather Cap                              :LEATHER_HELMET
+Leather Tunic                            :LEATHER_CHESTPLATE
+Leather Pants                            :LEATHER_LEGGINGS
+Leather Boots                            :LEATHER_BOOTS
+
+Wolf Armor                               :WOLF_ARMOR
+
+Diamond Horse Armor                      :DIAMOND_HORSE_ARMOR
+Golden Horse Armor                       :GOLDEN_HORSE_ARMOR
+Copper Horse Armor                       :COPPER_HORSE_ARMOR
+Iron Horse Armor                         :IRON_HORSE_ARMOR
+Leather Horse Armor                      :LEATHER_HORSE_ARMOR
 
 Bolt Armor Trim Smithing Template        :BOLT_ARMOR_TRIM_SMITHING_TEMPLATE
 Coast Armor Trim Smithing Template       :COAST_ARMOR_TRIM_SMITHING_TEMPLATE
@@ -1243,6 +1272,14 @@ Magenta Bundle                           :MAGENTA_BUNDLE
 Pink Bundle                              :PINK_BUNDLE
 
 Chest                                    :CHEST
+Copper Chest                             :COPPER_CHEST
+Exposed Copper Chest                     :EXPOSED_COPPER_CHEST
+Weathered Copper Chest                   :WEATHERED_COPPER_CHEST
+Oxidized Copper Chest                    :OXIDIZED_COPPER_CHEST
+Waxed Copper Chest                       :WAXED_COPPER_CHEST
+Waxed Exposed Copper Chest               :WAXED_EXPOSED_COPPER_CHEST
+Waxed Weathered Copper Chest             :WAXED_WEATHERED_COPPER_CHEST
+Waxed Oxidized Copper Chest              :WAXED_OXIDIZED_COPPER_CHEST
 
 #
 # utility
@@ -1324,6 +1361,14 @@ Pink Harness                             :PINK_HARNESS
 
 Ladder                                   :LADDER
 Lead                                     :LEAD
+Lightning Rod                            :LIGHTNING_ROD
+Exposed Lightning Rod                    :EXPOSED_LIGHTNING_ROD
+Weathered Lightning Rod                  :WEATHERED_LIGHTNING_ROD
+Oxidized Lightning Rod                   :OXIDIZED_LIGHTNING_ROD
+Waxed Lightning Rod                      :WAXED_LIGHTNING_ROD
+Waxed Exposed Lightning Rod              :WAXED_EXPOSED_LIGHTNING_ROD
+Waxed Weathered Lightning Rod            :WAXED_WEATHERED_LIGHTNING_ROD
+Waxed Oxidized Lightning Rod             :WAXED_OXIDIZED_LIGHTNING_ROD
 Lodestone                                :LODESTONE
 Loom                                     :LOOM
 Map                                      :MAP
@@ -1430,9 +1475,19 @@ Magenta Carpet                           :MAGENTA_CARPET
 Pink Carpet                              :PINK_CARPET
 
 Bell                                     :BELL
-Chain                                    :CHAIN
 Bookshelf                                :BOOKSHELF
 Chiseled Bookshelf                       :CHISELED_BOOKSHELF
+
+
+Iron Chain                               :IRON_CHAIN
+Copper Chain                             :COPPER_CHAIN
+Exposed Copper Chain                     :EXPOSED_COPPER_CHAIN
+Weathered Copper Chain                   :WEATHERED_COPPER_CHAIN
+Oxidized Copper Chain                    :OXIDIZED_COPPER_CHAIN
+Waxed Copper Chain                       :WAXED_COPPER_CHAIN
+Waxed Exposed Copper Chain               :WAXED_EXPOSED_COPPER_CHAIN
+Waxed Weathered Copper Chain             :WAXED_WEATHERED_COPPER_CHAIN
+Waxed Oxidized Copper Chain              :WAXED_OXIDIZED_COPPER_CHAIN
 
 White Dye                                :WHITE_DYE
 Light Gray Dye                           :LIGHT_GRAY_DYE
@@ -1494,16 +1549,31 @@ Purple Stained Glass Pane                :PURPLE_STAINED_GLASS_PANE
 Magenta Stained Glass Pane               :MAGENTA_STAINED_GLASS_PANE
 Pink Stained Glass Pane                  :PINK_STAINED_GLASS_PANE
 
+Iron Bars                                :IRON_BARS
+Copper Bars                              :COPPER_BARS
+Exposed Copper Bars                      :EXPOSED_COPPER_BARS
+Oxidized Copper Bars                     :OXIDIZED_COPPER_BARS
+Weathered Copper Bars                    :WEATHERED_COPPER_BARS
+Waxed Copper Bars                        :WAXED_COPPER_BARS
+Waxed Exposed Copper Bars                :WAXED_EXPOSED_COPPER_BARS
+Waxed Weathered Copper Bars              :WAXED_WEATHERED_COPPER_BARS
+Waxed Oxidized Copper Bars               :WAXED_OXIDIZED_COPPER_BARS
 Creaking Heart                           :CREAKING_HEART
 Glow Item Frame                          :GLOW_ITEM_FRAME
 Heart Of The Sea                         :HEART_OF_THE_SEA
-Iron Bars                                :IRON_BARS
 Item Frame                               :ITEM_FRAME
 Jack O'Lantern                           :JACK_O_LANTERN
 Lantern                                  :LANTERN
+Copper Lantern                           :COPPER_LANTERN
+Exposed Copper Lantern                   :EXPOSED_COPPER_LANTERN
+Weathered Copper Lantern                 :WEATHERED_COPPER_LANTERN
+Oxidized Copper Lantern                  :OXIDIZED_COPPER_LANTERN
+Waxed Copper Lantern                     :WAXED_COPPER_LANTERN
+Waxed Exposed Copper Lantern             :WAXED_EXPOSED_COPPER_LANTERN
+Waxed Weathered Copper Lantern           :WAXED_WEATHERED_COPPER_LANTERN
+Waxed Oxidized Copper Lantern            :WAXED_OXIDIZED_COPPER_LANTERN
 Lectern                                  :LECTERN
 Light                                    :LIGHT
-Lightning Rod                            :LIGHTNING_ROD
 Painting                                 :PAINTING
 
 Potted Acacia Sapling                    :POTTED_ACACIA_SAPLING
@@ -1544,6 +1614,8 @@ Potted Warped Roots                      :POTTED_WARPED_ROOTS
 Potted White Tulip                       :POTTED_WHITE_TULIP
 Potted Wither Rose                       :POTTED_WITHER_ROSE
 
+Copper Torch                             :COPPER_TORCH
+Copper Torch                             :COPPER_WALL_TORCH
 Sea Lantern                              :SEA_LANTERN
 Shroomlight                              :SHROOMLIGHT
 Soul Campfire                            :SOUL_CAMPFIRE
@@ -1596,6 +1668,15 @@ Purple Wool                              :PURPLE_WOOL
 Magenta Wool                             :MAGENTA_WOOL
 Pink Wool                                :PINK_WOOL
 
+Copper Golem Statue                      :COPPER_GOLEM_STATUE
+Exposed Copper Golem Statue              :EXPOSED_COPPER_GOLEM_STATUE
+Weathered Copper Golem Statue            :WEATHERED_COPPER_GOLEM_STATUE
+Oxidized Copper Golem Statue             :OXIDIZED_COPPER_GOLEM_STATUE
+Waxed Copper Golem Statue                :WAXED_COPPER_GOLEM_STATUE
+Waxed Exposed Copper Golem Statue        :WAXED_EXPOSED_COPPER_GOLEM_STATUE
+Waxed Weathered Copper Golem Statue      :WAXED_WEATHERED_COPPER_GOLEM_STATUE
+Waxed Oxidized Copper Golem Statue       :WAXED_OXIDIZED_COPPER_GOLEM_STATUE
+
 Player Head                              :PLAYER_HEAD
 Player Head                              :PLAYER_WALL_HEAD
 Creeper Head                             :CREEPER_HEAD
@@ -1630,9 +1711,9 @@ Knowledge Book                           :KNOWLEDGE_BOOK
 Lava                                     :LAVA
 Monster Spawner                          :SPAWNER
 
+Music Disc 5                             :MUSIC_DISC_5
 Music Disc 11                            :MUSIC_DISC_11
 Music Disc 13                            :MUSIC_DISC_13
-Music Disc 5                             :MUSIC_DISC_5
 Music Disc Blocks                        :MUSIC_DISC_BLOCKS
 Music Disc Cat                           :MUSIC_DISC_CAT
 Music Disc Chirp                         :MUSIC_DISC_CHIRP
@@ -1668,6 +1749,7 @@ Cat Spawn Egg                            :CAT_SPAWN_EGG
 Cave Spider Spawn Egg                    :CAVE_SPIDER_SPAWN_EGG
 Chicken Spawn Egg                        :CHICKEN_SPAWN_EGG
 Cod Spawn Egg                            :COD_SPAWN_EGG
+Copper Golem Spawn Egg                   :COPPER_GOLEM_SPAWN_EGG
 Cow Spawn Egg                            :COW_SPAWN_EGG
 Creaking Spawn Egg                       :CREAKING_SPAWN_EGG
 Creeper Spawn Egg                        :CREEPER_SPAWN_EGG
