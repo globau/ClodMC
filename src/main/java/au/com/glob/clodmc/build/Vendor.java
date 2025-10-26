@@ -99,12 +99,13 @@ public final class Vendor {
           }
 
           // vendor
-          System.out.printf("vendoring %s%n", lib.name);
+          System.out.printf("vendoring %s...%n", lib.name);
 
           final Path srcPath = Paths.get(".git/vendored/%s".formatted(lib.name));
           final Path dstPath = Paths.get("src/main/java/vendored/%s".formatted(lib.path));
 
           // clone or update repo
+          System.out.println("updating source...");
           try {
             Files.createDirectories(srcPath.getParent());
             if (!Files.exists(srcPath)) {
@@ -122,6 +123,7 @@ public final class Vendor {
           }
 
           // build list of files to copy
+          System.out.println("copying...");
           final List<FileCopy> copyFilepaths = new ArrayList<>();
           for (final String srcFilename : lib.include) {
             if (srcFilename.endsWith("/")) {
@@ -175,9 +177,11 @@ public final class Vendor {
           }
 
           // format before patches
-          Util.run("./gradlew", ":spotlessApply");
+          System.out.println("formatting...");
+          Util.run("make", "format");
 
           // apply patches
+          System.out.println("patching...");
           final Path patchDir = Paths.get("src/vendored/%s".formatted(lib.name));
           if (Files.exists(patchDir)) {
             try (final Stream<Path> patches = Files.list(patchDir)) {
@@ -203,7 +207,8 @@ public final class Vendor {
           }
 
           // format after patches
-          Util.run("./gradlew", ":spotlessApply");
+          System.out.println("formatting...");
+          Util.run("make", "format");
 
           // check for changes
           final String modified = Util.capture("git", "status", "--porcelain", dstPath.toString());
