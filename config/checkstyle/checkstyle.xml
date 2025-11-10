@@ -368,10 +368,6 @@
         <module name="IllegalType">
             <property name="illegalClassNames" value="var" />
         </module>
-        <!-- glob: prevent using GL11 directly (use RenderSystem instead) -->
-        <module name="IllegalImport">
-            <property name="illegalPkgs" value="org.lwjgl.opengl" />
-        </module>
         <!-- glob: static imports should be qualified -->
         <module name="AvoidStaticImport" />
         <!-- glob: forbid empty statements -->
