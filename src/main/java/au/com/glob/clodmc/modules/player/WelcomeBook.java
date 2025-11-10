@@ -167,6 +167,10 @@ public class WelcomeBook implements Module, Listener {
           click) will also pull
           from inside held
           shulker boxes.
+
+          Include 🔇 when naming
+          a creature to silence
+          it.
           """);
 
   public WelcomeBook() {

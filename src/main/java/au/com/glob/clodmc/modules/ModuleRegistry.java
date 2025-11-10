@@ -19,6 +19,7 @@ import au.com.glob.clodmc.modules.inventory.inventorysort.InventorySort;
 import au.com.glob.clodmc.modules.mobs.BetterDrops;
 import au.com.glob.clodmc.modules.mobs.ExplodingCreepers;
 import au.com.glob.clodmc.modules.mobs.PreventMobGriefing;
+import au.com.glob.clodmc.modules.mobs.SilenceMobs;
 import au.com.glob.clodmc.modules.mobs.preventmobspawn.PreventMobSpawn;
 import au.com.glob.clodmc.modules.player.Back;
 import au.com.glob.clodmc.modules.player.DeathLog;
@@ -92,6 +93,7 @@ public class ModuleRegistry implements Iterable<Module>, PluginBootstrap {
     this.register(ExplodingCreepers.class);
     this.register(PreventMobGriefing.class);
     this.register(PreventMobSpawn.class, "GriefPrevention");
+    this.register(SilenceMobs.class);
 
     // player
     this.register(AFK.class);

@@ -20,6 +20,7 @@ While Clod-MC is open-source, pull requests are not accepted.
 - **Point-to-Point Gateways** - Player-built point-to-point teleportation system using coloured wool anchors [[src](src/main/java/au/com/glob/clodmc/modules/interactions/gateways/Gateways.java)]
 - **Seen** - Show how long it's been since the server last saw the player [[src](src/main/java/au/com/glob/clodmc/modules/player/Seen.java)]
 - **Server Status** - Add simple server status/health command [[src](src/main/java/au/com/glob/clodmc/modules/server/ServerStatus.java)]
+- **Silence Mobs/Animals** - Include 🔇 when naming a mob/animal/etc to silence it [[src](src/main/java/au/com/glob/clodmc/modules/mobs/SilenceMobs.java)]
 - **Sleep** - Tell players who slept and skipped the night [[src](src/main/java/au/com/glob/clodmc/modules/player/Sleep.java)]
 - **Spawn Teleport** - Adds /spawn to teleport to spawn [[src](src/main/java/au/com/glob/clodmc/modules/player/Spawn.java)]
 - **Spore Blossom Crafting** - Adds a crafting recipe for Spore Blossoms [[src](src/main/java/au/com/glob/clodmc/modules/crafting/SporeBlossom.java)]
