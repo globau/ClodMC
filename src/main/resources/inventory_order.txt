@@ -33,14 +33,14 @@ Bamboo Sapling                           :BAMBOO_SAPLING
 Bamboo Door                              :BAMBOO_DOOR
 Bamboo Fence                             :BAMBOO_FENCE
 Bamboo Fence Gate                        :BAMBOO_FENCE_GATE
-Bamboo Hanging Sign                      :BAMBOO_HANGING_SIGN
-Bamboo Hanging Sign                      :BAMBOO_WALL_HANGING_SIGN
 Bamboo Mosaic                            :BAMBOO_MOSAIC
 Bamboo Mosaic Slab                       :BAMBOO_MOSAIC_SLAB
 Bamboo Mosaic Stairs                     :BAMBOO_MOSAIC_STAIRS
 Bamboo Planks                            :BAMBOO_PLANKS
 Bamboo Sign                              :BAMBOO_SIGN
 Bamboo Sign                              :BAMBOO_WALL_SIGN
+Bamboo Hanging Sign                      :BAMBOO_HANGING_SIGN
+Bamboo Hanging Sign                      :BAMBOO_WALL_HANGING_SIGN
 Bamboo Shelf                             :BAMBOO_SHELF
 Bamboo Slab                              :BAMBOO_SLAB
 Bamboo Stairs                            :BAMBOO_STAIRS
@@ -74,8 +74,6 @@ Birch Boat With Chest                    :BIRCH_CHEST_BOAT
 Cherry Door                              :CHERRY_DOOR
 Cherry Fence                             :CHERRY_FENCE
 Cherry Fence Gate                        :CHERRY_FENCE_GATE
-Cherry Hanging Sign                      :CHERRY_HANGING_SIGN
-Cherry Hanging Sign                      :CHERRY_WALL_HANGING_SIGN
 Cherry Leaves                            :CHERRY_LEAVES
 Cherry Log                               :CHERRY_LOG
 Stripped Cherry Log                      :STRIPPED_CHERRY_LOG
@@ -83,6 +81,8 @@ Cherry Planks                            :CHERRY_PLANKS
 Cherry Sapling                           :CHERRY_SAPLING
 Cherry Sign                              :CHERRY_SIGN
 Cherry Sign                              :CHERRY_WALL_SIGN
+Cherry Hanging Sign                      :CHERRY_HANGING_SIGN
+Cherry Hanging Sign                      :CHERRY_WALL_HANGING_SIGN
 Cherry Shelf                             :CHERRY_SHELF
 Cherry Slab                              :CHERRY_SLAB
 Cherry Stairs                            :CHERRY_STAIRS
@@ -96,6 +96,8 @@ Crimson Door                             :CRIMSON_DOOR
 Crimson Fence                            :CRIMSON_FENCE
 Crimson Fence Gate                       :CRIMSON_FENCE_GATE
 Crimson Fungus                           :CRIMSON_FUNGUS
+Crimson Stem                             :CRIMSON_STEM
+Stripped Crimson Stem                    :STRIPPED_CRIMSON_STEM
 Crimson Hyphae                           :CRIMSON_HYPHAE
 Stripped Crimson Hyphae                  :STRIPPED_CRIMSON_HYPHAE
 Crimson Nylium                           :CRIMSON_NYLIUM
@@ -108,8 +110,6 @@ Crimson Hanging Sign                     :CRIMSON_WALL_HANGING_SIGN
 Crimson Shelf                            :CRIMSON_SHELF
 Crimson Slab                             :CRIMSON_SLAB
 Crimson Stairs                           :CRIMSON_STAIRS
-Crimson Stem                             :CRIMSON_STEM
-Stripped Crimson Stem                    :STRIPPED_CRIMSON_STEM
 Crimson Trapdoor                         :CRIMSON_TRAPDOOR
 
 Dark Oak Door                            :DARK_OAK_DOOR
@@ -254,6 +254,8 @@ Warped Door                              :WARPED_DOOR
 Warped Fence                             :WARPED_FENCE
 Warped Fence Gate                        :WARPED_FENCE_GATE
 Warped Fungus                            :WARPED_FUNGUS
+Warped Stem                              :WARPED_STEM
+Stripped Warped Stem                     :STRIPPED_WARPED_STEM
 Warped Hyphae                            :WARPED_HYPHAE
 Stripped Warped Hyphae                   :STRIPPED_WARPED_HYPHAE
 Warped Nylium                            :WARPED_NYLIUM
@@ -266,8 +268,6 @@ Warped Hanging Sign                      :WARPED_WALL_HANGING_SIGN
 Warped Shelf                             :WARPED_SHELF
 Warped Slab                              :WARPED_SLAB
 Warped Stairs                            :WARPED_STAIRS
-Warped Stem                              :WARPED_STEM
-Stripped Warped Stem                     :STRIPPED_WARPED_STEM
 Warped Trapdoor                          :WARPED_TRAPDOOR
 Warped Wart Block                        :WARPED_WART_BLOCK
 
@@ -943,8 +943,8 @@ Cherry Button                            :CHERRY_BUTTON
 Polished Blackstone Button               :POLISHED_BLACKSTONE_BUTTON
 Crimson Button                           :CRIMSON_BUTTON
 Dark Oak Button                          :DARK_OAK_BUTTON
-Mangrove Button                          :MANGROVE_BUTTON
 Jungle Button                            :JUNGLE_BUTTON
+Mangrove Button                          :MANGROVE_BUTTON
 Oak Button                               :OAK_BUTTON
 Pale Oak Button                          :PALE_OAK_BUTTON
 Spruce Button                            :SPRUCE_BUTTON
@@ -986,8 +986,8 @@ Crimson Pressure Plate                   :CRIMSON_PRESSURE_PLATE
 Dark Oak Pressure Plate                  :DARK_OAK_PRESSURE_PLATE
 Light Weighted Pressure Plate            :LIGHT_WEIGHTED_PRESSURE_PLATE
 Heavy Weighted Pressure Plate            :HEAVY_WEIGHTED_PRESSURE_PLATE
-Mangrove Pressure Plate                  :MANGROVE_PRESSURE_PLATE
 Jungle Pressure Plate                    :JUNGLE_PRESSURE_PLATE
+Mangrove Pressure Plate                  :MANGROVE_PRESSURE_PLATE
 Oak Pressure Plate                       :OAK_PRESSURE_PLATE
 Pale Oak Pressure Plate                  :PALE_OAK_PRESSURE_PLATE
 Spruce Pressure Plate                    :SPRUCE_PRESSURE_PLATE
@@ -1552,8 +1552,8 @@ Pink Stained Glass Pane                  :PINK_STAINED_GLASS_PANE
 Iron Bars                                :IRON_BARS
 Copper Bars                              :COPPER_BARS
 Exposed Copper Bars                      :EXPOSED_COPPER_BARS
-Oxidized Copper Bars                     :OXIDIZED_COPPER_BARS
 Weathered Copper Bars                    :WEATHERED_COPPER_BARS
+Oxidized Copper Bars                     :OXIDIZED_COPPER_BARS
 Waxed Copper Bars                        :WAXED_COPPER_BARS
 Waxed Exposed Copper Bars                :WAXED_EXPOSED_COPPER_BARS
 Waxed Weathered Copper Bars              :WAXED_WEATHERED_COPPER_BARS
@@ -1781,8 +1781,8 @@ Panda Spawn Egg                          :PANDA_SPAWN_EGG
 Parrot Spawn Egg                         :PARROT_SPAWN_EGG
 Phantom Spawn Egg                        :PHANTOM_SPAWN_EGG
 Pig Spawn Egg                            :PIG_SPAWN_EGG
-Piglin Brute Spawn Egg                   :PIGLIN_BRUTE_SPAWN_EGG
 Piglin Spawn Egg                         :PIGLIN_SPAWN_EGG
+Piglin Brute Spawn Egg                   :PIGLIN_BRUTE_SPAWN_EGG
 Pillager Spawn Egg                       :PILLAGER_SPAWN_EGG
 Polar Bear Spawn Egg                     :POLAR_BEAR_SPAWN_EGG
 Pufferfish Spawn Egg                     :PUFFERFISH_SPAWN_EGG
@@ -1792,8 +1792,8 @@ Salmon Spawn Egg                         :SALMON_SPAWN_EGG
 Sheep Spawn Egg                          :SHEEP_SPAWN_EGG
 Shulker Spawn Egg                        :SHULKER_SPAWN_EGG
 Silverfish Spawn Egg                     :SILVERFISH_SPAWN_EGG
-Skeleton Horse Spawn Egg                 :SKELETON_HORSE_SPAWN_EGG
 Skeleton Spawn Egg                       :SKELETON_SPAWN_EGG
+Skeleton Horse Spawn Egg                 :SKELETON_HORSE_SPAWN_EGG
 Slime Spawn Egg                          :SLIME_SPAWN_EGG
 Sniffer Spawn Egg                        :SNIFFER_SPAWN_EGG
 Snow Golem Spawn Egg                     :SNOW_GOLEM_SPAWN_EGG
@@ -1811,12 +1811,12 @@ Vindicator Spawn Egg                     :VINDICATOR_SPAWN_EGG
 Wandering Trader Spawn Egg               :WANDERING_TRADER_SPAWN_EGG
 Warden Spawn Egg                         :WARDEN_SPAWN_EGG
 Witch Spawn Egg                          :WITCH_SPAWN_EGG
-Wither Skeleton Spawn Egg                :WITHER_SKELETON_SPAWN_EGG
 Wither Spawn Egg                         :WITHER_SPAWN_EGG
+Wither Skeleton Spawn Egg                :WITHER_SKELETON_SPAWN_EGG
 Wolf Spawn Egg                           :WOLF_SPAWN_EGG
 Zoglin Spawn Egg                         :ZOGLIN_SPAWN_EGG
-Zombie Horse Spawn Egg                   :ZOMBIE_HORSE_SPAWN_EGG
 Zombie Spawn Egg                         :ZOMBIE_SPAWN_EGG
+Zombie Horse Spawn Egg                   :ZOMBIE_HORSE_SPAWN_EGG
 Zombie Villager Spawn Egg                :ZOMBIE_VILLAGER_SPAWN_EGG
 Zombified Piglin Spawn Egg               :ZOMBIFIED_PIGLIN_SPAWN_EGG
 
