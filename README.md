@@ -10,6 +10,7 @@ While Clod-MC is open-source, pull requests are not accepted.
 
 - **Away From Keyboard** - Automatic and manual AFK; players are visibly AFK in the tab-list [[src](src/main/java/au/com/glob/clodmc/modules/player/afk/AFK.java)]
 - **Back** - /back command to return to where you last teleported from [[src](src/main/java/au/com/glob/clodmc/modules/player/Back.java)]
+- **Chorus Flower Crafting** - Adds a crafting recipe for Chorus Flower [[src](src/main/java/au/com/glob/clodmc/modules/crafting/ChorusFlower.java)]
 - **Click-Through Waxed Signs** - When right-clicking on a waxed sign attached to a chest, open the chest [[src](src/main/java/au/com/glob/clodmc/modules/interactions/SignedContainers.java)]
 - **Deep Pockets** - When picking blocks, look inside held shulker boxes too [[src](src/main/java/au/com/glob/clodmc/modules/inventory/deeppockets/DeepPockets.java)]
 - **Homes** - Set limited number of named teleport locations [[src](src/main/java/au/com/glob/clodmc/modules/player/Homes.java)]

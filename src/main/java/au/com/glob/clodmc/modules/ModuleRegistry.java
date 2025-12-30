@@ -4,6 +4,7 @@ import au.com.glob.clodmc.ClodMC;
 import au.com.glob.clodmc.command.CommandBuilder;
 import au.com.glob.clodmc.events.PlayerTargetBlockListener;
 import au.com.glob.clodmc.modules.bluemap.BlueMap;
+import au.com.glob.clodmc.modules.crafting.ChorusFlower;
 import au.com.glob.clodmc.modules.crafting.SporeBlossom;
 import au.com.glob.clodmc.modules.interactions.FastLeafDecay;
 import au.com.glob.clodmc.modules.interactions.NamedStorage;
@@ -71,6 +72,7 @@ public class ModuleRegistry implements Iterable<Module>, PluginBootstrap {
     this.register(OpAlerts.class);
 
     // crafting
+    this.register(ChorusFlower.class);
     this.register(SporeBlossom.class);
 
     // interactions
