@@ -82,7 +82,7 @@ public class AFK implements Listener, Module {
               continue;
             }
             if (playerState.isAway) {
-              if (now - (playerState.lastInteractionTime + IDLE_TIME) >= MAX_AFK_TIME * 60) {
+              if (now - playerState.afkTime >= MAX_AFK_TIME * 60) {
                 playerState.player.kick(StringUtil.asComponent("You have been AFK for too long"));
               }
             } else {

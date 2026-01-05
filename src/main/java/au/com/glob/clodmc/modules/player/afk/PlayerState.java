@@ -11,12 +11,14 @@ final class PlayerState {
   Player player;
   long lastInteractionTime;
   boolean isAway;
+  long afkTime;
 
   // create new player state tracking
   PlayerState(final Player player) {
     this.player = player;
     this.lastInteractionTime = System.currentTimeMillis() / 1000;
     this.isAway = false;
+    this.afkTime = 0;
   }
 
   // update last interaction time and return from afk
@@ -39,6 +41,7 @@ final class PlayerState {
   // set player as afk
   public void setAway(final boolean announce) {
     this.isAway = true;
+    this.afkTime = System.currentTimeMillis() / 1000;
     AFK.getAfkTeam().addEntry(this.player.getName());
     if (announce) {
       this.announce();
@@ -48,6 +51,7 @@ final class PlayerState {
   // set player as no longer afk
   public void setBack(final boolean announce) {
     this.isAway = false;
+    this.afkTime = 0;
     AFK.getAfkTeam().removeEntry(this.player.getName());
     if (announce) {
       this.announce();
