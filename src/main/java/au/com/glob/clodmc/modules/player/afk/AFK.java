@@ -34,6 +34,7 @@ import org.jspecify.annotations.NullMarked;
 public class AFK implements Listener, Module {
   private static final int IDLE_TIME = 300; // seconds
   private static final int CHECK_INTERVAL = 5; // seconds
+  private static final int MAX_AFK_TIME = 60; // minutes
 
   private final HashMap<UUID, PlayerState> playerStates = new HashMap<>();
 
@@ -77,7 +78,14 @@ public class AFK implements Listener, Module {
         () -> {
           final long now = System.currentTimeMillis() / 1000;
           for (final PlayerState playerState : this.playerStates.values()) {
-            if (playerState.player.isOnline() && !playerState.isAway) {
+            if (!playerState.player.isOnline()) {
+              continue;
+            }
+            if (playerState.isAway) {
+              if (now - (playerState.lastInteractionTime + IDLE_TIME) >= MAX_AFK_TIME * 60) {
+                playerState.player.kick(StringUtil.asComponent("You have been AFK for too long"));
+              }
+            } else {
               if (now - playerState.lastInteractionTime >= IDLE_TIME) {
                 playerState.setAway(true);
               }
