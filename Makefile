@@ -18,3 +18,7 @@ clean:
 .PHONY: test
 test:
 	$(gradle) check --rerun-tasks
+
+.PHONY: release
+release:
+	./trigger-release-workflow.sh
