@@ -34,7 +34,7 @@ import org.jspecify.annotations.NullMarked;
 public class AFK implements Listener, Module {
   private static final int IDLE_TIME = 300; // seconds
   private static final int CHECK_INTERVAL = 5; // seconds
-  private static final int MAX_AFK_TIME = 60; // minutes
+  private static final int MAX_AFK_TIME = 3 * 60; // minutes
 
   private final HashMap<UUID, PlayerState> playerStates = new HashMap<>();
 
