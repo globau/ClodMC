@@ -2,8 +2,10 @@ package au.com.glob.clodmc.util;
 
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
+import java.util.Set;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -27,7 +29,7 @@ import org.jspecify.annotations.NullMarked;
 public final class TeleportUtil {
   private static final int CHECK_RADIUS = 3;
   private static final int MAX_RADIUS = 8;
-  private static final int POP_RADIUS = 16;
+  private static final int SOUND_RADIUS = 16;
   private static final Vector3i[] SHIFT_VECTORS;
 
   static {
@@ -82,8 +84,7 @@ public final class TeleportUtil {
         .thenAccept(
             (final Boolean result) -> {
               if (result) {
-                TeleportUtil.playTeleportSound(fromLoc, player);
-                TeleportUtil.playTeleportSound(destinationLoc, player);
+                TeleportUtil.playTeleportSoundNearby(fromLoc, destinationLoc, player);
                 TeleportUtil.showTeleportParticles(fromLoc);
               }
             })
@@ -282,14 +283,28 @@ public final class TeleportUtil {
     return location;
   }
 
-  // play teleport sound effect to nearby players
-  private static void playTeleportSound(final Location loc, final Player excludedPlayer) {
-    for (final Player player : loc.getNearbyPlayers(POP_RADIUS)) {
-      if (!player.equals(excludedPlayer)) {
+  // play teleport sound effect
+  public static void playTeleportSoundNearby(
+      final Location fromLoc, final Location toLoc, final Player teleportingPlayer) {
+    final Set<Player> notifiedPlayers = new HashSet<>();
+
+    for (final Player player : fromLoc.getNearbyPlayers(SOUND_RADIUS)) {
+      if (!player.equals(teleportingPlayer)) {
         player.playSound(
-            loc,
+            fromLoc,
             Sound.UI_HUD_BUBBLE_POP,
-            (float) ((1 - player.getLocation().distance(loc) / POP_RADIUS) * 0.75),
+            (float) (1 - player.getLocation().distance(fromLoc) / SOUND_RADIUS),
+            1);
+        notifiedPlayers.add(player);
+      }
+    }
+
+    for (final Player player : toLoc.getNearbyPlayers(SOUND_RADIUS)) {
+      if (!player.equals(teleportingPlayer) && !notifiedPlayers.contains(player)) {
+        player.playSound(
+            toLoc,
+            Sound.UI_HUD_BUBBLE_POP,
+            (float) (1 - player.getLocation().distance(toLoc) / SOUND_RADIUS),
             1);
       }
     }

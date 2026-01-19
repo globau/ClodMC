@@ -100,7 +100,7 @@ import org.jspecify.annotations.Nullable;
     description = "Player-built point-to-point teleportation system using coloured wool anchors")
 @NullMarked
 public class Gateways implements Module, Listener {
-  @SuppressWarnings({"NotNullFieldNotInitialized", "NullAway.Init"})
+  @SuppressWarnings({"NullAway.Init"})
   static Gateways instance;
 
   private static final int MAX_RANDOM_TP_TIME = 60; // minutes
@@ -437,8 +437,14 @@ public class Gateways implements Module, Listener {
                   // delay playing the sound by a tick to work around a Geyser issue
                   Schedule.delayed(
                       1,
-                      () -> player.playSound(finalTeleportPos, Sound.ENTITY_PLAYER_TELEPORT, 1, 1));
+                      () -> {
+                        TeleportUtil.playTeleportSoundNearby(
+                            anchorBlock.blockPos.up().asLocation(), finalTeleportPos, player);
+                        player.playSound(finalTeleportPos, Sound.ENTITY_PLAYER_TELEPORT, 1, 1);
+                      });
                 } else {
+                  TeleportUtil.playTeleportSoundNearby(
+                      anchorBlock.blockPos.up().asLocation(), finalTeleportPos, player);
                   player.playSound(finalTeleportPos, Sound.ENTITY_PLAYER_TELEPORT, 1, 1);
                 }
                 player
