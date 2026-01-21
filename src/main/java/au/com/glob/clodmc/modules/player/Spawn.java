@@ -6,7 +6,7 @@ import au.com.glob.clodmc.command.CommandBuilder;
 import au.com.glob.clodmc.modules.Module;
 import au.com.glob.clodmc.util.TeleportUtil;
 import org.bukkit.Bukkit;
-import org.bukkit.GameRule;
+import org.bukkit.GameRules;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
@@ -28,7 +28,7 @@ public class Spawn implements Module {
                 return;
               }
 
-              final Integer spawnRadius = world.getGameRuleValue(GameRule.SPAWN_RADIUS);
+              final Integer spawnRadius = world.getGameRuleValue(GameRules.RESPAWN_RADIUS);
               final Location location =
                   TeleportUtil.getRandomLoc(
                       world.getSpawnLocation(), spawnRadius == null ? 8 : spawnRadius);

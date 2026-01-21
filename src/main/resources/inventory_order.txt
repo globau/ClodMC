@@ -1106,6 +1106,14 @@ Mace                                     :MACE
 
 Trident                                  :TRIDENT
 
+Netherite Spear                          :NETHERITE_SPEAR
+Diamond Spear                            :DIAMOND_SPEAR
+Golden Spear                             :GOLDEN_SPEAR
+Iron Spear                               :IRON_SPEAR
+Copper Spear                             :COPPER_SPEAR
+Stone Spear                              :STONE_SPEAR
+Wooden Spear                             :WOODEN_SPEAR
+
 Elytra                                   :ELYTRA
 
 Netherite Sword                          :NETHERITE_SWORD
@@ -1189,11 +1197,18 @@ Leather Boots                            :LEATHER_BOOTS
 
 Wolf Armor                               :WOLF_ARMOR
 
+Netherite Horse Armor                    :NETHERITE_HORSE_ARMOR
 Diamond Horse Armor                      :DIAMOND_HORSE_ARMOR
 Golden Horse Armor                       :GOLDEN_HORSE_ARMOR
 Copper Horse Armor                       :COPPER_HORSE_ARMOR
 Iron Horse Armor                         :IRON_HORSE_ARMOR
 Leather Horse Armor                      :LEATHER_HORSE_ARMOR
+
+Netherite Nautilus Armor                 :NETHERITE_NAUTILUS_ARMOR
+Diamond Nautilus Armor                   :DIAMOND_NAUTILUS_ARMOR
+Golden Nautilus Armor                    :GOLDEN_NAUTILUS_ARMOR
+Iron Nautilus Armor                      :IRON_NAUTILUS_ARMOR
+Copper Nautilus Armor                    :COPPER_NAUTILUS_ARMOR
 
 Bolt Armor Trim Smithing Template        :BOLT_ARMOR_TRIM_SMITHING_TEMPLATE
 Coast Armor Trim Smithing Template       :COAST_ARMOR_TRIM_SMITHING_TEMPLATE
@@ -1745,6 +1760,7 @@ Blaze Spawn Egg                          :BLAZE_SPAWN_EGG
 Bogged Spawn Egg                         :BOGGED_SPAWN_EGG
 Breeze Spawn Egg                         :BREEZE_SPAWN_EGG
 Camel Spawn Egg                          :CAMEL_SPAWN_EGG
+Camel Husk Spawn Egg                     :CAMEL_HUSK_SPAWN_EGG
 Cat Spawn Egg                            :CAT_SPAWN_EGG
 Cave Spider Spawn Egg                    :CAVE_SPIDER_SPAWN_EGG
 Chicken Spawn Egg                        :CHICKEN_SPAWN_EGG
@@ -1776,8 +1792,10 @@ Llama Spawn Egg                          :LLAMA_SPAWN_EGG
 Magma Cube Spawn Egg                     :MAGMA_CUBE_SPAWN_EGG
 Mooshroom Spawn Egg                      :MOOSHROOM_SPAWN_EGG
 Mule Spawn Egg                           :MULE_SPAWN_EGG
+Nautilus Spawn Egg                       :NAUTILUS_SPAWN_EGG
 Ocelot Spawn Egg                         :OCELOT_SPAWN_EGG
 Panda Spawn Egg                          :PANDA_SPAWN_EGG
+Parched Spawn Egg                        :PARCHED_SPAWN_EGG
 Parrot Spawn Egg                         :PARROT_SPAWN_EGG
 Phantom Spawn Egg                        :PHANTOM_SPAWN_EGG
 Pig Spawn Egg                            :PIG_SPAWN_EGG
@@ -1817,6 +1835,7 @@ Wolf Spawn Egg                           :WOLF_SPAWN_EGG
 Zoglin Spawn Egg                         :ZOGLIN_SPAWN_EGG
 Zombie Spawn Egg                         :ZOMBIE_SPAWN_EGG
 Zombie Horse Spawn Egg                   :ZOMBIE_HORSE_SPAWN_EGG
+Zombie Nautilus Spawn Egg                :ZOMBIE_NAUTILUS_SPAWN_EGG
 Zombie Villager Spawn Egg                :ZOMBIE_VILLAGER_SPAWN_EGG
 Zombified Piglin Spawn Egg               :ZOMBIFIED_PIGLIN_SPAWN_EGG
 
