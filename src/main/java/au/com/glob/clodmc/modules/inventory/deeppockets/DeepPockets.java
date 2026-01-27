@@ -34,7 +34,6 @@ import org.jspecify.annotations.NullMarked;
     description = "When picking blocks, look inside held shulker boxes too")
 @NullMarked
 public class DeepPockets implements Module, Listener {
-
   // search shulker boxes when picking items from inventory
   @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
   public void onPlayerPickItem(final PlayerPickItemEvent event) {
@@ -106,9 +105,10 @@ public class DeepPockets implements Module, Listener {
     final int targetSlot = event.getTargetSlot();
     ItemStack targetItemStack = playerInventory.getItem(targetSlot);
 
-    // if the shulker is in the target slot, we need to move the shulker
-    // to an empty slot
-    if (playerSlot == targetSlot) {
+    // if shulker is in the target slot, we need to move the shulker
+    // to an empty slot - both to avoid the source shulker, and putting
+    // a shulker into another shulker
+    if (targetItemStack != null && Tag.SHULKER_BOXES.isTagged(targetItemStack.getType())) {
       final int emptySlot = playerInventory.firstEmpty();
 
       // full inventory; failure
@@ -120,7 +120,12 @@ public class DeepPockets implements Module, Listener {
       // move shulker into empty slot
       playerInventory.setItem(emptySlot, targetItemStack);
       playerInventory.clear(targetSlot);
-      playerSlot = emptySlot;
+
+      // only update source location if we moved the source shulker
+      if (playerSlot == targetSlot) {
+        playerSlot = emptySlot;
+      }
+
       targetItemStack = null;
     }
 
