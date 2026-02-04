@@ -14,27 +14,34 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.RecipeChoice;
 import org.bukkit.inventory.ShapedRecipe;
+import org.bukkit.inventory.ShapelessRecipe;
 import org.jspecify.annotations.NullMarked;
 
 @Doc(
     audience = Audience.PLAYER,
     title = "Chorus Flower Crafting",
-    description = "Adds a crafting recipe for Chorus Flower")
+    description = "Adds crafting recipes for Chorus Flower")
 @NullMarked
 public class ChorusFlower implements Module, Listener {
-  private final ShapedRecipe recipe;
+  private final ShapedRecipe flowerRecipe;
+  private final ShapelessRecipe fruitRecipe;
 
-  // register the spore blossom crafting recipe
+  // register the chorus flower recipes
   public ChorusFlower() {
-    this.recipe =
+    this.flowerRecipe =
         new ShapedRecipe(
             new NamespacedKey("clod-mc", "chorus-flower"),
             new ItemStack(Material.CHORUS_FLOWER, 1));
-    this.recipe.shape("CC", "CC");
-    this.recipe.setIngredient('C', Material.CHORUS_FRUIT);
-    Bukkit.addRecipe(this.recipe);
+    this.flowerRecipe.shape("CC", "CC");
+    this.flowerRecipe.setIngredient('C', Material.CHORUS_FRUIT);
+    Bukkit.addRecipe(this.flowerRecipe);
+
+    this.fruitRecipe =
+        new ShapelessRecipe(
+            new NamespacedKey("clod-mc", "chorus-fruit"), new ItemStack(Material.CHORUS_FRUIT, 4));
+    this.fruitRecipe.addIngredient(Material.CHORUS_FLOWER);
+    Bukkit.addRecipe(this.fruitRecipe);
   }
 
   // auto-discover recipe when player joins if they have ingredients
@@ -43,19 +50,13 @@ public class ChorusFlower implements Module, Listener {
     Schedule.asynchronously(
         () -> {
           final Player player = event.getPlayer();
-          if (player.hasDiscoveredRecipe(this.recipe.getKey())) {
-            return;
+          if (!player.hasDiscoveredRecipe(this.flowerRecipe.getKey())
+              && player.getInventory().contains(Material.CHORUS_FRUIT)) {
+            Schedule.onMainThread(() -> player.discoverRecipe(this.flowerRecipe.getKey()));
           }
-
-          for (final ItemStack item : player.getInventory().getContents()) {
-            if (item == null || item.isEmpty()) {
-              continue;
-            }
-            for (final RecipeChoice choice : this.recipe.getChoiceMap().values()) {
-              if (choice.test(item)) {
-                Schedule.onMainThread(() -> player.discoverRecipe(this.recipe.getKey()));
-              }
-            }
+          if (!player.hasDiscoveredRecipe(this.fruitRecipe.getKey())
+              && player.getInventory().contains(Material.CHORUS_FLOWER)) {
+            Schedule.onMainThread(() -> player.discoverRecipe(this.fruitRecipe.getKey()));
           }
         });
   }
@@ -66,15 +67,14 @@ public class ChorusFlower implements Module, Listener {
     if (!(event.getEntity() instanceof final Player player)) {
       return;
     }
-    if (player.hasDiscoveredRecipe(this.recipe.getKey())) {
-      return;
-    }
-
     final ItemStack item = event.getItem().getItemStack();
-    for (final RecipeChoice choice : this.recipe.getChoiceMap().values()) {
-      if (choice.test(item)) {
-        Schedule.onMainThread(() -> player.discoverRecipe(this.recipe.getKey()));
-      }
+    if (!player.hasDiscoveredRecipe(this.flowerRecipe.getKey())
+        && item.getType() == Material.CHORUS_FRUIT) {
+      Schedule.onMainThread(() -> player.discoverRecipe(this.flowerRecipe.getKey()));
+    }
+    if (!player.hasDiscoveredRecipe(this.fruitRecipe.getKey())
+        && item.getType() == Material.CHORUS_FLOWER) {
+      Schedule.onMainThread(() -> player.discoverRecipe(this.fruitRecipe.getKey()));
     }
   }
 }
