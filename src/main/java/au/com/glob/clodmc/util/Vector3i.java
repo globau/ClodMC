@@ -7,9 +7,9 @@ import org.jspecify.annotations.Nullable;
 /** immutable 3d integer vector for coordinates */
 @NullMarked
 public class Vector3i {
-  public int x;
-  public int y;
-  public int z;
+  public final int x;
+  public final int y;
+  public final int z;
 
   // create vector with x, y, z coordinates
   public Vector3i(final int x, final int y, final int z) {

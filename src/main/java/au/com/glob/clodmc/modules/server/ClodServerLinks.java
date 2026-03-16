@@ -12,6 +12,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerLinksSendEvent;
 import org.jspecify.annotations.NullMarked;
 
+@SuppressWarnings("UnstableApiUsage")
 @Doc(
     audience = Audience.ADMIN,
     title = "Server Links",

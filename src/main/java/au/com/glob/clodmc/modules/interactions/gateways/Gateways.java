@@ -108,7 +108,7 @@ public class Gateways implements Module, Listener {
   private static final int RANDOM_TP_COOLDOWN = 60; // seconds
 
   private final File configFile = new File(ClodMC.instance.getDataFolder(), "gateways.yml");
-  Map<BlockPos, AnchorBlock> instances = new HashMap<>();
+  final Map<BlockPos, AnchorBlock> instances = new HashMap<>();
   private final Map<Player, BlockPos> ignore = new HashMap<>();
   private final Random random = new Random();
 

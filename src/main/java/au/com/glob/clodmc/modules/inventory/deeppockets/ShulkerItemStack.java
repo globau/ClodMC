@@ -7,9 +7,9 @@ import org.jspecify.annotations.Nullable;
 /** represents an item stack location within a shulker box */
 @NullMarked
 final class ShulkerItemStack {
-  int playerSlot;
-  int shulkerSlot;
-  int amount;
+  final int playerSlot;
+  final int shulkerSlot;
+  final int amount;
 
   ShulkerItemStack(final int playerSlot, final int shulkerSlot, final int amount) {
     this.playerSlot = playerSlot;

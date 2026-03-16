@@ -8,7 +8,7 @@ import org.jspecify.annotations.NullMarked;
 /** tracks player afk state and last interaction time */
 @NullMarked
 final class PlayerState {
-  Player player;
+  final Player player;
   long lastInteractionTime;
   boolean isAway;
   long afkTime;

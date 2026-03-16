@@ -29,7 +29,7 @@ import org.jspecify.annotations.Nullable;
     description = "Queue and deliver whispers sent to offline players")
 @NullMarked
 public class OfflineMessages implements Module, Listener {
-  Pattern msgPattern = Pattern.compile("^/?msg\\s+(\\S+)\\s+(.+)$");
+  final Pattern msgPattern = Pattern.compile("^/?msg\\s+(\\S+)\\s+(.+)$");
 
   public OfflineMessages() {
     ConfigurationSerialization.registerClass(Message.class);

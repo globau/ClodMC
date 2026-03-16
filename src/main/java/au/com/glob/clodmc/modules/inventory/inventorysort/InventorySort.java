@@ -38,7 +38,7 @@ import org.jspecify.annotations.Nullable;
     description = "Sort containers by shift+right-clicking in the inventory screen")
 @NullMarked
 public class InventorySort implements Listener, Module {
-  static Map<String, Integer> materialOrder = new HashMap<>(1477);
+  static final Map<String, Integer> materialOrder = new HashMap<>(1477);
 
   public InventorySort() {
     super();

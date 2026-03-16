@@ -8,9 +8,9 @@ import org.jspecify.annotations.Nullable;
 @NullMarked
 public class HeatMapChunk {
   private final String world;
-  int x;
-  int z;
-  int count;
+  final int x;
+  final int z;
+  final int count;
 
   HeatMapChunk(final String world, final int x, final int z, final int count) {
     this.world = world;

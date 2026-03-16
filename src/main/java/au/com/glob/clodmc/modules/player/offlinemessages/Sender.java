@@ -9,8 +9,8 @@ import org.jspecify.annotations.Nullable;
 /** wrapper for command sender with chat utilities */
 @NullMarked
 final class Sender {
-  CommandSender recipient;
-  String name;
+  final CommandSender recipient;
+  final String name;
 
   Sender(final CommandSender recipient, final String name) {
     this.recipient = recipient;
