@@ -21,42 +21,34 @@ import org.yaml.snakeyaml.Yaml;
 public class GitHubWorkflowJavaVersionCheck extends AbstractFileSetCheck {
   private @Nullable String gradleJavaVersion;
 
+  @SuppressWarnings("unchecked")
   @Override
   protected void processFiltered(final File file, final FileText fileText) {
-    final String relativeFilename = CheckUtils.getRelativeFilename(file);
-    if (relativeFilename.equals("gradle.properties")) {
-      this.processGradlePropertiesFile(file);
-    } else if (CheckUtils.isRelativeTo(file, ".github/workflows")
-        && relativeFilename.endsWith(".yml")) {
-      this.processWorkflowFile(file);
-    }
-  }
-
-  private void processGradlePropertiesFile(final File file) {
-    final Properties properties = new Properties();
-    try (final InputStream in = Files.newInputStream(file.toPath())) {
-      properties.load(in);
-      this.gradleJavaVersion = properties.getProperty("javaVersion");
-    } catch (final IOException e) {
-      this.log(
-          0,
-          "failed to read java version from %s: %s"
-              .formatted(CheckUtils.getRelativeFilename(file), e));
-    }
-
-    if (this.gradleJavaVersion == null) {
-      this.log(
-          0,
-          "failed to find javaVersion property in %s"
-              .formatted(CheckUtils.getRelativeFilename(file)));
-    }
-  }
-
-  @SuppressWarnings("unchecked")
-  private void processWorkflowFile(final File file) {
-    if (this.gradleJavaVersion == null) {
-      this.log(0, "GitHubWorkflowJavaVersionCheck: missing java version");
+    if (!CheckUtils.isRelativeTo(file, ".github/workflows")
+        || !CheckUtils.getRelativeFilename(file).endsWith(".yml")) {
       return;
+    }
+
+    if (this.gradleJavaVersion == null) {
+      File dir = file.getAbsoluteFile().getParentFile();
+      while (dir != null) {
+        final File gradleFile = new File(dir, "gradle.properties");
+        if (gradleFile.exists()) {
+          final Properties properties = new Properties();
+          try (final InputStream in = Files.newInputStream(gradleFile.toPath())) {
+            properties.load(in);
+            this.gradleJavaVersion = properties.getProperty("javaVersion");
+          } catch (final IOException e) {
+            this.log(0, "failed to read gradle.properties: %s".formatted(e));
+            break;
+          }
+          break;
+        }
+        dir = dir.getParentFile();
+      }
+      if (this.gradleJavaVersion == null) {
+        this.log(0, "failed to find gradle.properties");
+      }
     }
 
     final Yaml yaml = new Yaml();
