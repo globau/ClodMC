@@ -7,6 +7,8 @@ import org.jspecify.annotations.NullMarked;
 /** standardised styling for messages sent to players via the action bar */
 @NullMarked
 public final class ActionBar {
+  private ActionBar() {}
+
   private static void setActionBar(
       final Player player, final ChatStyle style, final String message) {
     player.sendActionBar(StringUtil.asComponent("%s%s".formatted(style.prefix, message)));

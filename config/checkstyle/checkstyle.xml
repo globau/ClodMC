@@ -398,6 +398,7 @@
         <module name="au.com.glob.checks.NullMarkedCheck" />
         <module name="au.com.glob.checks.SpellingCheck" />
         <module name="au.com.glob.checks.StringLiteralsConcatenationCheck" />
+        <module name="au.com.glob.checks.UtilityClassConstructorCheck" />
     </module>
 
     <!-- glob: custom non-ast checks -->

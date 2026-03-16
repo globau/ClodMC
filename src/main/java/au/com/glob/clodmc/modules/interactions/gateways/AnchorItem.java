@@ -21,6 +21,8 @@ import org.jspecify.annotations.Nullable;
 /** manages the gateway anchor item recipe and creation */
 @NullMarked
 final class AnchorItem {
+  private AnchorItem() {}
+
   static final NamespacedKey RECIPE_KEY = new NamespacedKey("clod-mc", "anchor");
   private static final String[] SHAPE = new String[] {"PWP", "EWE", "ERE"};
   private static final Map<Character, Material> SHAPE_MATERIALS =

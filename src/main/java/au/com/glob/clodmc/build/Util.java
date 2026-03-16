@@ -17,6 +17,8 @@ import java.util.stream.Collectors;
 /** utilities for build scripts */
 @SuppressWarnings("NullabilityAnnotations")
 public final class Util {
+  private Util() {}
+
   // 'static main()' wrapper for standardised exception handling
   static void mainWrapper(final ThrowingRunnable runner) {
     try {

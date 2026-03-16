@@ -9,6 +9,8 @@ import org.jspecify.annotations.NullMarked;
 /** wrappers around Bukkit scheduling, with clearer and cleaner semantics */
 @NullMarked
 public final class Schedule {
+  private Schedule() {}
+
   // schedule the task to run on the main thread
   public static void onMainThread(final Runnable task) {
     Bukkit.getScheduler().scheduleSyncDelayedTask(ClodMC.instance, task);

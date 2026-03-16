@@ -6,6 +6,8 @@ import org.jspecify.annotations.NullMarked;
 /** standardised styling for messages sent to players via chat */
 @NullMarked
 public final class Chat {
+  private Chat() {}
+
   // send styled message to command sender
   private static void sendMessage(
       final CommandSender sender, final ChatStyle style, final String message) {

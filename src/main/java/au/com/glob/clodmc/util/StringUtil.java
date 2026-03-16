@@ -14,6 +14,8 @@ import org.jspecify.annotations.Nullable;
 /** string helpers */
 @NullMarked
 public final class StringUtil {
+  private StringUtil() {}
+
   // format seconds as human-readable relative time
   public static String relativeTime(final long inputSeconds) {
     final long dd = TimeUnit.SECONDS.toDays(inputSeconds);

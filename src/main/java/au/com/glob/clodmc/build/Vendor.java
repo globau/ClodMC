@@ -17,6 +17,8 @@ import java.util.stream.Stream;
 /** manages vendoring of third-party dependencies into the codebase */
 @SuppressWarnings("NullabilityAnnotations")
 public final class Vendor {
+  private Vendor() {}
+
   private static final Path VENDORED_PATH = Path.of("src/vendored");
   private static final String VENDORED_FILENAME = "vendored.properties";
 

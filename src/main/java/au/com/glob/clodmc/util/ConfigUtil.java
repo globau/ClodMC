@@ -17,6 +17,8 @@ import org.yaml.snakeyaml.error.YAMLException;
 /** config file helpers */
 @NullMarked
 public final class ConfigUtil {
+  private ConfigUtil() {}
+
   @SuppressWarnings("StaticNonFinalField")
   public static boolean sanityChecked = false;
 

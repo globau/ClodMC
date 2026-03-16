@@ -7,6 +7,8 @@ import org.jspecify.annotations.NullMarked;
 /** logfile helpers */
 @NullMarked
 public final class Logger {
+  private Logger() {}
+
   // log info message
   public static void info(final String message) {
     ClodMC.instance.getLogger().info(message);

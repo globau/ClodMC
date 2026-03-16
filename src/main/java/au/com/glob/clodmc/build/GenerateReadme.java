@@ -27,6 +27,8 @@ import javax.tools.ToolProvider;
 /** generates README.md from @doc annotations and src/doc/README.md */
 @SuppressWarnings("NullabilityAnnotations")
 public final class GenerateReadme {
+  private GenerateReadme() {}
+
   private static void generateReadme(final List<ModuleInfo> modules, final boolean isRelease)
       throws Exception {
     String template = Files.readString(Path.of("src/doc/README.md"));

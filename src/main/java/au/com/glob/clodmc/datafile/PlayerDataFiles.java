@@ -9,6 +9,8 @@ import org.jspecify.annotations.NullMarked;
 /** factory and cache for player data files indexed by uuid */
 @NullMarked
 public final class PlayerDataFiles {
+  private PlayerDataFiles() {}
+
   private static final Map<String, PlayerDataFile> instances = new HashMap<>();
 
   // get cached file or create new one

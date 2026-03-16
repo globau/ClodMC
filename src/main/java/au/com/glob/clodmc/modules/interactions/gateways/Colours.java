@@ -10,6 +10,8 @@ import org.jspecify.annotations.Nullable;
 /** manages available gateway colours and their material mappings */
 @NullMarked
 public final class Colours {
+  private Colours() {}
+
   static final List<Colour> COLOURS =
       List.of(
           new Colour(Material.WHITE_WOOL, "white", 0, Color.fromRGB(0xf9ffff)),

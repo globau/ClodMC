@@ -12,6 +12,8 @@ import java.util.stream.Stream;
 /** outputs the java home for the correct version (as per gradle.properties) */
 @SuppressWarnings("NullabilityAnnotations")
 public final class JavaHome {
+  private JavaHome() {}
+
   private static final String JDK_VERSION = readJavaVersion();
   private static final Path CACHE_FILE = Path.of("build", "java_home-%s".formatted(JDK_VERSION));
 

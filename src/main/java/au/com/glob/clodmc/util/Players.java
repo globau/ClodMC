@@ -25,6 +25,8 @@ import org.jspecify.annotations.Nullable;
 /** utilities for player management and bedrock client detection */
 @NullMarked
 public final class Players {
+  private Players() {}
+
   // Attribute.BLOCK_INTERACTION_RANGE + 1
   public static final int INTERACTION_RANGE = 5;
 

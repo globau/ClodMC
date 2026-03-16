@@ -7,6 +7,8 @@ import org.jspecify.annotations.NullMarked;
 /** location related helpers */
 @NullMarked
 public final class LocationUtil {
+  private LocationUtil() {}
+
   // calculates location the player is facing from given location
   public static Location facingLocation(final Location location) {
     final double yawRadians = Math.toRadians(location.getYaw());

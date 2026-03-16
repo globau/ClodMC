@@ -9,6 +9,8 @@ import org.jspecify.annotations.NullMarked;
 /** utilities for detecting bedrock edition clients via geyser api */
 @NullMarked
 public final class Bedrock {
+  private Bedrock() {}
+
   private static boolean geyserLoaded;
 
   static {

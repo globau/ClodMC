@@ -27,6 +27,8 @@ import org.jspecify.annotations.NullMarked;
 /** player teleport helpers */
 @NullMarked
 public final class TeleportUtil {
+  private TeleportUtil() {}
+
   private static final int CHECK_RADIUS = 3;
   private static final int MAX_RADIUS = 8;
   private static final int SOUND_RADIUS = 16;
