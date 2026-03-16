@@ -69,4 +69,5 @@ While Clod-MC is open-source, pull requests are not accepted.
 
 - `/admininv` - Toggle admin/player inventory
 - `/restore_inv` - Restore player's inventory from automatic backups
-- `/welcome` - Give specified player the welcome book
+- `/welcome` - Give yourself the welcome book
+- `/welcome-player` - Give specified player the welcome book

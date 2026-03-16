@@ -4,6 +4,7 @@ import au.com.glob.clodmc.ClodMC;
 import au.com.glob.clodmc.annotations.Audience;
 import au.com.glob.clodmc.annotations.Doc;
 import au.com.glob.clodmc.command.CommandBuilder;
+import au.com.glob.clodmc.command.CommandError;
 import au.com.glob.clodmc.command.CommandUsageError;
 import au.com.glob.clodmc.command.EitherCommandSender;
 import au.com.glob.clodmc.modules.Module;
@@ -18,8 +19,11 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
+import java.util.UUID;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.json.JSONComponentSerializer;
 import org.bukkit.Bukkit;
@@ -172,10 +176,24 @@ public class WelcomeBook implements Module, Listener {
           a creature to silence
           it.
           """);
+  private final Set<UUID> cooldownUUIDs = new HashSet<>();
 
   public WelcomeBook() {
     CommandBuilder.build("welcome")
-        .usage("/welcome <player>")
+        .usage("/welcome")
+        .description("Give yourself the welcome book")
+        .executor(
+            (final Player player) -> {
+              if (this.cooldownUUIDs.contains(player.getUniqueId())) {
+                throw new CommandError("You need to wait longer before requesting another book");
+              }
+              this.cooldownUUIDs.add(player.getUniqueId());
+              Schedule.delayed(20 * 60, () -> this.cooldownUUIDs.remove(player.getUniqueId()));
+              giveWelcomeBook(player, player);
+            });
+
+    CommandBuilder.build("welcome-player")
+        .usage("/welcome-player <player>")
         .description("Give specified player the welcome book")
         .requiresOp()
         .executor(
