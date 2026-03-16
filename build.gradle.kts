@@ -60,6 +60,8 @@ checkstyle {
 tasks.withType<Checkstyle>().configureEach {
     configProperties = configProperties ?: mutableMapOf()
     configProperties!!["basedir"] = projectDir.absolutePath
+    val checkstyleTask = this
+    doFirst { checkstyleTask.setSource(checkstyleTask.source.files.sortedBy { it.absolutePath }) }
 }
 
 tasks.checkstyleMain {
