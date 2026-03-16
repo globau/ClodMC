@@ -8,8 +8,8 @@ import org.jspecify.annotations.NullMarked;
 
 /** factory and cache for player data files indexed by uuid */
 @NullMarked
-public class PlayerDataFiles {
-  protected static final Map<String, PlayerDataFile> instances = new HashMap<>();
+public final class PlayerDataFiles {
+  private static final Map<String, PlayerDataFile> instances = new HashMap<>();
 
   // get cached file or create new one
   public static PlayerDataFile of(final String filename) {

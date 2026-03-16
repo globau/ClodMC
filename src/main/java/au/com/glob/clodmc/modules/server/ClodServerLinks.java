@@ -16,7 +16,6 @@ import org.jspecify.annotations.NullMarked;
     audience = Audience.ADMIN,
     title = "Server Links",
     description = "Set server links in Minecraft client pause screen")
-@SuppressWarnings("UnstableApiUsage")
 @NullMarked
 public class ClodServerLinks implements Module, Listener {
   @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)

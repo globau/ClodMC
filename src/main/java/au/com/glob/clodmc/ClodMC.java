@@ -19,7 +19,7 @@ import vendored.com.jeff_media.customblockdata.CustomBlockData;
 /** main plugin class that handles lifecycle and module coordination */
 @NullMarked
 public final class ClodMC extends JavaPlugin implements Listener {
-  @SuppressWarnings({"NotNullFieldNotInitialized", "NullAway.Init", "StaticNonFinalField"})
+  @SuppressWarnings({"NullAway.Init", "StaticNonFinalField"})
   public static ClodMC instance;
 
   private final ModuleRegistry moduleRegistry = new ModuleRegistry();
