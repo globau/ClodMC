@@ -244,15 +244,14 @@ public class WelcomeBook implements Module, Listener {
   private static void giveWelcomeBook(
       final Player recipient, @Nullable final CommandSender sender) {
     final ItemStack bookItem = new ItemStack(Material.WRITTEN_BOOK);
+
     final BookMeta bookMeta = (BookMeta) bookItem.getItemMeta();
-
-    final BookMeta.BookMetaBuilder builder = bookMeta.toBuilder();
     for (final String page : PAGES) {
-      builder.addPage(StringUtil.asComponent(page));
+      bookMeta.addPages(StringUtil.asComponent(page));
     }
-    builder.title(Component.text(TITLE)).author(Component.text(AUTHOR));
-
-    bookItem.setItemMeta(builder.build());
+    bookMeta.title(Component.text(TITLE));
+    bookMeta.author(Component.text(AUTHOR));
+    bookItem.setItemMeta(bookMeta);
 
     final HashMap<Integer, ItemStack> overflow = recipient.getInventory().addItem(bookItem);
     if (!overflow.isEmpty()) {
