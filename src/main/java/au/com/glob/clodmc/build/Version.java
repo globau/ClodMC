@@ -10,7 +10,7 @@ public final class Version {
   private Version() {}
 
   // generate version string from git commit timestamp
-  public static void main(final String[] args) {
+  static void main(final String[] args) {
     Util.mainWrapper(
         () -> {
           // parse commit timestamp and convert to gmt+8

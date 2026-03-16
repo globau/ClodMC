@@ -61,7 +61,7 @@ public final class JavaHome {
   }
 
   // find and output java home directory
-  public static void main(final String[] args) {
+  static void main(final String[] args) {
     Util.mainWrapper(
         () -> {
           final String cached = readCached();

@@ -266,7 +266,7 @@ public final class GenerateReadme {
       List<CommandInfo> commands,
       String sourcePath) {}
 
-  public static void main(final String[] args) {
+  static void main(final String[] args) {
     Util.mainWrapper(
         () -> {
           // check for --release flag
