@@ -32,9 +32,10 @@ import au.com.glob.clodmc.modules.player.PlayerTracker;
 import au.com.glob.clodmc.modules.player.Seen;
 import au.com.glob.clodmc.modules.player.Sleep;
 import au.com.glob.clodmc.modules.player.Spawn;
-import au.com.glob.clodmc.modules.player.WelcomeBook;
 import au.com.glob.clodmc.modules.player.afk.AFK;
 import au.com.glob.clodmc.modules.player.offlinemessages.OfflineMessages;
+import au.com.glob.clodmc.modules.player.welcomebook.WelcomeBookAdmin;
+import au.com.glob.clodmc.modules.player.welcomebook.WelcomeBookPlayer;
 import au.com.glob.clodmc.modules.server.ClodServerLinks;
 import au.com.glob.clodmc.modules.server.MOTD;
 import au.com.glob.clodmc.modules.server.RequiredPlugins;
@@ -109,7 +110,8 @@ public class ModuleRegistry implements Iterable<Module>, PluginBootstrap {
     this.register(Seen.class);
     this.register(Sleep.class);
     this.register(Spawn.class);
-    this.register(WelcomeBook.class);
+    this.register(WelcomeBookAdmin.class);
+    this.register(WelcomeBookPlayer.class);
 
     // server
     this.register(ClodServerLinks.class);

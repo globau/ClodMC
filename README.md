@@ -28,6 +28,7 @@ While Clod-MC is open-source, pull requests are not accepted.
 - **VeinMiner Enchantment** - Mine connected blocks with one action when shift+mining [[src](src/main/java/au/com/glob/clodmc/modules/interactions/VeinMiner.java)]
 - **Waxed Item Frames** - Allow waxing an item-frame to prevent item rotation/removal and allow chest click-through [[src](src/main/java/au/com/glob/clodmc/modules/interactions/WaxedItemFrames.java)]
 - **Waxed Pressure Plates** - Allow waxing a pressure plate to prevent it activating [[src](src/main/java/au/com/glob/clodmc/modules/interactions/WaxedPressurePlates.java)]
+- **Welcome Book** - Give yourself the Welcome Book [[src](src/main/java/au/com/glob/clodmc/modules/player/welcomebook/WelcomeBookPlayer.java)]
 
 ### Server
 
@@ -47,7 +48,7 @@ While Clod-MC is open-source, pull requests are not accepted.
 - **Inventory Restore** - Automatic inventory backup, allowing admins to restore [[src](src/main/java/au/com/glob/clodmc/modules/inventory/InventoryRestore.java)]
 - **Required Plugins** - Don't allow non-op players to connect unless all required plugins are loaded [[src](src/main/java/au/com/glob/clodmc/modules/server/RequiredPlugins.java)]
 - **Server Links** - Set server links in Minecraft client pause screen [[src](src/main/java/au/com/glob/clodmc/modules/server/ClodServerLinks.java)]
-- **Welcome Book** - Give players the Welcome Book [[src](src/main/java/au/com/glob/clodmc/modules/player/WelcomeBook.java)]
+- **Welcome Book** - Give players the Welcome Book [[src](src/main/java/au/com/glob/clodmc/modules/player/welcomebook/WelcomeBookAdmin.java)]
 
 ## Commands
 
@@ -64,10 +65,10 @@ While Clod-MC is open-source, pull requests are not accepted.
 - `/server-status` - Shows server status
 - `/sethome` - Sets a home to your current location
 - `/spawn` - Teleport to spawn
+- `/welcome-book` - Give yourself the welcome book
 
 ### Admin
 
 - `/admininv` - Toggle admin/player inventory
 - `/restore_inv` - Restore player's inventory from automatic backups
-- `/welcome` - Give yourself the welcome book
 - `/welcome-player` - Give specified player the welcome book

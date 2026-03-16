@@ -1,16 +1,7 @@
-package au.com.glob.clodmc.modules.player;
+package au.com.glob.clodmc.modules.player.welcomebook;
 
 import au.com.glob.clodmc.ClodMC;
-import au.com.glob.clodmc.annotations.Audience;
-import au.com.glob.clodmc.annotations.Doc;
-import au.com.glob.clodmc.command.CommandBuilder;
-import au.com.glob.clodmc.command.CommandError;
-import au.com.glob.clodmc.command.CommandUsageError;
-import au.com.glob.clodmc.command.EitherCommandSender;
-import au.com.glob.clodmc.modules.Module;
-import au.com.glob.clodmc.util.Chat;
 import au.com.glob.clodmc.util.Logger;
-import au.com.glob.clodmc.util.Schedule;
 import au.com.glob.clodmc.util.StringUtil;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -19,33 +10,21 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Locale;
-import java.util.Set;
-import java.util.UUID;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.json.JSONComponentSerializer;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Sound;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
-import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BookMeta;
 import org.jspecify.annotations.NullMarked;
-import org.jspecify.annotations.Nullable;
 
-@Doc(
-    audience = Audience.ADMIN,
-    title = "Welcome Book",
-    description = "Give players the Welcome Book")
+/** welcome book creation */
 @NullMarked
-public class WelcomeBook implements Module, Listener {
+public final class WelcomeBook {
+  private WelcomeBook() {}
+
   private static final String TITLE = "Welcome to Clod-MC";
   private static final String AUTHOR = "glob";
   private static final List<String> PAGES =
@@ -176,73 +155,9 @@ public class WelcomeBook implements Module, Listener {
           a creature to silence
           it.
           """);
-  private final Set<UUID> cooldownUUIDs = new HashSet<>();
-
-  public WelcomeBook() {
-    CommandBuilder.build("welcome")
-        .usage("/welcome")
-        .description("Give yourself the welcome book")
-        .executor(
-            (final Player player) -> {
-              if (this.cooldownUUIDs.contains(player.getUniqueId())) {
-                throw new CommandError("You need to wait longer before requesting another book");
-              }
-              this.cooldownUUIDs.add(player.getUniqueId());
-              Schedule.delayed(20 * 60, () -> this.cooldownUUIDs.remove(player.getUniqueId()));
-              giveWelcomeBook(player, player);
-            });
-
-    CommandBuilder.build("welcome-player")
-        .usage("/welcome-player <player>")
-        .description("Give specified player the welcome book")
-        .requiresOp()
-        .executor(
-            (final EitherCommandSender sender, @Nullable final Player player) -> {
-              if (player == null) {
-                throw new CommandUsageError();
-              }
-              giveWelcomeBook(player, sender);
-            })
-        .completor(
-            (CommandSender sender, List<String> args) ->
-                Bukkit.getOnlinePlayers().stream()
-                    .map(Player::getName)
-                    .filter(
-                        (String name) ->
-                            name.toLowerCase(Locale.ENGLISH)
-                                .startsWith(args.getFirst().toLowerCase(Locale.ENGLISH)))
-                    .toList());
-
-    // save the welcome book for other consumers
-    final List<String> pagesAsJson =
-        PAGES.stream()
-            .map(StringUtil::asComponent)
-            .map((Component component) -> JSONComponentSerializer.json().serialize(component))
-            .toList();
-    final String json = "[%s]".formatted(String.join(",", pagesAsJson));
-
-    final Gson gson = new GsonBuilder().setPrettyPrinting().create();
-    final String prettyJson = gson.toJson(JsonParser.parseString(json));
-
-    try {
-      final File jsonFile = new File(ClodMC.instance.getDataFolder(), "welcome-book.json");
-      Files.writeString(jsonFile.toPath(), prettyJson);
-    } catch (final IOException e) {
-      Logger.error("failed to write welcome-book.json", e);
-    }
-  }
-
-  // give welcome book to new players
-  @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-  public void onPlayerJoin(final PlayerJoinEvent event) {
-    if (!event.getPlayer().hasPlayedBefore()) {
-      Schedule.delayed(5, () -> giveWelcomeBook(event.getPlayer(), null));
-    }
-  }
 
   // create and give welcome book to player
-  private static void giveWelcomeBook(
-      final Player recipient, @Nullable final CommandSender sender) {
+  static void giveTo(final Player recipient) {
     final ItemStack bookItem = new ItemStack(Material.WRITTEN_BOOK);
 
     final BookMeta bookMeta = (BookMeta) bookItem.getItemMeta();
@@ -259,9 +174,25 @@ public class WelcomeBook implements Module, Listener {
     }
 
     recipient.playSound(recipient, Sound.ITEM_BOOK_PAGE_TURN, 1.0f, 1.0f);
+  }
 
-    if (sender != null) {
-      Chat.fyi(sender, "Gave welcome book to %s".formatted(recipient.getName()));
+  static void exportAsJson() {
+    // save the welcome book for other consumers
+    final List<String> pagesAsJson =
+        PAGES.stream()
+            .map(StringUtil::asComponent)
+            .map((Component component) -> JSONComponentSerializer.json().serialize(component))
+            .toList();
+    final String json = "[%s]".formatted(String.join(",", pagesAsJson));
+
+    final Gson gson = new GsonBuilder().setPrettyPrinting().create();
+    final String prettyJson = gson.toJson(JsonParser.parseString(json));
+
+    try {
+      final File jsonFile = new File(ClodMC.instance.getDataFolder(), "welcome-book.json");
+      Files.writeString(jsonFile.toPath(), prettyJson);
+    } catch (final IOException e) {
+      Logger.error("failed to write welcome-book.json", e);
     }
   }
 }
