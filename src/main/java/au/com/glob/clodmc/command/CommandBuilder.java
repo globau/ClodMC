@@ -3,11 +3,13 @@ package au.com.glob.clodmc.command;
 import au.com.glob.clodmc.ClodMC;
 import au.com.glob.clodmc.util.Chat;
 import au.com.glob.clodmc.util.Logger;
+import io.papermc.paper.command.brigadier.BasicCommand;
+import io.papermc.paper.command.brigadier.CommandSourceStack;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 import org.bukkit.Bukkit;
-import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jspecify.annotations.NullMarked;
@@ -154,15 +156,19 @@ public final class CommandBuilder {
       this.usage = "/%s".formatted(this.name);
     }
 
-    final Command command =
-        new Command(this.name, this.description, this.usage, List.of()) {
+    final BasicCommand cmd =
+        new BasicCommand() {
           @Override
-          public boolean execute(
-              final CommandSender sender, final String commandLabel, final String[] args) {
+          public void execute(final CommandSourceStack commandSourceStack, final String[] args) {
             final CommandBuilder that = CommandBuilder.this;
             if (that.executor == null) {
-              return false;
+              return;
             }
+
+            final CommandSender sender =
+                Objects.requireNonNullElse(
+                    commandSourceStack.getExecutor(), commandSourceStack.getSender());
+
             try {
               switch (that.executor) {
                 case final ExecutorP executorP -> executorP.accept(that.toPlayer(sender));
@@ -191,7 +197,7 @@ public final class CommandBuilder {
                 default -> throw new RuntimeException("executor not handled");
               }
             } catch (final CommandUsageError e) {
-              Chat.error(sender, "usage: %s".formatted(this.usageMessage));
+              Chat.error(sender, "usage: %s".formatted(that.usage));
             } catch (final CommandError e) {
               Chat.error(sender, Objects.requireNonNullElse(e.getMessage(), "Internal Error"));
             } catch (final Throwable e) {
@@ -200,17 +206,19 @@ public final class CommandBuilder {
               Chat.error(sender, "Internal command error: %s".formatted(message));
               Logger.exception(e);
             }
-            return true;
           }
 
           @Override
-          public List<String> tabComplete(
-              final CommandSender sender, final String alias, final String[] args)
-              throws IllegalArgumentException {
+          public Collection<String> suggest(
+              final CommandSourceStack commandSourceStack, final String[] args) {
             final CommandBuilder that = CommandBuilder.this;
             if (that.completor == null) {
               return List.of();
             }
+
+            final CommandSender sender =
+                Objects.requireNonNullElse(
+                    commandSourceStack.getExecutor(), commandSourceStack.getSender());
 
             final List<String> argsList = new ArrayList<>(List.of(args));
             return switch (that.completor) {
@@ -220,12 +228,13 @@ public final class CommandBuilder {
               default -> throw new RuntimeException("completor not handled");
             };
           }
-        };
-    if (this.requiresOp) {
-      command.setPermission("op");
-    }
 
-    ClodMC.instance.getServer().getCommandMap().register("clod-mc", command);
+          @Override
+          public @Nullable String permission() {
+            return CommandBuilder.this.requiresOp ? "op" : null;
+          }
+        };
+    ClodMC.instance.registerCommand(this.name, cmd);
   }
 
   // convert command sender to player with permission checks
