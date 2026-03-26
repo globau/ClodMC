@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
+import java.util.Objects;
 import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -64,23 +65,27 @@ public final class JavaHome {
   static void main(final String[] args) {
     Util.mainWrapper(
         () -> {
+          // in CI use the current java
+          if ("true".equalsIgnoreCase(System.getenv("CI"))) {
+            System.out.println(
+                Objects.requireNonNullElse(
+                    System.getenv("JAVA_HOME"), System.getProperty("java.home")));
+            return;
+          }
+
           final String cached = readCached();
           if (cached != null) {
             System.out.println(cached);
             return;
           }
 
-          // check the running java version
-          final Matcher matcher =
-              Pattern.compile("^(\\d+)\\.").matcher(System.getProperty("java.version"));
-          if (matcher.find()) {
-            final String version = matcher.group(1);
-            if (version.equals(JDK_VERSION)) {
-              final String javaHome = System.getProperty("java.home");
-              writeCached(javaHome);
-              System.out.println(javaHome);
-              return;
-            }
+          // check the running java major version
+          final String current = System.getProperty("java.version").split("[.-]", 2)[0];
+          if (current.equals(JDK_VERSION)) {
+            final String javaHome = System.getProperty("java.home");
+            writeCached(javaHome);
+            System.out.println(javaHome);
+            return;
           }
 
           // try to find the correct jdk version in the standard macOS locations
@@ -99,10 +104,9 @@ public final class JavaHome {
                 final String javaFilename = "%s/bin/java".formatted(javaHome);
                 if (Files.exists(Path.of(javaFilename))) {
                   final String versionOutput = Util.capture(javaFilename, "--version");
-                  final Matcher matcher1 =
-                      Pattern.compile("^\\S+ (\\d+)\\.").matcher(versionOutput);
-                  if (matcher1.find()) {
-                    final String version = matcher1.group(1);
+                  final Matcher matcher = Pattern.compile("^\\S+ (\\d+)").matcher(versionOutput);
+                  if (matcher.find()) {
+                    final String version = matcher.group(1);
                     if (version.equals(JDK_VERSION)) {
                       writeCached(javaHome);
                       System.out.println(javaHome);
