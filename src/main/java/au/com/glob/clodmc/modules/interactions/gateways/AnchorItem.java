@@ -125,7 +125,7 @@ final class AnchorItem {
     final boolean isDuplicate =
         Gateways.instance.instances.values().stream()
             .anyMatch((AnchorBlock anchorBlock) -> anchorBlock.networkId == networkId);
-    final boolean isRandomDest = networkId == Gateways.RANDOM_NETWORK_ID;
+    final boolean isRandomDest = RandomTeleport.isRandomNetworkId(networkId);
 
     final String suffix;
     if (isRandomDest) {

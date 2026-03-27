@@ -5,8 +5,6 @@ import au.com.glob.clodmc.annotations.Audience;
 import au.com.glob.clodmc.annotations.Doc;
 import au.com.glob.clodmc.command.CommandBuilder;
 import au.com.glob.clodmc.command.EitherCommandSender;
-import au.com.glob.clodmc.datafile.PlayerDataFile;
-import au.com.glob.clodmc.datafile.PlayerDataFiles;
 import au.com.glob.clodmc.events.PlayerTargetBlockEvent;
 import au.com.glob.clodmc.modules.Module;
 import au.com.glob.clodmc.util.ActionBar;
@@ -16,34 +14,20 @@ import au.com.glob.clodmc.util.ConfigUtil;
 import au.com.glob.clodmc.util.Logger;
 import au.com.glob.clodmc.util.Players;
 import au.com.glob.clodmc.util.Schedule;
-import au.com.glob.clodmc.util.StringUtil;
 import au.com.glob.clodmc.util.TeleportUtil;
-import au.com.glob.clodmc.util.TimeUtil;
 import java.io.File;
 import java.io.IOException;
-import java.time.Duration;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
-import java.util.Random;
 import java.util.stream.Collectors;
-import me.ryanhamshire.GriefPrevention.Claim;
-import me.ryanhamshire.GriefPrevention.GriefPrevention;
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.title.Title;
 import org.bukkit.Bukkit;
 import org.bukkit.Effect;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.Sound;
-import org.bukkit.Statistic;
-import org.bukkit.World;
-import org.bukkit.WorldBorder;
 import org.bukkit.block.Block;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
@@ -103,20 +87,9 @@ public class Gateways implements Module, Listener {
   @SuppressWarnings({"NullAway.Init"})
   static Gateways instance;
 
-  private static final int MAX_RANDOM_TP_TIME = 60; // minutes
-  private static final int MIN_RANDOM_TP_DISTANCE = 1500;
-  private static final int RANDOM_TP_COOLDOWN = 60; // seconds
-
   private final File configFile = new File(ClodMC.instance.getDataFolder(), "gateways.yml");
   final Map<BlockPos, AnchorBlock> instances = new HashMap<>();
   private final Map<Player, BlockPos> ignore = new HashMap<>();
-  private final Random random = new Random();
-
-  // a black-black gateway teleports the player to a random location
-  public static final int RANDOM_NETWORK_ID =
-      Network.coloursToNetworkId(
-          Objects.requireNonNull(Colours.of(Material.BLACK_WOOL)),
-          Objects.requireNonNull(Colours.of(Material.BLACK_WOOL)));
 
   // initialise gateway system with recipes and commands
   public Gateways() {
@@ -218,7 +191,7 @@ public class Gateways implements Module, Listener {
     AnchorItem.setMeta(item, networkId);
 
     int amount = 2;
-    if (networkId == RANDOM_NETWORK_ID
+    if (RandomTeleport.isRandomNetworkId(networkId)
         && event.getView().getPlayer() instanceof final Player player) {
       amount = player.isOp() ? 1 : 0;
     }
@@ -401,8 +374,8 @@ public class Gateways implements Module, Listener {
     final Location teleportPos;
     final PlayerTeleportEvent.TeleportCause cause;
 
-    if (anchorBlock.networkId == RANDOM_NETWORK_ID) {
-      teleportPos = this.randomTeleportLocation(anchorBlock, player);
+    if (RandomTeleport.isRandomNetworkId(anchorBlock.networkId)) {
+      teleportPos = RandomTeleport.location(player);
       if (teleportPos == null) {
         return;
       }
@@ -429,7 +402,7 @@ public class Gateways implements Module, Listener {
     player
         .teleportAsync(teleportPos, cause)
         .whenComplete(
-            (@Nullable final Boolean result, final Throwable e) -> {
+            (@Nullable final Boolean result, final Throwable _) -> {
               player.clearTitle();
               if (result != null && result) {
                 this.ignore.put(player, BlockPos.of(finalTeleportPos));
@@ -454,7 +427,7 @@ public class Gateways implements Module, Listener {
               }
             })
         .exceptionally(
-            (final Throwable ex) -> {
+            (final Throwable _) -> {
               Chat.error(player, "Teleport failed");
               return null;
             });
@@ -531,104 +504,5 @@ public class Gateways implements Module, Listener {
   // get all active anchor blocks for bluemap integration
   public Collection<AnchorBlock> getAnchorBlocks() {
     return this.instances.values();
-  }
-
-  // find safe random teleport location for new players
-  private @Nullable Location randomTeleportLocation(
-      final AnchorBlock anchorBlock, final Player player) {
-    // only new players can use a random gateway
-    if (!player.isOp()) {
-      final int ticks = player.getStatistic(Statistic.PLAY_ONE_MINUTE);
-      final long minutesPlayed = Math.round(ticks / 20.0 / 60.0);
-      if (minutesPlayed > MAX_RANDOM_TP_TIME) {
-        Chat.error(player, "New Players Only");
-        return null;
-      }
-    }
-
-    // cooldown
-    final PlayerDataFile dataFile = PlayerDataFiles.of(player);
-    final LocalDateTime now = TimeUtil.localNow();
-    final LocalDateTime lastRandomTeleport = dataFile.getDateTime("tpr");
-    if (lastRandomTeleport != null) {
-      final long secondsSinceRandomTeleport = Duration.between(lastRandomTeleport, now).toSeconds();
-      if (secondsSinceRandomTeleport < RANDOM_TP_COOLDOWN) {
-        this.ignore.put(player, anchorBlock.blockPos.up());
-        Chat.warning(
-            player,
-            "You must wait another %s before teleporting again"
-                .formatted(
-                    StringUtil.plural2(RANDOM_TP_COOLDOWN - secondsSinceRandomTeleport, "second")));
-        return null;
-      }
-    }
-    dataFile.setDateTime("tpr", now);
-    dataFile.save();
-
-    // show a message; normally this is only visible if the destination
-    // chunk is slow to load
-    player.showTitle(
-        Title.title(
-            Component.text(""),
-            Component.text("Teleporting"),
-            Title.Times.times(Duration.ZERO, Duration.ofSeconds(2), Duration.ofMillis(500))));
-
-    final World world = Bukkit.getWorld("world");
-    if (world == null) {
-      this.ignore.put(player, anchorBlock.blockPos.up());
-      return null;
-    }
-    final WorldBorder border = world.getWorldBorder();
-
-    int attemptsLeft = 25;
-    while (attemptsLeft > 0) {
-      attemptsLeft--;
-
-      // pick a random location
-      final double radius = border.getSize() / 2.0;
-      final Location center = border.getCenter();
-      Location randomPos;
-      do {
-        final double distance =
-            MIN_RANDOM_TP_DISTANCE + (this.random.nextDouble() * (radius - MIN_RANDOM_TP_DISTANCE));
-        final double angle = 2 * Math.PI * this.random.nextDouble();
-        final double x = center.getX() + distance * Math.cos(angle);
-        final double z = center.getZ() + distance * Math.sin(angle);
-        final double y = world.getHighestBlockYAt(new Location(world, x, 0, z));
-        randomPos = new Location(world, x, y, z);
-      } while (!border.isInside(randomPos));
-
-      // avoid claims
-      final Claim claim = GriefPrevention.instance.dataStore.getClaimAt(randomPos, true, null);
-      if (claim != null) {
-        continue;
-      }
-
-      // find a safe location
-      final Location teleportPos = TeleportUtil.getSafePos(randomPos);
-      final String biomeKey = teleportPos.getBlock().getBiome().getKey().value();
-      if (biomeKey.equals("ocean")
-          || biomeKey.endsWith("_ocean")
-          || biomeKey.equals("river")
-          || biomeKey.endsWith("_river")) {
-        continue;
-      }
-
-      // getSafePos can put a player into an unsafe location if there aren't any safe positions
-      // nearby, which is normally fine but should be avoided here
-      if (TeleportUtil.isUnsafe(teleportPos.getBlock())) {
-        continue;
-      }
-
-      Chat.info(
-          player,
-          "Sending you %s blocks away"
-              .formatted(
-                  String.format("%,d", Math.round(player.getLocation().distance(teleportPos)))));
-      return teleportPos;
-    }
-    this.ignore.put(player, anchorBlock.blockPos.up());
-    Chat.error(player, "Failed to find a safe location");
-    return null;
   }
 }

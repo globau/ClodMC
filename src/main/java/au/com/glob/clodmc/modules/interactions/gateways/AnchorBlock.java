@@ -43,7 +43,7 @@ public class AnchorBlock implements ConfigurationSerializable {
     this.displayName =
         "%s%s"
             .formatted(this.getColourPair(), this.name == null ? "" : " (%s)".formatted(this.name));
-    this.isRandom = networkId == Gateways.RANDOM_NETWORK_ID;
+    this.isRandom = RandomTeleport.isRandomNetworkId(networkId);
     this.visuals = new Visuals(this);
   }
 
@@ -63,7 +63,7 @@ public class AnchorBlock implements ConfigurationSerializable {
               this.connectedTo.blockPos.getString(
                   !this.blockPos.world.equals(this.connectedTo.blockPos.world)));
     }
-    if (this.networkId == Gateways.RANDOM_NETWORK_ID) {
+    if (RandomTeleport.isRandomNetworkId(this.networkId)) {
       return "%sRandom Location".formatted(prefix);
     }
     return "%sDisconnected".formatted(prefix);
