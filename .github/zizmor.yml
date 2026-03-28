@@ -1,0 +1,8 @@
+rules:
+  unpinned-uses:
+    config:
+      policies:
+        # github-provided actions (actions/* and github/*) are considered trusted
+        # and are exempt from hash-pinning; major version tags are sufficient
+        actions/*: ref-pin
+        github/*: ref-pin

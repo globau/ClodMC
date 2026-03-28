@@ -28,13 +28,13 @@ jobs:
 
     steps:
     - name: Checkout repository
-      uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+      uses: actions/checkout@v6
       with:
         persist-credentials: false
 
     - name: jdk
       if: matrix.build-mode == 'manual'
-      uses: actions/setup-java@c1e323688fd81a25caa38c78aa6df2d33d3e20d9 # v4
+      uses: actions/setup-java@v5
       with:
         distribution: microsoft
         java-version: 25
@@ -44,7 +44,7 @@ jobs:
       run: ./gradlew --version
 
     - name: Initialise CodeQL
-      uses: github/codeql-action@c10b8064de6f491fea524254123dbe5e09572f13 # v4
+      uses: github/codeql-action@v4
       with:
         languages: ${{ matrix.language }}
         build-mode: ${{ matrix.build-mode }}
@@ -55,7 +55,7 @@ jobs:
       run: make build
 
     - name: Perform CodeQL Analysis
-      uses: github/codeql-action@c10b8064de6f491fea524254123dbe5e09572f13 # v4
+      uses: github/codeql-action@v4
       with:
         category: "/language:${{matrix.language}}"
 
