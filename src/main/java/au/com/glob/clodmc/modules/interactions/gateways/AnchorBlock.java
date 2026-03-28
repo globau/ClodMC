@@ -4,6 +4,7 @@ import au.com.glob.clodmc.util.BlockPos;
 import au.com.glob.clodmc.util.LocationUtil;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Predicate;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -89,14 +90,8 @@ public class AnchorBlock implements ConfigurationSerializable {
     this.connectedTo = null;
   }
 
-  // checks if player is not facing an anchor block
-  private static boolean notFacingAnchor(final Location location) {
-    return !Gateways.instance.instances.containsKey(
-        BlockPos.of(LocationUtil.facingLocation(location)));
-  }
-
   // calculates optimal teleport location for player considering rotation and safety
-  Location teleportLocation(final Player player) {
+  Location teleportLocation(final Player player, final Predicate<Location> notFacingAnchor) {
     // rotate player to avoid facing a wall
 
     // get standing-on block, bottom, and top blocks for the player's location
@@ -121,7 +116,7 @@ public class AnchorBlock implements ConfigurationSerializable {
       topLoc.setYaw(yaw);
       if (LocationUtil.isFacingAir(bottomLoc)
           && LocationUtil.isFacingAir(topLoc)
-          && notFacingAnchor(blockLoc)) {
+          && notFacingAnchor.test(blockLoc)) {
         return bottomLoc;
       }
     }
@@ -133,7 +128,7 @@ public class AnchorBlock implements ConfigurationSerializable {
       topLoc.setYaw(yaw);
       if (!LocationUtil.isFacingSolid(bottomLoc)
           && !LocationUtil.isFacingSolid(topLoc)
-          && notFacingAnchor(blockLoc)) {
+          && notFacingAnchor.test(blockLoc)) {
         return bottomLoc;
       }
     }

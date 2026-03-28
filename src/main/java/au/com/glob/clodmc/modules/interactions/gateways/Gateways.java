@@ -11,6 +11,7 @@ import au.com.glob.clodmc.util.ActionBar;
 import au.com.glob.clodmc.util.BlockPos;
 import au.com.glob.clodmc.util.Chat;
 import au.com.glob.clodmc.util.ConfigUtil;
+import au.com.glob.clodmc.util.LocationUtil;
 import au.com.glob.clodmc.util.Logger;
 import au.com.glob.clodmc.util.Players;
 import au.com.glob.clodmc.util.Schedule;
@@ -88,7 +89,8 @@ public class Gateways implements Module, Listener {
   static Gateways instance;
 
   private final File configFile = new File(ClodMC.instance.getDataFolder(), "gateways.yml");
-  final Map<BlockPos, AnchorBlock> instances = new HashMap<>();
+
+  private final Map<BlockPos, AnchorBlock> instances = new HashMap<>();
   private final Map<Player, BlockPos> ignore = new HashMap<>();
 
   // initialise gateway system with recipes and commands
@@ -188,7 +190,7 @@ public class Gateways implements Module, Listener {
     }
     final int networkId = Network.coloursToNetworkId(topColour, bottomColour);
 
-    AnchorItem.setMeta(item, networkId);
+    this.refreshItemMeta(item, networkId);
 
     int amount = 2;
     if (RandomTeleport.isRandomNetworkId(networkId)
@@ -215,7 +217,7 @@ public class Gateways implements Module, Listener {
   public void onPrepareAnvil(final PrepareAnvilEvent event) {
     final ItemStack item = event.getResult();
     if (AnchorItem.isAnchor(item)) {
-      AnchorItem.refreshMeta(item);
+      this.refreshItemMeta(item, AnchorItem.getNetworkId(item));
     }
   }
 
@@ -391,7 +393,7 @@ public class Gateways implements Module, Listener {
         return;
       }
 
-      teleportPos = connectedTo.teleportLocation(player);
+      teleportPos = connectedTo.teleportLocation(player, this::notFacingAnchor);
       // set cause to PLUGIN so this teleport is ignored by /back
       cause = PlayerTeleportEvent.TeleportCause.PLUGIN;
     }
@@ -504,5 +506,22 @@ public class Gateways implements Module, Listener {
   // get all active anchor blocks for bluemap integration
   public Collection<AnchorBlock> getAnchorBlocks() {
     return this.instances.values();
+  }
+
+  // checks if player is not facing an anchor block
+  private boolean notFacingAnchor(final Location location) {
+    return !this.instances.containsKey(BlockPos.of(LocationUtil.facingLocation(location)));
+  }
+
+  // checks if the specified networkId already exists
+  private boolean isDuplicate(final int networkId) {
+    return this.instances.values().stream()
+        .anyMatch((AnchorBlock anchorBlock) -> anchorBlock.networkId == networkId);
+  }
+
+  // refreshes anchor item metadata based on current state
+  private void refreshItemMeta(final ItemStack item, final int networkId) {
+    AnchorItem.setMeta(
+        item, networkId, RandomTeleport.isRandomNetworkId(networkId), this.isDuplicate(networkId));
   }
 }

@@ -121,12 +121,11 @@ final class AnchorItem {
   }
 
   // sets metadata on anchor item with duplicate and random detection
-  static void setMeta(final ItemStack anchorItem, final int networkId) {
-    final boolean isDuplicate =
-        Gateways.instance.instances.values().stream()
-            .anyMatch((AnchorBlock anchorBlock) -> anchorBlock.networkId == networkId);
-    final boolean isRandomDest = RandomTeleport.isRandomNetworkId(networkId);
-
+  static void setMeta(
+      final ItemStack anchorItem,
+      final int networkId,
+      final boolean isRandomDest,
+      final boolean isDuplicate) {
     final String suffix;
     if (isRandomDest) {
       suffix = "random";
@@ -137,11 +136,6 @@ final class AnchorItem {
     }
 
     AnchorItem.setMeta(anchorItem, networkId, getName(anchorItem), suffix);
-  }
-
-  // refreshes metadata on existing anchor item
-  static void refreshMeta(final ItemStack anchorItem) {
-    setMeta(anchorItem, getNetworkId(anchorItem));
   }
 
   // clears extra metadata from anchor item after crafting
