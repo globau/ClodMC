@@ -7,12 +7,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
         with:
           fetch-depth: 0
+          persist-credentials: false
 
       - name: jdk
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@c1e323688fd81a25caa38c78aa6df2d33d3e20d9 # v4
         with:
           distribution: microsoft
           java-version: 25
@@ -40,12 +41,36 @@ jobs:
       - name: release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          STEPS_TAG_OUTPUTS_TAG: ${{ steps.tag.outputs.tag }}
+          STEPS_TAG_OUTPUTS_VER: ${{ steps.tag.outputs.ver }}
         run: |
           git fetch --tags
           ./scripts/generate-readme --release > release.md
-          gh release create ${{ steps.tag.outputs.tag }} \
+          gh release create ${STEPS_TAG_OUTPUTS_TAG} \
             --repo="$GITHUB_REPOSITORY" \
             --generate-notes \
             --notes-file release.md \
-            --title="ClodMC-${{ steps.tag.outputs.ver }}" \
+            --title="ClodMC-${STEPS_TAG_OUTPUTS_VER}" \
             README.md build/libs/ClodMC-*.jar
+
+      - name: cleanup old releases
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # list releases (beyond the first three)
+          tags_to_delete=$(gh release list --limit 200 --json name,tagName,createdAt --template '{{range .}}{{.tagName}}{{"\n"}}{{end}}' | sed -n '4,$p')
+
+          if [ -z "$tags_to_delete" ]; then
+            echo "no old releases to delete"
+          else
+            echo "releases to delete:"
+            echo "$tags_to_delete"
+
+            # delete each release
+            echo "$tags_to_delete" | while read tag; do
+              if [ -n "$tag" ]; then
+                echo "deleting release $tag"
+                gh release delete "$tag"
+              fi
+            done
+          fi

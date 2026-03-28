@@ -18,6 +18,7 @@ clean:
 .PHONY: test
 test:
 	$(gradle) check --rerun-tasks
+	$(if $(GIT_INDEX_FILE),uvx zizmor .github/workflows/*.yml)
 
 .PHONY: release
 release:
