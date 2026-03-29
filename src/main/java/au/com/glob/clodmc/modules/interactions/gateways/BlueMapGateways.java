@@ -34,8 +34,14 @@ import org.jspecify.annotations.Nullable;
 public class BlueMapGateways implements Listener {
   private static final String MARKER_FILENAME = "gateway.svg";
 
-  private final Map<World, MarkerSet> markerSets = new HashMap<>(3);
+  private final Gateways gateways;
   private @Nullable BlueMapAPI api;
+
+  private final Map<World, MarkerSet> markerSets = new HashMap<>(3);
+
+  BlueMapGateways(final Gateways gateways) {
+    this.gateways = gateways;
+  }
 
   // initialises bluemap integration for gateway markers
   @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
@@ -75,7 +81,7 @@ public class BlueMapGateways implements Listener {
     }
 
     final Set<String> seenColours = new HashSet<>();
-    for (final AnchorBlock anchorBlock : Gateways.instance.getAnchorBlocks()) {
+    for (final AnchorBlock anchorBlock : this.gateways.getAnchorBlocks()) {
       if (anchorBlock.name == null) {
         continue;
       }

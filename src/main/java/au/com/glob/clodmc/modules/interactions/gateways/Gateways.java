@@ -85,9 +85,6 @@ import org.jspecify.annotations.Nullable;
     description = "Player-built point-to-point teleportation system using coloured wool anchors")
 @NullMarked
 public class Gateways implements Module, Listener {
-  @SuppressWarnings({"NullAway.Init"})
-  static Gateways instance;
-
   private final File configFile = new File(ClodMC.instance.getDataFolder(), "gateways.yml");
 
   private final Map<BlockPos, AnchorBlock> instances = new HashMap<>();
@@ -95,8 +92,6 @@ public class Gateways implements Module, Listener {
 
   // initialise gateway system with recipes and commands
   public Gateways() {
-    instance = this;
-
     ConfigurationSerialization.registerClass(AnchorBlock.class);
     Bukkit.addRecipe(AnchorItem.getRecipe());
 
@@ -160,7 +155,7 @@ public class Gateways implements Module, Listener {
 
     // register bluemap addon
     if (Bukkit.getPluginManager().isPluginEnabled("BlueMap")) {
-      ClodMC.registerListener(new BlueMapGateways());
+      ClodMC.registerListener(new BlueMapGateways(this));
     }
   }
 
