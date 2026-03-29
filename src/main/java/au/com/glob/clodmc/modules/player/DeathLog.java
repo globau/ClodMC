@@ -17,7 +17,7 @@ import org.jspecify.annotations.NullMarked;
     title = "Death Log",
     description = "Log player's death location in server log")
 @NullMarked
-public class DeathLog implements Module, Listener {
+public class DeathLog extends Module implements Listener {
   @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
   public void onPlayerDeath(final PlayerDeathEvent event) {
     final String died =

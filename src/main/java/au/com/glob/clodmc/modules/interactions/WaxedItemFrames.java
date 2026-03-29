@@ -29,7 +29,7 @@ import org.jspecify.annotations.NullMarked;
     description =
         "Allow waxing an item-frame to prevent item rotation/removal and allow chest click-through")
 @NullMarked
-public class WaxedItemFrames implements Module, Listener {
+public class WaxedItemFrames extends Module implements Listener {
   private static final NamespacedKey WAXED_KEY = new NamespacedKey("clod-mc", "waxed");
 
   // handle waxing item frames and click-through to containers

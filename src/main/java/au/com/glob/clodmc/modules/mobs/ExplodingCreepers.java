@@ -23,7 +23,7 @@ import org.jspecify.annotations.NullMarked;
     description = "Adds a slim chance that a creeper explodes into fireworks",
     hidden = true)
 @NullMarked
-public class ExplodingCreepers implements Module, Listener {
+public class ExplodingCreepers extends Module implements Listener {
 
   @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
   public void onEntityExplode(final EntityExplodeEvent event) {

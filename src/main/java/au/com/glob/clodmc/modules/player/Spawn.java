@@ -17,7 +17,7 @@ import org.jspecify.annotations.NullMarked;
     title = "Spawn Teleport",
     description = "Adds /spawn to teleport to spawn")
 @NullMarked
-public class Spawn implements Module {
+public class Spawn extends Module {
   public Spawn() {
     CommandBuilder.build("spawn")
         .description("Teleport to spawn")

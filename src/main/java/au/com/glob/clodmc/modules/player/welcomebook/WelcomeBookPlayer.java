@@ -18,7 +18,7 @@ import org.jspecify.annotations.NullMarked;
     title = "Welcome Book",
     description = "Give yourself the Welcome Book")
 @NullMarked
-public class WelcomeBookPlayer implements Module {
+public class WelcomeBookPlayer extends Module {
   private final Set<UUID> cooldownUUIDs = new HashSet<>();
 
   public WelcomeBookPlayer() {

@@ -33,7 +33,7 @@ import org.jspecify.annotations.NullMarked;
     title = "Deep Pockets",
     description = "When picking blocks, look inside held shulker boxes too")
 @NullMarked
-public class DeepPockets implements Module, Listener {
+public class DeepPockets extends Module implements Listener {
   // search shulker boxes when picking items from inventory
   @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
   public void onPlayerPickItem(final PlayerPickItemEvent event) {

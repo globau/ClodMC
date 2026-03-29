@@ -25,7 +25,7 @@ import org.jspecify.annotations.Nullable;
     title = "Welcome Book",
     description = "Give players the Welcome Book")
 @NullMarked
-public class WelcomeBookAdmin implements Module, Listener {
+public class WelcomeBookAdmin extends Module implements Listener {
   public WelcomeBookAdmin() {
     CommandBuilder.build("welcome-player")
         .usage("/welcome-player <player>")

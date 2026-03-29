@@ -45,7 +45,7 @@ import org.jspecify.annotations.Nullable;
     title = "Inventory Restore",
     description = "Automatic inventory backup, allowing admins to restore")
 @NullMarked
-public class InventoryRestore implements Module, Listener {
+public class InventoryRestore extends Module implements Listener {
   private static final DateTimeFormatter SHORT_DATETIME_FORMAT =
       DateTimeFormatter.ofPattern("yyyyMMdd-HHmmss");
   private static final DateTimeFormatter LONG_DATETIME_FORMAT =

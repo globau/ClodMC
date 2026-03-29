@@ -28,7 +28,7 @@ import org.jspecify.annotations.Nullable;
     title = "Seen",
     description = "Show how long it's been since the server last saw the player")
 @NullMarked
-public class Seen implements Module, Listener {
+public class Seen extends Module implements Listener {
   public Seen() {
     CommandBuilder.build("seen")
         .usage("/seen <player>")

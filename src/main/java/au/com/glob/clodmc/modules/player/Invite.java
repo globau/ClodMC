@@ -41,7 +41,7 @@ import org.jspecify.annotations.Nullable;
     title = "Invite",
     description = "Allows players with enough playtime to add others to the whitelist")
 @NullMarked
-public class Invite implements Module {
+public class Invite extends Module {
   private static final int MIN_PLAY_TIME = 240; // minutes
 
   private final @Nullable String apiKey;

@@ -29,7 +29,7 @@ import vendored.com.jeff_media.customblockdata.CustomBlockData;
     title = "Waxed Pressure Plates",
     description = "Allow waxing a pressure plate to prevent it activating")
 @NullMarked
-public class WaxedPressurePlates implements Module, Listener {
+public class WaxedPressurePlates extends Module implements Listener {
   private static final NamespacedKey WAXED_KEY = new NamespacedKey("clod-mc", "waxed");
 
   // handle waxing pressure plates and blocking activation when waxed

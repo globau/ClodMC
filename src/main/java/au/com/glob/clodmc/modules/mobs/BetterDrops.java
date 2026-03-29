@@ -16,7 +16,7 @@ import org.jspecify.annotations.NullMarked;
     title = "Better Drops",
     description = "Improve the drop rates of selected entities")
 @NullMarked
-public class BetterDrops implements Listener, Module {
+public class BetterDrops extends Module implements Listener {
   @SuppressWarnings("MissingCasesInEnumSwitch")
   @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
   public void onEntityDeath(final EntityDeathEvent event) {

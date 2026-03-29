@@ -21,7 +21,7 @@ import org.jspecify.annotations.NullMarked;
     title = "Heat Map",
     description = "Track minutes a chunk is occupied by at least one player")
 @NullMarked
-public class HeatMap implements Module, Listener {
+public class HeatMap extends Module implements Listener {
   private final HashSet<UUID> afkPlayers = new HashSet<>();
 
   public HeatMap() {

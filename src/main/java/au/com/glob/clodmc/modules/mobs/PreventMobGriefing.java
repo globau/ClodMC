@@ -17,7 +17,7 @@ import org.jspecify.annotations.NullMarked;
     title = "Prevent Mob Griefing",
     description = "Prevent some mobs from breaking or moving blocks")
 @NullMarked
-public class PreventMobGriefing implements Listener, Module {
+public class PreventMobGriefing extends Module implements Listener {
   // prevent creeper explosions from destroying blocks
   @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
   public void onEntityExplode(final EntityExplodeEvent event) {

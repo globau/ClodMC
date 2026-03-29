@@ -20,7 +20,11 @@ import org.jspecify.annotations.NullMarked;
     title = "BlueMap Integration",
     description = "Bridge between ClodMC modules and BlueMap")
 @NullMarked
-public class BlueMap implements Module, Listener {
+public class BlueMap extends Module implements Listener {
+  public BlueMap() {
+    super("BlueMap");
+  }
+
   // initialise all bluemap addons when api is available
   @EventHandler
   public void onModuleInitialise(final ModuleInitialiseEvent event) {
@@ -31,7 +35,7 @@ public class BlueMap implements Module, Listener {
           ClodMC.registerListener(new BlueMapSpawn());
           ClodMC.registerListener(new BlueMapWorldBorder());
           ClodMC.registerListener(new BlueMapHeatMap());
-          if (Bukkit.getPluginManager().isPluginEnabled("GriefPrevention")) {
+          if (ClodMC.isPluginEnabled("GriefPrevention")) {
             ClodMC.registerListener(new BlueMapGriefPrevention());
           }
 

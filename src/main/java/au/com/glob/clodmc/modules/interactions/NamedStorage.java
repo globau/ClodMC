@@ -20,7 +20,7 @@ import org.jspecify.annotations.NullMarked;
     title = "Named Storage",
     description = "If a container has been named in an anvil, show that name when looking at it")
 @NullMarked
-public class NamedStorage implements Module, Listener {
+public class NamedStorage extends Module implements Listener {
   @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
   public void onPlayerTargetBlock(final PlayerTargetBlockEvent event) {
     final Player player = event.getPlayer();

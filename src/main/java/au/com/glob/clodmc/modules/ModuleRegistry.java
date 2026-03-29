@@ -41,21 +41,14 @@ import au.com.glob.clodmc.modules.server.MOTD;
 import au.com.glob.clodmc.modules.server.RequiredPlugins;
 import au.com.glob.clodmc.modules.server.ServerStatus;
 import au.com.glob.clodmc.modules.server.heapmap.HeatMap;
-import au.com.glob.clodmc.util.Logger;
 import io.papermc.paper.plugin.bootstrap.BootstrapContext;
 import io.papermc.paper.plugin.bootstrap.PluginBootstrap;
-import java.util.HashMap;
-import java.util.Map;
-import org.bukkit.Bukkit;
-import org.bukkit.event.Listener;
 import org.jspecify.annotations.NullMarked;
 
 /** registry for all plugin modules with automatic registration and lifecycle management */
 @SuppressWarnings({"UnstableApiUsage"})
 @NullMarked
 public class ModuleRegistry implements PluginBootstrap {
-  private final Map<Class<? extends Module>, Module> modules = new HashMap<>();
-
   // paper bootstrap lifecycle hook for early module registration
   @Override
   public void bootstrap(final BootstrapContext context) {
@@ -63,90 +56,65 @@ public class ModuleRegistry implements PluginBootstrap {
   }
 
   // register all modules organised by category
-  public void registerAll() {
+  public static void registerAll() {
     // custom event listeners
     ClodMC.registerListener(new PlayerTargetBlockListener());
 
     // core - used by other modules
-    this.register(OpAlerts.class);
+    Module.create(OpAlerts::new);
 
     // crafting
-    this.register(ChorusFlower.class);
-    this.register(SporeBlossom.class);
+    Module.create(ChorusFlower::new);
+    Module.create(SporeBlossom::new);
 
     // interactions
-    this.register(FastLeafDecay.class);
-    this.register(Gateways.class);
-    this.register(NamedStorage.class);
-    this.register(SignedContainers.class);
-    this.register(VeinMiner.class, VeinMiner.REQUIRED_PLUGIN);
-    this.register(WaxedItemFrames.class);
-    this.register(WaxedPressurePlates.class);
+    Module.create(FastLeafDecay::new);
+    Module.create(Gateways::new);
+    Module.create(NamedStorage::new);
+    Module.create(SignedContainers::new);
+    Module.create(VeinMiner::new);
+    Module.create(WaxedItemFrames::new);
+    Module.create(WaxedPressurePlates::new);
 
     // inventory
-    this.register(AdminInv.class);
-    this.register(DeepPockets.class);
-    this.register(InventoryRestore.class);
-    this.register(InventorySort.class);
+    Module.create(AdminInv::new);
+    Module.create(DeepPockets::new);
+    Module.create(InventoryRestore::new);
+    Module.create(InventorySort::new);
 
     // mobs
-    this.register(BetterDrops.class);
-    this.register(ExplodingCreepers.class);
-    this.register(PreventMobGriefing.class);
-    this.register(PreventMobSpawn.class, "GriefPrevention");
-    this.register(SilenceMobs.class);
+    Module.create(BetterDrops::new);
+    Module.create(ExplodingCreepers::new);
+    Module.create(PreventMobGriefing::new);
+    Module.create(PreventMobSpawn::new);
+    Module.create(SilenceMobs::new);
 
     // player
-    this.register(AFK.class);
-    this.register(Back.class);
-    this.register(DeathLog.class);
-    this.register(GameMode.class);
-    this.register(Homes.class);
-    this.register(Invite.class);
-    this.register(OfflineMessages.class);
-    this.register(PlayerTracker.class);
-    this.register(Seen.class);
-    this.register(Sleep.class);
-    this.register(Spawn.class);
-    this.register(WelcomeBookAdmin.class);
-    this.register(WelcomeBookPlayer.class);
+    Module.create(AFK::new);
+    Module.create(Back::new);
+    Module.create(DeathLog::new);
+    Module.create(GameMode::new);
+    Module.create(Homes::new);
+    Module.create(Invite::new);
+    Module.create(OfflineMessages::new);
+    Module.create(PlayerTracker::new);
+    Module.create(Seen::new);
+    Module.create(Sleep::new);
+    Module.create(Spawn::new);
+    Module.create(WelcomeBookAdmin::new);
+    Module.create(WelcomeBookPlayer::new);
 
     // server
-    this.register(ClodServerLinks.class);
-    this.register(HeatMap.class);
-    this.register(MOTD.class);
-    this.register(RequiredPlugins.class);
-    this.register(ServerStatus.class);
+    Module.create(ClodServerLinks::new);
+    Module.create(HeatMap::new);
+    Module.create(MOTD::new);
+    Module.create(RequiredPlugins::new);
+    Module.create(ServerStatus::new);
 
     // bluemap
-    this.register(BlueMap.class, "BlueMap");
+    Module.create(BlueMap::new);
 
     // register commands built by modules
     CommandBuilder.registerBuilders();
-  }
-
-  // register individual module with plugin dependency validation
-  private void register(
-      final Class<? extends Module> moduleClass, final String... requiredPlugins) {
-    for (final String plugin : requiredPlugins) {
-      if (!Bukkit.getPluginManager().isPluginEnabled(plugin)) {
-        Logger.warning(
-            "Cannot load module %s: depends on plugin %s which is not enabled"
-                .formatted(moduleClass.getSimpleName(), plugin));
-        return;
-      }
-    }
-
-    final Module module;
-    try {
-      module = moduleClass.getDeclaredConstructor().newInstance();
-    } catch (final Exception e) {
-      throw new RuntimeException(e);
-    }
-    this.modules.put(moduleClass, module);
-
-    if (module instanceof final Listener listener) {
-      ClodMC.registerListener(listener);
-    }
   }
 }

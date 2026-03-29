@@ -15,7 +15,7 @@ import org.jspecify.annotations.NullMarked;
     title = "Server Status",
     description = "Add simple server status/health command")
 @NullMarked
-public class ServerStatus implements Module {
+public class ServerStatus extends Module {
   public ServerStatus() {
     CommandBuilder.build("server-status")
         .description("Shows server status")

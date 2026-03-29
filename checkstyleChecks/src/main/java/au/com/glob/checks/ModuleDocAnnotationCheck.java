@@ -33,7 +33,7 @@ public class ModuleDocAnnotationCheck extends AbstractCheck {
         return;
       }
 
-      if (CheckUtils.classImplements(ast, "Module")
+      if (CheckUtils.classExtends(ast, "Module")
           && !AnnotationUtil.containsAnnotation(ast, "Doc")) {
         this.log(
             ast, "module class '%s' is missing @Doc annotation".formatted(CheckUtils.getName(ast)));

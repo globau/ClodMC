@@ -1,5 +1,6 @@
 package au.com.glob.clodmc.modules.server;
 
+import au.com.glob.clodmc.ClodMC;
 import au.com.glob.clodmc.annotations.Audience;
 import au.com.glob.clodmc.annotations.Doc;
 import au.com.glob.clodmc.events.OpAlertEvent;
@@ -24,7 +25,7 @@ import org.jspecify.annotations.NullMarked;
     title = "Required Plugins",
     description = "Don't allow non-op players to connect unless all required plugins are loaded")
 @NullMarked
-public class RequiredPlugins implements Listener, Module {
+public class RequiredPlugins extends Module implements Listener {
   private static final List<String> REQUIRED = List.of("GriefPrevention");
 
   private boolean preventLogin = true;
@@ -34,7 +35,7 @@ public class RequiredPlugins implements Listener, Module {
   public void onServerLoad(final ServerLoadEvent event) {
     final StringJoiner missing = new StringJoiner(" ");
     for (final String name : REQUIRED) {
-      if (!Bukkit.getPluginManager().isPluginEnabled(name)) {
+      if (!ClodMC.isPluginEnabled(name)) {
         missing.add(name);
       }
     }

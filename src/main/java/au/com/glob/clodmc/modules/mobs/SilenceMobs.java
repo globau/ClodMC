@@ -17,7 +17,7 @@ import org.jspecify.annotations.NullMarked;
     title = "Silence Mobs/Animals",
     description = "Include 🔇 when naming a mob/animal/etc to silence it")
 @NullMarked
-public class SilenceMobs implements Listener, Module {
+public class SilenceMobs extends Module implements Listener {
   @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
   public void onPlayerInteractAtEntity(final PlayerInteractAtEntityEvent event) {
     final ItemStack heldItem = event.getPlayer().getInventory().getItem(event.getHand());

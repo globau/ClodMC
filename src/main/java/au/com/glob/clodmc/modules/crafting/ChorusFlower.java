@@ -23,7 +23,7 @@ import org.jspecify.annotations.NullMarked;
     title = "Chorus Flower Crafting",
     description = "Adds crafting recipes for Chorus Flower")
 @NullMarked
-public class ChorusFlower implements Module, Listener {
+public class ChorusFlower extends Module implements Listener {
   private final ShapedRecipe flowerRecipe;
   private final ShapelessRecipe fruitRecipe;
 

@@ -3,6 +3,7 @@ package au.com.glob.clodmc.modules.interactions;
 import au.com.glob.clodmc.annotations.Audience;
 import au.com.glob.clodmc.annotations.Doc;
 import au.com.glob.clodmc.events.BlockRemovedEvent;
+import au.com.glob.clodmc.events.ModuleInitialiseEvent;
 import au.com.glob.clodmc.modules.BootstrapContextHelper;
 import au.com.glob.clodmc.modules.Module;
 import au.com.glob.clodmc.util.Schedule;
@@ -49,9 +50,7 @@ import org.jspecify.annotations.Nullable;
     title = "VeinMiner Enchantment",
     description = "Mine connected blocks with one action when shift+mining")
 @NullMarked
-public class VeinMiner implements Module, Listener {
-  public static final String REQUIRED_PLUGIN = "GriefPrevention";
-
+public class VeinMiner extends Module implements Listener {
   private static final TypedKey<Enchantment> VEINMINE_KEY =
       TypedKey.create(RegistryKey.ENCHANTMENT, Key.key("clod-mc:veinminer"));
 
@@ -67,8 +66,12 @@ public class VeinMiner implements Module, Listener {
           BlockFace.UP,
           BlockFace.DOWN);
 
-  private final Enchantment veinmineEnchantment;
+  private @Nullable Enchantment veinmineEnchantment;
   private final Set<UUID> cooldownUUIDs = Collections.newSetFromMap(new WeakHashMap<>());
+
+  public VeinMiner() {
+    super("GriefPrevention");
+  }
 
   // register the veinmine enchantment during bootstrap
   @SuppressWarnings("UnstableApiUsage")
@@ -94,8 +97,8 @@ public class VeinMiner implements Module, Listener {
                 .activeSlots(EquipmentSlotGroup.MAINHAND));
   }
 
-  // initialise veinminer with the registered enchantment
-  public VeinMiner() {
+  @EventHandler
+  public void onModuleInitialise(final ModuleInitialiseEvent event) {
     this.veinmineEnchantment =
         RegistryAccess.registryAccess()
             .getRegistry(RegistryKey.ENCHANTMENT)
@@ -114,7 +117,9 @@ public class VeinMiner implements Module, Listener {
 
     // check tool
     final ItemStack tool = player.getInventory().getItemInMainHand();
-    if (block.getDrops(tool).isEmpty() || !tool.containsEnchantment(this.veinmineEnchantment)) {
+    if (this.veinmineEnchantment == null
+        || block.getDrops(tool).isEmpty()
+        || !tool.containsEnchantment(this.veinmineEnchantment)) {
       return;
     }
 

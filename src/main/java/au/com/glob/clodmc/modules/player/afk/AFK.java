@@ -32,7 +32,7 @@ import org.jspecify.annotations.NullMarked;
     title = "Away From Keyboard",
     description = "Automatic and manual AFK; players are visibly AFK in the tab-list")
 @NullMarked
-public class AFK implements Listener, Module {
+public class AFK extends Module implements Listener {
   private static final int IDLE_TIME = 300; // seconds
   private static final int CHECK_INTERVAL = 5; // seconds
   private static final int MAX_AFK_TIME = 3 * 60; // minutes

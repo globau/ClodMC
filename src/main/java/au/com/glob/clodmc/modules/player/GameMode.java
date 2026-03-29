@@ -23,7 +23,7 @@ import org.jspecify.annotations.Nullable;
     description = "/gamemode that doesn't announce",
     hidden = true)
 @NullMarked
-public class GameMode implements Module {
+public class GameMode extends Module {
   private static final List<String> MODES = List.of("survival", "creative", "spectator");
 
   public GameMode() {

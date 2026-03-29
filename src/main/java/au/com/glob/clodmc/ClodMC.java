@@ -22,8 +22,6 @@ public final class ClodMC extends JavaPlugin implements Listener {
   @SuppressWarnings({"NullAway.Init", "StaticNonFinalField"})
   public static ClodMC instance;
 
-  private final ModuleRegistry moduleRegistry = new ModuleRegistry();
-
   // initialise plugin instance
   public ClodMC() {
     super();
@@ -44,7 +42,7 @@ public final class ClodMC extends JavaPlugin implements Listener {
   public void onEnable() {
     Bukkit.getPluginManager().registerEvents(this, this);
     CustomBlockData.registerListener(this);
-    this.moduleRegistry.registerAll();
+    ModuleRegistry.registerAll();
 
     // ensure all configs can be deserialised, halt server if not to avoid dataloss
     try {
@@ -60,6 +58,10 @@ public final class ClodMC extends JavaPlugin implements Listener {
 
   public static void registerListener(final Listener listener) {
     Bukkit.getServer().getPluginManager().registerEvents(listener, instance);
+  }
+
+  public static boolean isPluginEnabled(final String name) {
+    return Bukkit.getPluginManager().isPluginEnabled(name);
   }
 
   // signal server startup to production harness

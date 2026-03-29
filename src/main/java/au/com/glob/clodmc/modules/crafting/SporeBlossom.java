@@ -23,7 +23,7 @@ import org.jspecify.annotations.NullMarked;
     title = "Spore Blossom Crafting",
     description = "Adds a crafting recipe for Spore Blossoms")
 @NullMarked
-public class SporeBlossom implements Module, Listener {
+public class SporeBlossom extends Module implements Listener {
   private final ShapelessRecipe recipe;
 
   // register the spore blossom crafting recipe

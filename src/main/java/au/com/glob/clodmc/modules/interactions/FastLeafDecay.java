@@ -30,7 +30,7 @@ import org.jspecify.annotations.NullMarked;
     title = "Fast Leaf Decay",
     description = "Nearly instant decaying of leafs")
 @NullMarked
-public class FastLeafDecay implements Listener, Module {
+public class FastLeafDecay extends Module implements Listener {
   private static final int INITIAL_BREAK_DELAY_TICKS = 5;
   private static final int CASCADE_BREAK_DELAY_TICKS = 2;
 

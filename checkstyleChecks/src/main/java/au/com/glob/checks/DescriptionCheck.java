@@ -34,7 +34,7 @@ public class DescriptionCheck extends AbstractCheck {
   @Override
   public void visitToken(final DetailAST ast) {
     // modules use @doc
-    if (CheckUtils.classImplements(ast, "Module")) {
+    if (CheckUtils.classExtends(ast, "Module")) {
       return;
     }
 

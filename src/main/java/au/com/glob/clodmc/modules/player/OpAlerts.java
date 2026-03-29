@@ -20,7 +20,7 @@ import org.jspecify.annotations.NullMarked;
     description = "Collect startup alerts and send them to the first operator that logs in",
     hidden = true)
 @NullMarked
-public class OpAlerts implements Module, Listener {
+public class OpAlerts extends Module implements Listener {
   private final List<String> alerts = new ArrayList<>();
 
   @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)

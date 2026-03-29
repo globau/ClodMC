@@ -23,7 +23,7 @@ import org.jspecify.annotations.NullMarked;
     title = "Sleep",
     description = "Tell players who slept and skipped the night")
 @NullMarked
-public class Sleep implements Listener, Module {
+public class Sleep extends Module implements Listener {
   @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
   public void onTimeSkip(final TimeSkipEvent event) {
     final Collection<? extends Player> players = ClodMC.instance.getServer().getOnlinePlayers();

@@ -26,7 +26,7 @@ import org.jspecify.annotations.Nullable;
     title = "Homes",
     description = "Set limited number of named teleport locations")
 @NullMarked
-public class Homes implements Listener, Module {
+public class Homes extends Module implements Listener {
   private static final int MAX_HOMES = 3;
   private static final String DEFAULT_NAME = "home";
 

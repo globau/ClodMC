@@ -28,7 +28,7 @@ import org.jspecify.annotations.Nullable;
     title = "Offline Messages",
     description = "Queue and deliver whispers sent to offline players")
 @NullMarked
-public class OfflineMessages implements Module, Listener {
+public class OfflineMessages extends Module implements Listener {
   final Pattern msgPattern = Pattern.compile("^/?msg\\s+(\\S+)\\s+(.+)$");
 
   public OfflineMessages() {

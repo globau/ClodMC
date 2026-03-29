@@ -126,6 +126,29 @@ public final class CheckUtils {
     return true;
   }
 
+  static boolean classExtends(final DetailAST classDef, final String name) {
+    final DetailAST extendsClause = classDef.findFirstToken(TokenTypes.EXTENDS_CLAUSE);
+    if (extendsClause == null) {
+      return false;
+    }
+
+    DetailAST child = extendsClause.getFirstChild();
+    while (child != null) {
+      if (child.getType() == TokenTypes.IDENT && name.equals(child.getText())) {
+        return true;
+      }
+      if (child.getType() == TokenTypes.DOT) {
+        final String qualifiedName = getQualifiedName(child);
+        if (qualifiedName.endsWith(".%s".formatted(name)) || name.equals(qualifiedName)) {
+          return true;
+        }
+      }
+      child = child.getNextSibling();
+    }
+
+    return false;
+  }
+
   static boolean classImplements(final DetailAST classDef, final String name) {
     final DetailAST implementsClause = classDef.findFirstToken(TokenTypes.IMPLEMENTS_CLAUSE);
     if (implementsClause == null) {

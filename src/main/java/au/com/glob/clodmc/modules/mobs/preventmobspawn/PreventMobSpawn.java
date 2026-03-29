@@ -20,8 +20,12 @@ import org.jspecify.annotations.NullMarked;
     title = "Prevent Mob Spawning",
     description = "Prevents enemy mobs from spawning within areas claimed by admin")
 @NullMarked
-public class PreventMobSpawn implements Listener, Module {
+public class PreventMobSpawn extends Module implements Listener {
   private final List<AdminClaim> adminClaims = new ArrayList<>(1);
+
+  public PreventMobSpawn() {
+    super("GriefPrevention");
+  }
 
   // cache all admin claims for spawn checking
   @EventHandler

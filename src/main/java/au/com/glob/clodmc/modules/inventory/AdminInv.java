@@ -25,7 +25,7 @@ import org.jspecify.annotations.Nullable;
     title = "Admin Inventory",
     description = "Swap between player and admin inventories")
 @NullMarked
-public class AdminInv implements Module, Listener {
+public class AdminInv extends Module implements Listener {
   private final Map<UUID, @Nullable ItemStack[]> playerInventories = new HashMap<>();
   private final Map<UUID, @Nullable ItemStack[]> adminInventories = new HashMap<>();
 

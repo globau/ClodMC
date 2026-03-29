@@ -16,7 +16,7 @@ import org.jspecify.annotations.NullMarked;
     title = "Custom MOTD",
     description = "Set MOTD automatically based on server type")
 @NullMarked
-public class MOTD implements Module, Listener {
+public class MOTD extends Module implements Listener {
   private final Component motd;
 
   public MOTD() {

@@ -19,7 +19,7 @@ import org.jspecify.annotations.NullMarked;
     title = "Player Tracker",
     description = "Collect data about players (eg. login/logout times)")
 @NullMarked
-public class PlayerTracker implements Module, Listener {
+public class PlayerTracker extends Module implements Listener {
   // update player data on join
   @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
   public void onPlayerJoin(final PlayerJoinEvent event) {

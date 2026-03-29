@@ -21,7 +21,7 @@ import org.jspecify.annotations.NullMarked;
     title = "Back",
     description = "/back command to return to where you last teleported from")
 @NullMarked
-public class Back implements Module, Listener {
+public class Back extends Module implements Listener {
   public Back() {
     CommandBuilder.build("back")
         .description("Teleport to previous location")

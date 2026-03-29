@@ -18,7 +18,7 @@ import org.jspecify.annotations.NullMarked;
     title = "Server Links",
     description = "Set server links in Minecraft client pause screen")
 @NullMarked
-public class ClodServerLinks implements Module, Listener {
+public class ClodServerLinks extends Module implements Listener {
   @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
   public void onPlayerLinksSend(final PlayerLinksSendEvent event) {
     final ServerLinks links = event.getLinks();

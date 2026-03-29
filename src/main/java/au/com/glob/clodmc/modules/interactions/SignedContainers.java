@@ -27,7 +27,7 @@ import org.jspecify.annotations.NullMarked;
     title = "Click-Through Waxed Signs",
     description = "When right-clicking on a waxed sign attached to a chest, open the chest")
 @NullMarked
-public class SignedContainers implements Module, Listener {
+public class SignedContainers extends Module implements Listener {
   @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
   public void onPlayerInteract(final PlayerInteractEvent event) {
     if (event.getAction() != Action.RIGHT_CLICK_BLOCK || event.getHand() != EquipmentSlot.HAND) {
