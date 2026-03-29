@@ -2,6 +2,7 @@ package au.com.glob.clodmc.modules.mobs.preventmobspawn;
 
 import au.com.glob.clodmc.annotations.Audience;
 import au.com.glob.clodmc.annotations.Doc;
+import au.com.glob.clodmc.events.ModuleInitialiseEvent;
 import au.com.glob.clodmc.modules.Module;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,8 +24,8 @@ public class PreventMobSpawn implements Listener, Module {
   private final List<AdminClaim> adminClaims = new ArrayList<>(1);
 
   // cache all admin claims for spawn checking
-  @Override
-  public void loadConfig() {
+  @EventHandler
+  public void onModuleInitialise(final ModuleInitialiseEvent event) {
     for (final Claim claim : GriefPrevention.instance.dataStore.getClaims()) {
       if (claim.isAdminClaim()) {
         this.adminClaims.add(new AdminClaim(claim));

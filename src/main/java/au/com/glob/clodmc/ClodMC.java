@@ -1,6 +1,6 @@
 package au.com.glob.clodmc;
 
-import au.com.glob.clodmc.modules.Module;
+import au.com.glob.clodmc.events.ModuleInitialiseEvent;
 import au.com.glob.clodmc.modules.ModuleRegistry;
 import au.com.glob.clodmc.util.ConfigUtil;
 import au.com.glob.clodmc.util.InvalidConfigException;
@@ -49,26 +49,13 @@ public final class ClodMC extends JavaPlugin implements Listener {
     // ensure all configs can be deserialised, halt server if not to avoid dataloss
     try {
       ConfigUtil.sanityCheckConfigs();
-
-      for (final Module module : this.moduleRegistry) {
-        module.loadConfig();
-      }
+      Bukkit.getPluginManager().callEvent(new ModuleInitialiseEvent());
     } catch (final InvalidConfigException e) {
       e.logErrors();
       // disable plugins to prevent firing onServerLoad and similar events
       Bukkit.getPluginManager().disablePlugins();
       Bukkit.shutdown();
     }
-  }
-
-  // return the instance of the specified module
-  public static <T extends Module> T getModule(final Class<T> moduleClass) {
-    final T module = instance.moduleRegistry.get(moduleClass);
-    if (module == null) {
-      throw new RuntimeException(
-          "%s is not a registered module".formatted(moduleClass.getSimpleName()));
-    }
-    return module;
   }
 
   public static void registerListener(final Listener listener) {

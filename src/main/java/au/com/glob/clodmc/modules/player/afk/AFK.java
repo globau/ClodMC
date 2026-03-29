@@ -3,6 +3,7 @@ package au.com.glob.clodmc.modules.player.afk;
 import au.com.glob.clodmc.annotations.Audience;
 import au.com.glob.clodmc.annotations.Doc;
 import au.com.glob.clodmc.command.CommandBuilder;
+import au.com.glob.clodmc.events.ModuleInitialiseEvent;
 import au.com.glob.clodmc.modules.Module;
 import au.com.glob.clodmc.util.Schedule;
 import au.com.glob.clodmc.util.StringUtil;
@@ -69,8 +70,8 @@ public class AFK implements Listener, Module {
   }
 
   // start periodic task to check for idle players
-  @Override
-  public void loadConfig() {
+  @EventHandler
+  public void onModuleInitialise(final ModuleInitialiseEvent event) {
     // check for away players every second
     Schedule.periodically(
         CHECK_INTERVAL * 20,

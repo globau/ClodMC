@@ -3,6 +3,7 @@ package au.com.glob.clodmc.modules.inventory.inventorysort;
 import au.com.glob.clodmc.ClodMC;
 import au.com.glob.clodmc.annotations.Audience;
 import au.com.glob.clodmc.annotations.Doc;
+import au.com.glob.clodmc.events.ModuleInitialiseEvent;
 import au.com.glob.clodmc.events.OpAlertEvent;
 import au.com.glob.clodmc.modules.Module;
 import au.com.glob.clodmc.util.Logger;
@@ -46,8 +47,8 @@ public class InventorySort implements Listener, Module {
   }
 
   // load material sorting order from embedded resource file
-  @Override
-  public void loadConfig() {
+  @EventHandler
+  public void onModuleInitialise(final ModuleInitialiseEvent event) {
     final List<String> alerts = new ArrayList<>(0);
     final List<String> warnings = new ArrayList<>(0);
     final List<String> allMaterials = Registry.MATERIAL.stream().map(Enum::name).toList();

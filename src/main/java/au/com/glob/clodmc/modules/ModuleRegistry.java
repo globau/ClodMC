@@ -45,17 +45,15 @@ import au.com.glob.clodmc.util.Logger;
 import io.papermc.paper.plugin.bootstrap.BootstrapContext;
 import io.papermc.paper.plugin.bootstrap.PluginBootstrap;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 import org.bukkit.Bukkit;
 import org.bukkit.event.Listener;
 import org.jspecify.annotations.NullMarked;
-import org.jspecify.annotations.Nullable;
 
 /** registry for all plugin modules with automatic registration and lifecycle management */
 @SuppressWarnings({"UnstableApiUsage"})
 @NullMarked
-public class ModuleRegistry implements Iterable<Module>, PluginBootstrap {
+public class ModuleRegistry implements PluginBootstrap {
   private final Map<Class<? extends Module>, Module> modules = new HashMap<>();
 
   // paper bootstrap lifecycle hook for early module registration
@@ -150,18 +148,5 @@ public class ModuleRegistry implements Iterable<Module>, PluginBootstrap {
     if (module instanceof final Listener listener) {
       ClodMC.registerListener(listener);
     }
-  }
-
-  // iterate over registered modules
-  @Override
-  public Iterator<Module> iterator() {
-    return this.modules.values().iterator();
-  }
-
-  // get specific module instance by class type
-  @SuppressWarnings("unchecked")
-  public @Nullable <T extends Module> T get(final Class<T> moduleClass) {
-    final Module module = this.modules.get(moduleClass);
-    return (T) module;
   }
 }

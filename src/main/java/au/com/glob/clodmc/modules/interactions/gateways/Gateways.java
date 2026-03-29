@@ -5,6 +5,7 @@ import au.com.glob.clodmc.annotations.Audience;
 import au.com.glob.clodmc.annotations.Doc;
 import au.com.glob.clodmc.command.CommandBuilder;
 import au.com.glob.clodmc.command.EitherCommandSender;
+import au.com.glob.clodmc.events.ModuleInitialiseEvent;
 import au.com.glob.clodmc.events.PlayerTargetBlockEvent;
 import au.com.glob.clodmc.modules.Module;
 import au.com.glob.clodmc.util.ActionBar;
@@ -115,8 +116,8 @@ public class Gateways implements Module, Listener {
   }
 
   // load gateway configuration from yaml file
-  @Override
-  public void loadConfig() {
+  @EventHandler
+  public void onModuleInitialise(final ModuleInitialiseEvent event) {
     if (!ConfigUtil.sanityChecked) {
       Bukkit.shutdown();
       throw new RuntimeException("config file loaded before sanity checks");

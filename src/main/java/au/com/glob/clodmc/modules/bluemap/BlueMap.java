@@ -4,12 +4,14 @@ import au.com.glob.clodmc.ClodMC;
 import au.com.glob.clodmc.annotations.Audience;
 import au.com.glob.clodmc.annotations.Doc;
 import au.com.glob.clodmc.events.BlueMapInitEvent;
+import au.com.glob.clodmc.events.ModuleInitialiseEvent;
 import au.com.glob.clodmc.modules.Module;
 import au.com.glob.clodmc.modules.server.heapmap.BlueMapHeatMap;
 import au.com.glob.clodmc.util.Logger;
 import au.com.glob.clodmc.util.Schedule;
 import de.bluecolored.bluemap.api.BlueMapAPI;
 import org.bukkit.Bukkit;
+import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.jspecify.annotations.NullMarked;
 
@@ -20,8 +22,8 @@ import org.jspecify.annotations.NullMarked;
 @NullMarked
 public class BlueMap implements Module, Listener {
   // initialise all bluemap addons when api is available
-  @Override
-  public void loadConfig() {
+  @EventHandler
+  public void onModuleInitialise(final ModuleInitialiseEvent event) {
     BlueMapAPI.onEnable(
         (final BlueMapAPI api) -> {
           Logger.info("Initialising BlueMap addons");
