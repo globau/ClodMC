@@ -1,19 +1,20 @@
 package au.com.glob.clodmc.modules.server.heapmap;
 
-import au.com.glob.clodmc.ClodMC;
 import au.com.glob.clodmc.annotations.Audience;
 import au.com.glob.clodmc.annotations.Doc;
+import au.com.glob.clodmc.events.AfkStateChangeEvent;
 import au.com.glob.clodmc.modules.Module;
-import au.com.glob.clodmc.modules.player.afk.AFK;
 import au.com.glob.clodmc.util.Schedule;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.UUID;
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.jspecify.annotations.NullMarked;
-import org.jspecify.annotations.Nullable;
 
 @Doc(
     audience = Audience.SERVER,
@@ -21,15 +22,13 @@ import org.jspecify.annotations.Nullable;
     description = "Track minutes a chunk is occupied by at least one player")
 @NullMarked
 public class HeatMap implements Module, Listener {
-  private @Nullable AFK afk;
+  private final HashSet<UUID> afkPlayers = new HashSet<>();
 
   public HeatMap() {
     Schedule.periodically(
         20 * 60,
         20 * 60,
         () -> {
-          assert this.afk != null;
-
           final Collection<? extends Player> onlinePlayers = Bukkit.getOnlinePlayers();
           if (onlinePlayers.isEmpty()) {
             return;
@@ -37,7 +36,7 @@ public class HeatMap implements Module, Listener {
 
           final HashSet<Chunk> inhabitedChunks = new HashSet<>(onlinePlayers.size());
           for (final Player player : onlinePlayers) {
-            if (!this.afk.isAway(player)) {
+            if (!this.afkPlayers.contains(player.getUniqueId())) {
               inhabitedChunks.add(player.getChunk());
             }
           }
@@ -51,8 +50,12 @@ public class HeatMap implements Module, Listener {
         });
   }
 
-  @Override
-  public void loadConfig() {
-    this.afk = ClodMC.getModule(AFK.class);
+  @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+  public void onAfkStateChange(final AfkStateChangeEvent event) {
+    if (event.isAway()) {
+      this.afkPlayers.add(event.getPlayer().getUniqueId());
+    } else {
+      this.afkPlayers.remove(event.getPlayer().getUniqueId());
+    }
   }
 }

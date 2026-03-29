@@ -1,5 +1,6 @@
 package au.com.glob.clodmc.modules.player.afk;
 
+import au.com.glob.clodmc.events.AfkStateChangeEvent;
 import au.com.glob.clodmc.util.Chat;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -43,6 +44,7 @@ final class PlayerState {
     this.isAway = true;
     this.afkTime = System.currentTimeMillis() / 1000;
     AFK.getAfkTeam().addEntry(this.player.getName());
+    Bukkit.getPluginManager().callEvent(new AfkStateChangeEvent(this.player, true));
     if (announce) {
       this.announce();
     }
@@ -53,6 +55,7 @@ final class PlayerState {
     this.isAway = false;
     this.afkTime = 0;
     AFK.getAfkTeam().removeEntry(this.player.getName());
+    Bukkit.getPluginManager().callEvent(new AfkStateChangeEvent(this.player, false));
     if (announce) {
       this.announce();
     }
