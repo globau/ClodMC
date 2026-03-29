@@ -12,21 +12,22 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.WorldBorder;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
 import org.jspecify.annotations.NullMarked;
 
 /** displays world borders as markers on bluemap */
 @NullMarked
-public class BlueMapWorldBorder extends Addon {
+public class BlueMapWorldBorder implements Listener {
   private static final Color LINE_COLOUR = new Color("#a52a2aff");
   private static final Color FILL_COLOUR = new Color("#00000000");
 
-  protected BlueMapWorldBorder(final BlueMapAPI api) {
-    super(api);
-  }
-
   // create world border markers for all worlds
-  @Override
-  public void update() {
+  @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+  public void onBlueMapInit(final BlueMapInitEvent event) {
+    final BlueMapAPI api = event.getApi();
+
     for (final World world : Bukkit.getWorlds()) {
       final WorldBorder border = world.getWorldBorder();
       final Location centre = border.getCenter();
@@ -49,8 +50,7 @@ public class BlueMapWorldBorder extends Addon {
 
       final MarkerSet markerSet = MarkerSet.builder().label("World Border").build();
       markerSet.getMarkers().put("ClodMC", marker);
-      this.api
-          .getWorld(world.getName())
+      api.getWorld(world.getName())
           .map(BlueMapWorld::getMaps)
           .ifPresent(
               (Collection<BlueMapMap> maps) ->

@@ -157,6 +157,11 @@ public class Gateways implements Module, Listener {
     for (final AnchorBlock anchorBlock : this.instances.values()) {
       anchorBlock.visuals.update();
     }
+
+    // register bluemap addon
+    if (Bukkit.getPluginManager().isPluginEnabled("BlueMap")) {
+      ClodMC.registerListener(new BlueMapGateways());
+    }
   }
 
   // save gateway configuration to yaml file
@@ -165,9 +170,7 @@ public class Gateways implements Module, Listener {
     config.set("anchors", new ArrayList<>(this.instances.values()));
     try {
       config.save(this.configFile);
-      if (BlueMapGateways.instance != null) {
-        BlueMapGateways.instance.update();
-      }
+      Bukkit.getPluginManager().callEvent(new GatewaysUpdateEvent());
     } catch (final IOException e) {
       Logger.error("failed to write %s".formatted(this.configFile), e);
     }

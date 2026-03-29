@@ -8,18 +8,18 @@ import de.bluecolored.bluemap.api.markers.MarkerSet;
 import de.bluecolored.bluemap.api.markers.POIMarker;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
 import org.jspecify.annotations.NullMarked;
 
 /** displays world spawn points as markers on bluemap */
 @NullMarked
-public class BlueMapSpawn extends Addon {
-  protected BlueMapSpawn(final BlueMapAPI api) {
-    super(api);
-  }
-
+public class BlueMapSpawn implements Listener {
   // create spawn point markers for all worlds
-  @Override
-  public void update() {
+  @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+  public void onBlueMapInit(final BlueMapInitEvent event) {
+    final BlueMapAPI api = event.getApi();
     for (final World world : Bukkit.getWorlds()) {
       final MarkerSet markerSet = MarkerSet.builder().label("Spawn").defaultHidden(false).build();
       markerSet.put(
@@ -32,8 +32,8 @@ public class BlueMapSpawn extends Addon {
                       world.getSpawnLocation().getY(),
                       world.getSpawnLocation().getZ() + 0.5))
               .build());
-      this.api
-          .getWorld(world)
+
+      api.getWorld(world)
           .ifPresent(
               (final BlueMapWorld blueMapWorld) -> {
                 for (final BlueMapMap map : blueMapWorld.getMaps()) {

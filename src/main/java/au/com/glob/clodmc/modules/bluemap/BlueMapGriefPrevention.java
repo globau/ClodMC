@@ -1,6 +1,5 @@
 package au.com.glob.clodmc.modules.bluemap;
 
-import au.com.glob.clodmc.ClodMC;
 import com.flowpowered.math.vector.Vector2d;
 import de.bluecolored.bluemap.api.BlueMapAPI;
 import de.bluecolored.bluemap.api.BlueMapMap;
@@ -26,30 +25,36 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 /** displays griefprevention claims as markers on bluemap */
 @NullMarked
-public class BlueMapGriefPrevention extends Addon implements Listener {
+public class BlueMapGriefPrevention implements Listener {
   private static final Color ADMIN_LINE = new Color("#fd6600ff");
   private static final Color ADMIN_FILL = new Color("#fd660096");
   private static final Color PLAYER_LINE = new Color("#0060ffff");
   private static final Color PLAYER_FILL = new Color("#0087ff96");
 
+  private @Nullable BlueMapAPI api;
   private final Map<World, MarkerSet> markerSets = new HashMap<>(3);
 
-  public BlueMapGriefPrevention(final BlueMapAPI api) {
-    super(api);
+  @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+  public void onBlueMapInit(final BlueMapInitEvent event) {
+    this.api = event.getApi();
 
     for (final World world : Bukkit.getWorlds()) {
       this.markerSets.put(world, MarkerSet.builder().label("Claims").defaultHidden(true).build());
     }
 
-    Bukkit.getPluginManager().registerEvents(this, ClodMC.instance);
+    this.update();
   }
 
   // update claim markers on the bluemap
-  @Override
-  protected void update() {
+  private void update() {
+    if (this.api == null) {
+      return;
+    }
+
     for (final MarkerSet markerSet : this.markerSets.values()) {
       markerSet.getMarkers().clear();
     }
@@ -93,7 +98,8 @@ public class BlueMapGriefPrevention extends Addon implements Listener {
 
     for (final Map.Entry<World, MarkerSet> entry : this.markerSets.entrySet()) {
       final String mapId = "claim-%s".formatted(entry.getKey().getName());
-      api.getWorld(entry.getKey())
+      this.api
+          .getWorld(entry.getKey())
           .ifPresent(
               (final BlueMapWorld world) -> {
                 for (final BlueMapMap map : world.getMaps()) {

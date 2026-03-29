@@ -1,8 +1,9 @@
 package au.com.glob.clodmc.modules.interactions.gateways;
 
 import au.com.glob.clodmc.ClodMC;
-import au.com.glob.clodmc.modules.bluemap.Addon;
+import au.com.glob.clodmc.modules.bluemap.BlueMapInitEvent;
 import au.com.glob.clodmc.util.Logger;
+import au.com.glob.clodmc.util.Schedule;
 import com.flowpowered.math.vector.Vector2i;
 import com.flowpowered.math.vector.Vector3d;
 import de.bluecolored.bluemap.api.BlueMapAPI;
@@ -22,26 +23,28 @@ import java.util.Objects;
 import java.util.Set;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
 /** displays gateway anchors as markers on bluemap */
 @NullMarked
-public class BlueMapGateways extends Addon {
-  @Nullable static BlueMapGateways instance = null;
-
+public class BlueMapGateways implements Listener {
   private static final String MARKER_FILENAME = "gateway.svg";
 
   private final Map<World, MarkerSet> markerSets = new HashMap<>(3);
+  private @Nullable BlueMapAPI api;
 
   // initialises bluemap integration for gateway markers
-  public BlueMapGateways(final BlueMapAPI api) {
-    super(api);
-    instance = this;
+  @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+  public void onBlueMapInit(final BlueMapInitEvent event) {
+    this.api = event.getApi();
 
     // create svg
     final Path gatewayFilePath =
-        api.getWebApp().getWebRoot().resolve("assets").resolve(MARKER_FILENAME);
+        this.api.getWebApp().getWebRoot().resolve("assets").resolve(MARKER_FILENAME);
     try {
       Files.createDirectories(gatewayFilePath.getParent());
       try (final OutputStream out = Files.newOutputStream(gatewayFilePath)) {
@@ -57,11 +60,16 @@ public class BlueMapGateways extends Addon {
       this.markerSets.put(
           world, MarkerSet.builder().label("Gateways").defaultHidden(false).build());
     }
+
+    Schedule.asynchronously(this::update);
   }
 
   // updates gateway markers on bluemap
-  @Override
-  public void update() {
+  private void update() {
+    if (this.api == null) {
+      return;
+    }
+
     for (final MarkerSet markerSet : this.markerSets.values()) {
       markerSet.getMarkers().clear();
     }
@@ -109,5 +117,10 @@ public class BlueMapGateways extends Addon {
                 }
               });
     }
+  }
+
+  @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+  public void onGatewaysUpdate(final GatewaysUpdateEvent event) {
+    Schedule.asynchronously(this::update);
   }
 }

@@ -71,6 +71,10 @@ public final class ClodMC extends JavaPlugin implements Listener {
     return module;
   }
 
+  public static void registerListener(final Listener listener) {
+    Bukkit.getServer().getPluginManager().registerEvents(listener, instance);
+  }
+
   // signal server startup to production harness
   @EventHandler
   public void onServerLoad(final ServerLoadEvent event) {

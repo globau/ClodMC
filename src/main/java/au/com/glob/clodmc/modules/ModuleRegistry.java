@@ -67,7 +67,7 @@ public class ModuleRegistry implements Iterable<Module>, PluginBootstrap {
   // register all modules organised by category
   public void registerAll() {
     // custom event listeners
-    registerListener(new PlayerTargetBlockListener());
+    ClodMC.registerListener(new PlayerTargetBlockListener());
 
     // core - used by other modules
     this.register(OpAlerts.class);
@@ -148,12 +148,8 @@ public class ModuleRegistry implements Iterable<Module>, PluginBootstrap {
     this.modules.put(moduleClass, module);
 
     if (module instanceof final Listener listener) {
-      registerListener(listener);
+      ClodMC.registerListener(listener);
     }
-  }
-
-  private static void registerListener(final Listener listener) {
-    Bukkit.getServer().getPluginManager().registerEvents(listener, ClodMC.instance);
   }
 
   // iterate over registered modules

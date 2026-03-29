@@ -1,19 +1,16 @@
 package au.com.glob.clodmc.modules.bluemap;
 
+import au.com.glob.clodmc.ClodMC;
 import au.com.glob.clodmc.annotations.Audience;
 import au.com.glob.clodmc.annotations.Doc;
 import au.com.glob.clodmc.modules.Module;
-import au.com.glob.clodmc.modules.interactions.gateways.BlueMapGateways;
 import au.com.glob.clodmc.modules.server.heapmap.BlueMapHeatMap;
 import au.com.glob.clodmc.util.Logger;
 import au.com.glob.clodmc.util.Schedule;
 import de.bluecolored.bluemap.api.BlueMapAPI;
-import java.util.ArrayList;
-import java.util.List;
 import org.bukkit.Bukkit;
 import org.bukkit.event.Listener;
 import org.jspecify.annotations.NullMarked;
-import org.jspecify.annotations.Nullable;
 
 @Doc(
     audience = Audience.SERVER,
@@ -21,29 +18,18 @@ import org.jspecify.annotations.Nullable;
     description = "Bridge between ClodMC modules and BlueMap")
 @NullMarked
 public class BlueMap implements Module, Listener {
-  private final List<Addon> addons = new ArrayList<>(4);
-
-  // register bluemap addon instance
-  private void register(final Class<? extends Addon> cls, @Nullable final BlueMapAPI api) {
-    try {
-      this.addons.add(cls.getDeclaredConstructor(BlueMapAPI.class).newInstance(api));
-    } catch (final Exception e) {
-      Logger.exception(e);
-    }
-  }
-
   // initialise all bluemap addons when api is available
   @Override
   public void loadConfig() {
     BlueMapAPI.onEnable(
         (final BlueMapAPI api) -> {
           Logger.info("Initialising BlueMap addons");
-          this.register(BlueMapSpawn.class, api);
-          this.register(BlueMapWorldBorder.class, api);
-          this.register(BlueMapGateways.class, api);
-          this.register(BlueMapHeatMap.class, api);
+
+          ClodMC.registerListener(new BlueMapSpawn());
+          ClodMC.registerListener(new BlueMapWorldBorder());
+          ClodMC.registerListener(new BlueMapHeatMap());
           if (Bukkit.getPluginManager().isPluginEnabled("GriefPrevention")) {
-            this.register(BlueMapGriefPrevention.class, api);
+            ClodMC.registerListener(new BlueMapGriefPrevention());
           }
 
           // delayed to avoid issue where bluemap was ignoring some addons
@@ -51,13 +37,7 @@ public class BlueMap implements Module, Listener {
               5 * 20,
               () -> {
                 Logger.info("Triggering BlueMap addon updates");
-                for (final Addon addon : this.addons) {
-                  try {
-                    addon.update();
-                  } catch (final Exception e) {
-                    Logger.exception(e);
-                  }
-                }
+                Bukkit.getPluginManager().callEvent(new BlueMapInitEvent(api));
               });
         });
   }

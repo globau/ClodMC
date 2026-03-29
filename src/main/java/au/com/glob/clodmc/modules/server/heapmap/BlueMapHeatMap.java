@@ -1,6 +1,6 @@
 package au.com.glob.clodmc.modules.server.heapmap;
 
-import au.com.glob.clodmc.modules.bluemap.Addon;
+import au.com.glob.clodmc.modules.bluemap.BlueMapInitEvent;
 import au.com.glob.clodmc.util.Logger;
 import au.com.glob.clodmc.util.Schedule;
 import com.flowpowered.math.vector.Vector2i;
@@ -19,12 +19,18 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.WorldBorder;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
 import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 import vendored.com.technicjelle.BMUtils.Cheese;
 
 /** generates bluemap heatmap markers from player activity data */
 @NullMarked
-public class BlueMapHeatMap extends Addon {
+public class BlueMapHeatMap implements Listener {
+  private volatile @Nullable BlueMapAPI api;
+
   private static final Color[] COLOURS = {
     // viridis heatmap colours (hottest last)
     new Color("#440154"),
@@ -48,27 +54,20 @@ public class BlueMapHeatMap extends Addon {
 
   private static final int MAX_MARKERS_PER_WORLD = 750;
 
-  private boolean generated = false;
-
-  public BlueMapHeatMap(final BlueMapAPI api) {
-    super(api);
-  }
-
   // generate heatmap markers once
-  @Override
-  public void update() {
-    if (this.generated) {
-      return;
-    }
-    Schedule.asynchronously(
-        () -> {
-          this.buildMarkers();
-          this.generated = true;
-        });
+  @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+  public void onBlueMapInit(final BlueMapInitEvent event) {
+    this.api = event.getApi();
+    Schedule.asynchronously(this::buildMarkers);
   }
 
   // build heatmap markers for all worlds
   private void buildMarkers() {
+    final BlueMapAPI api = this.api;
+    if (api == null) {
+      return;
+    }
+
     try (final DB db = new DB()) {
       for (final World world : Bukkit.getWorlds()) {
         // determine min and max heatmap values
@@ -154,8 +153,7 @@ public class BlueMapHeatMap extends Addon {
             "bluemap.heatmap added %d markers to %s".formatted(markerCount, world.getName()));
 
         // add to map(s)
-        this.api
-            .getWorld(world)
+        api.getWorld(world)
             .ifPresent(
                 (final BlueMapWorld blueMapWorld) -> {
                   for (final BlueMapMap map : blueMapWorld.getMaps()) {
