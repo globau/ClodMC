@@ -1,5 +1,6 @@
 package au.com.glob.clodmc.modules.bluemap;
 
+import au.com.glob.clodmc.events.BlueMapInitEvent;
 import com.flowpowered.math.vector.Vector3d;
 import de.bluecolored.bluemap.api.BlueMapAPI;
 import de.bluecolored.bluemap.api.BlueMapMap;

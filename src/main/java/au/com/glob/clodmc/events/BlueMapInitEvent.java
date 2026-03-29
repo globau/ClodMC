@@ -1,4 +1,4 @@
-package au.com.glob.clodmc.modules.bluemap;
+package au.com.glob.clodmc.events;
 
 import de.bluecolored.bluemap.api.BlueMapAPI;
 import org.bukkit.event.Event;

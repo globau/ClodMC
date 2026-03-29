@@ -1,5 +1,6 @@
 package au.com.glob.clodmc.modules.bluemap;
 
+import au.com.glob.clodmc.events.BlueMapInitEvent;
 import de.bluecolored.bluemap.api.BlueMapAPI;
 import de.bluecolored.bluemap.api.BlueMapMap;
 import de.bluecolored.bluemap.api.BlueMapWorld;

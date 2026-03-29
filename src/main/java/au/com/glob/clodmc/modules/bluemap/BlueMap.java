@@ -3,6 +3,7 @@ package au.com.glob.clodmc.modules.bluemap;
 import au.com.glob.clodmc.ClodMC;
 import au.com.glob.clodmc.annotations.Audience;
 import au.com.glob.clodmc.annotations.Doc;
+import au.com.glob.clodmc.events.BlueMapInitEvent;
 import au.com.glob.clodmc.modules.Module;
 import au.com.glob.clodmc.modules.server.heapmap.BlueMapHeatMap;
 import au.com.glob.clodmc.util.Logger;

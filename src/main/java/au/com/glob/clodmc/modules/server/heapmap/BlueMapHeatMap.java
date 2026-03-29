@@ -1,6 +1,6 @@
 package au.com.glob.clodmc.modules.server.heapmap;
 
-import au.com.glob.clodmc.modules.bluemap.BlueMapInitEvent;
+import au.com.glob.clodmc.events.BlueMapInitEvent;
 import au.com.glob.clodmc.util.Logger;
 import au.com.glob.clodmc.util.Schedule;
 import com.flowpowered.math.vector.Vector2i;
