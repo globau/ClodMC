@@ -1,8 +1,8 @@
 package au.com.glob.clodmc.modules.interactions;
 
-import au.com.glob.clodmc.ClodMC;
 import au.com.glob.clodmc.annotations.Audience;
 import au.com.glob.clodmc.annotations.Doc;
+import au.com.glob.clodmc.events.BlockRemovedEvent;
 import au.com.glob.clodmc.modules.BootstrapContextHelper;
 import au.com.glob.clodmc.modules.Module;
 import au.com.glob.clodmc.util.Schedule;
@@ -26,6 +26,7 @@ import me.ryanhamshire.GriefPrevention.ClaimPermission;
 import me.ryanhamshire.GriefPrevention.GriefPrevention;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
+import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -68,7 +69,6 @@ public class VeinMiner implements Module, Listener {
 
   private final Enchantment veinmineEnchantment;
   private final Set<UUID> cooldownUUIDs = Collections.newSetFromMap(new WeakHashMap<>());
-  private @Nullable FastLeafDecay fastLeafDecay;
 
   // register the veinmine enchantment during bootstrap
   @SuppressWarnings("UnstableApiUsage")
@@ -100,11 +100,6 @@ public class VeinMiner implements Module, Listener {
         RegistryAccess.registryAccess()
             .getRegistry(RegistryKey.ENCHANTMENT)
             .getOrThrow(VEINMINE_KEY);
-  }
-
-  @Override
-  public void loadConfig() {
-    this.fastLeafDecay = ClodMC.getModule(FastLeafDecay.class);
   }
 
   // handle vein mining when player breaks a block while sneaking
@@ -191,9 +186,7 @@ public class VeinMiner implements Module, Listener {
         canBreak = denalMessage == null || denalMessage.get() == null;
       }
       if (canBreak) {
-        if (this.fastLeafDecay != null) {
-          this.fastLeafDecay.onBlockRemove(block, 5);
-        }
+        Bukkit.getPluginManager().callEvent(new BlockRemovedEvent(block));
         block.breakNaturally(tool, true, true);
         if (player.getGameMode().equals(GameMode.SURVIVAL)) {
           tool.damage(COST, player);

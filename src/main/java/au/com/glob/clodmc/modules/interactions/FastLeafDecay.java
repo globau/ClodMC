@@ -4,6 +4,7 @@ package au.com.glob.clodmc.modules.interactions;
 
 import au.com.glob.clodmc.annotations.Audience;
 import au.com.glob.clodmc.annotations.Doc;
+import au.com.glob.clodmc.events.BlockRemovedEvent;
 import au.com.glob.clodmc.modules.Module;
 import au.com.glob.clodmc.util.Schedule;
 import java.util.ArrayList;
@@ -30,23 +31,31 @@ import org.jspecify.annotations.NullMarked;
     description = "Nearly instant decaying of leafs")
 @NullMarked
 public class FastLeafDecay implements Listener, Module {
+  private static final int INITIAL_BREAK_DELAY_TICKS = 5;
+  private static final int CASCADE_BREAK_DELAY_TICKS = 2;
+
   private final List<Block> scheduledBlocks = new ArrayList<>();
 
   @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
   public void onBlockBreak(final BlockBreakEvent event) {
     // start trying to break leaves immediately after a log is broken
-    this.onBlockRemove(event.getBlock(), 5);
+    this.onBlockRemove(event.getBlock(), INITIAL_BREAK_DELAY_TICKS);
+  }
+
+  @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+  public void onBlockRemoved(final BlockRemovedEvent event) {
+    this.onBlockRemove(event.getBlock(), INITIAL_BREAK_DELAY_TICKS);
   }
 
   // cascade leaf decay when leaves naturally decay
   @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
   public void onLeavesDecay(final LeavesDecayEvent event) {
     // check neighbours when a leaf decays to trigger a cascade
-    this.onBlockRemove(event.getBlock(), 2);
+    this.onBlockRemove(event.getBlock(), CASCADE_BREAK_DELAY_TICKS);
   }
 
   // schedule neighbouring leaves to decay after a delay
-  public void onBlockRemove(final Block oldBlock, final long delay) {
+  private void onBlockRemove(final Block oldBlock, final long delay) {
     // block broken must be either a log of leaf
     if (!Tag.LOGS.isTagged(oldBlock.getType()) && !Tag.LEAVES.isTagged(oldBlock.getType())) {
       return;
