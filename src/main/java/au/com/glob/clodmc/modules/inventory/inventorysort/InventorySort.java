@@ -3,8 +3,8 @@ package au.com.glob.clodmc.modules.inventory.inventorysort;
 import au.com.glob.clodmc.ClodMC;
 import au.com.glob.clodmc.annotations.Audience;
 import au.com.glob.clodmc.annotations.Doc;
+import au.com.glob.clodmc.events.OpAlertEvent;
 import au.com.glob.clodmc.modules.Module;
-import au.com.glob.clodmc.modules.player.OpAlerts;
 import au.com.glob.clodmc.util.Logger;
 import au.com.glob.clodmc.util.StringUtil;
 import java.io.BufferedReader;
@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Registry;
 import org.bukkit.entity.Donkey;
@@ -113,7 +114,7 @@ public class InventorySort implements Listener, Module {
 
     for (final String alert : alerts) {
       Logger.error(alert);
-      OpAlerts.addAlert(alert);
+      Bukkit.getPluginManager().callEvent(new OpAlertEvent(alert));
     }
     for (final String warning : warnings) {
       Logger.warning(warning);

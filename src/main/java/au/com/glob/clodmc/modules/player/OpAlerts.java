@@ -2,6 +2,7 @@ package au.com.glob.clodmc.modules.player;
 
 import au.com.glob.clodmc.annotations.Audience;
 import au.com.glob.clodmc.annotations.Doc;
+import au.com.glob.clodmc.events.OpAlertEvent;
 import au.com.glob.clodmc.modules.Module;
 import au.com.glob.clodmc.util.Chat;
 import au.com.glob.clodmc.util.Schedule;
@@ -20,18 +21,11 @@ import org.jspecify.annotations.NullMarked;
     hidden = true)
 @NullMarked
 public class OpAlerts implements Module, Listener {
-  @SuppressWarnings({"NotNullFieldNotInitialized", "NullAway.Init"})
-  private static OpAlerts instance;
-
   private final List<String> alerts = new ArrayList<>();
 
-  public OpAlerts() {
-    instance = this;
-  }
-
-  // add an alert to be shown to first op who joins
-  public static void addAlert(final String alert) {
-    instance.alerts.add(alert);
+  @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+  public void onOpAlert(final OpAlertEvent event) {
+    this.alerts.add(event.getMessage());
   }
 
   // send pending alerts to first op who joins

@@ -2,8 +2,8 @@ package au.com.glob.clodmc.modules.server;
 
 import au.com.glob.clodmc.annotations.Audience;
 import au.com.glob.clodmc.annotations.Doc;
+import au.com.glob.clodmc.events.OpAlertEvent;
 import au.com.glob.clodmc.modules.Module;
-import au.com.glob.clodmc.modules.player.OpAlerts;
 import au.com.glob.clodmc.util.Logger;
 import au.com.glob.clodmc.util.StringUtil;
 import io.papermc.paper.connection.PlayerConfigurationConnection;
@@ -42,7 +42,7 @@ public class RequiredPlugins implements Listener, Module {
     this.preventLogin = missing.length() > 0;
     if (this.preventLogin) {
       final String alert = "Missing required plugin(s): %s".formatted(missing);
-      OpAlerts.addAlert(alert);
+      Bukkit.getPluginManager().callEvent(new OpAlertEvent(alert));
       Logger.error("\n***\n*** %s\n***".formatted(alert));
     }
   }
