@@ -11,7 +11,6 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -62,19 +61,15 @@ public final class Players {
   public static void updateWhitelisted() {
     Schedule.asynchronously(
         () -> {
-          final File playersPath =
-              ClodMC.instance.getDataFolder().toPath().resolve("players").toFile();
-          final File[] ymlFiles =
-              playersPath.listFiles((final File file) -> file.getName().endsWith(".yml"));
           final List<UUID> uuids =
-              ymlFiles == null
-                  ? List.of()
-                  : Arrays.stream(ymlFiles)
-                      .map(
-                          (final File file) ->
-                              file.getName().substring(0, file.getName().indexOf(".")))
-                      .map(UUID::fromString)
-                      .toList();
+              FileUtil.listFiles(
+                      ClodMC.instance.getDataFolder().toPath().resolve("players"),
+                      (File file1) -> file1.getName().endsWith(".yml"))
+                  .stream()
+                  .map(
+                      (final File file) -> file.getName().substring(0, file.getName().indexOf(".")))
+                  .map(UUID::fromString)
+                  .toList();
 
           final Map<String, UUID> updatedWhitelist = new HashMap<>();
           for (final UUID uuid : uuids) {

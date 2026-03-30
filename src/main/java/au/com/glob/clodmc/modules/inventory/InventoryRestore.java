@@ -12,6 +12,7 @@ import au.com.glob.clodmc.datafile.PlayerDataFile;
 import au.com.glob.clodmc.datafile.PlayerDataFiles;
 import au.com.glob.clodmc.modules.Module;
 import au.com.glob.clodmc.util.Chat;
+import au.com.glob.clodmc.util.FileUtil;
 import au.com.glob.clodmc.util.Logger;
 import au.com.glob.clodmc.util.Players;
 import au.com.glob.clodmc.util.Schedule;
@@ -20,8 +21,6 @@ import java.io.File;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
@@ -116,7 +115,7 @@ public class InventoryRestore extends Module implements Listener {
               }
             })
         .completor(
-            (final CommandSender sender, final List<String> args) -> {
+            (final CommandSender _, final List<String> args) -> {
               if (args.size() == 1) {
                 // player name
                 return Players.getWhitelisted().keySet().stream()
@@ -246,17 +245,11 @@ public class InventoryRestore extends Module implements Listener {
 
   private List<File> getBackupFiles(final UUID uuid) {
     final String prefix = "%s%s".formatted(uuid, SEPARATOR);
-    final File[] files =
-        this.backupPath.listFiles(
-            (File file) -> file.getName().startsWith(prefix) && file.getName().endsWith(SUFFIX));
-
-    // must return mutable lists
-    if (files == null) {
-      return new ArrayList<>();
-    }
     // newest first
-    Arrays.sort(files, Comparator.comparingLong(File::lastModified).reversed());
-    return new ArrayList<>(Arrays.asList(files));
+    return FileUtil.listFiles(
+        this.backupPath,
+        (File file) -> file.getName().startsWith(prefix) && file.getName().endsWith(SUFFIX),
+        Comparator.comparingLong(File::lastModified).reversed());
   }
 
   private List<String> getBackupNames(final UUID uuid) {
