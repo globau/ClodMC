@@ -158,7 +158,7 @@ public class Invite extends Module {
                   });
             })
         .completor(
-            (final CommandSender sender, final List<String> args) -> {
+            (final CommandSender _, final List<String> args) -> {
               final List<String> types = List.of("java", "bedrock");
               if (args.isEmpty()) {
                 return types;

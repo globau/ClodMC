@@ -40,7 +40,7 @@ public class WelcomeBookAdmin extends Module implements Listener {
               Chat.fyi(sender, "Gave welcome book to %s".formatted(player.getName()));
             })
         .completor(
-            (CommandSender sender, List<String> args) ->
+            (CommandSender _, List<String> args) ->
                 Bukkit.getOnlinePlayers().stream()
                     .map(Player::getName)
                     .filter(

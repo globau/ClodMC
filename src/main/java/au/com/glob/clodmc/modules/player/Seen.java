@@ -72,7 +72,7 @@ public class Seen extends Module implements Listener {
               Chat.info(sender, "%s was last seen %s ago".formatted(playerName, dateAgo));
             })
         .completor(
-            (CommandSender sender, List<String> args) ->
+            (CommandSender _, List<String> args) ->
                 Players.getWhitelisted().keySet().stream()
                     .sorted(String.CASE_INSENSITIVE_ORDER)
                     .filter(

@@ -25,8 +25,8 @@ public abstract class Module {
 
   public static void create(final Supplier<Module> supplier) {
     try {
-      final Module ignored = supplier.get();
-    } catch (final ModuleSkippedException ignored) {
+      final Module _ = supplier.get();
+    } catch (final ModuleSkippedException _) {
       // module skipped due to missing plugin dependency
     }
   }

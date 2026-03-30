@@ -67,7 +67,7 @@ public class GameMode extends Module {
               }
             })
         .completor(
-            (final CommandSender sender, final List<String> args) -> {
+            (final CommandSender _, final List<String> args) -> {
               // no args
               if (args.isEmpty()) {
                 return MODES;

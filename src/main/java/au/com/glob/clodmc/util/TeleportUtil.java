@@ -74,8 +74,8 @@ public final class TeleportUtil {
     if (player.isInsideVehicle()) {
       prefix =
           switch (player.getVehicle()) {
-            case final Horse ignored -> "Dismounting your horse and teleporting you ";
-            case final Boat ignored -> "Dismounting your boat and teleporting you ";
+            case final Horse _ -> "Dismounting your horse and teleporting you ";
+            case final Boat _ -> "Dismounting your boat and teleporting you ";
             case null, default -> "Dismounting and teleporting you ";
           };
     }
@@ -91,7 +91,7 @@ public final class TeleportUtil {
               }
             })
         .exceptionally(
-            (final Throwable ex) -> {
+            (final Throwable _) -> {
               Chat.error(player, "Teleport failed");
               return null;
             });
