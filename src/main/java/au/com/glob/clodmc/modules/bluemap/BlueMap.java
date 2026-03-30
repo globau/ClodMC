@@ -6,7 +6,6 @@ import au.com.glob.clodmc.annotations.Doc;
 import au.com.glob.clodmc.events.BlueMapInitEvent;
 import au.com.glob.clodmc.events.ModuleInitialiseEvent;
 import au.com.glob.clodmc.modules.Module;
-import au.com.glob.clodmc.modules.server.heapmap.BlueMapHeatMap;
 import au.com.glob.clodmc.util.Logger;
 import au.com.glob.clodmc.util.Schedule;
 import de.bluecolored.bluemap.api.BlueMapAPI;
@@ -34,7 +33,6 @@ public class BlueMap extends Module implements Listener {
 
           ClodMC.registerListener(new BlueMapSpawn());
           ClodMC.registerListener(new BlueMapWorldBorder());
-          ClodMC.registerListener(new BlueMapHeatMap());
           if (ClodMC.isPluginEnabled("GriefPrevention")) {
             ClodMC.registerListener(new BlueMapGriefPrevention());
           }

@@ -1,5 +1,6 @@
 package au.com.glob.clodmc.modules.server.heapmap;
 
+import au.com.glob.clodmc.ClodMC;
 import au.com.glob.clodmc.annotations.Audience;
 import au.com.glob.clodmc.annotations.Doc;
 import au.com.glob.clodmc.events.AfkStateChangeEvent;
@@ -48,6 +49,11 @@ public class HeatMap extends Module implements Listener {
                 }
               });
         });
+
+    // register bluemap addon
+    if (ClodMC.isPluginEnabled("BlueMap")) {
+      ClodMC.registerListener(new BlueMapHeatMap());
+    }
   }
 
   @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
