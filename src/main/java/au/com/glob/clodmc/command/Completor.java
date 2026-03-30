@@ -4,4 +4,4 @@ import org.jspecify.annotations.NullMarked;
 
 /** base interface for command tab completion */
 @NullMarked
-public interface Completor {}
+public sealed interface Completor permits CompletorP, CompletorS {}

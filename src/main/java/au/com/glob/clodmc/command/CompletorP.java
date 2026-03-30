@@ -7,6 +7,6 @@ import org.jspecify.annotations.NullMarked;
 /** tab completion for player-only commands */
 @FunctionalInterface
 @NullMarked
-public interface CompletorP extends Completor {
+public non-sealed interface CompletorP extends Completor {
   List<String> accept(Player player, List<String> args);
 }

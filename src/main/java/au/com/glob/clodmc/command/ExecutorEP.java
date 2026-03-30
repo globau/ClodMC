@@ -7,6 +7,6 @@ import org.jspecify.annotations.Nullable;
 /** command executor with sender and player argument */
 @FunctionalInterface
 @NullMarked
-public interface ExecutorEP extends Executor {
+public non-sealed interface ExecutorEP extends Executor {
   void accept(EitherCommandSender sender, @Nullable Player arg1) throws CommandError;
 }

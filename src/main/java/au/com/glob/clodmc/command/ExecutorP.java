@@ -6,6 +6,6 @@ import org.jspecify.annotations.NullMarked;
 /** command executor for player-only commands */
 @FunctionalInterface
 @NullMarked
-public interface ExecutorP extends Executor {
+public non-sealed interface ExecutorP extends Executor {
   void accept(Player player) throws CommandError;
 }

@@ -194,7 +194,6 @@ public final class CommandBuilder {
                         new EitherCommandSender(sender),
                         argToString(args, 0),
                         argToPlayer(args, 1));
-                default -> throw new RuntimeException("executor not handled");
               }
             } catch (final CommandUsageError e) {
               Chat.error(sender, "usage: %s".formatted(that.usage));
@@ -225,7 +224,6 @@ public final class CommandBuilder {
               case final CompletorP completorP ->
                   completorP.accept(that.toPlayer(sender), argsList);
               case final CompletorS completorS -> completorS.accept(sender, argsList);
-              default -> throw new RuntimeException("completor not handled");
             };
           }
 

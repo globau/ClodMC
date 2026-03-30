@@ -7,6 +7,6 @@ import org.jspecify.annotations.NullMarked;
 /** tab completion for commands accepting any command sender */
 @FunctionalInterface
 @NullMarked
-public interface CompletorS extends Completor {
+public non-sealed interface CompletorS extends Completor {
   List<String> accept(CommandSender sender, List<String> args);
 }
