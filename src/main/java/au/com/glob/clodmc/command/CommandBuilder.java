@@ -45,7 +45,7 @@ public final class CommandBuilder {
   private @Nullable String description;
   private @Nullable Executor executor;
   private @Nullable Completor completor;
-  private boolean requiresOp = false;
+  private @Nullable String permission;
 
   private static final List<CommandBuilder> builders = new ArrayList<>();
 
@@ -80,9 +80,9 @@ public final class CommandBuilder {
     return this;
   }
 
-  // require op permissions to run this command
-  public CommandBuilder requiresOp() {
-    this.requiresOp = true;
+  // set required permission to run this command
+  public CommandBuilder requires(final String permission) {
+    this.permission = permission;
     return this;
   }
 
@@ -171,7 +171,7 @@ public final class CommandBuilder {
 
             try {
               switch (that.executor) {
-                case final ExecutorP executorP -> executorP.accept(that.toPlayer(sender));
+                case final ExecutorP executorP -> executorP.accept(toPlayer(sender));
                 case final ExecutorE executorE -> executorE.accept(new EitherCommandSender(sender));
                 case final ExecutorEP executorEP ->
                     executorEP.accept(new EitherCommandSender(sender), argToPlayer(args, 0));
@@ -183,7 +183,7 @@ public final class CommandBuilder {
                 case final ExecutorES executorES ->
                     executorES.accept(new EitherCommandSender(sender), argToString(args, 0));
                 case final ExecutorPS executorPS ->
-                    executorPS.accept(that.toPlayer(sender), argToString(args, 0));
+                    executorPS.accept(toPlayer(sender), argToString(args, 0));
                 case final ExecutorESS executorESS ->
                     executorESS.accept(
                         new EitherCommandSender(sender),
@@ -221,27 +221,23 @@ public final class CommandBuilder {
 
             final List<String> argsList = new ArrayList<>(List.of(args));
             return switch (that.completor) {
-              case final CompletorP completorP ->
-                  completorP.accept(that.toPlayer(sender), argsList);
+              case final CompletorP completorP -> completorP.accept(toPlayer(sender), argsList);
               case final CompletorS completorS -> completorS.accept(sender, argsList);
             };
           }
 
           @Override
           public @Nullable String permission() {
-            return CommandBuilder.this.requiresOp ? "op" : null;
+            return CommandBuilder.this.permission;
           }
         };
     ClodMC.instance.registerCommand(this.name, cmd);
   }
 
   // convert command sender to player with permission checks
-  private Player toPlayer(final CommandSender sender) throws CommandError {
+  private static Player toPlayer(final CommandSender sender) throws CommandError {
     if (!(sender instanceof final Player player)) {
       throw new CommandError("This command can only be run by a player");
-    }
-    if (this.requiresOp && !player.isOp()) {
-      throw new CommandError("You do not have permissions to run this command");
     }
     return player;
   }

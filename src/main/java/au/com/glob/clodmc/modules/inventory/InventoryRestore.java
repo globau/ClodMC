@@ -65,7 +65,7 @@ public class InventoryRestore extends Module implements Listener {
     CommandBuilder.build("restore_inv")
         .usage("/restore_inv <player> [backup]")
         .description("Restore player's inventory from automatic backups")
-        .requiresOp()
+        .requires("op")
         .executor(
             (final EitherCommandSender sender,
                 @Nullable final String playerName,

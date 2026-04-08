@@ -30,13 +30,9 @@ public class GameMode extends Module {
     CommandBuilder.build("gamemode")
         .usage("/gamemode <survival|creative|spectator> [player]")
         .description("Change player's Game Mode")
-        .requiresOp()
+        .requires("op")
         .executor(
             (final EitherCommandSender sender, @Nullable String mode, @Nullable Player target) -> {
-              if (sender.isPlayer() && !sender.isOp()) {
-                throw new CommandError("You cannot change your game mode");
-              }
-
               if (mode == null) {
                 throw new CommandUsageError();
               }

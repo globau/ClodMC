@@ -30,7 +30,7 @@ public class WelcomeBookAdmin extends Module implements Listener {
     CommandBuilder.build("welcome-player")
         .usage("/welcome-player <player>")
         .description("Give specified player the welcome book")
-        .requiresOp()
+        .requires("op")
         .executor(
             (final EitherCommandSender sender, @Nullable final Player player) -> {
               if (player == null) {

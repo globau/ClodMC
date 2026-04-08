@@ -33,7 +33,7 @@ public class AdminInv extends Module implements Listener {
   public AdminInv() {
     CommandBuilder.build("admininv")
         .description("Toggle admin/player inventory")
-        .requiresOp()
+        .requires("op")
         .executor(
             (final Player player) -> {
               if (this.hasStoredInventory(player)) {
