@@ -38,6 +38,7 @@ import au.com.glob.clodmc.modules.player.welcomebook.WelcomeBookAdmin;
 import au.com.glob.clodmc.modules.player.welcomebook.WelcomeBookPlayer;
 import au.com.glob.clodmc.modules.server.ClodServerLinks;
 import au.com.glob.clodmc.modules.server.MOTD;
+import au.com.glob.clodmc.modules.server.Permissions;
 import au.com.glob.clodmc.modules.server.RequiredPlugins;
 import au.com.glob.clodmc.modules.server.ServerStatus;
 import au.com.glob.clodmc.modules.server.heapmap.HeatMap;
@@ -108,6 +109,7 @@ public class ModuleRegistry implements PluginBootstrap {
     Module.create(ClodServerLinks::new);
     Module.create(HeatMap::new);
     Module.create(MOTD::new);
+    Module.create(Permissions::new);
     Module.create(RequiredPlugins::new);
     Module.create(ServerStatus::new);
 

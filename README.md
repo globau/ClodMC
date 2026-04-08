@@ -36,6 +36,7 @@ While Clod-MC is open-source, pull requests are not accepted.
 - **BlueMap Integration** - Bridge between ClodMC modules and BlueMap [[src](src/main/java/au/com/glob/clodmc/modules/bluemap/BlueMap.java)]
 - **Fast Leaf Decay** - Nearly instant decaying of leafs [[src](src/main/java/au/com/glob/clodmc/modules/interactions/FastLeafDecay.java)]
 - **Heat Map** - Track minutes a chunk is occupied by at least one player [[src](src/main/java/au/com/glob/clodmc/modules/server/heapmap/HeatMap.java)]
+- **Permissions** - Minimal permissions provider [[src](src/main/java/au/com/glob/clodmc/modules/server/Permissions.java)]
 - **Player Tracker** - Collect data about players (eg. login/logout times) [[src](src/main/java/au/com/glob/clodmc/modules/player/PlayerTracker.java)]
 - **Prevent Mob Griefing** - Prevent some mobs from breaking or moving blocks [[src](src/main/java/au/com/glob/clodmc/modules/mobs/PreventMobGriefing.java)]
 - **Prevent Mob Spawning** - Prevents enemy mobs from spawning within areas claimed by admin [[src](src/main/java/au/com/glob/clodmc/modules/mobs/preventmobspawn/PreventMobSpawn.java)]
