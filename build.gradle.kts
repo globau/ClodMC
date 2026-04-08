@@ -60,8 +60,8 @@ checkstyle {
 tasks.withType<Checkstyle>().configureEach {
     configProperties = configProperties ?: mutableMapOf()
     configProperties!!["basedir"] = projectDir.absolutePath
-    val checkstyleTask = this
-    doFirst { checkstyleTask.setSource(checkstyleTask.source.files.sortedBy { it.absolutePath }) }
+    val orig = source
+    setSource(objects.fileCollection().from(provider { orig.files.sortedBy { it.absolutePath } }))
 }
 
 tasks.checkstyleMain {
@@ -146,7 +146,8 @@ tasks.register<Exec>("generateReadme") {
     group = "documentation"
     commandLine("./scripts/generate-readme")
     standardOutput = ByteArrayOutputStream()
-    doLast { file("README.md").writeText(standardOutput.toString()) }
+    val readmeFile = layout.projectDirectory.file("README.md")
+    doLast { readmeFile.asFile.writeText(standardOutput.toString()) }
 }
 
 tasks.register<Exec>("checkReadme") {
@@ -154,9 +155,10 @@ tasks.register<Exec>("checkReadme") {
     group = "verification"
     commandLine("./scripts/generate-readme")
     standardOutput = ByteArrayOutputStream()
+    val readmeFile = layout.projectDirectory.file("README.md")
     doLast {
         val generatedContent = standardOutput.toString()
-        val currentContent = file("README.md").readText()
+        val currentContent = readmeFile.asFile.readText()
         if (generatedContent != currentContent) {
             throw GradleException(
                 "README.md does not match generated content; run 'make format' to update it",
@@ -167,8 +169,18 @@ tasks.register<Exec>("checkReadme") {
 
 tasks.register("printVersion") {
     val jarTask = tasks.named<Jar>("jar")
-    val jarPath = jarTask.map { task -> project.relativePath(task.archiveFile.get().asFile) }
-    doLast { logger.quiet("built " + jarPath.get()) }
+    val projDir = projectDir
+    val jarPath = jarTask.flatMap { it.archiveFile }
+    doLast {
+        logger.quiet(
+            "built " +
+                jarPath
+                    .get()
+                    .asFile
+                    .relativeTo(projDir)
+                    .path,
+        )
+    }
 }
 
 tasks.named("build") { finalizedBy("printVersion") }
