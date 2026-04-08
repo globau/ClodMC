@@ -18,6 +18,18 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.permissions.PermissionAttachment;
 import org.jspecify.annotations.NullMarked;
 
+/*
+To apply permissions to a player, edit their player datafile.
+  eg. plugins/ClodMC/players/8a56e8f2-0bc0-42aa-8f20-7b9188d1efbc.yml
+
+Add a top-level "permissions" field with a list of the permissions to apply:
+
+permissions:
+- coreprotect.*
+
+The player will need to re-log to apply changes.
+ */
+
 @Doc(
     audience = Audience.SERVER,
     title = "Permissions",
