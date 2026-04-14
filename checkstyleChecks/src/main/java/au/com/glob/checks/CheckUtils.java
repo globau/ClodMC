@@ -193,4 +193,8 @@ public final class CheckUtils {
         && (CheckUtils.branchContains(modifiers, TokenTypes.ABSTRACT)
             || CheckUtils.branchContains(modifiers, TokenTypes.LITERAL_NATIVE));
   }
+
+  static String removeSuffix(final String value, final String suffix) {
+    return value.endsWith(suffix) ? value.substring(0, value.length() - suffix.length()) : value;
+  }
 }
