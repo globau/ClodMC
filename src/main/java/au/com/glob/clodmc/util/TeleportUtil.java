@@ -23,6 +23,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.util.BoundingBox;
 import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 /** player teleport helpers */
 @NullMarked
@@ -52,6 +53,15 @@ public final class TeleportUtil {
 
   // teleport player safely with visual and audio effects
   public static void teleport(final Player player, final Location location, final String reason) {
+    teleport(player, location, reason, null);
+  }
+
+  // teleport player safely with visual and audio effects, with async callback
+  public static void teleport(
+      final Player player,
+      final Location location,
+      final String reason,
+      @Nullable final Runnable callback) {
     final Location fromLoc = player.getLocation();
 
     final Location destinationLoc;
@@ -88,6 +98,9 @@ public final class TeleportUtil {
               if (result) {
                 TeleportUtil.playTeleportSoundNearby(fromLoc, destinationLoc, player);
                 TeleportUtil.showTeleportParticles(fromLoc);
+                if (callback != null) {
+                  callback.run();
+                }
               }
             })
         .exceptionally(

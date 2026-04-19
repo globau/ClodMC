@@ -29,13 +29,21 @@ public class Spawn extends Module {
               }
 
               final Integer spawnRadius = world.getGameRuleValue(GameRules.RESPAWN_RADIUS);
+              final Location worldSpawn = world.getSpawnLocation();
               final Location location =
-                  TeleportUtil.getRandomLoc(
-                      world.getSpawnLocation(), spawnRadius == null ? 8 : spawnRadius);
+                  TeleportUtil.getRandomLoc(worldSpawn, spawnRadius == null ? 8 : spawnRadius);
 
               // teleport to the centre of the block, just above the surface as per vanilla
               location.add(0.5, 0.1, 0.5);
-              TeleportUtil.teleport(player, location, "to spawn");
+              TeleportUtil.teleport(
+                  player,
+                  location,
+                  "to spawn",
+                  () -> {
+                    final double dx = (worldSpawn.getX() + 0.5) - location.getX();
+                    final double dz = (worldSpawn.getZ() + 0.5) - location.getZ();
+                    player.setRotation((float) Math.toDegrees(Math.atan2(-dx, dz)), 0);
+                  });
             });
   }
 }
