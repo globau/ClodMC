@@ -267,22 +267,22 @@ public final class TeleportUtil {
 
   // find random safe location within radius
   public static Location getRandomLoc(final Location loc, final int randomRadius) {
-    final Location location = loc.clone();
+    final Random rand = new Random();
     int attempts = 0;
     while (attempts <= randomRadius) {
       attempts++;
-      final Random rand = new Random();
       final double angle = rand.nextDouble() * 2 * Math.PI;
       final double distance = rand.nextDouble() * randomRadius;
+      final Location location = loc.clone();
       location.add(
-          (double) Math.round(distance + Math.cos(angle)),
+          (double) Math.round(distance * Math.cos(angle)),
           0,
-          (double) Math.round(distance + Math.sin(angle)));
+          (double) Math.round(distance * Math.sin(angle)));
       if (!isUnsafe(location.getBlock())) {
-        break;
+        return location;
       }
     }
-    return location;
+    return loc.clone();
   }
 
   // play teleport sound effect
