@@ -688,6 +688,7 @@ Azure Bluet                              :AZURE_BLUET
 Blue Orchid                              :BLUE_ORCHID
 Cornflower                               :CORNFLOWER
 Dandelion                                :DANDELION
+Golden Dandelion                         :GOLDEN_DANDELION
 Open Eyeblossom                          :OPEN_EYEBLOSSOM
 Closed Eyeblossom                        :CLOSED_EYEBLOSSOM
 Lilac                                    :LILAC
@@ -1605,6 +1606,7 @@ Potted Cornflower                        :POTTED_CORNFLOWER
 Potted Crimson Fungus                    :POTTED_CRIMSON_FUNGUS
 Potted Crimson Roots                     :POTTED_CRIMSON_ROOTS
 Potted Dandelion                         :POTTED_DANDELION
+Potted Golden Dandelion                  :POTTED_GOLDEN_DANDELION
 Potted Dark Oak Sapling                  :POTTED_DARK_OAK_SAPLING
 Potted Dead Bush                         :POTTED_DEAD_BUSH
 Potted Open Eyeblossom                   :POTTED_OPEN_EYEBLOSSOM
