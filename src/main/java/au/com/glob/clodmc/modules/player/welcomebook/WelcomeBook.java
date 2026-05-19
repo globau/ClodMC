@@ -88,7 +88,7 @@ public final class WelcomeBook {
           Claim land with a
           golden shovel.
 
-          <click:open_url:https://bit.ly/mcgpuser><blue>bit.ly/mcgpuser</blue></click>
+          <click:open_url:https://s.glob.au/6K7><blue>s.glob.au/6K7</blue></click>
           """,
           """
           <b>Invite Players</b>
