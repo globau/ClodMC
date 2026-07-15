@@ -1,15 +1,15 @@
 [versions]
-bluemap = "2.7.7" # https://repo.bluecolored.de/#/releases/de/bluecolored/bluemap-api
-checkstyle = "13.4.0" # https://checkstyle.sourceforge.io/
+bluemap = "2.8.0" # https://repo.bluecolored.de/#/releases/de/bluecolored/bluemap-api
+checkstyle = "13.7.0" # https://checkstyle.sourceforge.io/
 errorprone-gradle = "5.1.0" # https://github.com/tbroyer/gradle-errorprone-plugin/releases
-errorprone = "2.49.0" # https://github.com/google/error-prone/releases
-geyser = "2.9.0-SNAPSHOT" # https://geysermc.org/wiki/geyser/getting-started-with-the-api
+errorprone = "2.50.0" # https://github.com/google/error-prone/releases
+geyser = "2.10.0-SNAPSHOT" # https://geysermc.org/wiki/geyser/getting-started-with-the-api
 google-java-format = "1.35.0" # https://github.com/google/google-java-format/releases
-griefprevention = "16.18.4" # https://github.com/GriefPrevention/GriefPrevention/releases
+griefprevention = "16.18.7" # https://github.com/GriefPrevention/GriefPrevention/releases
 jspecify = "1.0.0" # https://jspecify.dev/docs/using/
-paper = "26.1.2.build.+" # https://jd.papermc.io/paper/
+paper = "26.2.build.+" # https://jd.papermc.io/paper/
 snakeyaml = "2.6" # https://central.sonatype.com/artifact/org.yaml/snakeyaml
-spotless = "8.4.0" #  https://plugins.gradle.org/plugin/com.diffplug.spotless
+spotless = "8.8.0" #  https://plugins.gradle.org/plugin/com.diffplug.spotless
 toml = "1.2" # https://central.sonatype.com/artifact/com.github.jezza/toml
 
 [plugins]

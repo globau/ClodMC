@@ -311,6 +311,20 @@ Bricks                                   :BRICKS
 
 Calcite                                  :CALCITE
 
+Cinnabar                                 :CINNABAR
+Cinnabar Slab                            :CINNABAR_SLAB
+Cinnabar Stairs                          :CINNABAR_STAIRS
+Cinnabar Wall                            :CINNABAR_WALL
+Chiseled Cinnabar                        :CHISELED_CINNABAR
+Polished Cinnabar                        :POLISHED_CINNABAR
+Polished Cinnabar Slab                   :POLISHED_CINNABAR_SLAB
+Polished Cinnabar Stairs                 :POLISHED_CINNABAR_STAIRS
+Polished Cinnabar Wall                   :POLISHED_CINNABAR_WALL
+Cinnabar Bricks                          :CINNABAR_BRICKS
+Cinnabar Brick Slab                      :CINNABAR_BRICK_SLAB
+Cinnabar Brick Stairs                    :CINNABAR_BRICK_STAIRS
+Cinnabar Brick Wall                      :CINNABAR_BRICK_WALL
+
 Cobblestone                              :COBBLESTONE
 Infested Cobblestone                     :INFESTED_COBBLESTONE
 Cobblestone Slab                         :COBBLESTONE_SLAB
@@ -440,6 +454,22 @@ Mossy Stone Brick Slab                   :MOSSY_STONE_BRICK_SLAB
 Mossy Stone Brick Stairs                 :MOSSY_STONE_BRICK_STAIRS
 Mossy Stone Brick Wall                   :MOSSY_STONE_BRICK_WALL
 Infested Mossy Stone Bricks              :INFESTED_MOSSY_STONE_BRICKS
+
+Sulfur                                   :SULFUR
+Potent Sulfur                            :POTENT_SULFUR
+Sulfur Spike                             :SULFUR_SPIKE
+Sulfur Slab                              :SULFUR_SLAB
+Sulfur Stairs                            :SULFUR_STAIRS
+Sulfur Wall                              :SULFUR_WALL
+Chiseled Sulfur                          :CHISELED_SULFUR
+Polished Sulfur                          :POLISHED_SULFUR
+Polished Sulfur Slab                     :POLISHED_SULFUR_SLAB
+Polished Sulfur Stairs                   :POLISHED_SULFUR_STAIRS
+Polished Sulfur Wall                     :POLISHED_SULFUR_WALL
+Sulfur Bricks                            :SULFUR_BRICKS
+Sulfur Brick Slab                        :SULFUR_BRICK_SLAB
+Sulfur Brick Stairs                      :SULFUR_BRICK_STAIRS
+Sulfur Brick Wall                        :SULFUR_BRICK_WALL
 
 Tuff                                     :TUFF
 Tuff Slab                                :TUFF_SLAB
@@ -680,6 +710,7 @@ Bucket Of Axolotl                        :AXOLOTL_BUCKET
 Bucket Of Cod                            :COD_BUCKET
 Bucket Of Pufferfish                     :PUFFERFISH_BUCKET
 Bucket Of Salmon                         :SALMON_BUCKET
+Bucket Of Sulfur Cube                    :SULFUR_CUBE_BUCKET
 Bucket Of Tadpole                        :TADPOLE_BUCKET
 Bucket Of Tropical Fish                  :TROPICAL_FISH_BUCKET
 
@@ -1732,6 +1763,7 @@ Music Disc 5                             :MUSIC_DISC_5
 Music Disc 11                            :MUSIC_DISC_11
 Music Disc 13                            :MUSIC_DISC_13
 Music Disc Blocks                        :MUSIC_DISC_BLOCKS
+Music Disc Bounce                        :MUSIC_DISC_BOUNCE
 Music Disc Cat                           :MUSIC_DISC_CAT
 Music Disc Chirp                         :MUSIC_DISC_CHIRP
 Music Disc Creator                       :MUSIC_DISC_CREATOR
@@ -1821,6 +1853,7 @@ Spider Spawn Egg                         :SPIDER_SPAWN_EGG
 Squid Spawn Egg                          :SQUID_SPAWN_EGG
 Stray Spawn Egg                          :STRAY_SPAWN_EGG
 Strider Spawn Egg                        :STRIDER_SPAWN_EGG
+Sulfur Cube Spawn Egg                    :SULFUR_CUBE_SPAWN_EGG
 Tadpole Spawn Egg                        :TADPOLE_SPAWN_EGG
 Trader Llama Spawn Egg                   :TRADER_LLAMA_SPAWN_EGG
 Tropical Fish Spawn Egg                  :TROPICAL_FISH_SPAWN_EGG

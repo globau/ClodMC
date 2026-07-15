@@ -158,7 +158,7 @@ public class Visuals {
 
   // checks if player can see visuals from location
   private boolean canSeeVisualsFrom(final Location playerLoc) {
-    return this.bottomLocation.getWorld() == playerLoc.getWorld()
+    return this.bottomLocation.getWorld().equals(playerLoc.getWorld())
         && this.bottomLocation.distanceSquared(playerLoc) <= VISIBLE_RANGE_SQUARED
         && !(playerLoc.getBlockX() == this.bottomLocation.getBlockX()
             && playerLoc.getBlockY() == this.bottomLocation.getBlockY()

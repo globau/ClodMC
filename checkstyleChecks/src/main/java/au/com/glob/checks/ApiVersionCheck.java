@@ -10,7 +10,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
 import java.nio.file.Files;
-import java.util.Arrays;
 import java.util.Map;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
@@ -38,11 +37,16 @@ public class ApiVersionCheck extends AbstractFileSetCheck {
   private void processVersionsFile(final File file) {
     try (final Reader reader = Files.newBufferedReader(file.toPath())) {
       final TomlTable table = Toml.from(reader);
-      // support 1.21.11-R0.1-SNAPSHOT and 26.1.2.build.5-alpha styles
-      final String[] parts =
-          CheckUtils.removeSuffix((String) table.get("versions.paper"), "-R0.1-SNAPSHOT")
-              .split("\\.");
-      this.buildVersion = String.join(".", Arrays.copyOf(parts, Math.min(parts.length, 3)));
+      final String version = (String) table.get("versions.paper");
+      final int buildPos = version.indexOf(".build");
+      if (buildPos == -1) {
+        this.log(
+            0,
+            "failed to parse paper-api version from %s"
+                .formatted(CheckUtils.getRelativeFilename(file)));
+      } else {
+        this.buildVersion = version.substring(0, buildPos);
+      }
     } catch (final IOException e) {
       this.log(
           0,
