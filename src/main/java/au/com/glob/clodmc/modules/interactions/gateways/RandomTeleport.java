@@ -45,16 +45,24 @@ final class RandomTeleport {
     return networkId == RANDOM_NETWORK_ID;
   }
 
+  // only new players can use a random gateway
+  static boolean isEligible(final Player player) {
+    return player.isOp()
+        || Math.round(player.getStatistic(Statistic.PLAY_ONE_MINUTE) / 20.0 / 60.0)
+            <= MAX_RANDOM_TP_TIME;
+  }
+
   // find safe random teleport location for new players
   @Nullable static Location location(final Player player) {
-    // only new players can use a random gateway
-    if (!player.isOp()) {
-      final int ticks = player.getStatistic(Statistic.PLAY_ONE_MINUTE);
-      final long minutesPlayed = Math.round(ticks / 20.0 / 60.0);
-      if (minutesPlayed > MAX_RANDOM_TP_TIME) {
-        Chat.error(player, "New Players Only");
-        return null;
-      }
+    if (!isEligible(player)) {
+      final long secondsPlayed = player.getStatistic(Statistic.PLAY_ONE_MINUTE) / 20L;
+      Chat.error(
+          player,
+          "New players only - this portal disables after %s of playtime (yours is %s)"
+              .formatted(
+                  StringUtil.relativeTime(MAX_RANDOM_TP_TIME * 60L),
+                  StringUtil.relativeTime(secondsPlayed)));
+      return null;
     }
 
     // cooldown

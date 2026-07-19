@@ -2,8 +2,10 @@ package au.com.glob.clodmc.modules.interactions.gateways;
 
 import au.com.glob.clodmc.util.Schedule;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Location;
@@ -30,6 +32,11 @@ public class Visuals {
   private static final int EFFECT_PARTICLES_TRAIL_ACTIVE = 5;
   private static final int EFFECT_PARTICLES_TRAIL_INACTIVE = 3;
   private static final double ANGLE_STEP = 2 * Math.PI / EFFECT_PARTICLES;
+  private static final int PARTICLE_UPDATE_TICKS = 2;
+
+  // a random gateway's eligibility split only changes as players' playtime crosses the
+  // threshold, so it doesn't need re-checking on every particle update
+  private static final int ELIGIBILITY_REFRESH_TICKS = 20;
 
   private final AnchorBlock anchorBlock;
   private final Location blockLocation;
@@ -39,7 +46,9 @@ public class Visuals {
   final Colour bottomColour;
 
   private @Nullable BukkitTask particleTask = null;
+  private @Nullable BukkitTask eligibilityTask = null;
   private final List<NearbyPlayer> nearbyPlayers = new ArrayList<>();
+  private final Set<Player> cachedIneligiblePlayers = new HashSet<>();
 
   private final double[] activeBottomRingY;
   private final double[] activeTopRingY;
@@ -114,6 +123,7 @@ public class Visuals {
       this.particleTask.cancel();
       this.particleTask = null;
     }
+    this.stopEligibilityTask();
     this.updateLights(0);
   }
 
@@ -138,22 +148,84 @@ public class Visuals {
 
     this.particleTask =
         Schedule.periodically(
-            2,
+            PARTICLE_UPDATE_TICKS,
             () -> {
-              if (!this.nearbyPlayers.isEmpty()) {
-                this.spawnJavaParticles(
-                    this.nearbyPlayers.stream()
-                        .filter((final NearbyPlayer nearby) -> !nearby.isBedrock)
-                        .map((final NearbyPlayer nearby) -> nearby.player)
-                        .toList(),
-                    isActive);
-                this.spawnBedrockParticles(
-                    this.nearbyPlayers.stream()
-                        .filter((NearbyPlayer nearby) -> nearby.isBedrock)
-                        .map((final NearbyPlayer nearby) -> nearby.player)
-                        .toList());
+              if (this.nearbyPlayers.isEmpty()) {
+                return;
               }
+
+              final List<Player> javaPlayers =
+                  this.nearbyPlayers.stream()
+                      .filter((final NearbyPlayer nearby) -> !nearby.isBedrock)
+                      .map((final NearbyPlayer nearby) -> nearby.player)
+                      .toList();
+
+              // the random gateway is only active for eligible viewers; every other gateway's
+              // active state is the same for everyone
+              if (this.anchorBlock.isRandom) {
+                final List<Player> eligiblePlayers =
+                    javaPlayers.stream()
+                        .filter((final Player p) -> !this.cachedIneligiblePlayers.contains(p))
+                        .toList();
+                final List<Player> ineligiblePlayers =
+                    javaPlayers.stream().filter(this.cachedIneligiblePlayers::contains).toList();
+                if (!eligiblePlayers.isEmpty()) {
+                  this.spawnJavaParticles(eligiblePlayers, true);
+                }
+                if (!ineligiblePlayers.isEmpty()) {
+                  this.spawnJavaParticles(ineligiblePlayers, false);
+                }
+              } else {
+                this.spawnJavaParticles(javaPlayers, isActive);
+              }
+
+              this.spawnBedrockParticles(
+                  this.nearbyPlayers.stream()
+                      .filter((NearbyPlayer nearby) -> nearby.isBedrock)
+                      .map((final NearbyPlayer nearby) -> nearby.player)
+                      .toList());
             });
+  }
+
+  // re-checks nearby players not yet known to be ineligible for a random gateway; once a
+  // player is found ineligible they can't become eligible again, so they're never re-checked
+  private void updateIneligiblePlayers() {
+    for (final NearbyPlayer nearby : this.nearbyPlayers) {
+      if (nearby.isBedrock || this.cachedIneligiblePlayers.contains(nearby.player)) {
+        continue;
+      }
+      if (!RandomTeleport.isEligible(nearby.player)) {
+        this.cachedIneligiblePlayers.add(nearby.player);
+      }
+    }
+
+    if (!this.hasPlayerNeedingRecheck()) {
+      this.stopEligibilityTask();
+    }
+  }
+
+  // true if a nearby java player's eligibility isn't yet known to be permanently ineligible
+  private boolean hasPlayerNeedingRecheck() {
+    for (final NearbyPlayer nearby : this.nearbyPlayers) {
+      if (!nearby.isBedrock && !this.cachedIneligiblePlayers.contains(nearby.player)) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  private void startEligibilityTask() {
+    if (this.eligibilityTask == null) {
+      this.eligibilityTask =
+          Schedule.periodically(ELIGIBILITY_REFRESH_TICKS, this::updateIneligiblePlayers);
+    }
+  }
+
+  private void stopEligibilityTask() {
+    if (this.eligibilityTask != null) {
+      this.eligibilityTask.cancel();
+      this.eligibilityTask = null;
+    }
   }
 
   // checks if player can see visuals from location
@@ -179,6 +251,13 @@ public class Visuals {
     final NearbyPlayer nearbyPlayer = new NearbyPlayer(player);
     if (!this.nearbyPlayers.contains(nearbyPlayer)) {
       this.nearbyPlayers.add(nearbyPlayer);
+      if (this.anchorBlock.isRandom && !nearbyPlayer.isBedrock) {
+        if (RandomTeleport.isEligible(player)) {
+          this.startEligibilityTask();
+        } else {
+          this.cachedIneligiblePlayers.add(player);
+        }
+      }
     }
   }
 
@@ -190,6 +269,9 @@ public class Visuals {
         iter.remove();
         break;
       }
+    }
+    if (this.anchorBlock.isRandom && !this.hasPlayerNeedingRecheck()) {
+      this.stopEligibilityTask();
     }
   }
 

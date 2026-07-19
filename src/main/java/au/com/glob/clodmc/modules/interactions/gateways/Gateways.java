@@ -337,7 +337,7 @@ public class Gateways extends Module implements Listener {
 
     final AnchorBlock anchorBlock = this.instances.get(BlockPos.of(block.getLocation()));
     if (anchorBlock != null) {
-      ActionBar.plain(player, anchorBlock.getInformation());
+      ActionBar.plain(player, anchorBlock.getInformation(player));
     }
   }
 
@@ -388,7 +388,7 @@ public class Gateways extends Module implements Listener {
 
       final AnchorBlock connectedTo = anchorBlock.connectedTo;
       if (connectedTo == null) {
-        ActionBar.plain(player, anchorBlock.getInformation());
+        ActionBar.plain(player, anchorBlock.getInformation(player));
         return;
       }
 

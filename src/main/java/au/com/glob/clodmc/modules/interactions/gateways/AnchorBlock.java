@@ -55,7 +55,7 @@ public class AnchorBlock implements ConfigurationSerializable {
   }
 
   // gets display information about the anchor block
-  String getInformation() {
+  String getInformation(final Player player) {
     final String prefix = "<yellow>%s</yellow> - ".formatted(this.displayName);
     if (this.connectedTo != null) {
       return "%s%s"
@@ -65,7 +65,9 @@ public class AnchorBlock implements ConfigurationSerializable {
                   !this.blockPos.world.equals(this.connectedTo.blockPos.world)));
     }
     if (RandomTeleport.isRandomNetworkId(this.networkId)) {
-      return "%sRandom Location".formatted(prefix);
+      return RandomTeleport.isEligible(player)
+          ? "%sRandom Location".formatted(prefix)
+          : "%sDisabled - New Players Only".formatted(prefix);
     }
     return "%sDisconnected".formatted(prefix);
   }

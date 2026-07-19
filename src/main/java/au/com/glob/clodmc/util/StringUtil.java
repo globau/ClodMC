@@ -26,11 +26,15 @@ public final class StringUtil {
     if (dd >= 7) {
       return plural(dd, "day");
     } else if (dd > 0) {
-      return "%s %s".formatted(plural(dd, "day"), plural(hh, "hour"));
+      return hh > 0 ? "%s %s".formatted(plural(dd, "day"), plural(hh, "hour")) : plural(dd, "day");
     } else if (hh > 0) {
-      return "%s %s".formatted(plural(hh, "hour"), plural(mm, "minute"));
+      return mm > 0
+          ? "%s %s".formatted(plural(hh, "hour"), plural(mm, "minute"))
+          : plural(hh, "hour");
     } else if (mm > 0) {
-      return "%s %s".formatted(plural(mm, "minute"), plural(seconds, "second"));
+      return seconds > 0
+          ? "%s %s".formatted(plural(mm, "minute"), plural(seconds, "second"))
+          : plural(mm, "minute");
     } else {
       return plural(seconds, "second");
     }
