@@ -220,6 +220,29 @@ Stripped Pale Oak Wood                   :STRIPPED_PALE_OAK_WOOD
 Pale Oak Boat                            :PALE_OAK_BOAT
 Pale Oak Boat With Chest                 :PALE_OAK_CHEST_BOAT
 
+Poplar Door                              :POPLAR_DOOR
+Poplar Fence                             :POPLAR_FENCE
+Poplar Fence Gate                        :POPLAR_FENCE_GATE
+Orange Poplar Leaves                     :ORANGE_POPLAR_LEAVES
+Red Poplar Leaves                        :RED_POPLAR_LEAVES
+Yellow Poplar Leaves                     :YELLOW_POPLAR_LEAVES
+Poplar Log                               :POPLAR_LOG
+Stripped Poplar Log                      :STRIPPED_POPLAR_LOG
+Poplar Planks                            :POPLAR_PLANKS
+Poplar Sapling                           :POPLAR_SAPLING
+Poplar Sign                              :POPLAR_SIGN
+Poplar Sign                              :POPLAR_WALL_SIGN
+Poplar Hanging Sign                      :POPLAR_HANGING_SIGN
+Poplar Hanging Sign                      :POPLAR_WALL_HANGING_SIGN
+Poplar Shelf                             :POPLAR_SHELF
+Poplar Slab                              :POPLAR_SLAB
+Poplar Stairs                            :POPLAR_STAIRS
+Poplar Trapdoor                          :POPLAR_TRAPDOOR
+Poplar Wood                              :POPLAR_WOOD
+Stripped Poplar Wood                     :STRIPPED_POPLAR_WOOD
+Poplar Boat                              :POPLAR_BOAT
+Poplar Boat With Chest                   :POPLAR_CHEST_BOAT
+
 Resin Clump                              :RESIN_CLUMP
 Block of Resin                           :RESIN_BLOCK
 Resin Brick                              :RESIN_BRICK
@@ -351,6 +374,40 @@ Blue Concrete                            :BLUE_CONCRETE
 Purple Concrete                          :PURPLE_CONCRETE
 Magenta Concrete                         :MAGENTA_CONCRETE
 Pink Concrete                            :PINK_CONCRETE
+
+White Concrete Slab                      :WHITE_CONCRETE_SLAB
+Light Gray Concrete Slab                 :LIGHT_GRAY_CONCRETE_SLAB
+Gray Concrete Slab                       :GRAY_CONCRETE_SLAB
+Black Concrete Slab                      :BLACK_CONCRETE_SLAB
+Brown Concrete Slab                      :BROWN_CONCRETE_SLAB
+Red Concrete Slab                        :RED_CONCRETE_SLAB
+Orange Concrete Slab                     :ORANGE_CONCRETE_SLAB
+Yellow Concrete Slab                     :YELLOW_CONCRETE_SLAB
+Lime Concrete Slab                       :LIME_CONCRETE_SLAB
+Green Concrete Slab                      :GREEN_CONCRETE_SLAB
+Cyan Concrete Slab                       :CYAN_CONCRETE_SLAB
+Light Blue Concrete Slab                 :LIGHT_BLUE_CONCRETE_SLAB
+Blue Concrete Slab                       :BLUE_CONCRETE_SLAB
+Purple Concrete Slab                     :PURPLE_CONCRETE_SLAB
+Magenta Concrete Slab                    :MAGENTA_CONCRETE_SLAB
+Pink Concrete Slab                       :PINK_CONCRETE_SLAB
+
+White Concrete Stairs                    :WHITE_CONCRETE_STAIRS
+Light Gray Concrete Stairs               :LIGHT_GRAY_CONCRETE_STAIRS
+Gray Concrete Stairs                     :GRAY_CONCRETE_STAIRS
+Black Concrete Stairs                    :BLACK_CONCRETE_STAIRS
+Brown Concrete Stairs                    :BROWN_CONCRETE_STAIRS
+Red Concrete Stairs                      :RED_CONCRETE_STAIRS
+Orange Concrete Stairs                   :ORANGE_CONCRETE_STAIRS
+Yellow Concrete Stairs                   :YELLOW_CONCRETE_STAIRS
+Lime Concrete Stairs                     :LIME_CONCRETE_STAIRS
+Green Concrete Stairs                    :GREEN_CONCRETE_STAIRS
+Cyan Concrete Stairs                     :CYAN_CONCRETE_STAIRS
+Light Blue Concrete Stairs               :LIGHT_BLUE_CONCRETE_STAIRS
+Blue Concrete Stairs                     :BLUE_CONCRETE_STAIRS
+Purple Concrete Stairs                   :PURPLE_CONCRETE_STAIRS
+Magenta Concrete Stairs                  :MAGENTA_CONCRETE_STAIRS
+Pink Concrete Stairs                     :PINK_CONCRETE_STAIRS
 
 White Concrete Powder                    :WHITE_CONCRETE_POWDER
 Light Gray Concrete Powder               :LIGHT_GRAY_CONCRETE_POWDER
@@ -750,6 +807,7 @@ Gunpowder                                :GUNPOWDER
 Ink Sac                                  :INK_SAC
 
 Bush                                     :BUSH
+Red Shrub                                :RED_SHRUB
 Cactus Flower                            :CACTUS_FLOWER
 Firefly Bush                             :FIREFLY_BUSH
 Glow Berries                             :GLOW_BERRIES
@@ -979,6 +1037,7 @@ Jungle Button                            :JUNGLE_BUTTON
 Mangrove Button                          :MANGROVE_BUTTON
 Oak Button                               :OAK_BUTTON
 Pale Oak Button                          :PALE_OAK_BUTTON
+Poplar Button                            :POPLAR_BUTTON
 Spruce Button                            :SPRUCE_BUTTON
 Stone Button                             :STONE_BUTTON
 Warped Button                            :WARPED_BUTTON
@@ -1022,6 +1081,7 @@ Jungle Pressure Plate                    :JUNGLE_PRESSURE_PLATE
 Mangrove Pressure Plate                  :MANGROVE_PRESSURE_PLATE
 Oak Pressure Plate                       :OAK_PRESSURE_PLATE
 Pale Oak Pressure Plate                  :PALE_OAK_PRESSURE_PLATE
+Poplar Pressure Plate                    :POPLAR_PRESSURE_PLATE
 Spruce Pressure Plate                    :SPRUCE_PRESSURE_PLATE
 Stone Pressure Plate                     :STONE_PRESSURE_PLATE
 Warped Pressure Plate                    :WARPED_PRESSURE_PLATE
@@ -1094,6 +1154,7 @@ Melon Slice                              :MELON_SLICE
 
 Brown Mushroom                           :BROWN_MUSHROOM
 Red Mushroom                             :RED_MUSHROOM
+Shelf Mushroom                           :SHELF_MUSHROOM
 Brown Mushroom Block                     :BROWN_MUSHROOM_BLOCK
 Red Mushroom Block                       :RED_MUSHROOM_BLOCK
 Mushroom Stem                            :MUSHROOM_STEM
@@ -1354,6 +1415,7 @@ Blue Bed                                 :BLUE_BED
 Purple Bed                               :PURPLE_BED
 Magenta Bed                              :MAGENTA_BED
 Pink Bed                                 :PINK_BED
+Straw Bed                                :STRAW_BED
 
 Blast Furnace                            :BLAST_FURNACE
 Brewing Stand                            :BREWING_STAND
@@ -1420,6 +1482,22 @@ Lodestone                                :LODESTONE
 Loom                                     :LOOM
 Map                                      :MAP
 Empty Map                                :FILLED_MAP
+Abandoned Camp Map                       :ABANDONED_CAMP_MAP
+Buried Ancient City Map                  :BURIED_ANCIENT_CITY_MAP
+Buried Mineshaft Map                     :BURIED_MINESHAFT_MAP
+Buried Treasure Map                      :BURIED_TREASURE_MAP
+Buried Trial Chambers Map                :BURIED_TRIAL_CHAMBERS_MAP
+Desert Pyramid Map                       :DESERT_PYRAMID_MAP
+Desert Village Map                       :DESERT_VILLAGE_MAP
+Jungle Pyramid Map                       :JUNGLE_PYRAMID_MAP
+Ocean Monument Map                       :OCEAN_MONUMENT_MAP
+Plains Village Map                       :PLAINS_VILLAGE_MAP
+Savanna Village Map                      :SAVANNA_VILLAGE_MAP
+Snowy Village Map                        :SNOWY_VILLAGE_MAP
+Swamp Hut Map                            :SWAMP_HUT_MAP
+Taiga Village Map                        :TAIGA_VILLAGE_MAP
+Warm Ocean Ruins Map                     :WARM_OCEAN_RUINS_MAP
+Woodland Mansion Map                     :WOODLAND_MANSION_MAP
 Name Tag                                 :NAME_TAG
 Note Block                               :NOTE_BLOCK
 Paper                                    :PAPER
@@ -1520,6 +1598,23 @@ Blue Carpet                              :BLUE_CARPET
 Purple Carpet                            :PURPLE_CARPET
 Magenta Carpet                           :MAGENTA_CARPET
 Pink Carpet                              :PINK_CARPET
+
+White Cushion                            :WHITE_CUSHION
+Light Gray Cushion                       :LIGHT_GRAY_CUSHION
+Gray Cushion                             :GRAY_CUSHION
+Black Cushion                            :BLACK_CUSHION
+Brown Cushion                            :BROWN_CUSHION
+Red Cushion                              :RED_CUSHION
+Orange Cushion                           :ORANGE_CUSHION
+Yellow Cushion                           :YELLOW_CUSHION
+Lime Cushion                             :LIME_CUSHION
+Green Cushion                            :GREEN_CUSHION
+Cyan Cushion                             :CYAN_CUSHION
+Light Blue Cushion                       :LIGHT_BLUE_CUSHION
+Blue Cushion                             :BLUE_CUSHION
+Purple Cushion                           :PURPLE_CUSHION
+Magenta Cushion                          :MAGENTA_CUSHION
+Pink Cushion                             :PINK_CUSHION
 
 Bell                                     :BELL
 Bookshelf                                :BOOKSHELF
@@ -1652,6 +1747,7 @@ Potted Orange Tulip                      :POTTED_ORANGE_TULIP
 Potted Oxeye Daisy                       :POTTED_OXEYE_DAISY
 Potted Pale Oak Sapling                  :POTTED_PALE_OAK_SAPLING
 Potted Pink Tulip                        :POTTED_PINK_TULIP
+Potted Poplar Sapling                    :POTTED_POPLAR_SAPLING
 Potted Poppy                             :POTTED_POPPY
 Potted Red Mushroom                      :POTTED_RED_MUSHROOM
 Potted Red Tulip                         :POTTED_RED_TULIP
@@ -1715,6 +1811,40 @@ Blue Wool                                :BLUE_WOOL
 Purple Wool                              :PURPLE_WOOL
 Magenta Wool                             :MAGENTA_WOOL
 Pink Wool                                :PINK_WOOL
+
+White Wool Slab                          :WHITE_WOOL_SLAB
+Light Gray Wool Slab                     :LIGHT_GRAY_WOOL_SLAB
+Gray Wool Slab                           :GRAY_WOOL_SLAB
+Black Wool Slab                          :BLACK_WOOL_SLAB
+Brown Wool Slab                          :BROWN_WOOL_SLAB
+Red Wool Slab                            :RED_WOOL_SLAB
+Orange Wool Slab                         :ORANGE_WOOL_SLAB
+Yellow Wool Slab                         :YELLOW_WOOL_SLAB
+Lime Wool Slab                           :LIME_WOOL_SLAB
+Green Wool Slab                          :GREEN_WOOL_SLAB
+Cyan Wool Slab                           :CYAN_WOOL_SLAB
+Light Blue Wool Slab                     :LIGHT_BLUE_WOOL_SLAB
+Blue Wool Slab                           :BLUE_WOOL_SLAB
+Purple Wool Slab                         :PURPLE_WOOL_SLAB
+Magenta Wool Slab                        :MAGENTA_WOOL_SLAB
+Pink Wool Slab                           :PINK_WOOL_SLAB
+
+White Wool Stairs                        :WHITE_WOOL_STAIRS
+Light Gray Wool Stairs                   :LIGHT_GRAY_WOOL_STAIRS
+Gray Wool Stairs                         :GRAY_WOOL_STAIRS
+Black Wool Stairs                        :BLACK_WOOL_STAIRS
+Brown Wool Stairs                        :BROWN_WOOL_STAIRS
+Red Wool Stairs                          :RED_WOOL_STAIRS
+Orange Wool Stairs                       :ORANGE_WOOL_STAIRS
+Yellow Wool Stairs                       :YELLOW_WOOL_STAIRS
+Lime Wool Stairs                         :LIME_WOOL_STAIRS
+Green Wool Stairs                        :GREEN_WOOL_STAIRS
+Cyan Wool Stairs                         :CYAN_WOOL_STAIRS
+Light Blue Wool Stairs                   :LIGHT_BLUE_WOOL_STAIRS
+Blue Wool Stairs                         :BLUE_WOOL_STAIRS
+Purple Wool Stairs                       :PURPLE_WOOL_STAIRS
+Magenta Wool Stairs                      :MAGENTA_WOOL_STAIRS
+Pink Wool Stairs                         :PINK_WOOL_STAIRS
 
 Copper Golem Statue                      :COPPER_GOLEM_STATUE
 Exposed Copper Golem Statue              :EXPOSED_COPPER_GOLEM_STATUE
