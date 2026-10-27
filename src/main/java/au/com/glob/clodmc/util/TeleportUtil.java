@@ -15,8 +15,7 @@ import org.bukkit.Tag;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
-import org.bukkit.block.data.type.Slab;
-import org.bukkit.block.data.type.Snow;
+import org.bukkit.block.data.type.TrapDoor;
 import org.bukkit.entity.Boat;
 import org.bukkit.entity.Horse;
 import org.bukkit.entity.Player;
@@ -33,6 +32,24 @@ public final class TeleportUtil {
   private static final int CHECK_RADIUS = 3;
   private static final int MAX_RADIUS = 8;
   private static final int SOUND_RADIUS = 16;
+  private static final double PLAYER_WIDTH = 0.6;
+  private static final double PLAYER_HEIGHT = 1.8;
+  private static final double SUPPORT_DEPTH = 0.01;
+  private static final Set<Material> DANGEROUS_MATERIALS =
+      Set.of(
+          Material.CACTUS,
+          Material.CAMPFIRE,
+          Material.END_GATEWAY,
+          Material.END_PORTAL,
+          Material.FIRE,
+          Material.LAVA,
+          Material.MAGMA_BLOCK,
+          Material.NETHER_PORTAL,
+          Material.POWDER_SNOW,
+          Material.SOUL_CAMPFIRE,
+          Material.SOUL_FIRE,
+          Material.SWEET_BERRY_BUSH,
+          Material.WITHER_ROSE);
   private static final Vector3i[] SHIFT_VECTORS;
 
   static {
@@ -139,6 +156,10 @@ public final class TeleportUtil {
 
   // find nearest safe position for teleportation
   public static Location getSafePos(final Location location) {
+    if (isSafeAt(location)) {
+      return location;
+    }
+
     final World world = location.getWorld();
     int x = location.getBlockX();
     int y = location.getBlockY();
@@ -148,27 +169,23 @@ public final class TeleportUtil {
     final int worldLogicalY = world.getLogicalHeight();
     final int worldMaxY = y < worldLogicalY ? worldLogicalY : world.getMaxHeight();
 
-    // push up outside of solid blocks
-    while (world.getBlockAt(x, y, z).isSolid()) {
+    // push up out of blocks and unsafe locations, without pushing up too far
+    final int pushMaxY = Math.min(worldMaxY, location.getBlockY() + MAX_RADIUS);
+    while (y < pushMaxY && isUnsafe(world.getBlockAt(x, y, z))) {
       y++;
     }
-
-    // push up outside of unsafe blocks
-    while (isUnsafe(world.getBlockAt(x, y, z))) {
-      if (y == worldMaxY) {
-        y = location.getBlockY();
-        break;
-      }
-      y++;
-    }
-
-    // avoid pushing up too far
-    if (y - location.getBlockY() > MAX_RADIUS) {
+    if (isUnsafe(world.getBlockAt(x, y, z))) {
       y = location.getBlockY();
     }
 
-    // mid-air isn't safe
-    while (world.getBlockAt(x, y - 1, z).isEmpty()) {
+    // mid-air isn't safe; fall through open space until there's a floor or a liquid
+    while (true) {
+      final Block block = world.getBlockAt(x, y, z);
+      if (!block.getCollisionShape().getBoundingBoxes().isEmpty()
+          || isValidFloor(floorHeight(block))
+          || block.getRelative(BlockFace.DOWN).isLiquid()) {
+        break;
+      }
       y--;
       if (y == worldMinY) {
         y = location.getBlockY();
@@ -176,106 +193,150 @@ public final class TeleportUtil {
       }
     }
 
-    // find a safe spot try within 3x3x3 area
+    // find a safe spot within a 3x3x3 area
+    final int baseX = x;
+    final int baseY = y;
+    final int baseZ = z;
     int i = 0;
     while (isUnsafe(world.getBlockAt(x, y, z))) {
       i++;
       if (i >= SHIFT_VECTORS.length) {
-        x = location.getBlockX();
-        y = Math.clamp(location.getBlockY() + CHECK_RADIUS, worldMinY, worldMaxY);
-        z = location.getBlockZ();
+        x = baseX;
+        y = Math.clamp(baseY + CHECK_RADIUS, worldMinY, worldMaxY);
+        z = baseZ;
         break;
       }
-      x = location.getBlockX() + SHIFT_VECTORS[i].x;
-      y = Math.clamp(location.getBlockY() + SHIFT_VECTORS[i].y, worldMinY, worldMaxY);
-      z = location.getBlockZ() + SHIFT_VECTORS[i].z;
+      x = baseX + SHIFT_VECTORS[i].x;
+      y = Math.clamp(baseY + SHIFT_VECTORS[i].y, worldMinY, worldMaxY);
+      z = baseZ + SHIFT_VECTORS[i].z;
     }
 
-    final double doubleX = x + 0.5;
-    double doubleY = y;
-    final double doubleZ = z + 0.5;
+    final double floor = floorHeight(world.getBlockAt(x, y, z));
+    final double doubleY = isValidFloor(floor) ? y + floor : y;
+    return new Location(world, x + 0.5, doubleY, z + 0.5, 0, 0);
+  }
 
-    // handle standing on blocks that aren't 1.0 high
-    final Block block = world.getBlockAt(x, y, z);
-    if (block.isEmpty()) {
-      final Block blockDown = world.getBlockAt(x, y - 1, z);
-      final Material material = blockDown.getType();
-      if (blockDown.getBlockData() instanceof final Slab slab
-          && slab.getType() == Slab.Type.BOTTOM) {
-        doubleY -= 0.5;
-      } else if (Tag.FENCES.isTagged(material)
-          || Tag.FENCE_GATES.isTagged(material)
-          || Tag.WALLS.isTagged(material)) {
-        doubleY += 0.5;
-      } else if (material == Material.DIRT_PATH) {
-        doubleY -= 1.0 / 16.0;
-      } else if (Tag.WOOL_CARPETS.isTagged(material) || material == Material.MOSS_CARPET) {
-        doubleY -= 15.0 / 16.0;
-      }
-    } else {
-      if (block.getBlockData() instanceof final Snow snow) {
-        doubleY += (snow.getLayers() - 1) * (1.0 / 8.0);
+  // check if the player can stand at the exact location, without centring on a block
+  private static boolean isSafeAt(final Location location) {
+    final World world = location.getWorld();
+    final BoundingBox playerBox = playerBoxAt(location.getX(), location.getY(), location.getZ());
+    final BoundingBox supportBox =
+        new BoundingBox(
+            playerBox.getMinX(),
+            playerBox.getMinY() - SUPPORT_DEPTH,
+            playerBox.getMinZ(),
+            playerBox.getMaxX(),
+            playerBox.getMinY(),
+            playerBox.getMaxZ());
+
+    final BoundingBox touchingBox = playerBox.clone().union(supportBox);
+    for (final Block block : blocksIn(world, touchingBox)) {
+      if (DANGEROUS_MATERIALS.contains(block.getType())) {
+        return false;
       }
     }
 
-    // if, after all that, the player doesn't need to be moved to a safe location, return the
-    // original location unmodified to retain sub-block precision
-    final Location safeLocation = new Location(world, doubleX, doubleY, doubleZ, 0, 0);
-    if (safeLocation.getBlockX() == location.getBlockX()
-        && safeLocation.getBlockY() == location.getBlockY()
-        && safeLocation.getBlockY() == location.getBlockY()) {
-      return location;
+    boolean supported = false;
+    for (final Block block : collisionCandidates(world, touchingBox)) {
+      if (block.getType() != Material.SCAFFOLDING && collides(block, playerBox)) {
+        return false;
+      }
+      supported |= collides(block, supportBox);
     }
-
-    return safeLocation;
+    return supported;
   }
 
   // check if block location is unsafe for player
   public static boolean isUnsafe(final Block feetBlock) {
-    final Material feetMaterial = feetBlock.getType();
-    final Block surfaceBlock = feetBlock.getRelative(BlockFace.DOWN);
-    final Material surfaceMaterial = surfaceBlock.getType();
-
-    // some materials are never safe to stand on
-    if (surfaceMaterial == Material.AIR
-        || surfaceMaterial == Material.CACTUS
-        || surfaceMaterial == Material.CAMPFIRE
-        || surfaceMaterial == Material.CAVE_AIR
-        || surfaceMaterial == Material.END_PORTAL
-        || surfaceMaterial == Material.FIRE
-        || surfaceMaterial == Material.LAVA
-        || surfaceMaterial == Material.MAGMA_BLOCK
-        || surfaceMaterial == Material.NETHER_PORTAL
-        || surfaceMaterial == Material.POWDER_SNOW
-        || surfaceMaterial == Material.SOUL_CAMPFIRE
-        || surfaceMaterial == Material.SOUL_FIRE
-        || surfaceMaterial == Material.SWEET_BERRY_BUSH
-        || surfaceMaterial == Material.VOID_AIR
-        || surfaceMaterial == Material.WITHER_ROSE) {
+    final double floor = floorHeight(feetBlock);
+    if (!isValidFloor(floor)) {
       return true;
     }
 
-    // ouch
-    if (feetMaterial == Material.FIRE
-        || feetMaterial == Material.LAVA
-        || feetMaterial == Material.POWDER_SNOW) {
+    if (DANGEROUS_MATERIALS.contains(feetBlock.getType())) {
+      return true;
+    }
+    if (floor <= 0.0
+        && DANGEROUS_MATERIALS.contains(feetBlock.getRelative(BlockFace.DOWN).getType())) {
       return true;
     }
 
-    // surface must be solid, blocks where feet and head are mustn't be
-    return !canStandOn(surfaceBlock)
-        || feetBlock.isSolid()
-        || feetBlock.getRelative(BlockFace.UP).isSolid();
+    final BoundingBox playerBox =
+        playerBoxAt(feetBlock.getX() + 0.5, feetBlock.getY() + floor, feetBlock.getZ() + 0.5);
+    for (final Block block : collisionCandidates(feetBlock.getWorld(), playerBox)) {
+      if (block.getType() != Material.SCAFFOLDING && collides(block, playerBox)) {
+        return true;
+      }
+    }
+    return false;
   }
 
-  // check if block can support a standing player
-  private static boolean canStandOn(final Block block) {
+  private static BoundingBox playerBoxAt(final double x, final double y, final double z) {
+    return new BoundingBox(
+        x - PLAYER_WIDTH / 2,
+        y,
+        z - PLAYER_WIDTH / 2,
+        x + PLAYER_WIDTH / 2,
+        y + PLAYER_HEIGHT,
+        z + PLAYER_WIDTH / 2);
+  }
+
+  // blocks which the box intersects, excluding those it only touches
+  private static List<Block> blocksIn(final World world, final BoundingBox box) {
+    final List<Block> blocks = new ArrayList<>();
+    for (int x = (int) Math.floor(box.getMinX()); x < Math.ceil(box.getMaxX()); x++) {
+      for (int y = (int) Math.floor(box.getMinY()); y < Math.ceil(box.getMaxY()); y++) {
+        for (int z = (int) Math.floor(box.getMinZ()); z < Math.ceil(box.getMaxZ()); z++) {
+          blocks.add(world.getBlockAt(x, y, z));
+        }
+      }
+    }
+    return blocks;
+  }
+
+  // blocks whose collision shapes could intersect the box; fences, walls, etc. extend into the
+  // block above them
+  private static List<Block> collisionCandidates(final World world, final BoundingBox box) {
+    return blocksIn(world, box.clone().expand(0, 1, 0, 0, 0, 0));
+  }
+
+  // check if the block's collision shape intersects the box
+  private static boolean collides(final Block block, final BoundingBox box) {
+    return block
+        .getCollisionShape()
+        .overlaps(box.clone().shift(-block.getX(), -block.getY(), -block.getZ()));
+  }
+
+  private static boolean isValidFloor(final double floor) {
+    return !Double.isInfinite(floor) && floor < 1.0;
+  }
+
+  // height above the base of the block a player would stand at, as per vanilla's dismount logic
+  private static double floorHeight(final Block feetBlock) {
+    // players stand inside scaffolding, on whatever is below it
+    if (feetBlock.getType() != Material.SCAFFOLDING) {
+      final double top = floorShapeTop(feetBlock);
+      if (!Double.isInfinite(top)) {
+        return top;
+      }
+    }
+    final double belowTop = floorShapeTop(feetBlock.getRelative(BlockFace.DOWN));
+    return belowTop >= 1.0 ? belowTop - 1.0 : Double.NEGATIVE_INFINITY;
+  }
+
+  // top of the block's collision shape that can be stood on, or negative infinity if none
+  private static double floorShapeTop(final Block block) {
     final Material material = block.getType();
-    if (Tag.WOOL_CARPETS.isTagged(material) || material == Material.SCAFFOLDING) {
-      return true;
+    if ((Tag.CLIMBABLE.isTagged(material) && material != Material.SCAFFOLDING)
+        || (block.getBlockData() instanceof final TrapDoor trapDoor && trapDoor.isOpen())) {
+      return Double.NEGATIVE_INFINITY;
     }
 
-    return block.isSolid();
+    double top = Double.NEGATIVE_INFINITY;
+    for (final BoundingBox box : block.getCollisionShape().getBoundingBoxes()) {
+      top = Math.max(top, box.getMaxY());
+    }
+    return top;
   }
 
   // find random safe location within radius
