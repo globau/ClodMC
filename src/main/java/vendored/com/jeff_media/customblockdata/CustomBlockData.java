@@ -31,6 +31,7 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+import net.kyori.adventure.key.Key;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.event.block.BlockBreakEvent;
@@ -162,7 +163,7 @@ public class CustomBlockData implements PersistentDataContainer {
   /**
    * The Plugin this CustomBlockData object belongs to
    */
-  private final Plugin plugin;
+  private final @Nullable Plugin plugin;
 
   /**
    * Gets the PersistentDataContainer associated with the given block and plugin
@@ -171,8 +172,13 @@ public class CustomBlockData implements PersistentDataContainer {
    * @param plugin Plugin
    */
   public CustomBlockData(final @NotNull Block block, final @NotNull Plugin plugin) {
+    this(block, getKey(plugin, block), plugin);
+  }
+
+  private CustomBlockData(
+      final @NotNull Block block, final @NotNull NamespacedKey key, final @Nullable Plugin plugin) {
     this.chunk = block.getChunk();
-    this.key = getKey(plugin, block);
+    this.key = key;
     this.pdc = getPersistentDataContainer();
     this.blockEntry = getBlockEntry(block);
     this.plugin = plugin;
@@ -187,11 +193,18 @@ public class CustomBlockData implements PersistentDataContainer {
    */
   @Deprecated
   public CustomBlockData(final @NotNull Block block, final @NotNull String namespace) {
-    this.chunk = block.getChunk();
-    this.key = new NamespacedKey(namespace, getKey(block));
-    this.pdc = getPersistentDataContainer();
-    this.plugin = JavaPlugin.getProvidingPlugin(CustomBlockData.class);
-    this.blockEntry = getBlockEntry(block);
+    this(block, new NamespacedKey(namespace, getKey(block)), getProvidingPluginOrNull());
+  }
+
+  /**
+   * Gets the plugin providing this class, or null when this class is not currently provided by a plugin.
+   */
+  @Nullable private static Plugin getProvidingPluginOrNull() {
+    try {
+      return JavaPlugin.getProvidingPlugin(CustomBlockData.class);
+    } catch (IllegalArgumentException exception) {
+      return null;
+    }
   }
 
   /**
@@ -199,8 +212,8 @@ public class CustomBlockData implements PersistentDataContainer {
    */
   private static void checkRelocation() {
     if (CustomBlockData.class.getPackage().getName().equals(new String(DEFAULT_PACKAGE))) {
-      try {
-        JavaPlugin plugin = JavaPlugin.getProvidingPlugin(CustomBlockData.class);
+      final Plugin plugin = getProvidingPluginOrNull();
+      if (plugin != null) {
         plugin
             .getLogger()
             .warning(
@@ -208,8 +221,6 @@ public class CustomBlockData implements PersistentDataContainer {
                     + " of plugin "
                     + plugin.getName()
                     + " for not relocating the CustomBlockData package.");
-      } catch (IllegalArgumentException exception) {
-        // Could not get plugin
       }
     }
   }
@@ -355,6 +366,100 @@ public class CustomBlockData implements PersistentDataContainer {
   }
 
   /**
+   * Returns all CustomBlockData stored for the given block, including data belonging to other plugin namespaces.
+   * <p>
+   * Each map key is the key used to store the CustomBlockData in the chunk. Its namespace identifies the plugin
+   * namespace that owns the data. The returned CustomBlockData objects can be read and modified normally.
+   *
+   * @param block Block
+   * @return A map of storage keys to all CustomBlockData stored for the block
+   */
+  @NotNull public static Map<NamespacedKey, CustomBlockData> getAllCustomBlockData(
+      final @NotNull Block block) {
+    final PersistentDataContainer chunkPDC = block.getChunk().getPersistentDataContainer();
+    final String blockKey = getKey(block);
+    final Plugin plugin = getProvidingPluginOrNull();
+    final Map<NamespacedKey, CustomBlockData> result = new LinkedHashMap<>();
+
+    for (final NamespacedKey storageKey : chunkPDC.getKeys()) {
+      if (!storageKey.getKey().equals(blockKey)) continue;
+      if (!chunkPDC.has(storageKey, PersistentDataType.TAG_CONTAINER)) continue;
+      result.put(storageKey, new CustomBlockData(block, storageKey, plugin));
+    }
+
+    return result;
+  }
+
+  /**
+   * Returns all CustomBlockData stored in the given chunk, including data belonging to other plugin namespaces.
+   * <p>
+   * Each map key is the key used to store the CustomBlockData in the chunk. Its namespace identifies the plugin
+   * namespace that owns the data, while its key identifies the block position. The returned CustomBlockData objects
+   * can be read and modified normally.
+   *
+   * @param chunk Chunk
+   * @return A map of storage keys to all CustomBlockData stored in the chunk
+   */
+  @NotNull public static Map<NamespacedKey, CustomBlockData> getAllCustomBlockData(
+      final @NotNull Chunk chunk) {
+    final PersistentDataContainer chunkPDC = chunk.getPersistentDataContainer();
+    final Plugin plugin = getProvidingPluginOrNull();
+    final Map<NamespacedKey, CustomBlockData> result = new LinkedHashMap<>();
+
+    for (final NamespacedKey storageKey : chunkPDC.getKeys()) {
+      if (!chunkPDC.has(storageKey, PersistentDataType.TAG_CONTAINER)) continue;
+      final Block block = getBlockFromKey(storageKey, chunk);
+      if (block == null) continue;
+      result.put(storageKey, new CustomBlockData(block, storageKey, plugin));
+    }
+
+    return result;
+  }
+
+  /**
+   * Clears all CustomBlockData stored for the given block, including data belonging to other plugin namespaces.
+   *
+   * @param block Block
+   * @return The number of plugin data containers removed
+   */
+  public static int clearAllCustomBlockData(final @NotNull Block block) {
+    final PersistentDataContainer chunkPDC = block.getChunk().getPersistentDataContainer();
+    final Set<NamespacedKey> storageKeys = getAllCustomBlockData(block).keySet();
+    storageKeys.forEach(chunkPDC::remove);
+    return storageKeys.size();
+  }
+
+  /**
+   * Clears all CustomBlockData stored in the given chunk, including data belonging to other plugin namespaces.
+   * Other custom data stored directly on the chunk is left untouched.
+   *
+   * @param chunk Chunk
+   * @return The number of plugin/block data containers removed
+   */
+  public static int clearAllCustomBlockData(final @NotNull Chunk chunk) {
+    final PersistentDataContainer chunkPDC = chunk.getPersistentDataContainer();
+    final Set<NamespacedKey> storageKeys = getAllCustomBlockData(chunk).keySet();
+    storageKeys.forEach(chunkPDC::remove);
+    return storageKeys.size();
+  }
+
+  /**
+   * Returns all blocks in the given chunk containing CustomBlockData from any plugin namespace.
+   * Blocks containing data from multiple plugin namespaces are only included once.
+   *
+   * @param chunk Chunk
+   * @return A set containing all blocks in the chunk that have CustomBlockData
+   */
+  @NotNull public static Set<Block> getBlocksWithCustomData(final @NotNull Chunk chunk) {
+    final PersistentDataContainer chunkPDC = chunk.getPersistentDataContainer();
+    return chunkPDC.getKeys().stream()
+        .filter(key -> chunkPDC.has(key, PersistentDataType.TAG_CONTAINER))
+        .map(key -> getBlockFromKey(key, chunk))
+        .filter(Objects::nonNull)
+        .collect(Collectors.toSet());
+  }
+
+  /**
    * Returns a Set of all blocks in this chunk containing Custom Block Data created by the given plugin
    *
    * @param plugin Plugin
@@ -465,7 +570,7 @@ public class CustomBlockData implements PersistentDataContainer {
    * Saves the block's {@link PersistentDataContainer} inside the chunk's PersistentDataContainer
    */
   private void save() {
-    setDirty(plugin, blockEntry);
+    if (plugin != null) setDirty(plugin, blockEntry);
     if (pdc.isEmpty()) {
       chunk.getPersistentDataContainer().remove(key);
     } else {
@@ -487,11 +592,6 @@ public class CustomBlockData implements PersistentDataContainer {
               if (dataType == null) return;
               newCbd.set(key, dataType, get(key, dataType));
             });
-  }
-
-  @Override
-  public void copyTo(PersistentDataContainer other, boolean replace) {
-    throw new RuntimeException("CustomBlockData::copyTo not implemented");
   }
 
   @Override
@@ -541,6 +641,16 @@ public class CustomBlockData implements PersistentDataContainer {
   @Override
   public int getSize() {
     return pdc.getSize();
+  }
+
+  @Nullable @Override
+  public PersistentDataType<?, ?> getPrimitiveStorageType(final @NotNull Key key) {
+    return pdc.getPrimitiveStorageType(key);
+  }
+
+  @Override
+  public void copyTo(final @NotNull PersistentDataContainer other, final boolean replace) {
+    pdc.copyTo(other, replace);
   }
 
   @Override

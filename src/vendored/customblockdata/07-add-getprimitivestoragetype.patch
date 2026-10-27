@@ -1,0 +1,23 @@
+diff --git a/src/main/java/vendored/com/jeff_media/customblockdata/CustomBlockData.java b/src/main/java/vendored/com/jeff_media/customblockdata/CustomBlockData.java
+--- a/src/main/java/vendored/com/jeff_media/customblockdata/CustomBlockData.java
++++ b/src/main/java/vendored/com/jeff_media/customblockdata/CustomBlockData.java
+@@ -31,6 +31,7 @@
+ import java.util.regex.Matcher;
+ import java.util.regex.Pattern;
+ import java.util.stream.Collectors;
++import net.kyori.adventure.key.Key;
+ import org.bukkit.*;
+ import org.bukkit.block.Block;
+ import org.bukkit.event.block.BlockBreakEvent;
+@@ -641,6 +642,11 @@ public class CustomBlockData implements PersistentDataContainer {
+     return pdc.getSize();
+   }
+ 
++  @Nullable @Override
++  public PersistentDataType<?, ?> getPrimitiveStorageType(final @NotNull Key key) {
++    return pdc.getPrimitiveStorageType(key);
++  }
++
+   @Override
+   public void copyTo(final @NotNull PersistentDataContainer other, final boolean replace) {
+     pdc.copyTo(other, replace);
