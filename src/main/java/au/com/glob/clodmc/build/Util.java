@@ -33,8 +33,8 @@ public final class Util {
   static String capture(final Path path, final String... command)
       throws IOException, InterruptedException {
     final ProcessBuilder pb = new ProcessBuilder(command);
-    final Process process = pb.start();
     pb.directory(path.toFile());
+    final Process process = pb.start();
     final String output =
         new String(process.getInputStream().readAllBytes(), StandardCharsets.UTF_8);
     final int exitCode = process.waitFor();
