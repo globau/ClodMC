@@ -3,7 +3,6 @@ package au.com.glob.clodmc.modules.inventory.deeppockets;
 import au.com.glob.clodmc.annotations.Audience;
 import au.com.glob.clodmc.annotations.Doc;
 import au.com.glob.clodmc.modules.Module;
-import au.com.glob.clodmc.util.Players;
 import io.papermc.paper.event.player.PlayerPickItemEvent;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -16,7 +15,6 @@ import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.Tag;
-import org.bukkit.block.Block;
 import org.bukkit.block.ShulkerBox;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -45,12 +43,7 @@ public class DeepPockets extends Module implements Listener {
     }
 
     final PlayerInventory playerInventory = player.getInventory();
-
-    // find block player is targeting
-    final Block target = player.getTargetBlockExact(Players.INTERACTION_RANGE);
-    if (target == null) {
-      return;
-    }
+    final Material targetMaterial = event.getItem().getType();
 
     // find slots with shulkers of any colour
     final List<Integer> playerSlots = new ArrayList<>();
@@ -73,7 +66,7 @@ public class DeepPockets extends Module implements Listener {
 
       // find matching items inside shulker
       final Inventory shulkerInventory = shulker.getInventory();
-      shulkerInventory.all(target.getType()).entrySet().stream()
+      shulkerInventory.all(targetMaterial).entrySet().stream()
           .map(
               (Map.Entry<Integer, ? extends ItemStack> entry) ->
                   new ShulkerItemStack(playerSlot, entry.getKey(), entry.getValue().getAmount()))
