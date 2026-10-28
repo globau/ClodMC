@@ -2,7 +2,6 @@ package au.com.glob.clodmc.modules.interactions;
 
 import au.com.glob.clodmc.annotations.Audience;
 import au.com.glob.clodmc.annotations.Doc;
-import au.com.glob.clodmc.events.BlockRemovedEvent;
 import au.com.glob.clodmc.events.ModuleInitialiseEvent;
 import au.com.glob.clodmc.modules.BootstrapContextHelper;
 import au.com.glob.clodmc.modules.Module;
@@ -27,12 +26,16 @@ import me.ryanhamshire.GriefPrevention.ClaimPermission;
 import me.ryanhamshire.GriefPrevention.GriefPrevention;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
-import org.bukkit.Bukkit;
+import org.bukkit.Effect;
 import org.bukkit.GameMode;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
+import org.bukkit.SoundCategory;
+import org.bukkit.SoundGroup;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.block.data.BlockData;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -68,6 +71,7 @@ public class VeinMiner extends Module implements Listener {
 
   private @Nullable Enchantment veinmineEnchantment;
   private final Set<UUID> cooldownUUIDs = Collections.newSetFromMap(new WeakHashMap<>());
+  private final Set<UUID> veinminingUUIDs = new HashSet<>();
 
   public VeinMiner() {
     super("GriefPrevention");
@@ -111,14 +115,14 @@ public class VeinMiner extends Module implements Listener {
     final Player player = event.getPlayer();
     final Block block = event.getBlock();
 
-    if (!player.isSneaking()) {
+    if (this.veinminingUUIDs.contains(player.getUniqueId()) || !player.isSneaking()) {
       return;
     }
 
     // check tool
     final ItemStack tool = player.getInventory().getItemInMainHand();
     if (this.veinmineEnchantment == null
-        || block.getDrops(tool).isEmpty()
+        || block.getDrops(tool, player).isEmpty()
         || !tool.containsEnchantment(this.veinmineEnchantment)) {
       return;
     }
@@ -151,6 +155,31 @@ public class VeinMiner extends Module implements Listener {
     }
   }
 
+  // break as the player so drops, experience, tool damage, and events match a normal break
+  private void breakBlock(final Block block, final Player player) {
+    final BlockData blockData = block.getBlockData();
+    final boolean broken;
+    this.veinminingUUIDs.add(player.getUniqueId());
+    try {
+      broken = player.breakBlock(block);
+    } finally {
+      this.veinminingUUIDs.remove(player.getUniqueId());
+    }
+
+    // the server doesn't send break effects to the breaking player
+    if (broken) {
+      final Location location = block.getLocation().toCenterLocation();
+      final SoundGroup soundGroup = blockData.getSoundGroup();
+      player.playEffect(location, Effect.DESTROY_BLOCK, blockData);
+      player.playSound(
+          location,
+          soundGroup.getBreakSound(),
+          SoundCategory.BLOCKS,
+          (soundGroup.getVolume() + 1.0f) / 2.0f,
+          soundGroup.getPitch() * 0.8f);
+    }
+  }
+
   // recursively break connected blocks of the same type
   private void breakBlocks(
       final Block block,
@@ -160,6 +189,11 @@ public class VeinMiner extends Module implements Listener {
       @Nullable final Claim initialClaim) {
     final Material material = block.getType();
     if (material == Material.AIR) {
+      return;
+    }
+
+    // stop if the player has left or switched away from the veinmine tool
+    if (!player.isOnline() || !player.getInventory().getItemInMainHand().equals(tool)) {
       return;
     }
 
@@ -191,11 +225,7 @@ public class VeinMiner extends Module implements Listener {
         canBreak = denalMessage == null || denalMessage.get() == null;
       }
       if (canBreak) {
-        Bukkit.getPluginManager().callEvent(new BlockRemovedEvent(block));
-        block.breakNaturally(tool, true, true);
-        if (player.getGameMode().equals(GameMode.SURVIVAL)) {
-          tool.damage(COST, player);
-        }
+        this.breakBlock(block, player);
       }
     }
 

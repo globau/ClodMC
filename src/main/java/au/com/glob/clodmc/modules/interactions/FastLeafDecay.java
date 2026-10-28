@@ -4,7 +4,6 @@ package au.com.glob.clodmc.modules.interactions;
 
 import au.com.glob.clodmc.annotations.Audience;
 import au.com.glob.clodmc.annotations.Doc;
-import au.com.glob.clodmc.events.BlockRemovedEvent;
 import au.com.glob.clodmc.modules.Module;
 import au.com.glob.clodmc.util.Schedule;
 import java.util.ArrayList;
@@ -39,11 +38,6 @@ public class FastLeafDecay extends Module implements Listener {
   @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
   public void onBlockBreak(final BlockBreakEvent event) {
     // start trying to break leaves immediately after a log is broken
-    this.onBlockRemove(event.getBlock(), INITIAL_BREAK_DELAY_TICKS);
-  }
-
-  @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-  public void onBlockRemoved(final BlockRemovedEvent event) {
     this.onBlockRemove(event.getBlock(), INITIAL_BREAK_DELAY_TICKS);
   }
 
