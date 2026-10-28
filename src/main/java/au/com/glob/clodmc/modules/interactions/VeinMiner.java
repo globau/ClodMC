@@ -82,10 +82,7 @@ public class VeinMiner extends Module implements Listener {
   public static void bootstrap(final BootstrapContextHelper context) {
     context.enchantment(
         VEINMINE_KEY,
-        List.of(
-            EnchantmentTagKeys.TRADEABLE,
-            EnchantmentTagKeys.NON_TREASURE,
-            EnchantmentTagKeys.NON_TREASURE),
+        List.of(EnchantmentTagKeys.TRADEABLE, EnchantmentTagKeys.NON_TREASURE),
         (RegistryComposeEvent<Enchantment, EnchantmentRegistryEntry.Builder> event,
             EnchantmentRegistryEntry.Builder builder) ->
             builder
