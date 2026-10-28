@@ -15,7 +15,6 @@ import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
 import org.bukkit.Tag;
 import org.bukkit.block.Block;
-import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.type.Leaves;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -55,21 +54,22 @@ public class FastLeafDecay extends Module implements Listener {
       return;
     }
 
-    // schedule neighbouring leaves to decay
-    final List<BlockFace> neighbours =
-        new ArrayList<>(
-            List.of(
-                BlockFace.UP,
-                BlockFace.NORTH,
-                BlockFace.EAST,
-                BlockFace.SOUTH,
-                BlockFace.WEST,
-                BlockFace.DOWN));
+    // schedule neighbouring leaves to decay, including diagonals as trees can generate leaves that
+    // only touch diagonally
+    final List<Block> neighbours = new ArrayList<>(26);
+    for (int x = -1; x <= 1; x++) {
+      for (int y = -1; y <= 1; y++) {
+        for (int z = -1; z <= 1; z++) {
+          if (x != 0 || y != 0 || z != 0) {
+            neighbours.add(oldBlock.getRelative(x, y, z));
+          }
+        }
+      }
+    }
     Collections.shuffle(neighbours);
 
     // schedule neighbouring leaf blocks for decay, in a random order
-    for (final BlockFace neighbourFace : neighbours) {
-      final Block block = oldBlock.getRelative(neighbourFace);
+    for (final Block block : neighbours) {
       if (!Tag.LEAVES.isTagged(block.getType())) {
         continue;
       }
