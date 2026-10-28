@@ -1,6 +1,7 @@
 package au.com.glob.clodmc.modules.bluemap;
 
 import au.com.glob.clodmc.events.BlueMapInitEvent;
+import au.com.glob.clodmc.util.Schedule;
 import com.flowpowered.math.vector.Vector2d;
 import de.bluecolored.bluemap.api.BlueMapAPI;
 import de.bluecolored.bluemap.api.BlueMapMap;
@@ -17,8 +18,7 @@ import me.ryanhamshire.GriefPrevention.GriefPrevention;
 import me.ryanhamshire.GriefPrevention.events.ClaimChangeEvent;
 import me.ryanhamshire.GriefPrevention.events.ClaimCreatedEvent;
 import me.ryanhamshire.GriefPrevention.events.ClaimDeletedEvent;
-import me.ryanhamshire.GriefPrevention.events.ClaimExtendEvent;
-import me.ryanhamshire.GriefPrevention.events.ClaimResizeEvent;
+import me.ryanhamshire.GriefPrevention.events.ClaimTransferEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -38,6 +38,7 @@ public class BlueMapGriefPrevention implements Listener {
 
   private @Nullable BlueMapAPI api;
   private final Map<World, MarkerSet> markerSets = new HashMap<>(3);
+  private boolean updatePending;
 
   @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
   public void onBlueMapInit(final BlueMapInitEvent event) {
@@ -114,33 +115,41 @@ public class BlueMapGriefPrevention implements Listener {
     }
   }
 
+  // griefprevention fires claim events before applying the change, so update on the next tick;
+  // multiple events within a tick result in a single update
+  private void scheduleUpdate() {
+    if (this.updatePending) {
+      return;
+    }
+    this.updatePending = true;
+    Schedule.nextTick(
+        () -> {
+          this.updatePending = false;
+          this.update();
+        });
+  }
+
   // refresh markers when a claim is created
   @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
   public void onClaimCreated(final ClaimCreatedEvent event) {
-    this.update();
+    this.scheduleUpdate();
   }
 
-  // refresh markers when a claim is resized
-  @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-  public void onClaimResize(final ClaimResizeEvent event) {
-    this.update();
-  }
-
-  // refresh markers when a claim is changed
+  // refresh markers when a claim is resized or extended
   @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
   public void onClaimChange(final ClaimChangeEvent event) {
-    this.update();
+    this.scheduleUpdate();
   }
 
-  // refresh markers when a claim is extended
+  // refresh markers when a claim changes owner
   @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-  public void onClaimExtend(final ClaimExtendEvent event) {
-    this.update();
+  public void onClaimTransfer(final ClaimTransferEvent event) {
+    this.scheduleUpdate();
   }
 
   // refresh markers when a claim is deleted
   @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
   public void onClaimDeleted(final ClaimDeletedEvent event) {
-    this.update();
+    this.scheduleUpdate();
   }
 }
