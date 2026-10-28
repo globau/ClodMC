@@ -54,6 +54,7 @@ public class SporeBlossom extends Module implements Listener {
             for (final RecipeChoice choice : this.recipe.getChoiceList()) {
               if (choice.test(item)) {
                 Schedule.onMainThread(() -> player.discoverRecipe(this.recipe.getKey()));
+                return;
               }
             }
           }
