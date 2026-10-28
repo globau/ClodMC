@@ -124,6 +124,9 @@ public class OfflineMessages extends Module implements Listener {
     Schedule.delayed(
         3 * 20,
         () -> {
+          if (!player.isOnline()) {
+            return;
+          }
           for (final Message message : messages) {
             message.sendTo(player);
           }
