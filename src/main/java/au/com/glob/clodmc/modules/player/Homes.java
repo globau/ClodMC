@@ -76,6 +76,10 @@ public class Homes extends Module implements Listener {
             (final Player player, @Nullable String name) -> {
               name = name == null ? DEFAULT_NAME : name;
 
+              if (name.contains(".")) {
+                throw new CommandError("Home names cannot contain '.'");
+              }
+
               final Map<String, Location> homes = getHomes(player);
               final boolean existing = homes.containsKey(name);
 
