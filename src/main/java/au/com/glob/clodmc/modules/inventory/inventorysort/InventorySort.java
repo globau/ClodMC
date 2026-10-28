@@ -20,7 +20,6 @@ import java.util.Map;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Registry;
-import org.bukkit.entity.Donkey;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -31,6 +30,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.SaddledMountInventory;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
@@ -146,8 +146,9 @@ public class InventorySort extends Module implements Listener {
     if (inventory.getType() == InventoryType.PLAYER) {
       minSlot = 9;
       maxSlot = 35;
-    } else if (inventory.getHolder() instanceof Donkey) {
-      minSlot = 1;
+    } else if (inventory instanceof SaddledMountInventory) {
+      // skip saddle and body armour slots
+      minSlot = 2;
     }
 
     // merge similar itemstacks
