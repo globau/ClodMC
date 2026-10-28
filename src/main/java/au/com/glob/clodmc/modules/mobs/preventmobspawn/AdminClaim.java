@@ -9,26 +9,28 @@ import org.jspecify.annotations.NullMarked;
 @NullMarked
 final class AdminClaim {
   private final World world;
-  private final double minX;
-  private final double minZ;
-  private final double maxX;
-  private final double maxZ;
+  private final int minX;
+  private final int minZ;
+  private final int maxX;
+  private final int maxZ;
 
   AdminClaim(final Claim claim) {
-    // cache claim boundaries for performance
+    // cache claim boundaries for performance; corners are inclusive block coordinates
     this.world = claim.getLesserBoundaryCorner().getWorld();
-    this.minX = claim.getLesserBoundaryCorner().getX();
-    this.minZ = claim.getLesserBoundaryCorner().getZ();
-    this.maxX = claim.getGreaterBoundaryCorner().getX();
-    this.maxZ = claim.getGreaterBoundaryCorner().getZ();
+    this.minX = claim.getLesserBoundaryCorner().getBlockX();
+    this.minZ = claim.getLesserBoundaryCorner().getBlockZ();
+    this.maxX = claim.getGreaterBoundaryCorner().getBlockX();
+    this.maxZ = claim.getGreaterBoundaryCorner().getBlockZ();
   }
 
   // check if location is within this admin claim
   boolean contains(final Location loc) {
+    final int x = loc.getBlockX();
+    final int z = loc.getBlockZ();
     return loc.getWorld().equals(this.world)
-        && loc.getX() >= this.minX
-        && loc.getX() <= this.maxX
-        && loc.getZ() >= this.minZ
-        && loc.getZ() <= this.maxZ;
+        && x >= this.minX
+        && x <= this.maxX
+        && z >= this.minZ
+        && z <= this.maxZ;
   }
 }
