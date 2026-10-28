@@ -113,10 +113,13 @@ public class AFK extends Module implements Listener {
     this.playerStates.put(event.getPlayer().getUniqueId(), playerState);
   }
 
-  // update activity on quit
+  // clear afk state on quit, without announcing it
   @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
   public void onPlayerQuit(final PlayerQuitEvent event) {
-    this.onAction(event.getPlayer());
+    final PlayerState playerState = this.playerStates.remove(event.getPlayer().getUniqueId());
+    if (playerState != null && playerState.isAway) {
+      playerState.setBack(false);
+    }
   }
 
   // update activity on chat
