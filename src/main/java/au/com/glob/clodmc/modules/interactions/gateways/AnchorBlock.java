@@ -140,7 +140,7 @@ public class AnchorBlock implements ConfigurationSerializable {
       blockLoc.setYaw(yaw);
       bottomLoc.setYaw(yaw);
       topLoc.setYaw(yaw);
-      if (!LocationUtil.isFacingAir(bottomLoc) && !LocationUtil.isFacingAir(topLoc)) {
+      if (LocationUtil.isFacingAir(bottomLoc) && LocationUtil.isFacingAir(topLoc)) {
         return bottomLoc;
       }
     }
@@ -156,7 +156,7 @@ public class AnchorBlock implements ConfigurationSerializable {
     }
 
     // original rotation
-    blockLoc.setYaw(playerYaw);
+    bottomLoc.setYaw(playerYaw);
     return bottomLoc;
   }
 
