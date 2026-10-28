@@ -66,9 +66,8 @@ final class RandomTeleport {
     }
 
     // cooldown
-    final PlayerDataFile dataFile = PlayerDataFiles.of(player);
     final LocalDateTime now = TimeUtil.localNow();
-    final LocalDateTime lastRandomTeleport = dataFile.getDateTime("tpr");
+    final LocalDateTime lastRandomTeleport = PlayerDataFiles.read(player).getDateTime("tpr");
     if (lastRandomTeleport != null) {
       final long secondsSinceRandomTeleport = Duration.between(lastRandomTeleport, now).toSeconds();
       if (secondsSinceRandomTeleport < RANDOM_TP_COOLDOWN) {
@@ -141,8 +140,8 @@ final class RandomTeleport {
               .formatted(
                   String.format("%,d", Math.round(player.getLocation().distance(teleportPos)))));
 
-      dataFile.setDateTime("tpr", now);
-      dataFile.save();
+      PlayerDataFiles.update(
+          player, (final PlayerDataFile dataFile) -> dataFile.setDateTime("tpr", now));
 
       return teleportPos;
     }

@@ -1,7 +1,6 @@
 package au.com.glob.clodmc.util;
 
 import au.com.glob.clodmc.ClodMC;
-import au.com.glob.clodmc.datafile.PlayerDataFile;
 import au.com.glob.clodmc.datafile.PlayerDataFiles;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -73,8 +72,11 @@ public final class Players {
 
           final Map<String, UUID> updatedWhitelist = new HashMap<>();
           for (final UUID uuid : uuids) {
-            final PlayerDataFile config = PlayerDataFiles.of(uuid);
-            updatedWhitelist.put(config.getPlayerName(), uuid);
+            // name can be empty if the file is being written by the main thread
+            final String name = PlayerDataFiles.read(uuid).getPlayerName();
+            if (!name.isEmpty()) {
+              updatedWhitelist.put(name, uuid);
+            }
           }
           whitelisted = Collections.unmodifiableMap(updatedWhitelist);
         });

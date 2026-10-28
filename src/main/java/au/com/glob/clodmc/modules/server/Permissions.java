@@ -3,7 +3,6 @@ package au.com.glob.clodmc.modules.server;
 import au.com.glob.clodmc.ClodMC;
 import au.com.glob.clodmc.annotations.Audience;
 import au.com.glob.clodmc.annotations.Doc;
-import au.com.glob.clodmc.datafile.PlayerDataFile;
 import au.com.glob.clodmc.datafile.PlayerDataFiles;
 import au.com.glob.clodmc.modules.Module;
 import au.com.glob.clodmc.util.Logger;
@@ -41,8 +40,7 @@ public class Permissions extends Module implements Listener {
   @EventHandler
   public void onPlayerJoin(final PlayerJoinEvent event) {
     final Player player = event.getPlayer();
-    final PlayerDataFile dataFile = PlayerDataFiles.of(player);
-    final List<String> permissions = dataFile.getStringList("permissions");
+    final List<String> permissions = PlayerDataFiles.read(player).getStringList("permissions");
     if (permissions.isEmpty()) {
       return;
     }

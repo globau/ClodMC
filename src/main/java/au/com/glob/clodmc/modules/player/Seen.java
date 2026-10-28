@@ -55,7 +55,7 @@ public class Seen extends Module implements Listener {
                 Chat.error(sender, "%s doesn't play on this server".formatted(playerName));
                 return;
               }
-              final PlayerDataFile dataFile = PlayerDataFiles.of(playerUUID);
+              final PlayerDataFile dataFile = PlayerDataFiles.read(playerUUID);
 
               LocalDateTime date = dataFile.getLastLogout();
               if (date == null) {

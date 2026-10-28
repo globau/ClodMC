@@ -134,10 +134,12 @@ public class Invite extends Module {
                               }
 
                               // record who invited the new player
-                              final PlayerDataFile dataFile = PlayerDataFiles.of(uuid);
-                              dataFile.setPlayerName(name);
-                              dataFile.setInvitedBy(sender.getName());
-                              dataFile.save();
+                              PlayerDataFiles.update(
+                                  uuid,
+                                  (final PlayerDataFile dataFile) -> {
+                                    dataFile.setPlayerName(name);
+                                    dataFile.setInvitedBy(sender.getName());
+                                  });
 
                               // email admin
                               Mailer.emailAdmin(

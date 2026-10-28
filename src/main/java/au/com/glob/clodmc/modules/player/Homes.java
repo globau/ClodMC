@@ -148,7 +148,7 @@ public class Homes extends Module implements Listener {
 
   // retrieve all homes for a player from data file
   private static Map<String, Location> getHomes(final Player player) {
-    final PlayerDataFile dataFile = PlayerDataFiles.of(player);
+    final PlayerDataFile dataFile = PlayerDataFiles.read(player);
 
     final ConfigurationSection section = dataFile.getConfigurationSection("homes");
     if (section == null) {
@@ -157,7 +157,7 @@ public class Homes extends Module implements Listener {
     final Map<String, Location> result = new HashMap<>();
     for (final String name : section.getKeys(false)) {
       final Location playerLocation =
-          dataFile.getSerializable("homes.%s".formatted(name), Location.class, null);
+          dataFile.getSerializable("homes.%s".formatted(name), Location.class);
       result.put(name, Objects.requireNonNull(playerLocation));
     }
     return result;
@@ -165,18 +165,20 @@ public class Homes extends Module implements Listener {
 
   // save all homes for a player to data file
   private static void setHomes(final Player player, final Map<String, Location> homes) {
-    final PlayerDataFile dataFile = PlayerDataFiles.of(player);
-    final ConfigurationSection section = dataFile.getConfigurationSection("homes");
-    if (section != null) {
-      for (final String name : section.getKeys(false)) {
-        if (!homes.containsKey(name)) {
-          section.set(name, null);
-        }
-      }
-    }
-    for (final String name : homes.keySet()) {
-      dataFile.set("homes.%s".formatted(name), homes.get(name));
-    }
-    dataFile.save();
+    PlayerDataFiles.update(
+        player,
+        (final PlayerDataFile dataFile) -> {
+          final ConfigurationSection section = dataFile.getConfigurationSection("homes");
+          if (section != null) {
+            for (final String name : section.getKeys(false)) {
+              if (!homes.containsKey(name)) {
+                section.set(name, null);
+              }
+            }
+          }
+          for (final String name : homes.keySet()) {
+            dataFile.set("homes.%s".formatted(name), homes.get(name));
+          }
+        });
   }
 }

@@ -96,9 +96,10 @@ public class InventoryRestore extends Module implements Listener {
                 return;
               }
 
-              final PlayerDataFile dataFile = PlayerDataFiles.of(uuid);
-              dataFile.set("restore_inv", getBackupName(backupFile));
-              dataFile.save();
+              PlayerDataFiles.update(
+                  uuid,
+                  (final PlayerDataFile dataFile) ->
+                      dataFile.set("restore_inv", getBackupName(backupFile)));
 
               try {
                 final LocalDateTime date =
@@ -106,12 +107,12 @@ public class InventoryRestore extends Module implements Listener {
                 Chat.info(
                     sender,
                     "Inventory for %s will be restored from %s next time they log in"
-                        .formatted(dataFile.getPlayerName(), date.format(LONG_DATETIME_FORMAT)));
+                        .formatted(playerName, date.format(LONG_DATETIME_FORMAT)));
               } catch (final DateTimeParseException e) {
                 Chat.info(
                     sender,
                     "Inventory for %s will be restored next time they log in"
-                        .formatted(dataFile.getPlayerName()));
+                        .formatted(playerName));
               }
             })
         .completor(
@@ -143,12 +144,11 @@ public class InventoryRestore extends Module implements Listener {
   // if requested restore inventory backup when player joins
   @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
   public void onPlayerJoin(final PlayerJoinEvent event) {
-    final PlayerDataFile dataFile = PlayerDataFiles.of(event.getPlayer());
-    final String backupName = dataFile.getString("restore_inv");
+    final String backupName = PlayerDataFiles.read(event.getPlayer()).getString("restore_inv");
     if (backupName != null) {
       this.restorePlayerInventory(null, event.getPlayer(), backupName);
-      dataFile.remove("restore_inv");
-      dataFile.save();
+      PlayerDataFiles.update(
+          event.getPlayer(), (final PlayerDataFile dataFile) -> dataFile.remove("restore_inv"));
     }
   }
 

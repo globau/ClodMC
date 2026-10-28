@@ -3,36 +3,57 @@ package au.com.glob.clodmc.datafile;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import java.util.function.Consumer;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.jspecify.annotations.NullMarked;
 
-/** factory and cache for player data files indexed by uuid */
+/**
+ * access to player data files indexed by uuid.
+ *
+ * <p>files are always loaded fresh from disk. use read() for a snapshot that cannot be saved, and
+ * update() to load, modify, and save a file in one step.
+ */
 @NullMarked
 public final class PlayerDataFiles {
   private PlayerDataFiles() {}
 
-  private static final Map<String, PlayerDataFile> instances = new HashMap<>();
+  private static final Map<UUID, PlayerDataFile> updating = new HashMap<>();
 
-  // get cached file or create new one
-  public static PlayerDataFile of(final String filename) {
-    if (!instances.containsKey(filename)) {
-      instances.put(filename, new PlayerDataFile(filename));
+  // load a read-only snapshot of a player's data file
+  public static PlayerDataFile read(final Player player) {
+    return read(player.getUniqueId());
+  }
+
+  // load a read-only snapshot of a player's data file
+  public static PlayerDataFile read(final UUID uuid) {
+    return new PlayerDataFile(uuid);
+  }
+
+  // load, modify, and save a player's data file
+  public static void update(final Player player, final Consumer<PlayerDataFile> change) {
+    update(player.getUniqueId(), change);
+  }
+
+  // load, modify, and save a player's data file; nested updates share the outer instance
+  public static void update(final UUID uuid, final Consumer<PlayerDataFile> change) {
+    if (!Bukkit.isPrimaryThread()) {
+      throw new IllegalStateException("player data files must be updated on the main thread");
     }
-    return instances.get(filename);
-  }
 
-  // get player data file by player object
-  public static PlayerDataFile of(final Player player) {
-    return of(player.getUniqueId());
-  }
+    final PlayerDataFile active = updating.get(uuid);
+    if (active != null) {
+      change.accept(active);
+      return;
+    }
 
-  // get player data file by uuid
-  public static PlayerDataFile of(final UUID uuid) {
-    return of("players/%s.yml".formatted(uuid));
-  }
-
-  // remove player from cache to free memory
-  public static void unload(final Player player) {
-    instances.remove("players/%s.yml".formatted(player.getUniqueId()));
+    final PlayerDataFile dataFile = new PlayerDataFile(uuid);
+    updating.put(uuid, dataFile);
+    try {
+      change.accept(dataFile);
+      dataFile.save();
+    } finally {
+      updating.remove(uuid);
+    }
   }
 }

@@ -8,6 +8,7 @@ import au.com.glob.clodmc.modules.Module;
 import au.com.glob.clodmc.util.Schedule;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.bukkit.Bukkit;
@@ -47,7 +48,8 @@ public class OfflineMessages extends Module implements Listener {
     // offline player check might make a web request to fetch uuid
     final OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(recipient);
 
-    final PlayerDataFile dataFile = PlayerDataFiles.of(offlinePlayer.getUniqueId());
+    final UUID uuid = offlinePlayer.getUniqueId();
+    final PlayerDataFile dataFile = PlayerDataFiles.read(uuid);
     if (dataFile.isNewFile()) {
       return false;
     }
@@ -59,8 +61,8 @@ public class OfflineMessages extends Module implements Listener {
     }
     messages.add(new Message(System.currentTimeMillis() / 1000L, sender.name, message));
 
-    dataFile.set("messages", messages);
-    dataFile.save();
+    PlayerDataFiles.update(
+        uuid, (final PlayerDataFile updatedFile) -> updatedFile.set("messages", messages));
 
     sender.fyi("%s will receive your message next time they log in".formatted(recipient));
     return true;
@@ -68,7 +70,7 @@ public class OfflineMessages extends Module implements Listener {
 
   // load offline messages for a player from their data file
   private static List<Message> loadMessages(final Player player) {
-    return loadMessages(PlayerDataFiles.of(player).getList("messages"));
+    return loadMessages(PlayerDataFiles.read(player).getList("messages"));
   }
 
   // convert config list to message objects
@@ -125,9 +127,8 @@ public class OfflineMessages extends Module implements Listener {
           for (final Message message : messages) {
             message.sendTo(player);
           }
-          final PlayerDataFile dataFile = PlayerDataFiles.of(player);
-          dataFile.remove("messages");
-          dataFile.save();
+          PlayerDataFiles.update(
+              player, (final PlayerDataFile dataFile) -> dataFile.remove("messages"));
         });
   }
 }

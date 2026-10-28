@@ -5,7 +5,6 @@ import au.com.glob.clodmc.annotations.Doc;
 import au.com.glob.clodmc.datafile.PlayerDataFile;
 import au.com.glob.clodmc.datafile.PlayerDataFiles;
 import au.com.glob.clodmc.modules.Module;
-import au.com.glob.clodmc.util.Schedule;
 import org.bukkit.Statistic;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -23,28 +22,23 @@ public class PlayerTracker extends Module implements Listener {
   // update player data on join
   @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
   public void onPlayerJoin(final PlayerJoinEvent event) {
-    final PlayerDataFile dataFile = PlayerDataFiles.of(event.getPlayer());
-    dataFile.setPlayerName(event.getPlayer().getName());
-    dataFile.touchLastLogin();
-    dataFile.save();
+    PlayerDataFiles.update(
+        event.getPlayer(),
+        (final PlayerDataFile dataFile) -> {
+          dataFile.setPlayerName(event.getPlayer().getName());
+          dataFile.touchLastLogin();
+        });
   }
 
-  // update player data on quit and schedule file unload
+  // update player data on quit
   @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
   public void onPlayerQuit(final PlayerQuitEvent event) {
-    final PlayerDataFile dataFile = PlayerDataFiles.of(event.getPlayer());
-    dataFile.touchLastLogout();
-    dataFile.setPlaytimeMins(
-        Math.round(event.getPlayer().getStatistic(Statistic.PLAY_ONE_MINUTE) / 20.0 / 60.0));
-    dataFile.save();
-
-    // unload player file after 10 seconds
-    Schedule.delayed(
-        10 * 20,
-        () -> {
-          if (!event.getPlayer().isOnline()) {
-            PlayerDataFiles.unload(event.getPlayer());
-          }
+    PlayerDataFiles.update(
+        event.getPlayer(),
+        (final PlayerDataFile dataFile) -> {
+          dataFile.touchLastLogout();
+          dataFile.setPlaytimeMins(
+              Math.round(event.getPlayer().getStatistic(Statistic.PLAY_ONE_MINUTE) / 20.0 / 60.0));
         });
   }
 }
