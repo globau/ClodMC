@@ -70,14 +70,14 @@ public class GameMode extends Module {
               }
               // game mode
               if (args.size() == 1) {
-                return MODES.stream()
-                    .filter((String value) -> value.startsWith(args.getFirst()))
-                    .toList();
+                final String prefix = args.getFirst().toLowerCase(Locale.ENGLISH);
+                return MODES.stream().filter((String value) -> value.startsWith(prefix)).toList();
               }
               // player name
+              final String prefix = args.get(1).toLowerCase(Locale.ENGLISH);
               return Bukkit.getOnlinePlayers().stream()
                   .map(Player::getName)
-                  .filter((String name) -> name.toLowerCase(Locale.ENGLISH).startsWith(args.get(1)))
+                  .filter((String name) -> name.toLowerCase(Locale.ENGLISH).startsWith(prefix))
                   .toList();
             });
   }
