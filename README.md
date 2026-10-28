@@ -27,7 +27,7 @@ While Clod-MC is open-source, pull requests are not accepted.
 - **Spore Blossom Crafting** - Adds a crafting recipe for Spore Blossoms [[src](src/main/java/au/com/glob/clodmc/modules/crafting/SporeBlossom.java)]
 - **VeinMiner Enchantment** - Mine connected blocks with one action when shift+mining [[src](src/main/java/au/com/glob/clodmc/modules/interactions/VeinMiner.java)]
 - **Waxed Item Frames** - Allow waxing an item-frame to prevent item rotation/removal and allow chest click-through [[src](src/main/java/au/com/glob/clodmc/modules/interactions/WaxedItemFrames.java)]
-- **Waxed Pressure Plates** - Allow waxing a pressure plate to prevent it activating [[src](src/main/java/au/com/glob/clodmc/modules/interactions/WaxedPressurePlates.java)]
+- **Waxed Pressure Plates** - Allow waxing a pressure plate to prevent players activating it (mobs and items still can) [[src](src/main/java/au/com/glob/clodmc/modules/interactions/WaxedPressurePlates.java)]
 - **Welcome Book** - Give yourself the Welcome Book [[src](src/main/java/au/com/glob/clodmc/modules/player/welcomebook/WelcomeBookPlayer.java)]
 
 ### Server

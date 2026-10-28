@@ -27,12 +27,15 @@ import vendored.com.jeff_media.customblockdata.CustomBlockData;
 @Doc(
     audience = Audience.PLAYER,
     title = "Waxed Pressure Plates",
-    description = "Allow waxing a pressure plate to prevent it activating")
+    description =
+        "Allow waxing a pressure plate to prevent players activating it (mobs and items still"
+            + " can)")
 @NullMarked
 public class WaxedPressurePlates extends Module implements Listener {
   private static final NamespacedKey WAXED_KEY = new NamespacedKey("clod-mc", "waxed");
 
-  // handle waxing pressure plates and blocking activation when waxed
+  // handle waxing pressure plates and blocking activation by players when waxed; other entities
+  // fire EntityInteractEvent and are intentionally not blocked
   @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
   public void onPlayerInteract(final PlayerInteractEvent event) {
     final Block block = event.getClickedBlock();
@@ -45,7 +48,7 @@ public class WaxedPressurePlates extends Module implements Listener {
 
     switch (event.getAction()) {
       case PHYSICAL -> {
-        // pressure plate activated - cancel interaction if waxed
+        // pressure plate activated by a player - cancel interaction if waxed
         final PersistentDataContainer customBlockData = new CustomBlockData(block, ClodMC.instance);
         if (customBlockData.has(WAXED_KEY)) {
           event.setCancelled(true);
