@@ -4,12 +4,9 @@ import au.com.glob.clodmc.annotations.Audience;
 import au.com.glob.clodmc.annotations.Doc;
 import au.com.glob.clodmc.modules.Module;
 import au.com.glob.clodmc.util.Chat;
-import java.util.function.Supplier;
-import me.ryanhamshire.GriefPrevention.Claim;
+import au.com.glob.clodmc.util.ClaimUtil;
 import me.ryanhamshire.GriefPrevention.ClaimPermission;
-import me.ryanhamshire.GriefPrevention.GriefPrevention;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.Tag;
@@ -27,7 +24,6 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.jspecify.annotations.NullMarked;
-import org.jspecify.annotations.Nullable;
 
 @Doc(
     audience = Audience.PLAYER,
@@ -68,7 +64,7 @@ public class SignedContainers extends Module implements Listener {
             && Tag.ITEMS_AXES.isTagged(player.getInventory().getItem(event.getHand()).getType())) {
 
           final String denialReason =
-              claimDenialReason(player, clickedBlock, ClaimPermission.Build, event);
+              ClaimUtil.denialReason(player, clickedBlock, ClaimPermission.Build, event);
           if (denialReason != null) {
             Chat.error(player, denialReason);
             return;
@@ -86,7 +82,7 @@ public class SignedContainers extends Module implements Listener {
         }
 
         // otherwise open container sign is attached to
-        final String denialReason = containerDenialReason(player, attachedBlock, event);
+        final String denialReason = ClaimUtil.containerDenialReason(player, attachedBlock, event);
         if (denialReason != null) {
           Chat.error(player, denialReason);
           return;
@@ -94,34 +90,5 @@ public class SignedContainers extends Module implements Listener {
         player.openInventory(container.getInventory());
       }
     }
-  }
-
-  // mirrors griefprevention's container rules, which only apply when the container is clicked
-  private static @Nullable String containerDenialReason(
-      final Player player, final Block block, final PlayerInteractEvent event) {
-    final GriefPrevention griefPrevention = GriefPrevention.instance;
-    if (!griefPrevention.config_claims_preventTheft) {
-      return null;
-    }
-
-    final ClaimPermission permission =
-        griefPrevention.config_claims_hoppersRequireBuildTrust && block.getType() == Material.HOPPER
-            ? ClaimPermission.Build
-            : ClaimPermission.Container;
-    return claimDenialReason(player, block, permission, event);
-  }
-
-  private static @Nullable String claimDenialReason(
-      final Player player,
-      final Block block,
-      final ClaimPermission permission,
-      final PlayerInteractEvent event) {
-    final Claim claim =
-        GriefPrevention.instance.dataStore.getClaimAt(block.getLocation(), false, null);
-    if (claim == null) {
-      return null;
-    }
-    final Supplier<@Nullable String> denial = claim.checkPermission(player, permission, event);
-    return denial == null ? null : denial.get();
   }
 }
