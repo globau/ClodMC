@@ -72,13 +72,13 @@ public class Seen extends Module implements Listener {
               Chat.info(sender, "%s was last seen %s ago".formatted(playerName, dateAgo));
             })
         .completor(
-            (CommandSender _, List<String> args) ->
-                Players.getWhitelisted().keySet().stream()
-                    .sorted(String.CASE_INSENSITIVE_ORDER)
-                    .filter(
-                        (String name) ->
-                            name.toLowerCase(Locale.ENGLISH)
-                                .startsWith(args.getFirst().toLowerCase(Locale.ENGLISH)))
-                    .toList());
+            (CommandSender _, List<String> args) -> {
+              final String prefix =
+                  args.isEmpty() ? "" : args.getFirst().toLowerCase(Locale.ENGLISH);
+              return Players.getWhitelisted().keySet().stream()
+                  .sorted(String.CASE_INSENSITIVE_ORDER)
+                  .filter((String name) -> name.toLowerCase(Locale.ENGLISH).startsWith(prefix))
+                  .toList();
+            });
   }
 }

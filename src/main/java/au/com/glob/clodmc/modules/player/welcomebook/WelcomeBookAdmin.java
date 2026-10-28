@@ -40,14 +40,14 @@ public class WelcomeBookAdmin extends Module implements Listener {
               Chat.fyi(sender, "Gave welcome book to %s".formatted(player.getName()));
             })
         .completor(
-            (CommandSender _, List<String> args) ->
-                Bukkit.getOnlinePlayers().stream()
-                    .map(Player::getName)
-                    .filter(
-                        (String name) ->
-                            name.toLowerCase(Locale.ENGLISH)
-                                .startsWith(args.getFirst().toLowerCase(Locale.ENGLISH)))
-                    .toList());
+            (CommandSender _, List<String> args) -> {
+              final String prefix =
+                  args.isEmpty() ? "" : args.getFirst().toLowerCase(Locale.ENGLISH);
+              return Bukkit.getOnlinePlayers().stream()
+                  .map(Player::getName)
+                  .filter((String name) -> name.toLowerCase(Locale.ENGLISH).startsWith(prefix))
+                  .toList();
+            });
 
     WelcomeBook.exportAsJson();
   }
