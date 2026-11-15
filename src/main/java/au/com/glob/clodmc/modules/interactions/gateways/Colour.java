@@ -13,13 +13,20 @@ import org.jspecify.annotations.Nullable;
 @NullMarked
 final class Colour {
   final Material material;
+  final Material glass;
   final String name;
   final int index;
   final Color color;
 
-  // creates a colour with material, name, index and colour
-  Colour(final Material material, final String name, final int index, final Color color) {
+  // creates a colour with material, glass, name, index and colour
+  Colour(
+      final Material material,
+      final Material glass,
+      final String name,
+      final int index,
+      final Color color) {
     this.material = material;
+    this.glass = glass;
     this.name = name;
     this.index = index;
     this.color = color;

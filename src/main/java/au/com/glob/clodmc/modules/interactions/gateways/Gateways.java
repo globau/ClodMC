@@ -346,13 +346,18 @@ public class Gateways extends Module implements Listener {
   public void onPlayerMove(final PlayerMoveEvent event) {
     final Player player = event.getPlayer();
 
-    // don't teleport spectators, and only need to check if player's block changes
-    if (player.getGameMode().equals(GameMode.SPECTATOR) || !event.hasChangedBlock()) {
+    // only need to check if player's block changes
+    if (!event.hasChangedBlock()) {
       return;
     }
 
     // keep track of gateways within range of players
     this.updateNearbyAnchors(player);
+
+    // don't teleport spectators
+    if (player.getGameMode().equals(GameMode.SPECTATOR)) {
+      return;
+    }
 
     final Location playerLocation = event.getTo();
     final BlockPos playerPos = BlockPos.of(playerLocation);
